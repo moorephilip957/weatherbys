@@ -1,0 +1,621 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}International Wire | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/local_transfer.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/wire_transfer.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>International Wire Transfer</h1>
+        <p>Send money securely to any bank account worldwide</p>
+    </div>
+</div>
+
+<div class="transfer-layout">
+
+    <!-- Main Form -->
+    <div class="transfer-form-card">
+        <form id="wireForm">
+
+            <!-- Section 1: Amount & Currency -->
+            <div class="form-section">
+                <div class="form-section-head">
+                    <div class="form-section-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div>
+                        <h3 class="form-section-title">Amount to transfer</h3>
+                        <p class="form-section-sub">Select currency and enter amount</p>
+                    </div>
+                </div>
+
+                <!-- Currency Selector -->
+                <div class="currency-selector">
+                    <div class="currency-option active" data-currency="USD" data-symbol="$" data-rate="1">
+                        <span class="flag">🇺🇸</span>
+                        <span>USD</span>
+                    </div>
+                    <div class="currency-option" data-currency="EUR" data-symbol="€" data-rate="0.92">
+                        <span class="flag">🇪🇺</span>
+                        <span>EUR</span>
+                    </div>
+                    <div class="currency-option" data-currency="GBP" data-symbol="£" data-rate="0.79">
+                        <span class="flag">🇬🇧</span>
+                        <span>GBP</span>
+                    </div>
+                    <div class="currency-option" data-currency="JPY" data-symbol="¥" data-rate="149.5">
+                        <span class="flag">🇯🇵</span>
+                        <span>JPY</span>
+                    </div>
+                    <div class="currency-option" data-currency="CAD" data-symbol="C$" data-rate="1.36">
+                        <span class="flag">🇨🇦</span>
+                        <span>CAD</span>
+                    </div>
+                    <div class="currency-option" data-currency="AUD" data-symbol="A$" data-rate="1.53">
+                        <span class="flag">🇦🇺</span>
+                        <span>AUD</span>
+                    </div>
+                </div>
+
+                <div class="amount-field">
+                    <div class="amount-field-content">
+                        <div class="amount-label">
+                            <span class="dot-live"></span>
+                            Transfer amount
+                        </div>
+                        <div class="amount-input-wrap">
+                            <span class="amount-currency" id="currencySymbol">$</span>
+                            <input type="text" class="amount-input" id="amountInput" placeholder="0.00" inputmode="decimal">
+                        </div>
+                        <div class="amount-available">
+                            <span>Available: <strong>$24,562.00</strong></span>
+                            <button type="button" class="max-btn" id="maxBtn">MAX</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FX Rate Preview -->
+                <div class="fx-rate-box" id="fxRateBox">
+                    <div class="fx-rate-info">
+                        <div class="fx-icon"><i class="fas fa-exchange-alt"></i></div>
+                        <div>
+                            <p class="fx-label">Exchange rate</p>
+                            <p class="fx-value" id="fxRateValue">1 USD = 0.92 EUR</p>
+                        </div>
+                    </div>
+                    <div class="fx-rate-live">
+                        <span class="dot-live"></span>
+                        <span>Live rate</span>
+                    </div>
+                </div>
+
+                <!-- Recipient Preview -->
+                <div class="recipient-preview" id="recipientPreview">
+                    <div class="rp-head">
+                        <div class="rp-avatar" id="rpAvatar">JD</div>
+                        <div>
+                            <p class="rp-name" id="rpName">John Doe</p>
+                            <p class="rp-bank" id="rpBank">Deutsche Bank · Germany</p>
+                        </div>
+                    </div>
+                    <div class="rp-details">
+                        <span class="rd-label">You send:</span>
+                        <span class="rd-value" id="rpSend">$1,000.00</span>
+                        <span class="rd-label">They receive:</span>
+                        <span class="rd-value" id="rpReceive">€920.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Beneficiary Information -->
+            <div class="form-section">
+                <div class="form-section-head">
+                    <div class="form-section-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h3 class="form-section-title">Beneficiary information</h3>
+                        <p class="form-section-sub">Recipient's account details</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-field full">
+                        <label class="form-label">
+                            Beneficiary account name <span class="req">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" class="form-input" id="beneficiaryName" placeholder="Full name as it appears on the account" required>
+                        </div>
+                    </div>
+
+                    <div class="form-field full">
+                        <label class="form-label">
+                            Beneficiary account number <span class="req">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-hashtag input-icon"></i>
+                            <input type="text" class="form-input" id="accountNumber" placeholder="Account number or IBAN" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Bank Information -->
+            <div class="form-section">
+                <div class="form-section-head">
+                    <div class="form-section-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div>
+                        <h3 class="form-section-title">Bank information</h3>
+                        <p class="form-section-sub">Recipient's bank details</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-field full">
+                        <label class="form-label">
+                            Bank name <span class="req">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-university input-icon"></i>
+                            <input type="text" class="form-input" id="bankName" placeholder="e.g. Deutsche Bank" required>
+                        </div>
+                    </div>
+
+                    <div class="form-field full">
+                        <label class="form-label">
+                            Bank address <span class="req">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt input-icon"></i>
+                            <input type="text" class="form-input" id="bankAddress" placeholder="Full bank address" required>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">
+                            Country <span class="req">*</span>
+                        </label>
+                        <div class="country-select-wrap">
+                            <span class="country-flag-icon" id="countryFlag">🇩🇪</span>
+                            <select class="country-select" id="country" required>
+                                <option value="">Select country</option>
+                                <option value="DE" data-flag="🇩🇪">Germany</option>
+                                <option value="FR" data-flag="🇫🇷">France</option>
+                                <option value="GB" data-flag="🇬🇧">United Kingdom</option>
+                                <option value="IT" data-flag="🇮🇹">Italy</option>
+                                <option value="ES" data-flag="🇪🇸">Spain</option>
+                                <option value="NL" data-flag="🇳🇱">Netherlands</option>
+                                <option value="CH" data-flag="🇨🇭">Switzerland</option>
+                                <option value="JP" data-flag="🇯🇵">Japan</option>
+                                <option value="CN" data-flag="🇨🇳">China</option>
+                                <option value="AU" data-flag="🇦🇺">Australia</option>
+                                <option value="CA" data-flag="🇨🇦">Canada</option>
+                                <option value="SG" data-flag="🇸🇬">Singapore</option>
+                                <option value="AE" data-flag="🇦🇪">United Arab Emirates</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">
+                            SWIFT / BIC code <span class="req">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-code input-icon"></i>
+                            <input type="text" class="form-input" id="swiftCode" placeholder="8-11 characters" maxlength="11" required>
+                        </div>
+                        <div class="form-hint">
+                            <i class="fas fa-info-circle"></i>
+                            Ask your recipient or check their bank statement
+                        </div>
+                    </div>
+
+                    <div class="form-field full">
+                        <label class="form-label">
+                            IBAN number <span class="req">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-credit-card input-icon"></i>
+                            <input type="text" class="form-input" id="ibanNumber" placeholder="e.g. DE89 3704 0044 0532 0130 00" required>
+                        </div>
+                        <div class="form-hint">
+                            <i class="fas fa-info-circle"></i>
+                            International Bank Account Number (up to 34 characters)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wire Warning -->
+                <div class="wire-warning">
+                    <div class="ww-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="ww-content">
+                        <p class="ww-title">Important: Wire transfers are irreversible</p>
+                        <p class="ww-text">Please double-check all details before sending. International wires typically take 1-3 business days to process and may be subject to intermediary bank fees.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Additional Information -->
+            <div class="form-section">
+                <div class="form-section-head">
+                    <div class="form-section-icon" style="background: rgba(59,130,246,0.1); color: #2563EB;">
+                        <i class="fas fa-comment-alt"></i>
+                    </div>
+                    <div>
+                        <h3 class="form-section-title">Additional information</h3>
+                        <p class="form-section-sub">Optional note for this transfer</p>
+                    </div>
+                </div>
+
+                <div class="form-grid cols-1">
+                    <div class="form-field full">
+                        <label class="form-label">
+                            Note <span class="opt">(optional)</span>
+                        </label>
+                        <textarea class="form-textarea" id="note" placeholder="Add a note for this transfer..." maxlength="200"></textarea>
+                        <div class="form-hint">
+                            <i class="fas fa-info-circle"></i>
+                            <span id="charCount">0</span>/200 characters
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Transaction PIN -->
+            <div class="form-section">
+                <div class="pin-section">
+                    <div class="form-section-head" style="margin-bottom: 0;">
+                        <div class="form-section-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div>
+                            <h3 class="form-section-title">Transaction PIN</h3>
+                            <p class="form-section-sub">Enter your 6-digit PIN to authorize this wire transfer</p>
+                        </div>
+                    </div>
+
+                    <div class="pin-input-wrap">
+                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="0">
+                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="1">
+                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="2">
+                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="3">
+                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="4">
+                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="5">
+                    </div>
+
+                    <div class="pin-helper">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Your PIN is encrypted and never stored in plain text</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" id="cancelBtn">
+                    <i class="fas fa-times"></i>
+                    <span>Cancel</span>
+                </button>
+                <button type="submit" class="btn-send" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Send wire transfer</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="transfer-sidebar">
+
+        <!-- Transfer Summary -->
+        <div class="summary-card">
+            <h3><i class="fas fa-receipt"></i> Transfer summary</h3>
+
+            <div class="summary-row">
+                <span class="sr-label">Amount</span>
+                <span class="sr-value" id="summaryAmount">$0.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="sr-label">
+                    Wire transfer fee
+                    <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="International wire transfer processing fee"></i>
+                </span>
+                <span class="sr-value">$25.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="sr-label">
+                    Exchange rate
+                    <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="Live market rate with 0.5% markup"></i>
+                </span>
+                <span class="sr-value" id="summaryRate">0.92</span>
+            </div>
+            <div class="summary-row">
+                <span class="sr-label">Estimated delivery</span>
+                <span class="sr-value">1-3 business days</span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-row">
+                <span class="sr-label">Recipient receives</span>
+                <span class="sr-value" id="summaryReceive" style="color: #059669;">€0.00</span>
+            </div>
+
+            <div class="summary-total">
+                <span class="st-label">Total to debit</span>
+                <span class="st-value" id="summaryTotal">$0.00</span>
+            </div>
+        </div>
+
+        <!-- Wire Transfer Info -->
+        <div class="wire-info-card">
+            <h3><i class="fas fa-info-circle"></i> Wire transfer details</h3>
+            
+            <div class="wire-info-item">
+                <div class="wii-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="wii-content">
+                    <p class="wii-label">Processing time</p>
+                    <p class="wii-value">1-3 business days</p>
+                </div>
+            </div>
+
+            <div class="wire-info-item">
+                <div class="wii-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="wii-content">
+                    <p class="wii-label">Supported countries</p>
+                    <p class="wii-value">180+ countries</p>
+                </div>
+            </div>
+
+            <div class="wire-info-item">
+                <div class="wii-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="wii-content">
+                    <p class="wii-label">Daily limit</p>
+                    <p class="wii-value">$50,000.00</p>
+                </div>
+            </div>
+
+            <div class="wire-info-item">
+                <div class="wii-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="wii-content">
+                    <p class="wii-label">Intermediary fees</p>
+                    <p class="wii-value">May apply</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Info -->
+        <div class="security-info">
+            <h4><i class="fas fa-shield-alt"></i> Secure transfer</h4>
+            <div class="security-item">
+                <div class="si-icon"><i class="fas fa-check"></i></div>
+                <span>SWIFT network secured</span>
+            </div>
+            <div class="security-item">
+                <div class="si-icon"><i class="fas fa-check"></i></div>
+                <span>End-to-end encryption</span>
+            </div>
+            <div class="security-item">
+                <div class="si-icon"><i class="fas fa-check"></i></div>
+                <span>Fraud monitoring 24/7</span>
+            </div>
+            <div class="security-item">
+                <div class="si-icon"><i class="fas fa-check"></i></div>
+                <span>Compliance verified</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== CURRENCY SELECTION =====
+const currencyOptions = document.querySelectorAll('.currency-option');
+const currencySymbol = document.getElementById('currencySymbol');
+const fxRateValue = document.getElementById('fxRateValue');
+const summaryRate = document.getElementById('summaryRate');
+const summaryReceive = document.getElementById('summaryReceive');
+let currentCurrency = 'USD';
+let currentRate = 1;
+let currentSymbol = '$';
+
+currencyOptions.forEach(option => {
+    option.addEventListener('click', () => {
+        currencyOptions.forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+        
+        currentCurrency = option.dataset.currency;
+        currentRate = parseFloat(option.dataset.rate);
+        currentSymbol = option.dataset.symbol;
+        
+        currencySymbol.textContent = currentSymbol;
+        fxRateValue.textContent = `1 USD = ${currentRate} ${currentCurrency}`;
+        summaryRate.textContent = currentRate;
+        
+        updateSummary();
+        updateRecipientPreview();
+    });
+});
+
+// ===== AMOUNT INPUT =====
+const amountInput = document.getElementById('amountInput');
+const summaryAmount = document.getElementById('summaryAmount');
+const summaryTotal = document.getElementById('summaryTotal');
+
+amountInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/[^0-9.]/g, '');
+    const parts = value.split('.');
+    if (parts.length > 2) {
+        value = parts[0] + '.' + parts.slice(1).join('');
+    }
+    if (parts[1] && parts[1].length > 2) {
+        value = parts[0] + '.' + parts[1].slice(0, 2);
+    }
+    e.target.value = value;
+    updateSummary();
+    updateRecipientPreview();
+});
+
+function updateSummary() {
+    const amount = parseFloat(amountInput.value) || 0;
+    const fee = 25;
+    const total = amount + fee;
+    const receiveAmount = amount * currentRate;
+    
+    summaryAmount.textContent = currentSymbol + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    summaryTotal.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    summaryReceive.textContent = currentSymbol + receiveAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function updateRecipientPreview() {
+    const preview = document.getElementById('recipientPreview');
+    const name = document.getElementById('beneficiaryName').value;
+    const bank = document.getElementById('bankName').value;
+    const country = document.getElementById('country');
+    const countryText = country.options[country.selectedIndex]?.text || '';
+    
+    if (name && bank) {
+        preview.classList.add('active');
+        document.getElementById('rpAvatar').textContent = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        document.getElementById('rpName').textContent = name;
+        document.getElementById('rpBank').textContent = `${bank} · ${countryText}`;
+        
+        const amount = parseFloat(amountInput.value) || 0;
+        const receiveAmount = amount * currentRate;
+        document.getElementById('rpSend').textContent = currentSymbol + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('rpReceive').textContent = currentSymbol + receiveAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } else {
+        preview.classList.remove('active');
+    }
+}
+
+// Update preview on input
+document.getElementById('beneficiaryName').addEventListener('input', updateRecipientPreview);
+document.getElementById('bankName').addEventListener('input', updateRecipientPreview);
+document.getElementById('country').addEventListener('change', updateRecipientPreview);
+
+// MAX button
+document.getElementById('maxBtn').addEventListener('click', () => {
+    amountInput.value = '24562.00';
+    updateSummary();
+    updateRecipientPreview();
+});
+
+// ===== COUNTRY FLAG =====
+const countrySelect = document.getElementById('country');
+const countryFlag = document.getElementById('countryFlag');
+
+countrySelect.addEventListener('change', () => {
+    const selected = countrySelect.options[countrySelect.selectedIndex];
+    if (selected.dataset.flag) {
+        countryFlag.textContent = selected.dataset.flag;
+    }
+});
+
+// ===== NOTE CHARACTER COUNT =====
+const note = document.getElementById('note');
+const charCount = document.getElementById('charCount');
+note.addEventListener('input', () => {
+    charCount.textContent = note.value.length;
+});
+
+// ===== PIN INPUTS =====
+const pinBoxes = document.querySelectorAll('.pin-box');
+pinBoxes.forEach((box, idx) => {
+    box.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val;
+        if (val && idx < pinBoxes.length - 1) {
+            pinBoxes[idx + 1].focus();
+        }
+        if (val) {
+            box.classList.add('filled');
+        } else {
+            box.classList.remove('filled');
+        }
+    });
+
+    box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && idx > 0) {
+            pinBoxes[idx - 1].focus();
+        }
+    });
+
+    box.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+        for (let i = 0; i < Math.min(paste.length, pinBoxes.length - idx); i++) {
+            pinBoxes[idx + i].value = paste[i];
+            pinBoxes[idx + i].classList.add('filled');
+        }
+        const nextIdx = Math.min(idx + paste.length, pinBoxes.length - 1);
+        pinBoxes[nextIdx].focus();
+    });
+});
+
+// ===== CANCEL BUTTON =====
+document.getElementById('cancelBtn').addEventListener('click', () => {
+    if (confirm('Are you sure you want to cancel this wire transfer?')) {
+        window.location.href = '#'; // Will be Django URL
+    }
+});
+
+// ===== FORM SUBMIT =====
+document.getElementById('wireForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    let pin = '';
+    pinBoxes.forEach(b => pin += b.value);
+    
+    if (pin.length !== 6) {
+        alert('Please enter your 6-digit PIN');
+        pinBoxes[0].focus();
+        return;
+    }
+    
+    const amount = amountInput.value;
+    const name = document.getElementById('beneficiaryName').value;
+    const account = document.getElementById('accountNumber').value;
+    const bank = document.getElementById('bankName').value;
+    const swift = document.getElementById('swiftCode').value;
+    const iban = document.getElementById('ibanNumber').value;
+    
+    if (!amount || !name || !account || !bank || !swift || !iban) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    const sendBtn = document.getElementById('sendBtn');
+    sendBtn.innerHTML = '<i class="fas fa-check"></i> <span>Wire transfer sent!</span>';
+    sendBtn.style.background = 'linear-gradient(135deg, #00D4A8, #059669)';
+    sendBtn.disabled = true;
+    
+    setTimeout(() => {
+        sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Send wire transfer</span>';
+        sendBtn.style.background = '';
+        sendBtn.disabled = false;
+    }, 3000);
+});
+</script>
+{% endblock %}

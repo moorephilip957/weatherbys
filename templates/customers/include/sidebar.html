@@ -1,0 +1,33 @@
+<aside class="sidebar" id="sidebar">
+    <div class="logo">
+        <div class="logo-mark">H</div>
+        <div class="logo-text">Hampdens Bank</div>
+    </div>
+
+    <nav>
+        <div class="nav-section-label">Main</div>
+        <a href="{% url 'customer:dashboard' %}" class="nav-item-link active"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="{% url 'customer:transactions' %}" class="nav-item-link"><i class="fas fa-exchange-alt"></i> Transactions <span class="badge-dot">12</span></a>
+        <a href="{% url 'customer:cards' %}" class="nav-item-link"><i class="fas fa-credit-card"></i> Cards</a>
+
+        <div class="nav-section-label">Transfers</div>
+        <a href="{% url 'transaction:local_transfer' %}" class="nav-item-link"><i class="fas fa-building"></i> Local Transfer</a>
+        <a href="{% url 'transaction:wire_transfer' %}" class="nav-item-link"><i class="fas fa-globe"></i> International Wire</a>
+        <a href="{% url 'transaction:create_deposit' %}" class="nav-item-link"><i class="fas fa-arrow-down"></i> Deposit</a>
+        
+        <div class="nav-section-label">Finance</div>
+        <a href="{% url 'loan:apply_loan' %}" class="nav-item-link"><i class="fas fa-wallet"></i> Loan Request</a>
+        <a href="{% url 'loan:loan_history' %}" class="nav-item-link"><i class="fas fa-file-invoice-dollar"></i> Loan History</a>
+
+        <div class="nav-section-label">More</div>
+        <a href="{% url 'customer:download_app' %}" class="nav-item-link"><i class="fas fa-mobile-alt"></i> Download App</a>
+        <a href="{% url 'customer:settings' %}" class="nav-item-link"><i class="fas fa-cog"></i> Settings</a>
+        <a href="{% url 'support:create_ticket' %}" class="nav-item-link"><i class="fas fa-life-ring"></i> Support Ticket</a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="upgrade-title">✨ Go Premium</div>
+        <div class="upgrade-text">Unlock higher limits, metal cards, and zero fees.</div>
+        <button class="btn-upgrade">Upgrade now</button>
+    </div>
+</aside>

@@ -1,0 +1,472 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Deposit | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/local_transfer.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/deposit.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>Deposit Funds</h1>
+        <p>Add money to your Hampdens Bank account</p>
+    </div>
+</div>
+
+<!-- Deposit Method Tabs -->
+<div class="deposit-methods">
+    <button class="deposit-method-tab active" data-method="usdt">
+        <div class="method-icon">₮</div>
+        <span>USDT (Tether)</span>
+    </button>
+    <button class="deposit-method-tab" data-method="bitcoin">
+        <div class="method-icon">₿</div>
+        <span>Bitcoin</span>
+    </button>
+    <button class="deposit-method-tab" data-method="wire">
+        <div class="method-icon"><i class="fas fa-university"></i></div>
+        <span>Wire Transfer</span>
+    </button>
+</div>
+
+<!-- USDT Deposit -->
+<div class="deposit-content active" id="usdt-content">
+    
+    <!-- Amount Field -->
+    <div class="deposit-amount-card">
+        <div class="deposit-amount-head">
+            <h3>Deposit amount</h3>
+            <p>Enter how much USDT you want to deposit</p>
+        </div>
+        <div class="amount-field" style="margin-bottom: 0;">
+            <div class="amount-field-content">
+                <div class="amount-label">
+                    <span class="dot-live"></span>
+                    Amount to deposit
+                </div>
+                <div class="amount-input-wrap">
+                    <span class="amount-currency">₮</span>
+                    <input type="text" class="amount-input" id="usdtAmount" placeholder="0.00" inputmode="decimal">
+                </div>
+                <div class="amount-available">
+                    <span>≈ <strong id="usdtUsdEquiv">$0.00 USD</strong></span>
+                    <button type="button" class="max-btn" data-target="usdtAmount" data-amount="10000">MAX</button>
+                </div>
+                <div class="quick-amounts">
+                    <button type="button" class="quick-amount-chip" data-target="usdtAmount" data-amount="100">100 USDT</button>
+                    <button type="button" class="quick-amount-chip" data-target="usdtAmount" data-amount="500">500 USDT</button>
+                    <button type="button" class="quick-amount-chip" data-target="usdtAmount" data-amount="1000">1,000 USDT</button>
+                    <button type="button" class="quick-amount-chip" data-target="usdtAmount" data-amount="5000">5,000 USDT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="crypto-deposit-layout">
+        <!-- QR Code -->
+        <div class="qr-card">
+            <h3>Scan to deposit USDT</h3>
+            <p class="sub">Use your crypto wallet to scan this QR code</p>
+            
+            <div class="qr-code-wrap">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TR7NGqz9p8GmQb5XyKvLzN8mPwRtYvUjHc" alt="USDT QR Code">
+                <div class="crypto-logo" style="background: #26A17B; color: #fff;">₮</div>
+            </div>
+
+            <div class="qr-actions">
+                <button class="qr-action-btn" id="downloadQrUsdt">
+                    <i class="fas fa-download"></i>
+                    <span>Download QR</span>
+                </button>
+                <button class="qr-action-btn" id="shareQrUsdt">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Share</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Wallet Info -->
+        <div class="wallet-info-card">
+            <h3>USDT Wallet Address</h3>
+            <p class="sub">Send USDT (TRC20) to this address</p>
+
+            <div class="wallet-address-box">
+                <div class="wallet-address-label">Your deposit address</div>
+                <div class="wallet-address-value">
+                    TR7NGqz9p8GmQb5XyKvLzN8mPwRtYvUjHc
+                    <button class="copy-btn" data-copy="TR7NGqz9p8GmQb5XyKvLzN8mPwRtYvUjHc">
+                        <i class="far fa-copy"></i>
+                        <span>Copy</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="wallet-input-group">
+                <label>Transaction hash (optional)</label>
+                <div class="input-wrap">
+                    <input type="text" placeholder="Enter transaction hash after sending">
+                </div>
+                <div class="input-hint">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Add transaction hash to track your deposit</span>
+                </div>
+            </div>
+
+            <div class="deposit-instructions">
+                <h4><i class="fas fa-list-ol"></i> How to deposit</h4>
+                <ol>
+                    <li>Open your crypto wallet (Trust Wallet, MetaMask, etc.)</li>
+                    <li>Select USDT (TRC20 network)</li>
+                    <li>Click "Send" and scan the QR code or paste the address</li>
+                    <li>Enter the amount you want to deposit</li>
+                    <li>Confirm the transaction and wait for confirmation</li>
+                </ol>
+            </div>
+
+            <div class="important-notice">
+                <div class="in-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="in-content">
+                    <p class="in-title">Important</p>
+                    <p class="in-text">Only send USDT (TRC20) to this address. Sending other tokens or using different networks may result in permanent loss of funds.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bitcoin Deposit -->
+<div class="deposit-content" id="bitcoin-content">
+    
+    <!-- Amount Field -->
+    <div class="deposit-amount-card">
+        <div class="deposit-amount-head">
+            <h3>Deposit amount</h3>
+            <p>Enter how much Bitcoin you want to deposit</p>
+        </div>
+        <div class="amount-field" style="margin-bottom: 0;">
+            <div class="amount-field-content">
+                <div class="amount-label">
+                    <span class="dot-live"></span>
+                    Amount to deposit
+                </div>
+                <div class="amount-input-wrap">
+                    <span class="amount-currency">₿</span>
+                    <input type="text" class="amount-input" id="btcAmount" placeholder="0.00000000" inputmode="decimal">
+                </div>
+                <div class="amount-available">
+                    <span>≈ <strong id="btcUsdEquiv">$0.00 USD</strong></span>
+                    <button type="button" class="max-btn" data-target="btcAmount" data-amount="1">MAX</button>
+                </div>
+                <div class="quick-amounts">
+                    <button type="button" class="quick-amount-chip" data-target="btcAmount" data-amount="0.001">0.001 BTC</button>
+                    <button type="button" class="quick-amount-chip" data-target="btcAmount" data-amount="0.01">0.01 BTC</button>
+                    <button type="button" class="quick-amount-chip" data-target="btcAmount" data-amount="0.1">0.1 BTC</button>
+                    <button type="button" class="quick-amount-chip" data-target="btcAmount" data-amount="0.5">0.5 BTC</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="crypto-deposit-layout">
+        <!-- QR Code -->
+        <div class="qr-card">
+            <h3>Scan to deposit Bitcoin</h3>
+            <p class="sub">Use your crypto wallet to scan this QR code</p>
+            
+            <div class="qr-code-wrap">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" alt="Bitcoin QR Code">
+                <div class="crypto-logo" style="background: #F7931A; color: #fff;">₿</div>
+            </div>
+
+            <div class="qr-actions">
+                <button class="qr-action-btn" id="downloadQrBtc">
+                    <i class="fas fa-download"></i>
+                    <span>Download QR</span>
+                </button>
+                <button class="qr-action-btn" id="shareQrBtc">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Share</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Wallet Info -->
+        <div class="wallet-info-card">
+            <h3>Bitcoin Wallet Address</h3>
+            <p class="sub">Send BTC to this address</p>
+
+            <div class="wallet-address-box">
+                <div class="wallet-address-label">Your deposit address</div>
+                <div class="wallet-address-value">
+                    bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
+                    <button class="copy-btn" data-copy="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh">
+                        <i class="far fa-copy"></i>
+                        <span>Copy</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="wallet-input-group">
+                <label>Transaction ID (optional)</label>
+                <div class="input-wrap">
+                    <input type="text" placeholder="Enter transaction ID after sending">
+                </div>
+                <div class="input-hint">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Add transaction ID to track your deposit</span>
+                </div>
+            </div>
+
+            <div class="deposit-instructions">
+                <h4><i class="fas fa-list-ol"></i> How to deposit</h4>
+                <ol>
+                    <li>Open your Bitcoin wallet</li>
+                    <li>Click "Send" or "Withdraw"</li>
+                    <li>Scan the QR code or paste the Bitcoin address</li>
+                    <li>Enter the amount in BTC</li>
+                    <li>Confirm and wait for network confirmation (10-60 minutes)</li>
+                </ol>
+            </div>
+
+            <div class="important-notice">
+                <div class="in-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="in-content">
+                    <p class="in-title">Important</p>
+                    <p class="in-text">Only send Bitcoin (BTC) to this address. Minimum deposit: 0.001 BTC. Deposits require 3 network confirmations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Wire Transfer Deposit -->
+<div class="deposit-content" id="wire-content">
+    
+    <!-- Amount Field -->
+    <div class="deposit-amount-card">
+        <div class="deposit-amount-head">
+            <h3>Deposit amount</h3>
+            <p>Enter how much you want to deposit via wire transfer</p>
+        </div>
+        <div class="amount-field" style="margin-bottom: 0;">
+            <div class="amount-field-content">
+                <div class="amount-label">
+                    <span class="dot-live"></span>
+                    Amount to deposit
+                </div>
+                <div class="amount-input-wrap">
+                    <span class="amount-currency">€</span>
+                    <input type="text" class="amount-input" id="wireAmount" placeholder="0.00" inputmode="decimal">
+                </div>
+                <div class="amount-available">
+                    <span>Minimum: <strong>€1,000.00</strong></span>
+                    <button type="button" class="max-btn" data-target="wireAmount" data-amount="100000">MAX</button>
+                </div>
+                <div class="quick-amounts">
+                    <button type="button" class="quick-amount-chip" data-target="wireAmount" data-amount="10000">€10,000</button>
+                    <button type="button" class="quick-amount-chip" data-target="wireAmount" data-amount="25000">€25,000</button>
+                    <button type="button" class="quick-amount-chip" data-target="wireAmount" data-amount="50000">€50,000</button>
+                    <button type="button" class="quick-amount-chip" data-target="wireAmount" data-amount="100000">€100,000</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wire-deposit-card">
+        <div class="wire-deposit-header">
+            <div class="payment-method-badge">
+                <i class="fas fa-university"></i>
+                <span>Payment Method: WIRE</span>
+            </div>
+            <h2>Wire Transfer Deposit</h2>
+            <div class="amount-display" id="wireAmountDisplay">€0.00</div>
+            <p style="color: var(--muted); font-size: 13px; margin: 0;">Amount to deposit via wire transfer</p>
+        </div>
+
+        <div class="wire-instructions-box">
+            <div class="wib-head">
+                <div class="wib-icon"><i class="fas fa-info-circle"></i></div>
+                <div>
+                    <p class="wib-title">Wire Transfer Instructions</p>
+                    <p class="wib-sub">Please read carefully before proceeding</p>
+                </div>
+            </div>
+            <p class="wib-content">
+                Customers who selected Wire Transfer are required to <strong>contact support before making payment</strong>. Our support team will provide the appropriate bank details and guide you through the transfer process.
+                <br><br>
+                This ensures security and compliance with international wire transfer regulations. Do not proceed with the transfer until you have received official bank details from our support team.
+            </p>
+        </div>
+
+        <div class="wire-contact-actions">
+            <button class="wire-contact-btn" id="contactSupportBtn">
+                <i class="fas fa-headset"></i>
+                <span>Contact Support Now</span>
+            </button>
+            <button class="wire-contact-btn secondary" id="backToDashboardBtn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </button>
+        </div>
+
+        <div class="important-notice" style="margin-top: 24px;">
+            <div class="in-icon"><i class="fas fa-clock"></i></div>
+            <div class="in-content">
+                <p class="in-title">Processing Time</p>
+                <p class="in-text">Wire transfers typically take 1-3 business days to process after receiving bank details from support. Large transfers may require additional verification.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== TAB SWITCHING =====
+const tabs = document.querySelectorAll('.deposit-method-tab');
+const contents = document.querySelectorAll('.deposit-content');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        const method = tab.dataset.method;
+        
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        contents.forEach(c => c.classList.remove('active'));
+        document.getElementById(`${method}-content`).classList.add('active');
+    });
+});
+
+// ===== AMOUNT INPUTS =====
+function setupAmountInput(inputId, usdEquivId, rate) {
+    const input = document.getElementById(inputId);
+    const usdEquiv = document.getElementById(usdEquivId);
+    
+    input.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/[^0-9.]/g, '');
+        const parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        if (parts[1] && parts[1].length > 8) {
+            value = parts[0] + '.' + parts[1].slice(0, 8);
+        }
+        e.target.value = value;
+        
+        const num = parseFloat(value) || 0;
+        const usdValue = num * rate;
+        usdEquiv.textContent = '$' + usdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD';
+        
+        // Update wire display if it's the wire input
+        if (inputId === 'wireAmount') {
+            document.getElementById('wireAmountDisplay').textContent = '€' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+    });
+}
+
+// Setup each amount input with USD conversion rate
+setupAmountInput('usdtAmount', 'usdtUsdEquiv', 1); // USDT = $1
+setupAmountInput('btcAmount', 'btcUsdEquiv', 43250); // BTC = ~$43,250 (example rate)
+setupAmountInput('wireAmount', null, 1); // Wire uses EUR
+
+// ===== QUICK AMOUNT CHIPS =====
+document.querySelectorAll('.quick-amount-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+        const target = document.getElementById(chip.dataset.target);
+        target.value = chip.dataset.amount;
+        target.dispatchEvent(new Event('input'));
+        target.focus();
+    });
+});
+
+// ===== MAX BUTTONS =====
+document.querySelectorAll('.max-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.target);
+        target.value = btn.dataset.amount;
+        target.dispatchEvent(new Event('input'));
+    });
+});
+
+// ===== COPY WALLET ADDRESS =====
+document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const text = btn.dataset.copy;
+        navigator.clipboard.writeText(text).then(() => {
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> <span>Copied!</span>';
+            btn.style.background = '#059669';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.style.background = '';
+            }, 2000);
+        });
+    });
+});
+
+// ===== DOWNLOAD QR CODE =====
+function downloadQR(imageUrl, filename) {
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = filename;
+    link.click();
+}
+
+document.getElementById('downloadQrUsdt')?.addEventListener('click', () => {
+    downloadQR('https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TR7NGqz9p8GmQb5XyKvLzN8mPwRtYvUjHc', 'usdt-deposit-qr.png');
+});
+
+document.getElementById('downloadQrBtc')?.addEventListener('click', () => {
+    downloadQR('https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', 'bitcoin-deposit-qr.png');
+});
+
+// ===== SHARE QR CODE =====
+async function shareQR(url, title, text) {
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: title,
+                text: text,
+                url: url
+            });
+        } catch (err) {
+            console.log('Share cancelled');
+        }
+    } else {
+        navigator.clipboard.writeText(url);
+        alert('QR code URL copied to clipboard!');
+    }
+}
+
+document.getElementById('shareQrUsdt')?.addEventListener('click', () => {
+    shareQR(
+        'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TR7NGqz9p8GmQb5XyKvLzN8mPwRtYvUjHc',
+        'USDT Deposit QR',
+        'Scan this QR code to deposit USDT to my Hampdens Bank account'
+    );
+});
+
+document.getElementById('shareQrBtc')?.addEventListener('click', () => {
+    shareQR(
+        'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+        'Bitcoin Deposit QR',
+        'Scan this QR code to deposit Bitcoin to my Hampdens Bank account'
+    );
+});
+
+// ===== WIRE TRANSFER ACTIONS =====
+document.getElementById('contactSupportBtn')?.addEventListener('click', () => {
+    window.location.href = '#';
+});
+
+document.getElementById('backToDashboardBtn')?.addEventListener('click', () => {
+    window.location.href = '#';
+});
+</script>
+{% endblock %}

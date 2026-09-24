@@ -1,0 +1,355 @@
+{% extends './base.html' %}
+
+{% block title %}Dashboard | Hampdens Bank{% endblock %}
+
+{% block content %}
+<!-- Greeting -->
+<div class="greeting">
+    <h1>Good morning, Alex 👋</h1>
+    <p>Here's what's happening with your money today, Thursday, September 24.</p>
+</div>
+
+<!-- Bento Grid -->
+<div class="bento">
+
+    <!-- Hero Balance -->
+    <div class="card-x hero-card">
+        <div class="content">
+            <div class="hero-label">
+                <span class="dot-live"></span>
+                Available balance · Primary account
+            </div>
+            <div class="hero-balance">$24,562<span class="cents">.00</span></div>
+            <div class="hero-change">
+                <span class="up"><i class="fas fa-arrow-up"></i> +$1,284.50 (5.5%)</span>
+                <span class="muted">vs last month</span>
+            </div>
+            <div class="hero-actions">
+                <button class="hero-btn primary"><i class="fas fa-paper-plane"></i> <span>Send</span></button>
+                <button class="hero-btn"><i class="fas fa-plus"></i> <span>Top up</span></button>
+                <button class="hero-btn"><i class="fas fa-exchange-alt"></i> <span>Exchange</span></button>
+                <button class="hero-btn"><i class="fas fa-download"></i> <span>Request</span></button>
+            </div>
+        </div>
+        <div class="hero-card-num">•••• •••• •••• 4829</div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card-x quick-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">Quick actions</div>
+                <div class="card-sub">Most used this week</div>
+            </div>
+        </div>
+        <div class="quick-grid">
+            <a href="#" class="quick-btn">
+                <div class="qi purple"><i class="fas fa-paper-plane"></i></div>
+                <span>Send money</span>
+            </a>
+            <a href="#" class="quick-btn">
+                <div class="qi green"><i class="fas fa-qrcode"></i></div>
+                <span>Scan & pay</span>
+            </a>
+            <a href="#" class="quick-btn">
+                <div class="qi orange"><i class="fas fa-bolt"></i></div>
+                <span>Pay bills</span>
+            </a>
+            <a href="#" class="quick-btn">
+                <div class="qi pink"><i class="fas fa-piggy-bank"></i></div>
+                <span>Savings</span>
+            </a>
+            <a href="#" class="quick-btn">
+                <div class="qi blue"><i class="fas fa-globe"></i></div>
+                <span>Wire transfer</span>
+            </a>
+            <a href="#" class="quick-btn">
+                <div class="qi teal"><i class="fas fa-receipt"></i></div>
+                <span>Statements</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="card-x chart-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">Cash flow</div>
+                <div class="card-sub">Income vs Expenses</div>
+            </div>
+            <div class="chart-tabs">
+                <button>7D</button>
+                <button class="active">30D</button>
+                <button>90D</button>
+                <button>1Y</button>
+            </div>
+        </div>
+        <div class="chart-stats">
+            <div class="stat">
+                <div class="v">$8,420</div>
+                <div class="l">Income</div>
+            </div>
+            <div class="stat">
+                <div class="v">$3,180</div>
+                <div class="l">Expenses</div>
+            </div>
+            <div class="stat">
+                <div class="v" style="color: #059669;">+$5,240</div>
+                <div class="l">Net</div>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="cashflowChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="card-x tx-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">Recent activity</div>
+                <div class="card-sub">Last 5 transactions</div>
+            </div>
+            <a href="#" style="font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none;">View all →</a>
+        </div>
+        <div class="tx-list">
+            <div class="tx-item">
+                <div class="tx-icon in"><i class="fas fa-arrow-down"></i></div>
+                <div class="tx-info">
+                    <p class="tx-name">Salary · Acme Corp</p>
+                    <p class="tx-cat">Income · Today, 09:12</p>
+                </div>
+                <div class="tx-amount">
+                    <div class="v in">+$4,200.00</div>
+                    <div class="t">Completed</div>
+                </div>
+            </div>
+            <div class="tx-item">
+                <div class="tx-icon out" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fab fa-spotify"></i></div>
+                <div class="tx-info">
+                    <p class="tx-name">Spotify Premium</p>
+                    <p class="tx-cat">Subscription · Yesterday</p>
+                </div>
+                <div class="tx-amount">
+                    <div class="v">-$9.99</div>
+                    <div class="t">Card •4829</div>
+                </div>
+            </div>
+            <div class="tx-item">
+                <div class="tx-icon out"><i class="fas fa-shopping-bag"></i></div>
+                <div class="tx-info">
+                    <p class="tx-name">Apple Store</p>
+                    <p class="tx-cat">Shopping · Sep 22</p>
+                </div>
+                <div class="tx-amount">
+                    <div class="v">-$1,299.00</div>
+                    <div class="t">Card •4829</div>
+                </div>
+            </div>
+            <div class="tx-item">
+                <div class="tx-icon out" style="background: rgba(245,158,11,0.12); color: #D97706;"><i class="fas fa-utensils"></i></div>
+                <div class="tx-info">
+                    <p class="tx-name">Blue Bottle Coffee</p>
+                    <p class="tx-cat">Food & Drink · Sep 22</p>
+                </div>
+                <div class="tx-amount">
+                    <div class="v">-$14.50</div>
+                    <div class="t">Card •4829</div>
+                </div>
+            </div>
+            <div class="tx-item">
+                <div class="tx-icon in"><i class="fas fa-user-friends"></i></div>
+                <div class="tx-info">
+                    <p class="tx-name">Sarah Miller</p>
+                    <p class="tx-cat">Transfer · Sep 21</p>
+                </div>
+                <div class="tx-amount">
+                    <div class="v in">+$120.00</div>
+                    <div class="t">Completed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="card-x cards-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">My cards</div>
+                <div class="card-sub">2 active cards</div>
+            </div>
+            <button style="background: var(--surface-2); border: 1px solid var(--line); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;"><i class="fas fa-plus" style="font-size: 10px;"></i> New</button>
+        </div>
+        <div class="card-3d-wrap">
+            <div class="card-3d" id="card3d">
+                <div class="brand">HAMPDENS</div>
+                <div class="chip"></div>
+                <div class="num">4829 •••• •••• 4829</div>
+                <div class="bottom">
+                    <div>
+                        <div class="holder-label">Card holder</div>
+                        <div class="holder-val">ALEX KIM</div>
+                    </div>
+                    <div>
+                        <div class="exp-label">Expires</div>
+                        <div class="exp-val">09/29</div>
+                    </div>
+                    <div class="mc-logo"><span></span><span></span></div>
+                </div>
+            </div>
+        </div>
+        <div class="card-dots">
+            <div class="d active"></div>
+            <div class="d"></div>
+        </div>
+    </div>
+
+    <!-- Savings -->
+    <div class="card-x savings-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">Savings goals</div>
+                <div class="card-sub">3 active</div>
+            </div>
+            <a href="#" style="font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none;">+ New</a>
+        </div>
+        <div class="goal">
+            <div class="goal-head">
+                <div class="gh-left">
+                    <div class="gi" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fas fa-plane"></i></div>
+                    <div>
+                        <p class="gn">Tokyo trip</p>
+                        <p class="gp">$3,420 of $5,000</p>
+                    </div>
+                </div>
+                <strong style="font-size: 12px;">68%</strong>
+            </div>
+            <div class="goal-bar"><div class="fill" style="width: 68%; background: linear-gradient(90deg, #5B5BF7, #7C3AED);"></div></div>
+        </div>
+        <div class="goal">
+            <div class="goal-head">
+                <div class="gh-left">
+                    <div class="gi" style="background: rgba(0,212,168,0.12); color: #059669;"><i class="fas fa-home"></i></div>
+                    <div>
+                        <p class="gn">House deposit</p>
+                        <p class="gp">$18,200 of $40,000</p>
+                    </div>
+                </div>
+                <strong style="font-size: 12px;">45%</strong>
+            </div>
+            <div class="goal-bar"><div class="fill" style="width: 45%; background: linear-gradient(90deg, #00D4A8, #059669);"></div></div>
+        </div>
+        <div class="goal">
+            <div class="goal-head">
+                <div class="gh-left">
+                    <div class="gi" style="background: rgba(245,158,11,0.12); color: #D97706;"><i class="fas fa-car"></i></div>
+                    <div>
+                        <p class="gn">New car</p>
+                        <p class="gp">$6,800 of $25,000</p>
+                    </div>
+                </div>
+                <strong style="font-size: 12px;">27%</strong>
+            </div>
+            <div class="goal-bar"><div class="fill" style="width: 27%; background: linear-gradient(90deg, #F59E0B, #D97706);"></div></div>
+        </div>
+    </div>
+
+    <!-- Spending Breakdown -->
+    <div class="card-x spend-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">Spending</div>
+                <div class="card-sub">This month</div>
+            </div>
+        </div>
+        <div class="spend-list">
+            <div class="spend-row">
+                <div class="si" style="background: rgba(244,63,94,0.1); color: var(--danger);"><i class="fas fa-home"></i></div>
+                <div class="sm">
+                    <p class="sn">Housing</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 85%; background: var(--danger);"></div></div>
+                </div>
+                <div class="sv">$1,840</div>
+            </div>
+            <div class="spend-row">
+                <div class="si" style="background: rgba(245,158,11,0.12); color: #D97706;"><i class="fas fa-utensils"></i></div>
+                <div class="sm">
+                    <p class="sn">Food & Dining</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 55%; background: #F59E0B;"></div></div>
+                </div>
+                <div class="sv">$642</div>
+            </div>
+            <div class="spend-row">
+                <div class="si" style="background: rgba(59,130,246,0.1); color: #2563EB;"><i class="fas fa-car"></i></div>
+                <div class="sm">
+                    <p class="sn">Transport</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 35%; background: #3B82F6;"></div></div>
+                </div>
+                <div class="sv">$284</div>
+            </div>
+            <div class="spend-row">
+                <div class="si" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fas fa-shopping-bag"></i></div>
+                <div class="sm">
+                    <p class="sn">Shopping</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 45%; background: var(--primary);"></div></div>
+                </div>
+                <div class="sv">$412</div>
+            </div>
+            <div class="spend-row">
+                <div class="si" style="background: rgba(0,212,168,0.12); color: #059669;"><i class="fas fa-gamepad"></i></div>
+                <div class="sm">
+                    <p class="sn">Entertainment</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 25%; background: #00D4A8;"></div></div>
+                </div>
+                <div class="sv">$186</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions (Date Style) -->
+    <div class="card-x recent-tx-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">Recent transactions</div>
+                <div class="card-sub">Latest activity</div>
+            </div>
+            <a href="#" style="font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none;">View all →</a>
+        </div>
+        <div>
+            <div class="recent-tx-item">
+                <div class="recent-tx-date"><div class="d">24</div><div class="m">Sep</div></div>
+                <div class="recent-tx-info">
+                    <p class="n">Salary deposit</p>
+                    <p class="c">Acme Corp · Income</p>
+                </div>
+                <div class="recent-tx-amt in">+$4,200.00</div>
+            </div>
+            <div class="recent-tx-item">
+                <div class="recent-tx-date"><div class="d">23</div><div class="m">Sep</div></div>
+                <div class="recent-tx-info">
+                    <p class="n">Spotify Premium</p>
+                    <p class="c">Subscription · Card •4829</p>
+                </div>
+                <div class="recent-tx-amt">-$9.99</div>
+            </div>
+            <div class="recent-tx-item">
+                <div class="recent-tx-date"><div class="d">22</div><div class="m">Sep</div></div>
+                <div class="recent-tx-info">
+                    <p class="n">Apple Store</p>
+                    <p class="c">Shopping · Card •4829</p>
+                </div>
+                <div class="recent-tx-amt">-$1,299.00</div>
+            </div>
+            <div class="recent-tx-item">
+                <div class="recent-tx-date"><div class="d">21</div><div class="m">Sep</div></div>
+                <div class="recent-tx-info">
+                    <p class="n">Transfer from Sarah</p>
+                    <p class="c">P2P Transfer</p>
+                </div>
+                <div class="recent-tx-amt in">+$120.00</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

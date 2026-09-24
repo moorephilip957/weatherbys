@@ -95,7 +95,7 @@ def dashboard(request):
 
     return render(
         request,
-        'customer/dashboard.html',
+        'customers/dashboard.html',
         context
     )
 
@@ -116,7 +116,7 @@ def transaction_list(request):
 
     return render(
         request,
-        'customer/transactions.html',
+        'customers/transaction/transaction_list.html',
         {
             'transactions': page_obj
         }
@@ -148,7 +148,7 @@ def card(request):
 
     return render(
         request,
-        'customer/cards.html',
+        'customers/cards.html',
         {
             'cards': cards,
             'active_cards_count': active_cards_count,

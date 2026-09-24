@@ -1,0 +1,106 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Transfer Failed | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/transfer_success.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="status-page">
+    <!-- Failed Icon -->
+    <div class="status-icon-wrap failed">
+        <i class="fas fa-times-circle status-icon"></i>
+    </div>
+
+    <!-- Status Text -->
+    <h1 class="status-title failed">Transfer Failed</h1>
+    <p class="status-subtitle">We couldn't process your transfer. Please review the details below and try again.</p>
+
+    <!-- Transaction Details -->
+    <div class="status-details-card">
+        <h3><i class="fas fa-exclamation-triangle"></i> Error details</h3>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-user"></i>
+                Recipient
+            </span>
+            <span class="sdr-value">John Davis</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-hashtag"></i>
+                Account number
+            </span>
+            <span class="sdr-value mono">•••• 2841</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-university"></i>
+                Bank
+            </span>
+            <span class="sdr-value">Hampdens Bank</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-calendar"></i>
+                Attempted at
+            </span>
+            <span class="sdr-value">Sep 24, 2026 · 10:12 AM</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-file-invoice"></i>
+                Reference
+            </span>
+            <span class="sdr-value mono">TXN-2026-847292</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-exclamation-circle" style="color: var(--danger);"></i>
+                Error code
+            </span>
+            <span class="sdr-value mono" style="color: var(--danger);">ERR_INSUFFICIENT_FUNDS</span>
+        </div>
+
+        <div class="status-amount-highlight" style="background: linear-gradient(135deg, rgba(244,63,94,0.06), rgba(225,29,72,0.06));">
+            <div class="sah-label">Attempted amount</div>
+            <div class="sah-value" style="color: var(--danger);">$5,000.00</div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="status-actions">
+        <a href="#" class="status-btn danger">
+            <i class="fas fa-redo"></i>
+            <span>Try again</span>
+        </a>
+        <a href="#" class="status-btn secondary">
+            <i class="fas fa-home"></i>
+            <span>Back to dashboard</span>
+        </a>
+        <a href="#" class="status-btn secondary">
+            <i class="fas fa-headset"></i>
+            <span>Contact support</span>
+        </a>
+    </div>
+
+    <!-- Info Box -->
+    <div class="status-info-box" style="background: linear-gradient(135deg, rgba(244,63,94,0.04), rgba(225,29,72,0.02)); border-color: rgba(244,63,94,0.15);">
+        <div class="sib-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+            <i class="fas fa-lightbulb"></i>
+        </div>
+        <div class="sib-content">
+            <p class="sib-title">Why did this fail?</p>
+            <p class="sib-text">Your account balance is insufficient to complete this transfer. Please add funds to your account or reduce the transfer amount. No charges were applied to your account.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

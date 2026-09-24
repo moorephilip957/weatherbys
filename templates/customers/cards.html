@@ -1,0 +1,430 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %}Cards | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/cards.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>My Cards</h1>
+        <p>Manage your debit, credit, and virtual cards</p>
+    </div>
+</div>
+
+<!-- Featured Card + Controls -->
+<div class="cards-hero">
+
+    <!-- Featured Card -->
+    <div class="featured-card-wrap">
+        <div class="featured-head">
+            <div>
+                <h3>Primary Card</h3>
+                <p class="card-type">Platinum Debit · Active</p>
+            </div>
+            <div class="featured-actions">
+                <button class="featured-action-btn" title="Copy card number">
+                    <i class="far fa-copy"></i>
+                </button>
+                <button class="featured-action-btn" title="Download">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button class="featured-action-btn" title="More options">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Big 3D Card -->
+        <div class="card-3d-big" id="card3dBig">
+            <div class="brand">HAMPDENS</div>
+            <div class="chip"></div>
+            <div class="num">
+                <span id="cardNumber">4829 •••• •••• 4829</span>
+                <button class="toggle-vis" id="toggleVis" title="Show/hide">
+                    <i class="far fa-eye" id="eyeIcon"></i>
+                </button>
+            </div>
+            <div class="bottom">
+                <div>
+                    <div class="holder-label">Card holder</div>
+                    <div class="holder-val">ALEX KIM</div>
+                </div>
+                <div>
+                    <div class="exp-label">Expires</div>
+                    <div class="exp-val">09/29</div>
+                </div>
+                <div class="mc-logo"><span></span><span></span></div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="card-balance-chip">
+                <i class="fas fa-wallet"></i>
+                <span>Available:</span>
+                <span class="bal">$24,562.00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Controls -->
+    <div class="controls-panel">
+        <h3>Card Controls</h3>
+        <p class="sub">Manage security and spending preferences</p>
+
+        <div class="control-item">
+            <div class="control-info">
+                <div class="control-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                    <i class="fas fa-snowflake"></i>
+                </div>
+                <div class="control-text">
+                    <p class="ct-name">Freeze card</p>
+                    <p class="ct-desc">Temporarily block all transactions</p>
+                </div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="control-item">
+            <div class="control-info">
+                <div class="control-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="control-text">
+                    <p class="ct-name">International payments</p>
+                    <p class="ct-desc">Allow transactions outside your country</p>
+                </div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="control-item">
+            <div class="control-info">
+                <div class="control-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="control-text">
+                    <p class="ct-name">Online payments</p>
+                    <p class="ct-desc">Enable e-commerce transactions</p>
+                </div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="control-item">
+            <div class="control-info">
+                <div class="control-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="control-text">
+                    <p class="ct-name">ATM withdrawals</p>
+                    <p class="ct-desc">Allow cash withdrawals</p>
+                </div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="control-item">
+            <div class="control-info">
+                <div class="control-icon" style="background: rgba(59,130,246,0.1); color: #2563EB;">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="control-text">
+                    <p class="ct-name">Transaction alerts</p>
+                    <p class="ct-desc">Get notified for every transaction</p>
+                </div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <!-- Spending Limit -->
+        <div class="spending-limit">
+            <div class="sl-head">
+                <span class="sl-label">Monthly spending limit</span>
+                <span class="sl-val">$3,180 / $5,000</span>
+            </div>
+            <div class="sl-bar">
+                <div class="fill" style="width: 63%;"></div>
+            </div>
+            <div class="sl-foot">
+                <span>63% used</span>
+                <span>Resets in 7 days</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Card Gallery -->
+<div class="cards-gallery">
+    <div class="gallery-head">
+        <div>
+            <h3>All Cards</h3>
+            <p class="sub">3 active cards · 1 frozen</p>
+        </div>
+        <button class="btn-add-card">
+            <i class="fas fa-plus"></i>
+            <span>Request new card</span>
+        </button>
+    </div>
+
+    <div class="cards-scroll">
+        <!-- Active Card 1 -->
+        <div class="mini-card active">
+            <div class="mini-card-head">
+                <span class="mini-card-type debit">Debit</span>
+                <span class="mini-card-status"></span>
+            </div>
+            <div class="mini-card-num">•••• 4829</div>
+            <div class="mini-card-foot">
+                <p class="mini-card-holder">
+                    Primary
+                    <strong>Alex Kim</strong>
+                </p>
+                <div class="mini-card-logo"><span></span><span></span></div>
+            </div>
+        </div>
+
+        <!-- Active Card 2 -->
+        <div class="mini-card">
+            <div class="mini-card-head">
+                <span class="mini-card-type credit">Credit</span>
+                <span class="mini-card-status"></span>
+            </div>
+            <div class="mini-card-num">•••• 7156</div>
+            <div class="mini-card-foot">
+                <p class="mini-card-holder">
+                    Travel Rewards
+                    <strong>Alex Kim</strong>
+                </p>
+                <div class="mini-card-logo"><span></span><span></span></div>
+            </div>
+        </div>
+
+        <!-- Active Card 3 -->
+        <div class="mini-card">
+            <div class="mini-card-head">
+                <span class="mini-card-type virtual">Virtual</span>
+                <span class="mini-card-status"></span>
+            </div>
+            <div class="mini-card-num">•••• 3391</div>
+            <div class="mini-card-foot">
+                <p class="mini-card-holder">
+                    Online Shopping
+                    <strong>Alex Kim</strong>
+                </p>
+                <div class="mini-card-logo"><span></span><span></span></div>
+            </div>
+        </div>
+
+        <!-- Frozen Card -->
+        <div class="mini-card">
+            <div class="mini-card-head">
+                <span class="mini-card-type debit">Debit</span>
+                <span class="mini-card-status frozen"></span>
+            </div>
+            <div class="mini-card-num">•••• 9024</div>
+            <div class="mini-card-foot">
+                <p class="mini-card-holder">
+                    Business · Frozen
+                    <strong>Alex Kim</strong>
+                </p>
+                <div class="mini-card-logo"><span></span><span></span></div>
+            </div>
+        </div>
+
+        <!-- Add Card Tile -->
+        <div class="add-card-tile">
+            <div class="aci"><i class="fas fa-plus"></i></div>
+            <p class="act">Add new card</p>
+            <p class="acs">Debit, credit, or virtual</p>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Grid: Spending + Quick Actions -->
+<div class="cards-bottom">
+
+    <!-- Card Spending -->
+    <div class="card-spending-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">Spending on this card</div>
+                <div class="card-sub">Last 30 days · Primary card</div>
+            </div>
+        </div>
+        <div class="spend-list">
+            <div class="spend-row">
+                <div class="si" style="background: rgba(244,63,94,0.1); color: var(--danger);"><i class="fas fa-home"></i></div>
+                <div class="sm">
+                    <p class="sn">Housing</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 85%; background: var(--danger);"></div></div>
+                </div>
+                <div class="sv">$1,840</div>
+            </div>
+            <div class="spend-row">
+                <div class="si" style="background: rgba(245,158,11,0.12); color: #D97706;"><i class="fas fa-utensils"></i></div>
+                <div class="sm">
+                    <p class="sn">Food & Dining</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 55%; background: #F59E0B;"></div></div>
+                </div>
+                <div class="sv">$642</div>
+            </div>
+            <div class="spend-row">
+                <div class="si" style="background: rgba(59,130,246,0.1); color: #2563EB;"><i class="fas fa-car"></i></div>
+                <div class="sm">
+                    <p class="sn">Transport</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 35%; background: #3B82F6;"></div></div>
+                </div>
+                <div class="sv">$284</div>
+            </div>
+            <div class="spend-row">
+                <div class="si" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fas fa-shopping-bag"></i></div>
+                <div class="sm">
+                    <p class="sn">Shopping</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 45%; background: var(--primary);"></div></div>
+                </div>
+                <div class="sv">$412</div>
+            </div>
+            <div class="spend-row">
+                <div class="si" style="background: rgba(0,212,168,0.12); color: #059669;"><i class="fas fa-gamepad"></i></div>
+                <div class="sm">
+                    <p class="sn">Entertainment</p>
+                    <div class="spend-bar-wrap"><div class="fill" style="width: 25%; background: #00D4A8;"></div></div>
+                </div>
+                <div class="sv">$186</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card-spending-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">Quick actions</div>
+                <div class="card-sub">Card management</div>
+            </div>
+        </div>
+        <div class="quick-actions-grid">
+            <a href="#" class="qa-btn">
+                <div class="qa-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                    <i class="fab fa-apple"></i>
+                </div>
+                <div class="qa-text">
+                    <p class="qat">Add to Apple Pay</p>
+                    <p class="qas">Use on iPhone & Mac</p>
+                </div>
+            </a>
+            <a href="#" class="qa-btn">
+                <div class="qa-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                    <i class="fab fa-google-pay"></i>
+                </div>
+                <div class="qa-text">
+                    <p class="qat">Add to Google Pay</p>
+                    <p class="qas">Use on Android</p>
+                </div>
+            </a>
+            <a href="#" class="qa-btn">
+                <div class="qa-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                    <i class="fas fa-key"></i>
+                </div>
+                <div class="qa-text">
+                    <p class="qat">View PIN</p>
+                    <p class="qas">See or change your PIN</p>
+                </div>
+            </a>
+            <a href="#" class="qa-btn">
+                <div class="qa-icon" style="background: rgba(59,130,246,0.1); color: #2563EB;">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+                <div class="qa-text">
+                    <p class="qat">Set limits</p>
+                    <p class="qas">Daily & monthly caps</p>
+                </div>
+            </a>
+            <a href="#" class="qa-btn">
+                <div class="qa-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="qa-text">
+                    <p class="qat">Report lost/stolen</p>
+                    <p class="qas">Block & request new</p>
+                </div>
+            </a>
+            <a href="#" class="qa-btn">
+                <div class="qa-icon" style="background: rgba(124,58,237,0.1); color: var(--primary-2);">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <div class="qa-text">
+                    <p class="qat">Replace card</p>
+                    <p class="qas">Damaged or expired</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Toggle card number visibility
+const toggleVis = document.getElementById('toggleVis');
+const cardNumber = document.getElementById('cardNumber');
+const eyeIcon = document.getElementById('eyeIcon');
+let isVisible = false;
+
+if (toggleVis) {
+    toggleVis.addEventListener('click', () => {
+        isVisible = !isVisible;
+        if (isVisible) {
+            cardNumber.textContent = '4829 3847 5621 4829';
+            eyeIcon.className = 'far fa-eye-slash';
+        } else {
+            cardNumber.textContent = '4829 •••• •••• 4829';
+            eyeIcon.className = 'far fa-eye';
+        }
+    });
+}
+
+// 3D tilt for big card
+const card3dBig = document.getElementById('card3dBig');
+if (card3dBig && window.matchMedia('(hover: hover)').matches) {
+    card3dBig.addEventListener('mousemove', e => {
+        const r = card3dBig.getBoundingClientRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        const rx = ((y / r.height) - 0.5) * -10;
+        const ry = ((x / r.width) - 0.5) * 10;
+        card3dBig.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    card3dBig.addEventListener('mouseleave', () => {
+        card3dBig.style.transform = 'rotateX(0) rotateY(0)';
+    });
+}
+
+// Mini card selection
+document.querySelectorAll('.mini-card').forEach(card => {
+    card.addEventListener('click', () => {
+        document.querySelectorAll('.mini-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+    });
+});
+</script>
+{% endblock %}

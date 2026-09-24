@@ -1,0 +1,132 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Transfer Pending | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/transfer_success.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="status-page">
+    <!-- Pending Icon -->
+    <div class="status-icon-wrap pending">
+        <i class="fas fa-spinner status-icon"></i>
+    </div>
+
+    <!-- Status Text -->
+    <h1 class="status-title pending">Transfer in Progress</h1>
+    <p class="status-subtitle">Your transfer is being processed. We'll notify you once it's completed.</p>
+
+    <!-- Progress Steps -->
+    <div class="progress-steps">
+        <div class="progress-step completed">
+            <div class="ps-icon"><i class="fas fa-check"></i></div>
+            <span class="ps-label">Initiated</span>
+        </div>
+        <div class="progress-step active">
+            <div class="ps-icon"><i class="fas fa-cog"></i></div>
+            <span class="ps-label">Processing</span>
+        </div>
+        <div class="progress-step">
+            <div class="ps-icon"><i class="fas fa-check-circle"></i></div>
+            <span class="ps-label">Completed</span>
+        </div>
+    </div>
+
+    <!-- Transaction Details -->
+    <div class="status-details-card">
+        <h3><i class="fas fa-clock"></i> Transfer details</h3>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-user"></i>
+                Recipient
+            </span>
+            <span class="sdr-value">Emily Chen</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-hashtag"></i>
+                Account number
+            </span>
+            <span class="sdr-value mono">•••• 7465</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-university"></i>
+                Bank
+            </span>
+            <span class="sdr-value">Hampdens Bank</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-calendar"></i>
+                Initiated at
+            </span>
+            <span class="sdr-value">Sep 24, 2026 · 11:30 AM</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-file-invoice"></i>
+                Reference
+            </span>
+            <span class="sdr-value mono">TXN-2026-847293</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-hourglass-half"></i>
+                Estimated completion
+            </span>
+            <span class="sdr-value" style="color: #D97706;">~15 minutes</span>
+        </div>
+
+        <div class="status-amount-highlight" style="background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(217,119,6,0.06));">
+            <div class="sah-label">Amount being sent</div>
+            <div class="sah-value" style="color: #D97706;">$850.00</div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="status-actions">
+        <a href="#" class="status-btn primary">
+            <i class="fas fa-home"></i>
+            <span>Back to dashboard</span>
+        </a>
+        <a href="#" class="status-btn secondary">
+            <i class="fas fa-search"></i>
+            <span>Track transfer</span>
+        </a>
+        <button class="status-btn secondary" id="cancelTransferBtn">
+            <i class="fas fa-times"></i>
+            <span>Cancel transfer</span>
+        </button>
+    </div>
+
+    <!-- Info Box -->
+    <div class="status-info-box" style="background: linear-gradient(135deg, rgba(245,158,11,0.04), rgba(217,119,6,0.02)); border-color: rgba(245,158,11,0.15);">
+        <div class="sib-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+            <i class="fas fa-bell"></i>
+        </div>
+        <div class="sib-content">
+            <p class="sib-title">What happens next?</p>
+            <p class="sib-text">You'll receive an email and push notification once the transfer is complete. The funds will be available in the recipient's account immediately upon completion. You can cancel this transfer within the next 5 minutes if needed.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('cancelTransferBtn')?.addEventListener('click', () => {
+    if (confirm('Are you sure you want to cancel this transfer?')) {
+        alert('Transfer cancellation will be handled by Django backend');
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Transfer Successful | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/transfer_success.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="status-page">
+    <!-- Success Icon -->
+    <div class="status-icon-wrap success">
+        <i class="fas fa-check-circle status-icon"></i>
+    </div>
+
+    <!-- Status Text -->
+    <h1 class="status-title success">Transfer Successful!</h1>
+    <p class="status-subtitle">Your transfer has been completed successfully. The recipient should receive the funds shortly.</p>
+
+    <!-- Transaction Details -->
+    <div class="status-details-card">
+        <h3><i class="fas fa-receipt"></i> Transaction details</h3>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-user"></i>
+                Recipient
+            </span>
+            <span class="sdr-value">Sarah Miller</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-hashtag"></i>
+                Account number
+            </span>
+            <span class="sdr-value mono">•••• 5627</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-university"></i>
+                Bank
+            </span>
+            <span class="sdr-value">Hampdens Bank</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-calendar"></i>
+                Date & time
+            </span>
+            <span class="sdr-value">Sep 24, 2026 · 09:45 AM</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-file-invoice"></i>
+                Reference
+            </span>
+            <span class="sdr-value mono">TXN-2026-847291</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-comment"></i>
+                Memo
+            </span>
+            <span class="sdr-value">Dinner split</span>
+        </div>
+
+        <div class="status-amount-highlight">
+            <div class="sah-label">Amount sent</div>
+            <div class="sah-value">$120.00</div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="status-actions">
+        <a href="#" class="status-btn primary">
+            <i class="fas fa-home"></i>
+            <span>Back to dashboard</span>
+        </a>
+        <a href="#" class="status-btn secondary">
+            <i class="fas fa-paper-plane"></i>
+            <span>Send another</span>
+        </a>
+        <button class="status-btn secondary" id="downloadReceiptBtn">
+            <i class="fas fa-download"></i>
+            <span>Download receipt</span>
+        </button>
+    </div>
+
+    <!-- Info Box -->
+    <div class="status-info-box">
+        <div class="sib-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="sib-content">
+            <p class="sib-title">What's next?</p>
+            <p class="sib-text">The recipient will receive a notification once the funds are available in their account. You can track this transaction in your transaction history.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('downloadReceiptBtn')?.addEventListener('click', () => {
+    alert('Receipt download will be implemented with Django backend');
+});
+</script>
+{% endblock %}

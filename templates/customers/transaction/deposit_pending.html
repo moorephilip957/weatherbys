@@ -1,0 +1,154 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Deposit Pending | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/transfer_success.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/deposit_pending.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="status-page">
+    <!-- Pending Icon -->
+    <div class="status-icon-wrap pending">
+        <i class="fas fa-spinner status-icon"></i>
+    </div>
+
+    <!-- Status Text -->
+    <h1 class="status-title pending">Deposit in Progress</h1>
+    <p class="status-subtitle">Your deposit is being confirmed on the blockchain. We'll credit your account once it's fully confirmed.</p>
+
+    <!-- Network Confirmations Progress -->
+    <div class="confirmations-wrap">
+        <h3><i class="fas fa-link"></i> Network confirmations</h3>
+
+        <div class="confirmations-track">
+            <div class="conf-step completed">
+                <div class="cs-dot"><i class="fas fa-check"></i></div>
+                <span class="cs-label">Broadcast</span>
+                <span class="cs-time">11:30 AM</span>
+            </div>
+            <div class="conf-step active">
+                <div class="cs-dot">2</div>
+                <span class="cs-label">Confirming</span>
+                <span class="cs-time">~5 min left</span>
+            </div>
+            <div class="conf-step">
+                <div class="cs-dot">3</div>
+                <span class="cs-label">Confirmed</span>
+                <span class="cs-time">—</span>
+            </div>
+            <div class="conf-step">
+                <div class="cs-dot"><i class="fas fa-check-circle"></i></div>
+                <span class="cs-label">Credited</span>
+                <span class="cs-time">—</span>
+            </div>
+        </div>
+
+        <div class="conf-summary">
+            <div class="cs-left">
+                <strong>2 of 3</strong> confirmations received
+            </div>
+            <div class="cs-right">
+                <span class="dot-live"></span>
+                <span>Monitoring network</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Details -->
+    <div class="deposit-details-card">
+        <h3><i class="fas fa-wallet"></i> Deposit details</h3>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-coins"></i>
+                Deposit method
+            </span>
+            <span class="sdr-value">
+                <span class="deposit-method-badge usdt">
+                    <span class="dbm-logo">₮</span>
+                    USDT · TRC20
+                </span>
+            </span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-arrow-down"></i>
+                Deposit address
+            </span>
+            <span class="sdr-value mono" style="font-size: 11px;">TR7NGq...UjHc</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-hashtag"></i>
+                Transaction hash
+            </span>
+            <span class="sdr-value">
+                <a href="#" class="explorer-link">
+                    <span class="mono" style="font-size: 11px;">a8f3...c92d</span>
+                    <i class="fas fa-external-link-alt" style="font-size: 9px;"></i>
+                </a>
+            </span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-calendar"></i>
+                Initiated at
+            </span>
+            <span class="sdr-value">Sep 24, 2026 · 11:30 AM</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-hourglass-half"></i>
+                Estimated completion
+            </span>
+            <span class="sdr-value" style="color: #D97706;">~5 minutes</span>
+        </div>
+
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-network-wired"></i>
+                Network
+            </span>
+            <span class="sdr-value">TRON (TRC20)</span>
+        </div>
+
+        <div class="status-amount-highlight" style="background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(217,119,6,0.06));">
+            <div class="sah-label">Amount being deposited</div>
+            <div class="sah-value" style="color: #D97706;">1,000 USDT</div>
+            <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">≈ $1,000.00 USD</div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="status-actions">
+        <a href="#" class="status-btn primary">
+            <i class="fas fa-home"></i>
+            <span>Back to dashboard</span>
+        </a>
+        <a href="#" class="status-btn secondary">
+            <i class="fas fa-history"></i>
+            <span>Deposit history</span>
+        </a>
+        <a href="#" class="status-btn secondary">
+            <i class="fas fa-headset"></i>
+            <span>Contact support</span>
+        </a>
+    </div>
+
+    <!-- Warning Box -->
+    <div class="deposit-warning-box">
+        <div class="dwb-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="dwb-content">
+            <p class="dwb-title">Please don't close this page</p>
+            <p class="dwb-text">Your deposit will be automatically credited once it receives 3 network confirmations. This typically takes 5-15 minutes. If your deposit doesn't appear within 30 minutes, please contact support with your transaction hash.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

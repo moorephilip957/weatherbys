@@ -1,0 +1,354 @@
+/* ===== TRANSFER STATUS PAGES ===== */
+
+.status-page {
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+/* Status Icon */
+.status-icon-wrap {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 28px;
+    position: relative;
+}
+.status-icon-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    opacity: 0.2;
+    animation: statusPulse 2s ease-in-out infinite;
+}
+@keyframes statusPulse {
+    0%, 100% { transform: scale(1); opacity: 0.2; }
+    50% { transform: scale(1.1); opacity: 0.1; }
+}
+
+.status-icon-wrap.success {
+    background: linear-gradient(135deg, rgba(0,212,168,0.15), rgba(5,150,105,0.15));
+}
+.status-icon-wrap.success::before {
+    background: rgba(0,212,168,0.2);
+}
+.status-icon-wrap.success .status-icon {
+    color: #059669;
+    font-size: 56px;
+    animation: checkmarkDraw 0.6s ease-out;
+}
+@keyframes checkmarkDraw {
+    0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+    50% { transform: scale(1.2) rotate(0deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.status-icon-wrap.failed {
+    background: linear-gradient(135deg, rgba(244,63,94,0.15), rgba(225,29,72,0.15));
+}
+.status-icon-wrap.failed::before {
+    background: rgba(244,63,94,0.2);
+}
+.status-icon-wrap.failed .status-icon {
+    color: var(--danger);
+    font-size: 56px;
+    animation: shakeIcon 0.5s ease-out;
+}
+@keyframes shakeIcon {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+
+.status-icon-wrap.pending {
+    background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.15));
+}
+.status-icon-wrap.pending::before {
+    background: rgba(245,158,11,0.2);
+}
+.status-icon-wrap.pending .status-icon {
+    color: #D97706;
+    font-size: 48px;
+    animation: spinIcon 2s linear infinite;
+}
+@keyframes spinIcon {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Status Text */
+.status-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 10px;
+    letter-spacing: -0.02em;
+}
+.status-title.success { color: #059669; }
+.status-title.failed { color: var(--danger); }
+.status-title.pending { color: #D97706; }
+
+.status-subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    margin: 0 0 32px;
+    line-height: 1.6;
+}
+
+/* Transaction Details Card */
+.status-details-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+    text-align: left;
+    margin-bottom: 24px;
+}
+.status-details-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.status-details-card h3 i {
+    color: var(--primary);
+}
+
+.status-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line-2);
+}
+.status-detail-row:last-child {
+    border-bottom: none;
+}
+.status-detail-row .sdr-label {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.status-detail-row .sdr-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: right;
+    font-family: 'Plus Jakarta Sans';
+}
+.status-detail-row .sdr-value.mono {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+}
+
+.status-amount-highlight {
+    background: linear-gradient(135deg, rgba(91,91,247,0.06), rgba(124,58,237,0.06));
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 12px;
+    text-align: center;
+}
+.status-amount-highlight .sah-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+.status-amount-highlight .sah-value {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+/* Action Buttons */
+.status-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.status-btn {
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .2s;
+    text-decoration: none;
+}
+.status-btn.primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: #fff;
+    border: none;
+    box-shadow: 0 6px 16px -4px rgba(91,91,247,0.4);
+}
+.status-btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -4px rgba(91,91,247,0.5);
+}
+.status-btn.secondary {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+}
+.status-btn.secondary:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.status-btn.success {
+    background: linear-gradient(135deg, #00D4A8, #059669);
+    color: #fff;
+    border: none;
+    box-shadow: 0 6px 16px -4px rgba(0,212,168,0.4);
+}
+.status-btn.danger {
+    background: linear-gradient(135deg, var(--danger), #E11D48);
+    color: #fff;
+    border: none;
+    box-shadow: 0 6px 16px -4px rgba(244,63,94,0.4);
+}
+
+/* Info Box */
+.status-info-box {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    text-align: left;
+}
+.status-info-box .sib-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+.status-info-box .sib-content {
+    flex: 1;
+}
+.status-info-box .sib-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+.status-info-box .sib-text {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Progress Steps (for pending) */
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 0;
+    position: relative;
+}
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--line);
+    z-index: 0;
+}
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+}
+.progress-step .ps-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--line);
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    color: var(--muted);
+    transition: all .3s;
+}
+.progress-step.active .ps-icon {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.2);
+}
+.progress-step.completed .ps-icon {
+    background: #059669;
+    border-color: #059669;
+    color: #fff;
+}
+.progress-step .ps-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+}
+.progress-step.active .ps-label,
+.progress-step.completed .ps-label {
+    color: var(--ink);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .status-page {
+        margin: 20px auto;
+        padding: 0 16px;
+    }
+    .status-icon-wrap {
+        width: 100px;
+        height: 100px;
+    }
+    .status-icon-wrap .status-icon {
+        font-size: 44px !important;
+    }
+    .status-title {
+        font-size: 24px;
+    }
+    .status-amount-highlight .sah-value {
+        font-size: 24px;
+    }
+    .status-actions {
+        flex-direction: column;
+    }
+    .status-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .progress-steps {
+        margin: 20px 0;
+    }
+    .progress-step .ps-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 12px;
+    }
+    .progress-step .ps-label {
+        font-size: 10px;
+    }
+}

@@ -64,7 +64,7 @@ def local_transfer(request):
     context = {
         'form': form,
     }
-    return render(request, 'transactions/local_transfer.html', context)
+    return render(request, 'customers/transaction/local_transfer.html', context)
 
 
 @login_required
@@ -115,7 +115,7 @@ def wire_transfer(request):
     }
     return render(
         request,
-        'transactions/wire_transfer.html',
+        'customers/transaction/wire_transfer.html',
         context
     )
 
@@ -133,7 +133,7 @@ def transfer_success(request, tx_id):
 
     return render(
         request,
-        "transactions/transfer_success.html",
+        "customers/transaction/transfer_success.html",
         {
             "transaction": transaction
         }
@@ -152,7 +152,7 @@ def transfer_pending(request, tx_id):
 
     return render(
         request,
-        "transactions/transfer_pending.html",
+        "customers/transaction/transfer_pending.html",
         {
             "transaction": transaction
         }
@@ -172,7 +172,7 @@ def transfer_failed(request, tx_id):
 
     return render(
         request,
-        "transactions/transfer_failed.html",
+        "customers/transaction/transfer_failed.html",
         {
             "transaction": transaction
         }
@@ -206,7 +206,7 @@ def create_deposit(request):
 
     return render(
         request,
-        "transactions/create_deposit.html",
+        "customers/transaction/create_deposit.html",
         {
             "form": form
         }
@@ -327,7 +327,7 @@ def deposit_pending(request, deposit_id):
 
     return render(
         request,
-        "transactions/deposit_pending.html",
+        "customers/transaction/deposit_pending.html",
         {
             "deposit": deposit
         }

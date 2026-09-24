@@ -1,0 +1,471 @@
+/* ===== DEPOSIT PAGE ===== */
+
+/* ===== DEPOSIT AMOUNT CARD ===== */
+.deposit-amount-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+.deposit-amount-head h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+.deposit-amount-head p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 20px;
+}
+
+.deposit-methods {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 6px;
+}
+.deposit-method-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.deposit-method-tab:hover {
+    color: var(--ink);
+    background: var(--surface-2);
+}
+.deposit-method-tab.active {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 12px -3px rgba(91,91,247,0.4);
+}
+.deposit-method-tab .method-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+}
+.deposit-method-tab.active .method-icon {
+    background: rgba(255,255,255,0.2);
+}
+
+/* Deposit Content Panels */
+.deposit-content {
+    display: none;
+}
+.deposit-content.active {
+    display: block;
+}
+
+/* Crypto Deposit Layout */
+.crypto-deposit-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+/* QR Code Card */
+.qr-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 32px;
+    text-align: center;
+}
+.qr-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+.qr-card .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 24px;
+}
+.qr-code-wrap {
+    background: #fff;
+    border: 2px solid var(--line);
+    border-radius: 16px;
+    padding: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+    position: relative;
+}
+.qr-code-wrap img {
+    width: 200px;
+    height: 200px;
+    display: block;
+}
+.qr-code-wrap .crypto-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #fff;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.qr-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.qr-action-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .2s;
+    color: var(--ink-2);
+}
+.qr-action-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* Wallet Info Card */
+.wallet-info-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+}
+.wallet-info-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+.wallet-info-card .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 20px;
+}
+
+.wallet-address-box {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.wallet-address-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.wallet-address-value {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    word-break: break-all;
+    line-height: 1.6;
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    position: relative;
+}
+.wallet-address-value .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all .2s;
+}
+.wallet-address-value .copy-btn:hover {
+    background: var(--primary-2);
+}
+
+.wallet-input-group {
+    margin-top: 20px;
+}
+.wallet-input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--ink-2);
+}
+.wallet-input-group .input-wrap {
+    position: relative;
+}
+.wallet-input-group input {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: 'Courier New', monospace;
+    transition: all .2s;
+    outline: none;
+}
+.wallet-input-group input:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.1);
+}
+.wallet-input-group .input-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Deposit Instructions */
+.deposit-instructions {
+    background: linear-gradient(135deg, rgba(91,91,247,0.04), rgba(124,58,237,0.04));
+    border: 1px solid rgba(91,91,247,0.15);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+}
+.deposit-instructions h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+}
+.deposit-instructions ol {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.8;
+}
+.deposit-instructions li {
+    margin-bottom: 4px;
+}
+
+/* Wire Transfer Deposit */
+.wire-deposit-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 32px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.wire-deposit-header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+}
+.wire-deposit-header .payment-method-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(91,91,247,0.1);
+    color: var(--primary);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+}
+.wire-deposit-header h2 {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0 0 8px;
+}
+.wire-deposit-header .amount-display {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 12px 0;
+}
+
+.wire-instructions-box {
+    background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(244,63,94,0.04));
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+.wire-instructions-box .wib-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+.wire-instructions-box .wib-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(245,158,11,0.15);
+    color: #D97706;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.wire-instructions-box .wib-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 2px;
+    color: var(--ink);
+}
+.wire-instructions-box .wib-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+}
+.wire-instructions-box .wib-content {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.wire-contact-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+.wire-contact-btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .2s;
+    box-shadow: 0 6px 16px -4px rgba(91,91,247,0.4);
+}
+.wire-contact-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -4px rgba(91,91,247,0.5);
+}
+.wire-contact-btn.secondary {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    box-shadow: none;
+}
+.wire-contact-btn.secondary:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* Important Notice */
+.important-notice {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+}
+.important-notice .in-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(91,91,247,0.1);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+.important-notice .in-content {
+    flex: 1;
+}
+.important-notice .in-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--ink);
+}
+.important-notice .in-text {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .crypto-deposit-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .deposit-methods {
+        flex-direction: column;
+    }
+    .deposit-method-tab {
+        justify-content: flex-start;
+    }
+    .qr-code-wrap img {
+        width: 160px;
+        height: 160px;
+    }
+    .wire-deposit-header .amount-display {
+        font-size: 28px;
+    }
+    .wire-contact-actions {
+        flex-direction: column;
+    }
+    .wire-contact-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

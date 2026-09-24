@@ -1,0 +1,288 @@
+/* ===== INTERNATIONAL WIRE TRANSFER PAGE ===== */
+
+/* Currency Selector */
+.currency-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+.currency-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all .2s;
+    font-size: 13px;
+    font-weight: 600;
+}
+.currency-option:hover {
+    border-color: var(--primary);
+}
+.currency-option.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+.currency-option .flag {
+    font-size: 18px;
+}
+
+/* FX Rate Display */
+.fx-rate-box {
+    background: linear-gradient(135deg, rgba(0,212,168,0.08), rgba(91,91,247,0.08));
+    border: 1px solid rgba(0,212,168,0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.fx-rate-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+}
+.fx-rate-info .fx-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(0,212,168,0.15);
+    color: #059669;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+}
+.fx-rate-info .fx-label {
+    color: var(--muted);
+    margin: 0;
+    font-size: 11px;
+}
+.fx-rate-info .fx-value {
+    font-family: 'Plus Jakarta Sans';
+    font-weight: 700;
+    font-size: 13px;
+    margin: 0;
+    color: var(--ink);
+}
+.fx-rate-live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+}
+.fx-rate-live .dot-live {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+}
+
+/* Country Select with Flags */
+.country-select-wrap {
+    position: relative;
+}
+.country-select {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px 12px 40px;
+    font-size: 14px;
+    color: var(--ink);
+    font-family: inherit;
+    transition: all .2s;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+}
+.country-select:focus {
+    border-color: var(--primary);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.1);
+}
+.country-flag-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;
+}
+
+/* Wire Warning Box */
+.wire-warning {
+    background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(244,63,94,0.04));
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+.wire-warning .ww-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(245,158,11,0.15);
+    color: #D97706;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+.wire-warning .ww-content {
+    flex: 1;
+}
+.wire-warning .ww-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--ink);
+}
+.wire-warning .ww-text {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Wire Info Sidebar */
+.wire-info-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px;
+}
+.wire-info-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.wire-info-card h3 i {
+    color: var(--warning);
+}
+.wire-info-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line-2);
+}
+.wire-info-item:last-child {
+    border-bottom: none;
+}
+.wire-info-item .wii-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+.wire-info-item .wii-content {
+    flex: 1;
+}
+.wire-info-item .wii-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0 0 2px;
+}
+.wire-info-item .wii-value {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--ink);
+}
+
+/* Cancel Button */
+.btn-cancel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .2s;
+}
+.btn-cancel:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(244,63,94,0.04);
+}
+
+/* Recipient Preview */
+.recipient-preview {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    display: none;
+}
+.recipient-preview.active {
+    display: block;
+}
+.recipient-preview .rp-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.recipient-preview .rp-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+}
+.recipient-preview .rp-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+}
+.recipient-preview .rp-bank {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0;
+}
+.recipient-preview .rp-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    font-size: 11px;
+}
+.recipient-preview .rp-details .rd-label {
+    color: var(--muted);
+}
+.recipient-preview .rp-details .rd-value {
+    font-weight: 600;
+    color: var(--ink);
+    text-align: right;
+}
