@@ -46,14 +46,14 @@ def create_ticket(request):
     else:
         form = TicketForm()
 
-    return render(request, "support/create_ticket.html", {"form": form})
+    return render(request, "customers/support/create_ticket.html", {"form": form})
 
 
 @login_required
 # @kyc_required
 def ticket_success(request, reference_id):
     ticket = get_object_or_404(Ticket, reference_id=reference_id)
-    return render(request, "support/ticket_success.html", {"ticket": ticket})
+    return render(request, "customers/support/ticket_success.html", {"ticket": ticket})
 
 
 @login_required
@@ -66,7 +66,7 @@ def ticket_list(request):
     if status and status != "all":
         tickets = tickets.filter(status=status)
 
-    return render(request, "support/ticket_list.html", {
+    return render(request, "customers/support/ticket_list.html", {
         "tickets": tickets
     })
 
@@ -102,7 +102,7 @@ def ticket_detail(request, reference_id):
         else:
             messages.error(request, "Please enter a message or attach a file.")
 
-    return render(request, "support/ticket_detail.html", {
+    return render(request, "customers/support/ticket_detail.html", {
         "ticket": ticket,
         "messages": messages_qs
     })

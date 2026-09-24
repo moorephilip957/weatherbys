@@ -1,0 +1,340 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Request a Loan | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/local_transfer.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/loan.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>Request a Loan</h1>
+        <p>Get instant funding with competitive rates</p>
+    </div>
+</div>
+
+<!-- Loan Limit Alert (Static - Django will control visibility) -->
+<!-- 
+    In Django: {% if active_loans_count >= 2 %}
+    This alert will only show when user has 2+ active loans{% endif %}
+-->
+<div class="loan-alert">
+    <div class="la-icon"><i class="fas fa-exclamation-triangle"></i></div>
+    <div class="la-content">
+        <p class="la-title">Loan limit reached</p>
+        <p class="la-text">You have already requested 2 loans and cannot request another at this time. Please pay off one of your existing loans before applying for a new one.</p>
+        <button class="la-action">
+            <i class="fas fa-list"></i>
+            <span>View my loans</span>
+        </button>
+    </div>
+</div>
+
+<div class="loan-layout">
+
+    <!-- Main Form -->
+    <div>
+
+        <!-- Loan Amount -->
+        <div class="loan-amount-section">
+            <div class="loan-amount-content">
+                <div class="loan-amount-label">
+                    <i class="fas fa-dollar-sign"></i>
+                    Loan amount
+                </div>
+                <div class="loan-amount-display">
+                    <span class="currency">$</span>
+                    <span id="loanAmountDisplay">5,000</span>
+                </div>
+                <div class="loan-slider-wrap">
+                    <input type="range" class="loan-slider" id="loanSlider" min="500" max="50000" step="100" value="5000">
+                </div>
+                <div class="loan-slider-range">
+                    <span>Min: <strong>$500</strong></span>
+                    <span>Max: <strong>$50,000</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Term Selector -->
+        <div class="term-selector">
+            <h4><i class="fas fa-calendar-alt"></i> Loan term</h4>
+            <div class="term-options">
+                <div class="term-option" data-months="3">
+                    <div class="to-value">3</div>
+                    <div class="to-label">Months</div>
+                </div>
+                <div class="term-option" data-months="6">
+                    <div class="to-value">6</div>
+                    <div class="to-label">Months</div>
+                </div>
+                <div class="term-option active" data-months="12">
+                    <div class="to-value">12</div>
+                    <div class="to-label">Months</div>
+                </div>
+                <div class="term-option" data-months="24">
+                    <div class="to-value">24</div>
+                    <div class="to-label">Months</div>
+                </div>
+                <div class="term-option" data-months="36">
+                    <div class="to-value">36</div>
+                    <div class="to-label">Months</div>
+                </div>
+                <div class="term-option" data-months="48">
+                    <div class="to-value">48</div>
+                    <div class="to-label">Months</div>
+                </div>
+                <div class="term-option" data-months="60">
+                    <div class="to-value">60</div>
+                    <div class="to-label">Months</div>
+                </div>
+                <div class="term-option" data-months="84">
+                    <div class="to-value">84</div>
+                    <div class="to-label">Months</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Purpose Selector -->
+        <div class="purpose-selector">
+            <h4><i class="fas fa-bullseye"></i> Loan purpose</h4>
+            <div class="purpose-options">
+                <div class="purpose-option active" data-purpose="personal">
+                    <div class="po-icon"><i class="fas fa-user"></i></div>
+                    <div class="po-label">Personal</div>
+                </div>
+                <div class="purpose-option" data-purpose="business">
+                    <div class="po-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="po-label">Business</div>
+                </div>
+                <div class="purpose-option" data-purpose="education">
+                    <div class="po-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="po-label">Education</div>
+                </div>
+                <div class="purpose-option" data-purpose="medical">
+                    <div class="po-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div class="po-label">Medical</div>
+                </div>
+                <div class="purpose-option" data-purpose="home">
+                    <div class="po-icon"><i class="fas fa-home"></i></div>
+                    <div class="po-label">Home</div>
+                </div>
+                <div class="purpose-option" data-purpose="other">
+                    <div class="po-icon"><i class="fas fa-ellipsis-h"></i></div>
+                    <div class="po-label">Other</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PIN Section -->
+        <div class="pin-section">
+            <div class="form-section-head" style="margin-bottom: 0;">
+                <div class="form-section-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div>
+                    <h3 class="form-section-title">Transaction PIN</h3>
+                    <p class="form-section-sub">Enter your 6-digit PIN to authorize this loan request</p>
+                </div>
+            </div>
+
+            <div class="pin-input-wrap">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="0">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="1">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="2">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="3">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="4">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="5">
+            </div>
+
+            <div class="pin-helper">
+                <i class="fas fa-shield-alt"></i>
+                <span>Your PIN is encrypted and never stored in plain text</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sidebar Summary -->
+    <div class="loan-summary-card">
+        <h3><i class="fas fa-calculator"></i> Loan summary</h3>
+
+        <div class="loan-summary-row">
+            <span class="lsr-label">Loan amount</span>
+            <span class="lsr-value" id="summaryAmount">$5,000.00</span>
+        </div>
+        <div class="loan-summary-row">
+            <span class="lsr-label">Loan term</span>
+            <span class="lsr-value" id="summaryTerm">12 months</span>
+        </div>
+        <div class="loan-summary-row">
+            <span class="lsr-label">
+                Interest rate (APR)
+                <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="Annual Percentage Rate"></i>
+            </span>
+            <span class="lsr-value" id="summaryRate">8.5%</span>
+        </div>
+        <div class="loan-summary-row">
+            <span class="lsr-label">Processing fee</span>
+            <span class="lsr-value" id="summaryFee">$50.00</span>
+        </div>
+        <div class="loan-summary-row">
+            <span class="lsr-label">Total interest</span>
+            <span class="lsr-value" id="summaryInterest">$231.00</span>
+        </div>
+
+        <div class="loan-summary-total">
+            <div class="lst-label">Monthly payment</div>
+            <div class="lst-value" id="summaryMonthly">$435.92</div>
+            <div class="lst-sub">for <span id="summaryTermSub">12</span> months</div>
+        </div>
+
+        <div class="loan-summary-row">
+            <span class="lsr-label">Total repayment</span>
+            <span class="lsr-value highlight" id="summaryTotal">$5,281.00</span>
+        </div>
+
+        <button class="btn-request-loan" id="requestLoanBtn">
+            <i class="fas fa-paper-plane"></i>
+            <span>Request loan</span>
+        </button>
+
+        <div class="eligibility-info">
+            <div class="ei-head">
+                <i class="fas fa-check-circle"></i>
+                <span>You're eligible</span>
+            </div>
+            <div class="eligibility-item">
+                <i class="fas fa-check"></i>
+                <span>Credit score: 720 (Good)</span>
+            </div>
+            <div class="eligibility-item">
+                <i class="fas fa-check"></i>
+                <span>Account age: 2+ years</span>
+            </div>
+            <div class="eligibility-item">
+                <i class="fas fa-check"></i>
+                <span>Stable income verified</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== LOAN AMOUNT SLIDER =====
+const loanSlider = document.getElementById('loanSlider');
+const loanAmountDisplay = document.getElementById('loanAmountDisplay');
+let loanAmount = 5000;
+let loanTerm = 12;
+let interestRate = 8.5;
+
+loanSlider.addEventListener('input', (e) => {
+    loanAmount = parseFloat(e.target.value);
+    loanAmountDisplay.textContent = loanAmount.toLocaleString('en-US');
+    updateLoanSummary();
+});
+
+// ===== TERM SELECTOR =====
+document.querySelectorAll('.term-option').forEach(option => {
+    option.addEventListener('click', () => {
+        document.querySelectorAll('.term-option').forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+        loanTerm = parseInt(option.dataset.months);
+        
+        // Adjust interest rate based on term (longer = slightly higher)
+        if (loanTerm <= 6) interestRate = 7.5;
+        else if (loanTerm <= 12) interestRate = 8.5;
+        else if (loanTerm <= 24) interestRate = 9.5;
+        else if (loanTerm <= 36) interestRate = 10.5;
+        else if (loanTerm <= 60) interestRate = 11.5;
+        else interestRate = 12.5;
+        
+        updateLoanSummary();
+    });
+});
+
+// ===== PURPOSE SELECTOR =====
+document.querySelectorAll('.purpose-option').forEach(option => {
+    option.addEventListener('click', () => {
+        document.querySelectorAll('.purpose-option').forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+    });
+});
+
+// ===== UPDATE LOAN SUMMARY =====
+function updateLoanSummary() {
+    const monthlyRate = interestRate / 100 / 12;
+    const monthlyPayment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, loanTerm)) / 
+                           (Math.pow(1 + monthlyRate, loanTerm) - 1);
+    const totalRepayment = monthlyPayment * loanTerm;
+    const totalInterest = totalRepayment - loanAmount;
+    const processingFee = Math.min(loanAmount * 0.01, 500);
+    
+    document.getElementById('summaryAmount').textContent = '$' + loanAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('summaryTerm').textContent = loanTerm + ' months';
+    document.getElementById('summaryRate').textContent = interestRate.toFixed(1) + '%';
+    document.getElementById('summaryFee').textContent = '$' + processingFee.toFixed(2);
+    document.getElementById('summaryInterest').textContent = '$' + totalInterest.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('summaryMonthly').textContent = '$' + monthlyPayment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('summaryTermSub').textContent = loanTerm;
+    document.getElementById('summaryTotal').textContent = '$' + totalRepayment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// Initial calculation
+updateLoanSummary();
+
+// ===== PIN INPUTS =====
+const pinBoxes = document.querySelectorAll('.pin-box');
+pinBoxes.forEach((box, idx) => {
+    box.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val;
+        if (val && idx < pinBoxes.length - 1) {
+            pinBoxes[idx + 1].focus();
+        }
+        if (val) box.classList.add('filled');
+        else box.classList.remove('filled');
+    });
+
+    box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && idx > 0) {
+            pinBoxes[idx - 1].focus();
+        }
+    });
+});
+
+// ===== REQUEST LOAN BUTTON =====
+document.getElementById('requestLoanBtn').addEventListener('click', () => {
+    let pin = '';
+    pinBoxes.forEach(b => pin += b.value);
+    
+    if (pin.length !== 6) {
+        alert('Please enter your 6-digit PIN');
+        pinBoxes[0].focus();
+        return;
+    }
+    
+    const btn = document.getElementById('requestLoanBtn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Processing...</span>';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> <span>Loan requested!</span>';
+        btn.style.background = 'linear-gradient(135deg, #00D4A8, #059669)';
+        
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Request loan</span>';
+            btn.style.background = '';
+            btn.disabled = false;
+        }, 3000);
+    }, 2000);
+});
+</script>
+{% endblock %}

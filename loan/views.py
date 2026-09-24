@@ -34,7 +34,7 @@ def apply_loan(request):
     else:
         form = LoanApplicationForm()
 
-    return render(request, 'loan/apply_loan.html', {
+    return render(request, 'customers/loan/apply_loan.html', {
         'form': form,
         "active_loans": active_loans
     })
@@ -56,7 +56,7 @@ def loan_history(request):
 
     loans = loans.order_by('-date_applied')
 
-    return render(request, 'loan/loan_history.html', {
+    return render(request, 'customers/loan/loan_history.html', {
         'loans': loans,
         'status': status
     })

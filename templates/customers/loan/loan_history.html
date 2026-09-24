@@ -1,0 +1,359 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Loan History | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/transaction_list.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/loan.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>Loan History</h1>
+        <p>Track and manage all your loans</p>
+    </div>
+    <a href="#" class="btn-export">
+        <i class="fas fa-plus"></i>
+        <span>Request new loan</span>
+    </a>
+</div>
+
+<!-- Summary Cards -->
+<div class="summary-grid">
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Total borrowed</span>
+            <div class="sc-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                <i class="fas fa-coins"></i>
+            </div>
+        </div>
+        <div class="sc-value">$47,500.00</div>
+        <span class="sc-change up"><i class="fas fa-arrow-up"></i> 4 loans total</span>
+    </div>
+
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Active loans</span>
+            <div class="sc-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                <i class="fas fa-bolt"></i>
+            </div>
+        </div>
+        <div class="sc-value">2</div>
+        <span class="sc-change up"><i class="fas fa-info-circle"></i> Max limit reached</span>
+    </div>
+
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Next payment</span>
+            <div class="sc-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                <i class="fas fa-calendar"></i>
+            </div>
+        </div>
+        <div class="sc-value">$872.45</div>
+        <span class="sc-change down"><i class="fas fa-clock"></i> Due in 5 days</span>
+    </div>
+
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Credit score</span>
+            <div class="sc-icon" style="background: rgba(59,130,246,0.1); color: #2563EB;">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </div>
+        <div class="sc-value" style="color: #059669;">720</div>
+        <span class="sc-change up"><i class="fas fa-arrow-up"></i> +12 this month</span>
+    </div>
+</div>
+
+<!-- Filter Tabs -->
+<div class="loan-filter-tabs">
+    <button class="loan-filter-tab active">
+        <span>All loans</span>
+        <span class="tab-count">4</span>
+    </button>
+    <button class="loan-filter-tab">
+        <span>Active</span>
+        <span class="tab-count">2</span>
+    </button>
+    <button class="loan-filter-tab">
+        <span>Paid</span>
+        <span class="tab-count">1</span>
+    </button>
+    <button class="loan-filter-tab">
+        <span>Overdue</span>
+        <span class="tab-count">1</span>
+    </button>
+</div>
+
+<!-- Loans Grid -->
+<div class="loans-grid">
+
+    <!-- Active Loan 1 -->
+    <div class="loan-card active">
+        <div class="loan-card-head">
+            <div class="loan-card-info">
+                <p class="lci-purpose"><i class="fas fa-user"></i> Personal loan</p>
+                <h2 class="lci-amount">$5,000.00</h2>
+                <p class="lci-ref">REF-2026-847291</p>
+            </div>
+            <span class="loan-status-badge active">
+                <span class="lsb-dot"></span>
+                Active
+            </span>
+        </div>
+
+        <div class="loan-progress">
+            <div class="loan-progress-head">
+                <span class="lph-label">Repayment progress</span>
+                <span class="lph-value">45%</span>
+            </div>
+            <div class="loan-progress-bar">
+                <div class="lpb-fill" style="width: 45%;"></div>
+            </div>
+        </div>
+
+        <div class="loan-details-grid">
+            <div class="loan-detail-item">
+                <div class="ldi-label">Monthly payment</div>
+                <div class="ldi-value">$435.92</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Remaining</div>
+                <div class="ldi-value">$2,750.00</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Interest rate</div>
+                <div class="ldi-value">8.5% APR</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Term</div>
+                <div class="ldi-value">12 months</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Disbursed</div>
+                <div class="ldi-value">Jun 15, 2026</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Next payment</div>
+                <div class="ldi-value" style="color: #D97706;">Oct 15, 2026</div>
+            </div>
+        </div>
+
+        <div class="loan-card-actions">
+            <a href="#" class="loan-action-btn primary">
+                <i class="fas fa-credit-card"></i>
+                <span>Make payment</span>
+            </a>
+            <a href="#" class="loan-action-btn">
+                <i class="fas fa-file-alt"></i>
+                <span>View details</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Active Loan 2 -->
+    <div class="loan-card active">
+        <div class="loan-card-head">
+            <div class="loan-card-info">
+                <p class="lci-purpose"><i class="fas fa-briefcase"></i> Business loan</p>
+                <h2 class="lci-amount">$15,000.00</h2>
+                <p class="lci-ref">REF-2026-847180</p>
+            </div>
+            <span class="loan-status-badge active">
+                <span class="lsb-dot"></span>
+                Active
+            </span>
+        </div>
+
+        <div class="loan-progress">
+            <div class="loan-progress-head">
+                <span class="lph-label">Repayment progress</span>
+                <span class="lph-value">12%</span>
+            </div>
+            <div class="loan-progress-bar">
+                <div class="lpb-fill" style="width: 12%;"></div>
+            </div>
+        </div>
+
+        <div class="loan-details-grid">
+            <div class="loan-detail-item">
+                <div class="ldi-label">Monthly payment</div>
+                <div class="ldi-value">$671.25</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Remaining</div>
+                <div class="ldi-value">$13,200.00</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Interest rate</div>
+                <div class="ldi-value">9.5% APR</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Term</div>
+                <div class="ldi-value">24 months</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Disbursed</div>
+                <div class="ldi-value">Aug 03, 2026</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Next payment</div>
+                <div class="ldi-value" style="color: #D97706;">Oct 03, 2026</div>
+            </div>
+        </div>
+
+        <div class="loan-card-actions">
+            <a href="#" class="loan-action-btn primary">
+                <i class="fas fa-credit-card"></i>
+                <span>Make payment</span>
+            </a>
+            <a href="#" class="loan-action-btn">
+                <i class="fas fa-file-alt"></i>
+                <span>View details</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Overdue Loan -->
+    <div class="loan-card overdue">
+        <div class="loan-card-head">
+            <div class="loan-card-info">
+                <p class="lci-purpose"><i class="fas fa-graduation-cap"></i> Education loan</p>
+                <h2 class="lci-amount">$8,500.00</h2>
+                <p class="lci-ref">REF-2026-846920</p>
+            </div>
+            <span class="loan-status-badge overdue">
+                <span class="lsb-dot"></span>
+                Overdue
+            </span>
+        </div>
+
+        <div class="loan-progress">
+            <div class="loan-progress-head">
+                <span class="lph-label">Repayment progress</span>
+                <span class="lph-value">68%</span>
+            </div>
+            <div class="loan-progress-bar">
+                <div class="lpb-fill" style="width: 68%;"></div>
+            </div>
+        </div>
+
+        <div class="loan-details-grid">
+            <div class="loan-detail-item">
+                <div class="ldi-label">Monthly payment</div>
+                <div class="ldi-value">$392.50</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Remaining</div>
+                <div class="ldi-value">$2,720.00</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Interest rate</div>
+                <div class="ldi-value">7.5% APR</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Term</div>
+                <div class="ldi-value">24 months</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Disbursed</div>
+                <div class="ldi-value">Jan 10, 2025</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Overdue by</div>
+                <div class="ldi-value" style="color: var(--danger);">12 days</div>
+            </div>
+        </div>
+
+        <div class="loan-card-actions">
+            <a href="#" class="loan-action-btn primary" style="background: var(--danger); border-color: var(--danger);">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Pay now</span>
+            </a>
+            <a href="#" class="loan-action-btn">
+                <i class="fas fa-headset"></i>
+                <span>Contact support</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Paid Loan -->
+    <div class="loan-card paid">
+        <div class="loan-card-head">
+            <div class="loan-card-info">
+                <p class="lci-purpose"><i class="fas fa-heartbeat"></i> Medical loan</p>
+                <h2 class="lci-amount">$3,200.00</h2>
+                <p class="lci-ref">REF-2025-843102</p>
+            </div>
+            <span class="loan-status-badge paid">
+                <span class="lsb-dot"></span>
+                Paid
+            </span>
+        </div>
+
+        <div class="loan-progress">
+            <div class="loan-progress-head">
+                <span class="lph-label">Repayment progress</span>
+                <span class="lph-value">100%</span>
+            </div>
+            <div class="loan-progress-bar">
+                <div class="lpb-fill" style="width: 100%;"></div>
+            </div>
+        </div>
+
+        <div class="loan-details-grid">
+            <div class="loan-detail-item">
+                <div class="ldi-label">Monthly payment</div>
+                <div class="ldi-value">$285.40</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Remaining</div>
+                <div class="ldi-value" style="color: #059669;">$0.00</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Interest rate</div>
+                <div class="ldi-value">7.0% APR</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Term</div>
+                <div class="ldi-value">12 months</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Disbursed</div>
+                <div class="ldi-value">Mar 22, 2025</div>
+            </div>
+            <div class="loan-detail-item">
+                <div class="ldi-label">Paid off</div>
+                <div class="ldi-value" style="color: #059669;">Mar 22, 2026</div>
+            </div>
+        </div>
+
+        <div class="loan-card-actions">
+            <a href="#" class="loan-action-btn">
+                <i class="fas fa-download"></i>
+                <span>Download receipt</span>
+            </a>
+            <a href="#" class="loan-action-btn">
+                <i class="fas fa-file-alt"></i>
+                <span>View details</span>
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Filter tab toggle
+document.querySelectorAll('.loan-filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.loan-filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+    });
+});
+</script>
+{% endblock %}

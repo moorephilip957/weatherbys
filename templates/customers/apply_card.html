@@ -1,0 +1,451 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}Apply for Card | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/local_transfer.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/cards.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/apply_card.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>Apply for a Card</h1>
+        <p>Choose your perfect card and get started in minutes</p>
+    </div>
+</div>
+
+<div class="apply-card-layout">
+
+    <!-- Main Form -->
+    <div>
+
+        <!-- Card Preview Hero -->
+        <div class="card-preview-hero">
+            <div class="card-preview-hero-content">
+                <p class="cph-label">Your card preview</p>
+                
+                <div class="preview-card platinum" id="previewCard">
+                    <span class="pc-tier" id="previewTier">PLATINUM</span>
+                    <span class="pc-brand">HAMPDENS</span>
+                    <div class="pc-chip"></div>
+                    <div class="pc-num">•••• •••• •••• ••••</div>
+                    <div class="pc-bottom">
+                        <div>
+                            <div class="pc-holder-label">Card holder</div>
+                            <div class="pc-holder-val" id="previewName">ALEX KIM</div>
+                        </div>
+                        <div>
+                            <div class="pc-exp-label">Expires</div>
+                            <div class="pc-exp-val">09/31</div>
+                        </div>
+                    </div>
+                    <div class="pc-network mastercard" id="previewNetwork">
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+
+                <p class="card-preview-caption">
+                    <strong id="previewCaptionTitle">Platinum Mastercard</strong> · One-time issuance fee
+                </p>
+            </div>
+        </div>
+
+        <!-- Card Type Selector -->
+        <div class="card-type-selector">
+            <h4><i class="fas fa-credit-card"></i> Card network</h4>
+            <div class="card-type-options">
+                <div class="card-type-option" data-type="visa">
+                    <span class="cto-check"><i class="fas fa-check"></i></span>
+                    <div class="cto-logo visa-logo">VISA</div>
+                    <p class="cto-name">Visa</p>
+                    <p class="cto-desc">Accepted worldwide</p>
+                </div>
+                <div class="card-type-option active" data-type="mastercard">
+                    <span class="cto-check"><i class="fas fa-check"></i></span>
+                    <div class="cto-logo mc-logo">
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <p class="cto-name">Mastercard</p>
+                    <p class="cto-desc">Global acceptance</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Tier Selector -->
+        <div class="card-tier-selector">
+            <h4><i class="fas fa-layer-group"></i> Card tier</h4>
+            <p class="cts-sub">Choose the tier that matches your lifestyle and spending habits</p>
+            <div class="card-tier-grid">
+                <div class="card-tier-option" data-tier="standard" data-fee="5">
+                    <div class="cto-mini standard"></div>
+                    <p class="cto-tier-name">Standard</p>
+                    <p class="cto-tier-price"><strong>$5</strong> fee</p>
+                </div>
+                <div class="card-tier-option" data-tier="gold" data-fee="15">
+                    <div class="cto-mini gold"></div>
+                    <p class="cto-tier-name">Gold</p>
+                    <p class="cto-tier-price"><strong>$15</strong> fee</p>
+                </div>
+                <div class="card-tier-option active" data-tier="platinum" data-fee="25">
+                    <span class="popular-tag">Popular</span>
+                    <div class="cto-mini platinum"></div>
+                    <p class="cto-tier-name">Platinum</p>
+                    <p class="cto-tier-price"><strong>$25</strong> fee</p>
+                </div>
+                <div class="card-tier-option" data-tier="black" data-fee="50">
+                    <div class="cto-mini black"></div>
+                    <p class="cto-tier-name">Black</p>
+                    <p class="cto-tier-price"><strong>$50</strong> fee</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Settings -->
+        <div class="settings-section">
+            <h4><i class="fas fa-sliders-h"></i> Card settings</h4>
+            <div class="settings-grid">
+                <div class="form-field">
+                    <label class="form-label">Currency <span class="req">*</span></label>
+                    <select class="form-select" id="currencySelect">
+                        <option value="USD" data-symbol="$">🇺🇸 USD - US Dollar</option>
+                        <option value="EUR" data-symbol="€">🇪🇺 EUR - Euro</option>
+                        <option value="GBP" data-symbol="£">🇬🇧 GBP - British Pound</option>
+                        <option value="JPY" data-symbol="¥">🇯🇵 JPY - Japanese Yen</option>
+                        <option value="CAD" data-symbol="C$">🇨🇦 CAD - Canadian Dollar</option>
+                        <option value="AUD" data-symbol="A$">🇦🇺 AUD - Australian Dollar</option>
+                        <option value="CHF" data-symbol="Fr">🇨🇭 CHF - Swiss Franc</option>
+                        <option value="SGD" data-symbol="S$">🇸🇬 SGD - Singapore Dollar</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Cardholder name <span class="req">*</span></label>
+                    <input type="text" class="form-input" id="cardholderName" value="Alex Kim" placeholder="Name on card">
+                </div>
+            </div>
+
+            <!-- Spending Limit -->
+            <div style="margin-top: 18px;">
+                <label class="form-label">Daily spending limit</label>
+                <div class="spending-limit-wrap">
+                    <div class="spending-limit-display">
+                        <span class="sld-value" id="spendingValue">$5,000</span>
+                        <span class="sld-label">per day</span>
+                    </div>
+                    <input type="range" class="spending-slider" id="spendingSlider" min="100" max="50000" step="100" value="5000">
+                    <div class="spending-range">
+                        <span>$100</span>
+                        <span>$50,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delivery Method -->
+        <div class="settings-section">
+            <h4><i class="fas fa-shipping-fast"></i> Delivery method</h4>
+            <div class="delivery-options">
+                <div class="delivery-option" data-delivery="standard" data-cost="0">
+                    <div class="do-icon"><i class="fas fa-envelope"></i></div>
+                    <p class="do-name">Standard Mail</p>
+                    <p class="do-time">7-10 business days</p>
+                    <p class="do-price">Free</p>
+                </div>
+                <div class="delivery-option active" data-delivery="express" data-cost="15">
+                    <span class="do-tag">Fast</span>
+                    <div class="do-icon"><i class="fas fa-truck"></i></div>
+                    <p class="do-name">Express</p>
+                    <p class="do-time">2-3 business days</p>
+                    <p class="do-price">$15.00</p>
+                </div>
+                <div class="delivery-option" data-delivery="pickup" data-cost="0">
+                    <div class="do-icon"><i class="fas fa-university"></i></div>
+                    <p class="do-name">Branch Pickup</p>
+                    <p class="do-time">Ready in 24 hours</p>
+                    <p class="do-price">Free</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Billing Sidebar -->
+    <div class="billing-sidebar">
+
+        <!-- Billing Information -->
+        <div class="billing-card">
+            <h3><i class="fas fa-file-invoice"></i> Billing information</h3>
+
+            <div class="form-field" style="margin-bottom: 14px;">
+                <label class="form-label">Email address <span class="req">*</span></label>
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" class="form-input" value="alex.kim@example.com" placeholder="your@email.com">
+                </div>
+            </div>
+
+            <div class="form-field" style="margin-bottom: 14px;">
+                <label class="form-label">Phone number <span class="req">*</span></label>
+                <div class="input-with-icon">
+                    <i class="fas fa-phone input-icon"></i>
+                    <input type="tel" class="form-input" value="+1 (555) 123-4567" placeholder="+1 (555) 000-0000">
+                </div>
+            </div>
+
+            <div class="form-field" style="margin-bottom: 14px;">
+                <label class="form-label">Billing address <span class="req">*</span></label>
+                <div class="input-with-icon">
+                    <i class="fas fa-map-marker-alt input-icon"></i>
+                    <input type="text" class="form-input" value="123 Park Avenue, Apt 4B" placeholder="Street address">
+                </div>
+            </div>
+
+            <div class="settings-grid" style="gap: 10px;">
+                <div class="form-field">
+                    <label class="form-label">City <span class="req">*</span></label>
+                    <input type="text" class="form-input" value="New York" placeholder="City">
+                </div>
+                <div class="form-field">
+                    <label class="form-label">ZIP code <span class="req">*</span></label>
+                    <input type="text" class="form-input" value="10017" placeholder="ZIP">
+                </div>
+            </div>
+
+            <div class="form-field" style="margin-top: 14px;">
+                <label class="form-label">Country <span class="req">*</span></label>
+                <select class="form-select">
+                    <option selected>🇺🇸 United States</option>
+                    <option>🇨🇦 Canada</option>
+                    <option>🇬🇧 United Kingdom</option>
+                    <option>🇩🇪 Germany</option>
+                    <option>🇫🇷 France</option>
+                    <option>🇦🇺 Australia</option>
+                    <option>🇯🇵 Japan</option>
+                    <option>🇸🇬 Singapore</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="billing-card">
+            <div class="order-summary">
+                <h4><i class="fas fa-receipt"></i> Order summary</h4>
+                <div class="order-row">
+                    <span class="or-label">Card tier</span>
+                    <span class="or-value" id="summaryTier">Platinum</span>
+                </div>
+                <div class="order-row">
+                    <span class="or-label">Network</span>
+                    <span class="or-value" id="summaryNetwork">Mastercard</span>
+                </div>
+                <div class="order-row">
+                    <span class="or-label">Issuance fee</span>
+                    <span class="or-value" id="summaryFee">$25.00</span>
+                </div>
+                <div class="order-row">
+                    <span class="or-label">Delivery</span>
+                    <span class="or-value" id="summaryDelivery">$15.00</span>
+                </div>
+                <div class="order-row">
+                    <span class="or-label">Currency</span>
+                    <span class="or-value" id="summaryCurrency">USD</span>
+                </div>
+                <div class="order-divider"></div>
+                <div class="order-total">
+                    <span class="ot-label">Total</span>
+                    <span class="ot-value" id="summaryTotal">$40.00</span>
+                </div>
+            </div>
+
+            <button class="btn-apply-card" id="applyBtn">
+                <i class="fas fa-credit-card"></i>
+                <span>Apply for card</span>
+            </button>
+
+            <p class="terms-note">
+                By applying, you agree to our <a href="#">Card Terms & Conditions</a> and <a href="#">Privacy Policy</a>.
+            </p>
+        </div>
+
+        <!-- Benefits -->
+        <div class="benefits-card">
+            <h3><i class="fas fa-star"></i> What you get</h3>
+            <div class="benefit-item">
+                <div class="bi-icon"><i class="fas fa-check"></i></div>
+                <p class="bi-text"><strong>Zero foreign transaction fees</strong> on all purchases worldwide</p>
+            </div>
+            <div class="benefit-item">
+                <div class="bi-icon"><i class="fas fa-check"></i></div>
+                <p class="bi-text"><strong>Real-time notifications</strong> for every transaction</p>
+            </div>
+            <div class="benefit-item">
+                <div class="bi-icon"><i class="fas fa-check"></i></div>
+                <p class="bi-text"><strong>Freeze & unfreeze</strong> instantly from the app</p>
+            </div>
+            <div class="benefit-item">
+                <div class="bi-icon"><i class="fas fa-check"></i></div>
+                <p class="bi-text"><strong>Apple Pay & Google Pay</strong> ready out of the box</p>
+            </div>
+            <div class="benefit-item">
+                <div class="bi-icon"><i class="fas fa-check"></i></div>
+                <p class="bi-text"><strong>Fraud protection</strong> with 24/7 monitoring</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// State
+let state = {
+    type: 'mastercard',
+    tier: 'platinum',
+    fee: 25,
+    currency: 'USD',
+    symbol: '$',
+    delivery: 'express',
+    deliveryCost: 15,
+    spending: 5000,
+    name: 'Alex Kim'
+};
+
+// Card Type Selection
+document.querySelectorAll('.card-type-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+        document.querySelectorAll('.card-type-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        state.type = opt.dataset.type;
+        updatePreview();
+        updateSummary();
+    });
+});
+
+// Card Tier Selection
+document.querySelectorAll('.card-tier-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+        document.querySelectorAll('.card-tier-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        state.tier = opt.dataset.tier;
+        state.fee = parseFloat(opt.dataset.fee);
+        updatePreview();
+        updateSummary();
+    });
+});
+
+// Delivery Selection
+document.querySelectorAll('.delivery-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+        document.querySelectorAll('.delivery-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        state.delivery = opt.dataset.delivery;
+        state.deliveryCost = parseFloat(opt.dataset.cost);
+        updateSummary();
+    });
+});
+
+// Currency Selection
+document.getElementById('currencySelect').addEventListener('change', (e) => {
+    const option = e.target.options[e.target.selectedIndex];
+    state.currency = option.value;
+    state.symbol = option.dataset.symbol;
+    updateSummary();
+    updateSpendingDisplay();
+});
+
+// Cardholder Name
+document.getElementById('cardholderName').addEventListener('input', (e) => {
+    state.name = e.target.value || 'YOUR NAME';
+    updatePreview();
+});
+
+// Spending Slider
+const spendingSlider = document.getElementById('spendingSlider');
+spendingSlider.addEventListener('input', (e) => {
+    state.spending = parseInt(e.target.value);
+    updateSpendingDisplay();
+});
+
+function updateSpendingDisplay() {
+    document.getElementById('spendingValue').textContent = 
+        state.symbol + state.spending.toLocaleString('en-US');
+}
+
+// Update Card Preview
+function updatePreview() {
+    const card = document.getElementById('previewCard');
+    const network = document.getElementById('previewNetwork');
+    
+    // Update tier
+    card.classList.remove('standard', 'gold', 'platinum', 'black');
+    card.classList.add(state.tier);
+    
+    // Update tier label
+    document.getElementById('previewTier').textContent = state.tier.toUpperCase();
+    
+    // Update name
+    document.getElementById('previewName').textContent = state.name.toUpperCase();
+    
+    // Update network
+    network.classList.remove('visa', 'mastercard');
+    if (state.type === 'visa') {
+        network.classList.add('visa');
+        network.innerHTML = '<span>VISA</span>';
+    } else {
+        network.classList.add('mastercard');
+        network.innerHTML = '<span></span><span></span>';
+    }
+    
+    // Update caption
+    const tierName = state.tier.charAt(0).toUpperCase() + state.tier.slice(1);
+    const networkName = state.type === 'visa' ? 'Visa' : 'Mastercard';
+    document.getElementById('previewCaptionTitle').textContent = `${tierName} ${networkName}`;
+}
+
+// Update Order Summary
+function updateSummary() {
+    const tierName = state.tier.charAt(0).toUpperCase() + state.tier.slice(1);
+    const networkName = state.type === 'visa' ? 'Visa' : 'Mastercard';
+    const deliveryCost = state.deliveryCost === 0 ? 'Free' : '$' + state.deliveryCost.toFixed(2);
+    const total = state.fee + state.deliveryCost;
+    
+    document.getElementById('summaryTier').textContent = tierName;
+    document.getElementById('summaryNetwork').textContent = networkName;
+    document.getElementById('summaryFee').textContent = '$' + state.fee.toFixed(2);
+    document.getElementById('summaryDelivery').textContent = deliveryCost;
+    document.getElementById('summaryCurrency').textContent = state.currency;
+    document.getElementById('summaryTotal').textContent = '$' + total.toFixed(2);
+}
+
+// Apply Button
+document.getElementById('applyBtn').addEventListener('click', () => {
+    const btn = document.getElementById('applyBtn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Processing...</span>';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> <span>Application submitted!</span>';
+        btn.style.background = 'linear-gradient(135deg, #00D4A8, #059669)';
+        
+        setTimeout(() => {
+            // Will be Django URL
+            // window.location.href = '#';
+            btn.innerHTML = '<i class="fas fa-credit-card"></i> <span>Apply for card</span>';
+            btn.style.background = '';
+            btn.disabled = false;
+        }, 2000);
+    }, 1500);
+});
+
+// Initial state
+updatePreview();
+updateSummary();
+updateSpendingDisplay();
+</script>
+{% endblock %}

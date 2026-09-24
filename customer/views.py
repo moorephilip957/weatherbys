@@ -93,6 +93,11 @@ def dashboard(request):
         'recent_transactions': recent_transactions,
     }
 
+    # return render(
+    #     request,
+    #     'customer/dashboard.html',
+    #     context
+    # )
     return render(
         request,
         'customers/dashboard.html',
@@ -222,8 +227,12 @@ def download_app(request):
 
     return render(
         request,
-        'customer/download_app2.html',
+        'customers/download_app.html',
     )
+    # return render(
+    #     request,
+    #     'customer/download_app2.html',
+    # )
 
 @login_required
 @kyc_required
@@ -234,7 +243,7 @@ def settings(request):
 
     return render(
         request,
-        'customer/settings.html',
+        'customers/settings.html',
         {
             'user': user,
             'bank_account': getattr(user, 'bank_account', None),
@@ -306,7 +315,7 @@ def apply_card(request):
 
     return render(
         request,
-        'customer/apply_card.html',
+        'customers/apply_card.html',
         {
             'form': form,
             'account': account,

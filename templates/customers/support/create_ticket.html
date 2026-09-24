@@ -1,0 +1,243 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Create Support Ticket | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/local_transfer.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/support.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>Create Support Ticket</h1>
+        <p>Get help from our support team</p>
+    </div>
+</div>
+
+<div class="create-ticket-layout">
+
+    <!-- Main Form -->
+    <div class="create-ticket-card">
+        <h3>Ticket details</h3>
+        <p class="ctc-sub">Fill out the form below and we'll get back to you as soon as possible</p>
+
+        <form id="ticketForm">
+
+            <!-- Subject -->
+            <div class="form-field" style="margin-bottom: 18px;">
+                <label class="form-label">Subject <span class="req">*</span></label>
+                <div class="input-with-icon">
+                    <i class="fas fa-heading input-icon"></i>
+                    <input type="text" class="form-input" placeholder="Brief summary of your issue" required>
+                </div>
+            </div>
+
+            <!-- Category -->
+            <div class="form-field" style="margin-bottom: 18px;">
+                <label class="form-label">Category <span class="req">*</span></label>
+                <select class="form-select" required>
+                    <option value="">Select a category</option>
+                    <option value="account">Account issues</option>
+                    <option value="transaction">Transaction problems</option>
+                    <option value="card">Card issues</option>
+                    <option value="transfer">Transfer issues</option>
+                    <option value="loan">Loan inquiries</option>
+                    <option value="deposit">Deposit issues</option>
+                    <option value="security">Security concerns</option>
+                    <option value="technical">Technical issues</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <!-- Priority -->
+            <div style="margin-bottom: 20px;">
+                <label class="form-label">Priority <span class="req">*</span></label>
+                <div class="priority-selector">
+                    <div class="priority-option low" data-priority="low">
+                        <div class="po-icon"><i class="fas fa-flag"></i></div>
+                        <p class="po-label">Low</p>
+                        <p class="po-desc">General inquiry</p>
+                    </div>
+                    <div class="priority-option medium active" data-priority="medium">
+                        <div class="po-icon"><i class="fas fa-exclamation"></i></div>
+                        <p class="po-label">Medium</p>
+                        <p class="po-desc">Needs attention</p>
+                    </div>
+                    <div class="priority-option high" data-priority="high">
+                        <div class="po-icon"><i class="fas fa-bolt"></i></div>
+                        <p class="po-label">High</p>
+                        <p class="po-desc">Urgent issue</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-field" style="margin-bottom: 18px;">
+                <label class="form-label">Description <span class="req">*</span></label>
+                <textarea class="form-textarea" rows="6" placeholder="Please describe your issue in detail. Include any error messages, steps to reproduce, and what you were trying to do..." required></textarea>
+                <div class="form-hint">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Be as detailed as possible to help us resolve your issue faster</span>
+                </div>
+            </div>
+
+            <!-- File Upload -->
+            <div style="margin-bottom: 20px;">
+                <label class="form-label">Attachments <span class="opt">(optional)</span></label>
+                <div class="file-upload-area" id="fileUploadArea">
+                    <div class="fua-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <p class="fua-title">Drop files here or click to browse</p>
+                    <p class="fua-sub">PNG, JPG, PDF up to 10MB each · Max 5 files</p>
+                    <input type="file" id="fileInput" multiple accept=".png,.jpg,.jpeg,.pdf" style="display: none;">
+                </div>
+                <div class="uploaded-files" id="uploadedFiles"></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="ticket-form-actions">
+                <button type="button" class="btn-back" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Cancel</span>
+                </button>
+                <button type="submit" class="btn-submit-ticket">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Submit ticket</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="recent-tickets-sidebar">
+        <h3>
+            <span>Recent tickets</span>
+            <a href="{% url 'support:tickets' %}">View all</a>
+        </h3>
+
+        <a href="#" class="recent-ticket-item">
+            <span class="rti-status open"></span>
+            <div class="rti-content">
+                <p class="rti-subject">Unable to complete international wire</p>
+                <p class="rti-meta">
+                    <span>#TKT-847291</span>
+                    <span>·</span>
+                    <span>2 hours ago</span>
+                </p>
+            </div>
+        </a>
+
+        <a href="#" class="recent-ticket-item">
+            <span class="rti-status progress"></span>
+            <div class="rti-content">
+                <p class="rti-subject">Card blocked after suspicious activity</p>
+                <p class="rti-meta">
+                    <span>#TKT-847180</span>
+                    <span>·</span>
+                    <span>Yesterday</span>
+                </p>
+            </div>
+        </a>
+
+        <a href="#" class="recent-ticket-item">
+            <span class="rti-status resolved"></span>
+            <div class="rti-content">
+                <p class="rti-subject">Request for account statement</p>
+                <p class="rti-meta">
+                    <span>#TKT-846920</span>
+                    <span>·</span>
+                    <span>3 days ago</span>
+                </p>
+            </div>
+        </a>
+
+        <a href="#" class="recent-ticket-item">
+            <span class="rti-status closed"></span>
+            <div class="rti-content">
+                <p class="rti-subject">Update email address</p>
+                <p class="rti-meta">
+                    <span>#TKT-845102</span>
+                    <span>·</span>
+                    <span>1 week ago</span>
+                </p>
+            </div>
+        </a>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Priority selector
+document.querySelectorAll('.priority-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+        document.querySelectorAll('.priority-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+    });
+});
+
+// File upload
+const fileUploadArea = document.getElementById('fileUploadArea');
+const fileInput = document.getElementById('fileInput');
+const uploadedFiles = document.getElementById('uploadedFiles');
+
+fileUploadArea.addEventListener('click', () => fileInput.click());
+
+fileUploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileUploadArea.classList.add('dragover');
+});
+
+fileUploadArea.addEventListener('dragleave', () => {
+    fileUploadArea.classList.remove('dragover');
+});
+
+fileUploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileUploadArea.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+});
+
+fileInput.addEventListener('change', (e) => {
+    handleFiles(e.target.files);
+});
+
+function handleFiles(files) {
+    Array.from(files).forEach(file => {
+        if (uploadedFiles.children.length >= 5) {
+            alert('Maximum 5 files allowed');
+            return;
+        }
+        const fileEl = document.createElement('div');
+        fileEl.className = 'uploaded-file';
+        fileEl.innerHTML = `
+            <div class="uf-icon"><i class="fas fa-file"></i></div>
+            <div class="uf-info">
+                <p class="uf-name">${file.name}</p>
+                <p class="uf-size">${(file.size / 1024).toFixed(1)} KB</p>
+            </div>
+            <button type="button" class="uf-remove"><i class="fas fa-times"></i></button>
+        `;
+        fileEl.querySelector('.uf-remove').addEventListener('click', () => fileEl.remove());
+        uploadedFiles.appendChild(fileEl);
+    });
+}
+
+// Form submit
+document.getElementById('ticketForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = document.querySelector('.btn-submit-ticket');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Submitting...</span>';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> <span>Ticket created!</span>';
+        btn.style.background = 'linear-gradient(135deg, #00D4A8, #059669)';
+    }, 1500);
+});
+</script>
+{% endblock %}

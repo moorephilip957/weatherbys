@@ -1,0 +1,367 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}My Profile | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>My Profile</h1>
+        <p>View and manage your account information</p>
+    </div>
+</div>
+
+<!-- Profile Header -->
+<div class="profile-header">
+    <div class="profile-header-content">
+        <div class="profile-avatar-wrap">
+            <div class="profile-avatar">AK</div>
+            <div class="profile-avatar-status">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+
+        <div class="profile-header-info">
+            <h1 class="ph-name">Alex Kim</h1>
+            <p class="ph-email">
+                <i class="fas fa-envelope"></i>
+                alex.kim@example.com
+            </p>
+            <div class="profile-badges">
+                <span class="profile-badge premium">
+                    <i class="fas fa-crown"></i>
+                    <span>Premium Member</span>
+                </span>
+                <span class="profile-badge verified">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Verified Account</span>
+                </span>
+                <span class="profile-badge member">
+                    <i class="fas fa-calendar"></i>
+                    <span>Member since Jan 2024</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="profile-header-stats">
+            <div class="profile-stat">
+                <p class="ps-value">148</p>
+                <p class="ps-label">Transactions</p>
+            </div>
+            <div class="profile-stat">
+                <p class="ps-value">4</p>
+                <p class="ps-label">Cards</p>
+            </div>
+            <div class="profile-stat">
+                <p class="ps-value">2</p>
+                <p class="ps-label">Active Loans</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Layout -->
+<div class="profile-layout">
+
+    <!-- Left Column -->
+    <div>
+
+        <!-- Personal Information -->
+        <div class="profile-info-card">
+            <div class="profile-info-card-head">
+                <h3><i class="fas fa-user"></i> Personal information</h3>
+                <span class="card-action">
+                    <i class="fas fa-lock"></i>
+                    Read only
+                </span>
+            </div>
+
+            <div class="info-row">
+                <div class="ir-left">
+                    <div class="ir-icon"><i class="fas fa-user"></i></div>
+                    <div>
+                        <p class="ir-label">Full name</p>
+                        <p class="ir-value">Alex Kim</p>
+                    </div>
+                </div>
+                <button class="ir-edit edit-trigger">
+                    <i class="fas fa-pen"></i>
+                    <span class="edit-tooltip">Contact support to update</span>
+                </button>
+            </div>
+
+            <div class="info-row">
+                <div class="ir-left">
+                    <div class="ir-icon"><i class="fas fa-birthday-cake"></i></div>
+                    <div>
+                        <p class="ir-label">Date of birth</p>
+                        <p class="ir-value">March 15, 1990</p>
+                    </div>
+                </div>
+                <button class="ir-edit edit-trigger">
+                    <i class="fas fa-pen"></i>
+                    <span class="edit-tooltip">Contact support to update</span>
+                </button>
+            </div>
+
+            <div class="info-row">
+                <div class="ir-left">
+                    <div class="ir-icon"><i class="fas fa-venus-mars"></i></div>
+                    <div>
+                        <p class="ir-label">Gender</p>
+                        <p class="ir-value">Male</p>
+                    </div>
+                </div>
+                <button class="ir-edit edit-trigger">
+                    <i class="fas fa-pen"></i>
+                    <span class="edit-tooltip">Contact support to update</span>
+                </button>
+            </div>
+
+            <div class="info-row">
+                <div class="ir-left">
+                    <div class="ir-icon"><i class="fas fa-flag"></i></div>
+                    <div>
+                        <p class="ir-label">Nationality</p>
+                        <p class="ir-value">🇺🇸 United States</p>
+                    </div>
+                </div>
+                <button class="ir-edit edit-trigger">
+                    <i class="fas fa-pen"></i>
+                    <span class="edit-tooltip">Contact support to update</span>
+                </button>
+            </div>
+
+            <div class="info-row">
+                <div class="ir-left">
+                    <div class="ir-icon"><i class="fas fa-id-card"></i></div>
+                    <div>
+                        <p class="ir-label">Customer ID</p>
+                        <p class="ir-value" style="font-family: 'Courier New', monospace;">HB-2024-0847291</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="profile-info-card">
+            <div class="profile-info-card-head">
+                <h3><i class="fas fa-address-book"></i> Contact information</h3>
+                <span class="card-action">
+                    <i class="fas fa-lock"></i>
+                    Read only
+                </span>
+            </div>
+
+            <div class="info-row">
+                <div class="ir-left">
+                    <div class="ir-icon"><i class="fas fa-envelope"></i></div>
+                    <div>
+                        <p class="ir-label">Email address</p>
+                        <p class="ir-value">alex.kim@example.com</p>
+                    </div>
+                </div>
+                <button class="ir-edit edit-trigger">
+                    <i class="fas fa-pen"></i>
+                    <span class="edit-tooltip">Contact support to update</span>
+                </button>
+            </div>
+
+            <div class="info-row">
+                <div class="ir-left">
+                    <div class="ir-icon"><i class="fas fa-phone"></i></div>
+                    <div>
+                        <p class="ir-label">Phone number</p>
+                        <p class="ir-value">+1 (555) 123-4567</p>
+                    </div>
+                </div>
+                <button class="ir-edit edit-trigger">
+                    <i class="fas fa-pen"></i>
+                    <span class="edit-tooltip">Contact support to update</span>
+                </button>
+            </div>
+
+            <div class="info-row">
+                <div class="ir-left">
+                    <div class="ir-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <p class="ir-label">Residential address</p>
+                        <p class="ir-value">123 Park Avenue, Apt 4B, New York, NY 10017, USA</p>
+                    </div>
+                </div>
+                <button class="ir-edit edit-trigger">
+                    <i class="fas fa-pen"></i>
+                    <span class="edit-tooltip">Contact support to update</span>
+                </button>
+            </div>
+
+            <div class="info-row">
+                <div class="ir-left">
+                    <div class="ir-icon"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <p class="ir-label">Last login</p>
+                        <p class="ir-value">Today, 09:12 AM · Chrome on Windows</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Information Note -->
+            <div class="account-info-note">
+                <div class="ain-icon"><i class="fas fa-info-circle"></i></div>
+                <div class="ain-content">
+                    <p class="ain-title">Account Information</p>
+                    <p class="ain-text">To update your personal information, please contact our customer support team with your request. Our team will verify your identity and process the changes securely.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div>
+
+        <!-- Security Actions -->
+        <div class="security-actions-card">
+            <h3><i class="fas fa-shield-alt"></i> Security</h3>
+
+            <a href="#" class="security-action-item">
+                <div class="sai-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                    <i class="fas fa-key"></i>
+                </div>
+                <div class="sai-content">
+                    <p class="sai-title">Change password</p>
+                    <p class="sai-desc">Last changed 45 days ago</p>
+                </div>
+                <i class="fas fa-chevron-right sai-arrow"></i>
+            </a>
+
+            <a href="#" class="security-action-item">
+                <div class="sai-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="sai-content">
+                    <p class="sai-title">Change transaction PIN</p>
+                    <p class="sai-desc">Last changed 12 days ago</p>
+                </div>
+                <i class="fas fa-chevron-right sai-arrow"></i>
+            </a>
+
+            <a href="#" class="security-action-item">
+                <div class="sai-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="sai-content">
+                    <p class="sai-title">Two-factor authentication</p>
+                    <p class="sai-desc">Enabled · SMS + Authenticator</p>
+                </div>
+                <i class="fas fa-chevron-right sai-arrow"></i>
+            </a>
+
+            <a href="#" class="security-action-item">
+                <div class="sai-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="sai-content">
+                    <p class="sai-title">Login activity</p>
+                    <p class="sai-desc">View recent sign-ins</p>
+                </div>
+                <i class="fas fa-chevron-right sai-arrow"></i>
+            </a>
+        </div>
+
+        <!-- Account Status -->
+        <div class="account-status-card">
+            <h3><i class="fas fa-chart-line"></i> Account status</h3>
+
+            <div class="status-item">
+                <span class="si-dot active"></span>
+                <p class="si-label">Account status</p>
+                <span class="si-value good">Active</span>
+            </div>
+            <div class="status-item">
+                <span class="si-dot active"></span>
+                <p class="si-label">Email verification</p>
+                <span class="si-value good">Verified</span>
+            </div>
+            <div class="status-item">
+                <span class="si-dot active"></span>
+                <p class="si-label">Phone verification</p>
+                <span class="si-value good">Verified</span>
+            </div>
+            <div class="status-item">
+                <span class="si-dot active"></span>
+                <p class="si-label">KYC verification</p>
+                <span class="si-value good">Completed</span>
+            </div>
+            <div class="status-item">
+                <span class="si-dot warning"></span>
+                <p class="si-label">Password strength</p>
+                <span class="si-value warn">Good</span>
+            </div>
+        </div>
+
+        <!-- Need Help -->
+        <div class="need-help-card">
+            <div class="nhc-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+            <h3>Need Help?</h3>
+            <p>Contact our support team if you need assistance with your account settings or have any questions.</p>
+            <a href="#" class="nhc-btn">
+                <i class="fas fa-comments"></i>
+                <span>Contact Support</span>
+            </a>
+            <span class="nhc-alt">
+                Or email us at <a href="mailto:support@hampdensbank.com">support@hampdensbank.com</a>
+            </span>
+        </div>
+
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="profile-toast" id="profileToast">
+    <div class="pt-icon"><i class="fas fa-info-circle"></i></div>
+    <div class="pt-text">
+        <strong>Update requires support</strong>
+        <span>Please contact our support team to update this information.</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Show toast when edit buttons are clicked
+const toast = document.getElementById('profileToast');
+let toastTimeout;
+
+document.querySelectorAll('.edit-trigger').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Show toast
+        toast.classList.add('show');
+        
+        // Clear existing timeout
+        clearTimeout(toastTimeout);
+        
+        // Hide after 4 seconds
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 4000);
+    });
+});
+
+// Hide toast when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.edit-trigger') && !e.target.closest('.profile-toast')) {
+        toast.classList.remove('show');
+    }
+});
+</script>
+{% endblock %}

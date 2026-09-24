@@ -1,0 +1,213 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title %}Support Tickets | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/transaction_list.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/support.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>Support Tickets</h1>
+        <p>Track and manage your support requests</p>
+    </div>
+    <a href="#" class="btn-export" style="background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #fff; border: none;">
+        <i class="fas fa-plus"></i>
+        <span>New ticket</span>
+    </a>
+</div>
+
+<!-- Summary Cards -->
+<div class="ticket-summary-grid">
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Total tickets</span>
+            <div class="sc-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                <i class="fas fa-ticket-alt"></i>
+            </div>
+        </div>
+        <div class="sc-value">12</div>
+        <span class="sc-change up"><i class="fas fa-info-circle"></i> All time</span>
+    </div>
+
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Open</span>
+            <div class="sc-icon" style="background: rgba(59,130,246,0.1); color: var(--ticket-open);">
+                <i class="fas fa-envelope-open"></i>
+            </div>
+        </div>
+        <div class="sc-value">2</div>
+        <span class="sc-change up"><i class="fas fa-clock"></i> Awaiting response</span>
+    </div>
+
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">In progress</span>
+            <div class="sc-icon" style="background: rgba(245,158,11,0.12); color: var(--ticket-progress);">
+                <i class="fas fa-spinner"></i>
+            </div>
+        </div>
+        <div class="sc-value">1</div>
+        <span class="sc-change up"><i class="fas fa-user"></i> Being handled</span>
+    </div>
+
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Resolved</span>
+            <div class="sc-icon" style="background: rgba(0,212,168,0.12); color: var(--ticket-resolved);">
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+        <div class="sc-value">9</div>
+        <span class="sc-change up"><i class="fas fa-thumbs-up"></i> Successfully closed</span>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="ticket-filter-bar">
+    <div class="ticket-search">
+        <i class="fas fa-search" style="color: var(--muted); font-size: 13px;"></i>
+        <input type="text" placeholder="Search tickets by subject, ID, or keyword...">
+    </div>
+    <button class="ticket-filter-chip active">
+        <span>All</span>
+        <span class="tfc-count">12</span>
+    </button>
+    <button class="ticket-filter-chip">
+        <span>Open</span>
+        <span class="tfc-count">2</span>
+    </button>
+    <button class="ticket-filter-chip">
+        <span>In progress</span>
+        <span class="tfc-count">1</span>
+    </button>
+    <button class="ticket-filter-chip">
+        <span>Resolved</span>
+        <span class="tfc-count">7</span>
+    </button>
+    <button class="ticket-filter-chip">
+        <span>Closed</span>
+        <span class="tfc-count">2</span>
+    </button>
+</div>
+
+<!-- Ticket List -->
+<div class="ticket-list">
+
+    <a href="#" class="ticket-list-item">
+        <div class="tli-priority high"></div>
+        <div class="tli-content">
+            <p class="tli-subject">Unable to complete international wire transfer</p>
+            <p class="tli-preview"><strong>You:</strong> I've been trying to send money to my supplier in Germany but keep getting...</p>
+        </div>
+        <span class="tli-category"><i class="fas fa-exchange-alt"></i> Transfer</span>
+        <span class="tli-status open"><span class="ts-dot"></span> Open</span>
+        <span class="tli-time">2 hours ago</span>
+    </a>
+
+    <a href="#" class="ticket-list-item">
+        <div class="tli-priority high"></div>
+        <div class="tli-content">
+            <p class="tli-subject">Card blocked after suspicious activity alert</p>
+            <p class="tli-preview"><strong>Sarah (Support):</strong> I've unblocked your card. Please try your transaction again and let me know...</p>
+        </div>
+        <span class="tli-category"><i class="fas fa-credit-card"></i> Card</span>
+        <span class="tli-status progress"><span class="ts-dot"></span> In progress</span>
+        <span class="tli-time">Yesterday</span>
+    </a>
+
+    <a href="#" class="ticket-list-item">
+        <div class="tli-priority medium"></div>
+        <div class="tli-content">
+            <p class="tli-subject">Unable to complete international wire transfer</p>
+            <p class="tli-preview"><strong>You:</strong> I need to update my phone number on file. Can you help me with this?</p>
+        </div>
+        <span class="tli-category"><i class="fas fa-user"></i> Account</span>
+        <span class="tli-status open"><span class="ts-dot"></span> Open</span>
+        <span class="tli-time">2 days ago</span>
+    </a>
+
+    <a href="#" class="ticket-list-item">
+        <div class="tli-priority low"></div>
+        <div class="tli-content">
+            <p class="tli-subject">Request for account statement (PDF)</p>
+            <p class="tli-preview"><strong>Mike (Support):</strong> Your statement has been sent to your email. Please check your inbox.</p>
+        </div>
+        <span class="tli-category"><i class="fas fa-file-alt"></i> Account</span>
+        <span class="tli-status resolved"><span class="ts-dot"></span> Resolved</span>
+        <span class="tli-time">3 days ago</span>
+    </a>
+
+    <a href="#" class="ticket-list-item">
+        <div class="tli-priority medium"></div>
+        <div class="tli-content">
+            <p class="tli-subject">Loan payment not reflecting in account</p>
+            <p class="tli-preview"><strong>You:</strong> I made a payment 3 days ago but it's still showing as pending in my loan history.</p>
+        </div>
+        <span class="tli-category"><i class="fas fa-file-invoice-dollar"></i> Loan</span>
+        <span class="tli-status resolved"><span class="ts-dot"></span> Resolved</span>
+        <span class="tli-time">5 days ago</span>
+    </a>
+
+    <a href="#" class="ticket-list-item">
+        <div class="tli-priority low"></div>
+        <div class="tli-content">
+            <p class="tli-subject">How to enable biometric login</p>
+            <p class="tli-preview"><strong>Emma (Support):</strong> You can enable Face ID in Settings → Security → Biometric Login.</p>
+        </div>
+        <span class="tli-category"><i class="fas fa-mobile-alt"></i> Technical</span>
+        <span class="tli-status resolved"><span class="ts-dot"></span> Resolved</span>
+        <span class="tli-time">1 week ago</span>
+    </a>
+
+    <a href="#" class="ticket-list-item">
+        <div class="tli-priority medium"></div>
+        <div class="tli-content">
+            <p class="tli-subject">Deposit not credited after 24 hours</p>
+            <p class="tli-preview"><strong>Mike (Support):</strong> We've escalated this to our payments team. You should see the funds shortly.</p>
+        </div>
+        <span class="tli-category"><i class="fas fa-arrow-down"></i> Deposit</span>
+        <span class="tli-status resolved"><span class="ts-dot"></span> Resolved</span>
+        <span class="tli-time">1 week ago</span>
+    </a>
+
+    <a href="#" class="ticket-list-item">
+        <div class="tli-priority low"></div>
+        <div class="tli-content">
+            <p class="tli-subject">Update email address on file</p>
+            <p class="tli-preview"><strong>Sarah (Support):</strong> Your email has been updated successfully. You'll receive a confirmation shortly.</p>
+        </div>
+        <span class="tli-category"><i class="fas fa-user"></i> Account</span>
+        <span class="tli-status closed"><span class="ts-dot"></span> Closed</span>
+        <span class="tli-time">2 weeks ago</span>
+    </a>
+
+    <a href="#" class="ticket-list-item">
+        <div class="tli-priority low"></div>
+        <div class="tli-content">
+            <p class="tli-subject">Question about loan interest rates</p>
+            <p class="tli-preview"><strong>Emma (Support):</strong> Our current rates start at 7.5% APR for personal loans. You can see full details...</p>
+        </div>
+        <span class="tli-category"><i class="fas fa-file-invoice-dollar"></i> Loan</span>
+        <span class="tli-status closed"><span class="ts-dot"></span> Closed</span>
+        <span class="tli-time">3 weeks ago</span>
+    </a>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Filter chip toggle
+document.querySelectorAll('.ticket-filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+        document.querySelectorAll('.ticket-filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+    });
+});
+</script>
+{% endblock %}

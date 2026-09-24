@@ -1,0 +1,544 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %}Download App | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/download_app.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>Download the App</h1>
+        <p>Bank anywhere, anytime with the Hampdens Bank app</p>
+    </div>
+</div>
+
+<!-- Hero Device Detection -->
+<div class="download-hero">
+    <div class="download-hero-content">
+        <div class="download-hero-text">
+            <div class="detected-badge">
+                <span class="dot-live"></span>
+                <span id="detectedText">Detecting your device...</span>
+            </div>
+            <h1>Install <span class="gradient-text">Hampdens Bank</span> on your device</h1>
+            <p>Get the full banking experience with our Progressive Web App. No app store needed — install directly from your browser in seconds.</p>
+
+            <button class="download-btn-primary" id="mainDownloadBtn">
+                <div class="dbp-icon" id="downloadBtnIcon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="dbp-text">
+                    <span class="small" id="downloadBtnSmall">One-click install for</span>
+                    <span class="big" id="downloadBtnBig">Your Device</span>
+                </div>
+            </button>
+
+            <div class="download-alt-options">
+                <button class="download-alt-btn" data-platform="ios">
+                    <i class="fab fa-apple"></i>
+                    <span>iPhone / iPad</span>
+                </button>
+                <button class="download-alt-btn" data-platform="android">
+                    <i class="fab fa-android"></i>
+                    <span>Android</span>
+                </button>
+                <button class="download-alt-btn" data-platform="windows">
+                    <i class="fab fa-windows"></i>
+                    <span>Windows</span>
+                </button>
+                <button class="download-alt-btn" data-platform="macos">
+                    <i class="fab fa-apple"></i>
+                    <span>Mac</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="device-mockup">
+            <div class="device-phone">
+                <div class="device-screen">
+                    <div class="app-logo">H</div>
+                    <div class="app-name">Hampdens</div>
+                    <div class="app-tag">Banking · Reimagined</div>
+                    <div class="mini-balance">
+                        Available balance
+                        <strong>$24,562.00</strong>
+                    </div>
+                    <div class="mini-balance">
+                        Quick send
+                        <strong style="font-size: 12px;">→ Sarah · $120</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QR Code Section -->
+<div class="qr-section">
+    <div class="qr-wrap">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://app.hampdensbank.com" alt="Install QR Code">
+        <div class="qr-logo">H</div>
+    </div>
+    <div class="qr-section-text">
+        <h3>Scan with your phone camera</h3>
+        <p>Open your phone's camera app and point it at the QR code. You'll be taken directly to the install page. Works on both iOS and Android.</p>
+        <div class="qr-url-box">
+            <i class="fas fa-link" style="color: var(--muted);"></i>
+            <span>https://app.hampdensbank.com</span>
+            <button class="copy-url-btn" id="copyUrlBtn">
+                <i class="far fa-copy"></i>
+                <span>Copy</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Manual Instructions -->
+<div class="manual-section">
+    <div class="manual-section-head">
+        <h2>Manual installation guide</h2>
+        <p>Choose your device below for step-by-step instructions</p>
+    </div>
+
+    <!-- Platform Tabs -->
+    <div class="platform-tabs">
+        <button class="platform-tab active" data-platform="ios">
+            <span class="pt-icon ios"><i class="fab fa-apple"></i></span>
+            <span>iPhone / iPad</span>
+        </button>
+        <button class="platform-tab" data-platform="android">
+            <span class="pt-icon android"><i class="fab fa-android"></i></span>
+            <span>Android</span>
+        </button>
+        <button class="platform-tab" data-platform="windows">
+            <span class="pt-icon windows"><i class="fab fa-windows"></i></span>
+            <span>Windows</span>
+        </button>
+        <button class="platform-tab" data-platform="macos">
+            <span class="pt-icon macos"><i class="fab fa-apple"></i></span>
+            <span>macOS</span>
+        </button>
+    </div>
+
+    <!-- iOS Instructions -->
+    <div class="platform-content active" id="platform-ios">
+        <div class="platform-intro">
+            <div class="pi-icon" style="background: #000;">
+                <i class="fab fa-apple"></i>
+            </div>
+            <div class="pi-text">
+                <h4>Install on iPhone or iPad</h4>
+                <p>Use Safari browser — other browsers don't support installation on iOS</p>
+            </div>
+        </div>
+        <div class="steps-list">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <p class="step-title">Open Safari browser</p>
+                    <p class="step-desc">Launch the <strong>Safari</strong> app on your iPhone or iPad. Note: Chrome, Firefox, and other browsers do not support PWA installation on iOS.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <p class="step-title">Navigate to our website</p>
+                    <p class="step-desc">Go to <code>app.hampdensbank.com</code> in the Safari address bar and wait for the page to fully load.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <p class="step-title">Tap the Share button</p>
+                    <p class="step-desc">Tap the <strong>Share icon</strong> at the bottom of Safari (the square with an upward arrow). On iPad, it's at the top of the screen.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <p class="step-title">Select "Add to Home Screen"</p>
+                    <p class="step-desc">Scroll down the share menu and tap <strong>"Add to Home Screen"</strong>. You can rename the app if you'd like.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <p class="step-title">Tap "Add" to confirm</p>
+                    <p class="step-desc">Tap <strong>"Add"</strong> in the top-right corner. The Hampdens Bank icon will now appear on your home screen — tap it to launch the app!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Android Instructions -->
+    <div class="platform-content" id="platform-android">
+        <div class="platform-intro">
+            <div class="pi-icon" style="background: #3DDC84; color: #0A0E1A;">
+                <i class="fab fa-android"></i>
+            </div>
+            <div class="pi-text">
+                <h4>Install on Android</h4>
+                <p>Works with Chrome, Edge, Samsung Internet, and most modern browsers</p>
+            </div>
+        </div>
+        <div class="steps-list">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <p class="step-title">Open your browser</p>
+                    <p class="step-desc">Launch <strong>Chrome</strong> (recommended) or any modern browser on your Android device.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <p class="step-title">Visit our website</p>
+                    <p class="step-desc">Navigate to <code>app.hampdensbank.com</code> and wait for the page to fully load.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <p class="step-title">Tap the browser menu</p>
+                    <p class="step-desc">Tap the <strong>three-dot menu</strong> (⋮) in the top-right corner of your browser.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <p class="step-title">Look for install prompt</p>
+                    <p class="step-desc">You may see an <strong>"Install app"</strong> banner at the top of the page. If so, tap it and skip to step 6. Otherwise, continue to step 5.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <p class="step-title">Select install option</p>
+                    <p class="step-desc">In the menu, tap <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>. The wording may vary slightly by browser.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <p class="step-title">Confirm installation</p>
+                    <p class="step-desc">Tap <strong>"Install"</strong> in the confirmation dialog. The app will be added to your home screen and app drawer automatically.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Windows Instructions -->
+    <div class="platform-content" id="platform-windows">
+        <div class="platform-intro">
+            <div class="pi-icon" style="background: #0078D4;">
+                <i class="fab fa-windows"></i>
+            </div>
+            <div class="pi-text">
+                <h4>Install on Windows</h4>
+                <p>Works with Microsoft Edge, Chrome, and Brave browsers</p>
+            </div>
+        </div>
+        <div class="steps-list">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <p class="step-title">Open your browser</p>
+                    <p class="step-desc">Launch <strong>Microsoft Edge</strong> (recommended) or Chrome on your Windows PC.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <p class="step-title">Visit our website</p>
+                    <p class="step-desc">Go to <code>app.hampdensbank.com</code> and wait for the page to fully load.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <p class="step-title">Look for install icon</p>
+                    <p class="step-desc">Look for the <strong>app install icon</strong> (a monitor with a down arrow ↓) in the right side of the address bar. Click it.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <p class="step-title">Alternative: Use browser menu</p>
+                    <p class="step-desc">If you don't see the icon, click the <strong>three dots</strong> in the top-right → <strong>Apps</strong> → <strong>"Install this site as an app"</strong>.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <p class="step-title">Click "Install"</p>
+                    <p class="step-desc">In the popup dialog, click <strong>"Install"</strong>. The app will open in its own window.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <p class="step-title">Pin to taskbar (optional)</p>
+                    <p class="step-desc">Right-click the app icon in your taskbar and select <strong>"Pin to taskbar"</strong> for quick access anytime.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- macOS Instructions -->
+    <div class="platform-content" id="platform-macos">
+        <div class="platform-intro">
+            <div class="pi-icon" style="background: linear-gradient(135deg, #5B5BF7, #7C3AED);">
+                <i class="fab fa-apple"></i>
+            </div>
+            <div class="pi-text">
+                <h4>Install on macOS</h4>
+                <p>Use Safari 16.4+ on macOS Ventura or later for best experience</p>
+            </div>
+        </div>
+        <div class="steps-list">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <p class="step-title">Open Safari</p>
+                    <p class="step-desc">Launch <strong>Safari</strong> on your Mac. Make sure you're running Safari 16.4 or later (macOS Ventura or newer).</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <p class="step-title">Visit our website</p>
+                    <p class="step-desc">Navigate to <code>app.hampdensbank.com</code> and wait for the page to fully load.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <p class="step-title">Open the File menu</p>
+                    <p class="step-desc">In the top menu bar, click <strong>File</strong>.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <p class="step-title">Select "Add to Dock"</p>
+                    <p class="step-desc">Click <strong>"Add to Dock..."</strong> from the dropdown menu.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <p class="step-title">Confirm the addition</p>
+                    <p class="step-desc">Click <strong>"Add"</strong> in the confirmation dialog. The Hampdens Bank app will now appear in your Dock.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <p class="step-title">Launch the app</p>
+                    <p class="step-desc">Click the Hampdens Bank icon in your Dock to launch the app. It runs in its own window, just like a native app!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <h2>Why install the app?</h2>
+    <p class="sub">Experience banking the way it should be</p>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="fc-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <h4>Lightning fast</h4>
+            <p>Instant load times with smart caching — no more waiting for pages</p>
+        </div>
+        <div class="feature-card">
+            <div class="fc-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                <i class="fas fa-wifi"></i>
+            </div>
+            <h4>Works offline</h4>
+            <p>View your balance and recent transactions even without internet</p>
+        </div>
+        <div class="feature-card">
+            <div class="fc-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                <i class="fas fa-bell"></i>
+            </div>
+            <h4>Push notifications</h4>
+            <p>Get instant alerts for transactions, deposits, and security events</p>
+        </div>
+        <div class="feature-card">
+            <div class="fc-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4>Bank-grade security</h4>
+            <p>Biometric login, encryption, and fraud monitoring built-in</p>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section">
+    <h2>Frequently asked questions</h2>
+    <p class="sub">Everything you need to know about the app</p>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>What is a Progressive Web App (PWA)?</span>
+            <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+        </div>
+        <div class="faq-answer">
+            A Progressive Web App is a website that can be installed on your device like a native app. It works offline, sends push notifications, and provides a full-screen experience — all without downloading from an app store.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Does the app take up storage space?</span>
+            <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+        </div>
+        <div class="faq-answer">
+            Very little! The Hampdens Bank app uses less than 5MB of storage — compared to 100-300MB for traditional banking apps. It intelligently caches only what you need.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Is the app secure?</span>
+            <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+        </div>
+        <div class="faq-answer">
+            Absolutely. The app uses the same bank-grade 256-bit encryption as our website, supports biometric login (Face ID, Touch ID, fingerprint), and includes real-time fraud monitoring.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>How do I update the app?</span>
+            <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+        </div>
+        <div class="faq-answer">
+            Updates happen automatically! Whenever you open the app, it checks for updates in the background. You'll always have the latest features and security patches without lifting a finger.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Can I uninstall the app?</span>
+            <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+        </div>
+        <div class="faq-answer">
+            Yes, anytime. On mobile, long-press the app icon and select "Remove" or "Uninstall." On desktop, click the three-dot menu in the app window and select "Uninstall." Your account data remains safe on our servers.
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== DEVICE DETECTION =====
+function detectDevice() {
+    const ua = navigator.userAgent;
+    const platform = navigator.platform || '';
+
+    if (/iPad|iPhone|iPod/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+        return { type: 'ios', name: 'iPhone / iPad', icon: 'fab fa-apple', iconClass: 'ios' };
+    }
+    if (/Android/.test(ua)) {
+        return { type: 'android', name: 'Android', icon: 'fab fa-android', iconClass: 'android' };
+    }
+    if (/Win/.test(ua)) {
+        return { type: 'windows', name: 'Windows', icon: 'fab fa-windows', iconClass: 'windows' };
+    }
+    if (/Mac/.test(ua)) {
+        return { type: 'macos', name: 'macOS', icon: 'fab fa-apple', iconClass: 'macos' };
+    }
+    return { type: 'unknown', name: 'your device', icon: 'fas fa-laptop', iconClass: '' };
+}
+
+const device = detectDevice();
+
+// Update hero badge
+document.getElementById('detectedText').textContent = `Detected: ${device.name}`;
+
+// Update main download button
+const btnIcon = document.getElementById('downloadBtnIcon');
+btnIcon.innerHTML = `<i class="${device.icon}"></i>`;
+if (device.iconClass) btnIcon.classList.add(device.iconClass);
+document.getElementById('downloadBtnSmall').textContent = 'One-click install for';
+document.getElementById('downloadBtnBig').textContent = device.name;
+
+// Main download button click
+document.getElementById('mainDownloadBtn').addEventListener('click', () => {
+    // Switch to the detected platform tab
+    const tab = document.querySelector(`.platform-tab[data-platform="${device.type}"]`);
+    if (tab) {
+        document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.platform-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(`platform-${device.type}`).classList.add('active');
+        // Scroll to manual section
+        document.querySelector('.manual-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        // Fallback: show all tabs
+        alert('Please scroll down to choose your device for installation instructions.');
+    }
+});
+
+// Alt option buttons
+document.querySelectorAll('.download-alt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const platform = btn.dataset.platform;
+        const tab = document.querySelector(`.platform-tab[data-platform="${platform}"]`);
+        if (tab) {
+            document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.platform-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`platform-${platform}`).classList.add('active');
+            document.querySelector('.manual-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
+
+// ===== PLATFORM TABS =====
+document.querySelectorAll('.platform-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        const platform = tab.dataset.platform;
+        document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.platform-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(`platform-${platform}`).classList.add('active');
+    });
+});
+
+// ===== COPY URL =====
+document.getElementById('copyUrlBtn')?.addEventListener('click', function() {
+    const url = 'https://app.hampdensbank.com';
+    navigator.clipboard.writeText(url).then(() => {
+        const original = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-check"></i> <span>Copied!</span>';
+        this.style.background = '#059669';
+        setTimeout(() => {
+            this.innerHTML = original;
+            this.style.background = '';
+        }, 2000);
+    });
+});
+
+// ===== FAQ ACCORDION =====
+document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const wasOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        // Toggle clicked
+        if (!wasOpen) item.classList.add('open');
+    });
+});
+</script>
+{% endblock %}

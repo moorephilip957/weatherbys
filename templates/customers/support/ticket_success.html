@@ -1,0 +1,205 @@
+{% extends '../base.html' %}
+
+{% load static %}
+
+{% block title %}Ticket Created | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/transfer_success.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/support.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="ticket-success-page">
+
+    <!-- Success Icon -->
+    <div class="status-icon-wrap success">
+        <i class="fas fa-check-circle status-icon"></i>
+    </div>
+
+    <!-- Status Text -->
+    <h1 class="status-title success">Ticket Created Successfully!</h1>
+    <p class="status-subtitle">Your support request has been received. Our team will review it and get back to you as soon as possible.</p>
+
+    <!-- Ticket ID Highlight -->
+    <div class="ticket-id-highlight">
+        <i class="fas fa-ticket-alt"></i>
+        <span id="ticketIdText">#TKT-2026-847294</span>
+        <button class="copy-ticket-id" id="copyTicketIdBtn">
+            <i class="far fa-copy"></i>
+            <span>Copy</span>
+        </button>
+    </div>
+
+    <!-- Response Time Card -->
+    <div class="response-time-card">
+        <div class="rtc-icon">
+            <i class="fas fa-clock"></i>
+        </div>
+        <div class="rtc-content">
+            <p class="rtc-title">Expected response time</p>
+            <p class="rtc-text">Based on your priority level, our team will respond within the estimated timeframe below.</p>
+        </div>
+        <p class="rtc-time">~2 hours</p>
+    </div>
+
+    <!-- Ticket Summary -->
+    <div class="ticket-summary-card">
+        <h3><i class="fas fa-receipt"></i> Ticket summary</h3>
+
+        <div class="ticket-summary-row">
+            <span class="tsr-label">
+                <i class="fas fa-hashtag"></i>
+                Ticket ID
+            </span>
+            <span class="tsr-value mono">TKT-2026-847294</span>
+        </div>
+
+        <div class="ticket-summary-row">
+            <span class="tsr-label">
+                <i class="fas fa-heading"></i>
+                Subject
+            </span>
+            <span class="tsr-value">Unable to complete international wire transfer</span>
+        </div>
+
+        <div class="ticket-summary-row">
+            <span class="tsr-label">
+                <i class="fas fa-folder"></i>
+                Category
+            </span>
+            <span class="tsr-value">Transfer issues</span>
+        </div>
+
+        <div class="ticket-summary-row">
+            <span class="tsr-label">
+                <i class="fas fa-flag"></i>
+                Priority
+            </span>
+            <span class="tsr-value">
+                <span class="priority-badge high">
+                    <i class="fas fa-bolt"></i>
+                    High
+                </span>
+            </span>
+        </div>
+
+        <div class="ticket-summary-row">
+            <span class="tsr-label">
+                <i class="fas fa-paperclip"></i>
+                Attachments
+            </span>
+            <span class="tsr-value">2 files</span>
+        </div>
+
+        <div class="ticket-summary-row">
+            <span class="tsr-label">
+                <i class="fas fa-calendar"></i>
+                Created at
+            </span>
+            <span class="tsr-value">Sep 24, 2026 · 09:45 AM</span>
+        </div>
+
+        <div class="ticket-summary-row">
+            <span class="tsr-label">
+                <i class="fas fa-info-circle"></i>
+                Status
+            </span>
+            <span class="tsr-value">
+                <span class="tli-status open" style="padding: 4px 10px; font-size: 10px;">
+                    <span class="ts-dot"></span> Open
+                </span>
+            </span>
+        </div>
+    </div>
+
+    <!-- What's Next -->
+    <div class="whats-next">
+        <h3><i class="fas fa-route"></i> What happens next?</h3>
+        <div class="whats-next-steps">
+            <div class="wn-step">
+                <div class="wn-num">1</div>
+                <div class="wn-content">
+                    <p class="wn-title">Ticket review</p>
+                    <p class="wn-desc">Our support team will review your request and assign it to the appropriate specialist.</p>
+                </div>
+            </div>
+            <div class="wn-step">
+                <div class="wn-num">2</div>
+                <div class="wn-content">
+                    <p class="wn-title">Initial response</p>
+                    <p class="wn-desc">You'll receive an email notification and an in-app message when an agent responds to your ticket.</p>
+                </div>
+            </div>
+            <div class="wn-step">
+                <div class="wn-num">3</div>
+                <div class="wn-content">
+                    <p class="wn-title">Resolution</p>
+                    <p class="wn-desc">Work with your assigned agent to resolve the issue. You can reply anytime from your ticket page.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Info Strip -->
+    <div class="contact-info-strip">
+        <div class="cis-icon"><i class="fas fa-envelope"></i></div>
+        <div class="cis-text">
+            A confirmation email has been sent to <strong>alex.kim@example.com</strong>. You can also reach us directly at <strong>support@hampdensbank.com</strong> for urgent matters.
+        </div>
+        <div class="cis-actions">
+            <a href="mailto:support@hampdensbank.com" class="cis-btn">
+                <i class="fas fa-envelope"></i>
+                <span>Email us</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="status-actions">
+        <a href="#" class="status-btn primary">
+            <i class="fas fa-comments"></i>
+            <span>View ticket</span>
+        </a>
+        <a href="#" class="status-btn secondary">
+            <i class="fas fa-list"></i>
+            <span>All my tickets</span>
+        </a>
+        <a href="#" class="status-btn secondary">
+            <i class="fas fa-plus"></i>
+            <span>Create another</span>
+        </a>
+    </div>
+
+    <!-- Info Box -->
+    <div class="status-info-box">
+        <div class="sib-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+            <i class="fas fa-lightbulb"></i>
+        </div>
+        <div class="sib-content">
+            <p class="sib-title">Tip: Add more details anytime</p>
+            <p class="sib-text">You can add additional information, screenshots, or files to your ticket at any time by replying directly in the ticket conversation. The more details you provide, the faster we can help!</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Copy ticket ID
+document.getElementById('copyTicketIdBtn')?.addEventListener('click', function() {
+    const ticketId = document.getElementById('ticketIdText').textContent;
+    navigator.clipboard.writeText(ticketId).then(() => {
+        const original = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-check"></i> <span>Copied!</span>';
+        this.style.color = '#059669';
+        
+        setTimeout(() => {
+            this.innerHTML = original;
+            this.style.color = '';
+        }, 2000);
+    });
+});
+</script>
+{% endblock %}
