@@ -109,8 +109,8 @@
                 <div class="l">Monthly Expenses</div>
             </div>
             <div class="stat">
-                <div class="v" style="color: #059669;">{{request.user.bank_account.get_currency_symbol}}{{transaction_volume|floatformat:2|intcomma}}</div>
-                <div class="l">Transaction Volume</div>
+                <div class="v" style="color: #059669;">{{request.user.bank_account.get_currency_symbol}}{{net_flow|floatformat:2|intcomma}}</div>
+                <div class="l">Monthly Net Flow</div>
             </div>
         </div>
         <div class="chart-container">
@@ -354,8 +354,8 @@
                 <div class="recent-tx-item">
                     <div class="recent-tx-date"><div class="d">{{ transaction.created_at|date:"d" }}</div><div class="m">{{ transaction.created_at|date:"M" }}</div></div>
                     <div class="recent-tx-info">
-                        <p class="n">{{ transaction.get_transaction_type_display }}</p>
-                        <p class="c">{{transaction.beneficiary_name}} · {{transaction.direction}}</p>
+                        <p class="n">{{transaction.beneficiary_name}}</p>
+                        <p class="c">{{ transaction.get_transaction_type_display }} · {{transaction.direction}}</p>
                     </div>
                     {% if transaction.direction == 'credit' %}
                     <div class="recent-tx-amt in">+{{request.user.bank_account.get_currency_symbol}}{{ transaction.amount|floatformat:2|intcomma }}</div>
@@ -386,4 +386,120 @@
     </div>
 
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Cash flow chart
+const ctx = document.getElementById('cashflowChart');
+if (ctx) {
+    const chartCtx = ctx.getContext('2d');
+    const grad1 = chartCtx.createLinearGradient(0, 0, 0, 240);
+    grad1.addColorStop(0, 'rgba(91,91,247,0.25)');
+    grad1.addColorStop(1, 'rgba(91,91,247,0)');
+    const grad2 = chartCtx.createLinearGradient(0, 0, 0, 240);
+    grad2.addColorStop(0, 'rgba(0,212,168,0.2)');
+    grad2.addColorStop(1, 'rgba(0,212,168,0)');
+
+    new Chart(chartCtx, {
+        type: 'line',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [
+                {
+                    label: 'Income',
+                    data: [{{ monthly_incoming|floatformat:2|default:"0" }} * 0.2, {{ monthly_incoming|floatformat:2|default:"0" }} * 0.4, {{ monthly_incoming|floatformat:2|default:"0" }} * 0.7, {{ monthly_incoming|floatformat:2|default:"0" }}],
+                    borderColor: '#5B5BF7',
+                    backgroundColor: grad1,
+                    borderWidth: 2.5,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                },
+                {
+                    label: 'Expenses',
+                    data: [{{ monthly_outgoing|floatformat:2|default:"0" }} * 0.3, {{ monthly_outgoing|floatformat:2|default:"0" }} * 0.5, {{ monthly_outgoing|floatformat:2|default:"0" }} * 0.8, {{ monthly_outgoing|floatformat:2|default:"0" }}],
+                    borderColor: '#00D4A8',
+                    backgroundColor: grad2,
+                    borderWidth: 2.5,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#0A0E1A',
+                    padding: 12,
+                    titleFont: { size: 12, weight: '600' },
+                    bodyFont: { size: 12 },
+                    cornerRadius: 10,
+                    displayColors: true,
+                    boxPadding: 4,
+                    callbacks: {
+                        label: c => ` ${c.dataset.label}: {{ bank_account.get_currency_symbol }}${c.parsed.y.toLocaleString()}`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#9CA3AF', font: { size: 11 }, maxRotation: 0 },
+                    border: { display: false }
+                },
+                y: {
+                    grid: { color: '#F3F4F8', drawBorder: false },
+                    ticks: {
+                        color: '#9CA3AF',
+                        font: { size: 11 },
+                        callback: v => '{{ bank_account.get_currency_symbol }}' + (v/1000).toFixed(1) + 'k',
+                        maxTicksLimit: 5
+                    },
+                    border: { display: false }
+                }
+            },
+            interaction: { mode: 'index', intersect: false }
+        }
+    });
+}
+
+// 3D card tilt
+const card3d = document.getElementById('card3d');
+if (card3d && window.matchMedia('(hover: hover)').matches) {
+    card3d.addEventListener('mousemove', e => {
+        const r = card3d.getBoundingClientRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        const rx = ((y / r.height) - 0.5) * -12;
+        const ry = ((x / r.width) - 0.5) * 12;
+        card3d.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    card3d.addEventListener('mouseleave', () => {
+        card3d.style.transform = 'rotateX(0) rotateY(0)';
+    });
+}
+
+// Chart tabs
+document.querySelectorAll('.chart-tabs button').forEach(b => {
+    b.addEventListener('click', () => {
+        document.querySelectorAll('.chart-tabs button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+    });
+});
+
+// Card dots
+document.querySelectorAll('.card-dots .d').forEach(dot => {
+    dot.addEventListener('click', () => {
+        document.querySelectorAll('.card-dots .d').forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+    });
+});
+</script>
 {% endblock %}

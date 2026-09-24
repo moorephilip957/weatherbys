@@ -76,9 +76,12 @@ class LocalTransferForm(forms.ModelForm):
     transfer_pin = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "class": "form-control-custom",
-                "placeholder": "Enter your transfer PIN",
+                "class": "form-input",  # Changed
+                "placeholder": "Enter your 6-digit transfer PIN",
                 "autocomplete": "off",
+                "maxlength": "6",
+                "inputmode": "numeric",
+                "pattern": "[0-9]*",
             }
         )
     )
@@ -100,97 +103,79 @@ class LocalTransferForm(forms.ModelForm):
 
             "beneficiary_name": forms.TextInput(
                 attrs={
-                    "class": "form-control-custom",
-                    "placeholder": "Enter beneficiary's full name"
+                    "class": "form-input",  # Changed
+                    "placeholder": "e.g. John Smith"
                 }
             ),
 
             "beneficiary_number": forms.TextInput(
                 attrs={
-                    "class": "form-control-custom",
-                    "placeholder": "Enter account number"
+                    "class": "form-input",  # Changed
+                    "placeholder": "10-digit account number",
+                    "maxlength": "10",
                 }
             ),
 
             "bank_name": forms.TextInput(
                 attrs={
-                    "class": "form-control-custom",
-                    "placeholder": "Enter bank name"
+                    "class": "form-input",  # Changed
+                    "placeholder": "e.g. Hampdens Bank"
                 }
             ),
 
             "transfer_type": forms.Select(
                 attrs={
-                    "class": "form-select-custom"
+                    "class": "form-select"  # Changed
                 }
             ),
 
             "amount": forms.NumberInput(
                 attrs={
-                    "class": "form-control-custom amount-input",
+                    "class": "form-input amount-input",  # Changed
                     "min": "1",
                     "step": "0.01",
                     "placeholder": "0.00",
+                    "inputmode": "decimal",
                 }
             ),
 
             "description": forms.Textarea(
                 attrs={
-                    "class": "form-control-custom",
+                    "class": "form-textarea",  # Changed
                     "rows": 3,
-                    "placeholder": "Enter transaction description or purpose of payment",
-                    "style": "padding-top: 0.875rem; padding-bottom: 0.875rem; min-height: 100px; resize: vertical;"
+                    "placeholder": "What's this transfer for? e.g. Rent payment, dinner split...",
+                    "maxlength": "140",
                 }
             )
         }
 
     def __init__(self, *args, **kwargs):
-
         self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
 
     def clean(self):
-
         cleaned_data = super().clean()
 
         amount = cleaned_data.get("amount")
         pin = cleaned_data.get("transfer_pin")
-        account_number = cleaned_data.get(
-            "beneficiary_account_number"
-        )
+        account_number = cleaned_data.get("beneficiary_number")  # Fixed field name
 
         try:
             account = UserBankAccount.objects.get(user=self.user)
-
         except UserBankAccount.DoesNotExist:
-
-            raise forms.ValidationError(
-                "Account not found."
-            )
+            raise forms.ValidationError("Account not found.")
 
         # CHECK BALANCE
         if amount and amount > account.balance:
-
-            raise forms.ValidationError(
-                "Insufficient balance."
-            )
+            raise forms.ValidationError("Insufficient balance.")
 
         # CHECK PIN
-        if pin and not check_password(
-            pin,
-            account.transaction_pin
-        ):
-
-            raise forms.ValidationError(
-                "Invalid transfer PIN."
-            )
+        if pin and not check_password(pin, account.transaction_pin):
+            raise forms.ValidationError("Invalid transfer PIN.")
 
         # VALIDATE ACCOUNT NUMBER
         if account_number and len(account_number) < 10:
-
-            raise forms.ValidationError(
-                "Invalid account number."
-            )
+            raise forms.ValidationError("Invalid account number.")
 
         return cleaned_data
     

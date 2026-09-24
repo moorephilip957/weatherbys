@@ -15,11 +15,28 @@
     </div>
 </div>
 
-<div class="transfer-layout">
+<!-- Non-Field Errors (Balance, PIN, etc.) -->
+{% if form.non_field_errors %}
+<div class="loan-alert" style="margin-bottom: 24px;">
+    <div class="la-icon"><i class="fas fa-exclamation-triangle"></i></div>
+    <div class="la-content">
+        <p class="la-title">Transfer cannot be completed</p>
+        <p class="la-text">
+            {% for error in form.non_field_errors %}
+                {{ error }}<br>
+            {% endfor %}
+        </p>
+    </div>
+</div>
+{% endif %}
 
-    <!-- Main Form -->
-    <div class="transfer-form-card">
-        <form id="transferForm">
+<form method="POST" id="transferForm">
+    {% csrf_token %}
+
+    <div class="transfer-layout">
+
+        <!-- Main Form -->
+        <div class="transfer-form-card">
 
             <!-- Section 1: Amount -->
             <div class="form-section">
@@ -40,11 +57,17 @@
                             Transfer amount
                         </div>
                         <div class="amount-input-wrap">
-                            <span class="amount-currency">$</span>
-                            <input type="text" class="amount-input" id="amountInput" placeholder="0.00" inputmode="decimal">
+                            <span class="amount-currency">{{ request.user.bank_account.get_currency_symbol }}</span>
+                            {{ form.amount }}
                         </div>
+                        {% if form.amount.errors %}
+                            <div style="color: #FFD700; font-size: 12px; margin-top: 8px;">
+                                <i class="fas fa-exclamation-circle"></i>
+                                {{ form.amount.errors.0 }}
+                            </div>
+                        {% endif %}
                         <div class="amount-available">
-                            <span>Available: <strong>$24,562.00</strong></span>
+                            <span>Available: <strong>{{ request.user.bank_account.formatted_balance }}</strong></span>
                             <button type="button" class="max-btn" id="maxBtn">MAX</button>
                         </div>
                         <div class="quick-amounts">
@@ -76,8 +99,14 @@
                         </label>
                         <div class="input-with-icon">
                             <i class="fas fa-user input-icon"></i>
-                            <input type="text" class="form-input" id="beneficiaryName" placeholder="e.g. John Smith" required>
+                            {{ form.beneficiary_name }}
                         </div>
+                        {% if form.beneficiary_name.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.beneficiary_name.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="form-field">
@@ -86,28 +115,45 @@
                         </label>
                         <div class="input-with-icon">
                             <i class="fas fa-hashtag input-icon"></i>
-                            <input type="text" class="form-input" id="accountNumber" placeholder="10-digit account number" maxlength="10" required>
+                            {{ form.beneficiary_number }}
                         </div>
-                        <div class="form-hint">
-                            <i class="fas fa-info-circle"></i>
-                            Must be a valid Hampdens Bank account
-                        </div>
+                        {% if form.beneficiary_number.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.beneficiary_number.errors.0 }}</span>
+                            </div>
+                        {% else %}
+                            <div class="form-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Must be a valid Hampdens Bank account
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="form-field">
                         <label class="form-label">
                             Bank name <span class="req">*</span>
                         </label>
-                        <select class="form-select" id="bankName" required>
-                            <option value="">Select bank</option>
-                            <option value="hampdens" selected>Hampdens Bank</option>
-                            <option value="chase">Chase Bank</option>
-                            <option value="boa">Bank of America</option>
-                            <option value="wells">Wells Fargo</option>
-                            <option value="citi">Citibank</option>
-                            <option value="usbank">U.S. Bank</option>
-                            <option value="capital">Capital One</option>
-                        </select>
+                        {{ form.bank_name }}
+                        {% if form.bank_name.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.bank_name.errors.0 }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">
+                            Transfer type <span class="req">*</span>
+                        </label>
+                        {{ form.transfer_type }}
+                        {% if form.transfer_type.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.transfer_type.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -129,11 +175,13 @@
                         <label class="form-label">
                             Description / Memo <span class="opt">(optional)</span>
                         </label>
-                        <textarea class="form-textarea" id="description" placeholder="What's this transfer for? e.g. Rent payment, dinner split..." maxlength="140"></textarea>
-                        <div class="form-hint">
-                            <i class="fas fa-info-circle"></i>
-                            <span id="charCount">0</span>/140 characters
-                        </div>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.description.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -151,16 +199,20 @@
                         </div>
                     </div>
 
-                    <div class="pin-input-wrap">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="0">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="1">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="2">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="3">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="4">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="5">
+                    <div style="margin-top: 20px;">
+                        <label class="form-label">
+                            Transfer PIN <span class="req">*</span>
+                        </label>
+                        {{ form.transfer_pin }}
+                        {% if form.transfer_pin.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.transfer_pin.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
 
-                    <div class="pin-helper">
+                    <div class="pin-helper" style="margin-top: 12px;">
                         <i class="fas fa-shield-alt"></i>
                         <span>Your PIN is encrypted and never stored in plain text</span>
                     </div>
@@ -169,7 +221,7 @@
 
             <!-- Action Buttons -->
             <div class="form-actions">
-                <button type="button" class="btn-back" id="backBtn">
+                <button type="button" class="btn-back" onclick="history.back()">
                     <i class="fas fa-arrow-left"></i>
                     <span>Back to dashboard</span>
                 </button>
@@ -179,136 +231,125 @@
                 </button>
             </div>
 
-        </form>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="transfer-sidebar">
+
+            <!-- Transfer Summary -->
+            <div class="summary-card">
+                <h3><i class="fas fa-receipt"></i> Transfer summary</h3>
+
+                <div class="summary-row">
+                    <span class="sr-label">Amount</span>
+                    <span class="sr-value" id="summaryAmount">{{ request.user.bank_account.get_currency_symbol }}0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="sr-label">
+                        Transfer fee
+                        <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="Local transfers within Hampdens Bank are free"></i>
+                    </span>
+                    <span class="sr-value" style="color: #059669;">{{ request.user.bank_account.get_currency_symbol }}0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="sr-label">Estimated delivery</span>
+                    <span class="sr-value">Instant</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-total">
+                    <span class="st-label">Total to send</span>
+                    <span class="st-value" id="summaryTotal">{{ request.user.bank_account.get_currency_symbol }}0.00</span>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="security-info">
+                <h4><i class="fas fa-shield-alt"></i> Secure transfer</h4>
+                <div class="security-item">
+                    <div class="si-icon"><i class="fas fa-check"></i></div>
+                    <span>256-bit SSL encryption</span>
+                </div>
+                <div class="security-item">
+                    <div class="si-icon"><i class="fas fa-check"></i></div>
+                    <span>FDIC insured up to $250,000</span>
+                </div>
+                <div class="security-item">
+                    <div class="si-icon"><i class="fas fa-check"></i></div>
+                    <span>Two-factor authentication</span>
+                </div>
+                <div class="security-item">
+                    <div class="si-icon"><i class="fas fa-check"></i></div>
+                    <span>Fraud monitoring 24/7</span>
+                </div>
+            </div>
+
+            <!-- Recent Beneficiaries -->
+            <div class="recent-beneficiaries">
+                <h3>
+                    <span>Recent recipients</span>
+                    <a href="#">View all</a>
+                </h3>
+                <div class="beneficiary-list">
+                    <div class="beneficiary-item" data-name="Sarah Miller" data-account="4829105627" data-bank="Hampdens Bank">
+                        <div class="beneficiary-avatar" style="background: linear-gradient(135deg, #F59E0B, #F43F5E);">SM</div>
+                        <div class="beneficiary-info">
+                            <p class="beneficiary-name">Sarah Miller</p>
+                            <p class="beneficiary-bank">•••• 5627 · Hampdens</p>
+                        </div>
+                        <span class="beneficiary-use">Use →</span>
+                    </div>
+
+                    <div class="beneficiary-item" data-name="John Davis" data-account="7156392841" data-bank="Hampdens Bank">
+                        <div class="beneficiary-avatar" style="background: linear-gradient(135deg, #5B5BF7, #7C3AED);">JD</div>
+                        <div class="beneficiary-info">
+                            <p class="beneficiary-name">John Davis</p>
+                            <p class="beneficiary-bank">•••• 2841 · Hampdens</p>
+                        </div>
+                        <span class="beneficiary-use">Use →</span>
+                    </div>
+
+                    <div class="beneficiary-item" data-name="Emily Chen" data-account="3391827465" data-bank="Hampdens Bank">
+                        <div class="beneficiary-avatar" style="background: linear-gradient(135deg, #00D4A8, #059669);">EC</div>
+                        <div class="beneficiary-info">
+                            <p class="beneficiary-name">Emily Chen</p>
+                            <p class="beneficiary-bank">•••• 7465 · Hampdens</p>
+                        </div>
+                        <span class="beneficiary-use">Use →</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-
-    <!-- Sidebar -->
-    <div class="transfer-sidebar">
-
-        <!-- Transfer Summary -->
-        <div class="summary-card">
-            <h3><i class="fas fa-receipt"></i> Transfer summary</h3>
-
-            <div class="summary-row">
-                <span class="sr-label">Amount</span>
-                <span class="sr-value" id="summaryAmount">$0.00</span>
-            </div>
-            <div class="summary-row">
-                <span class="sr-label">
-                    Transfer fee
-                    <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="Local transfers within Hampdens Bank are free"></i>
-                </span>
-                <span class="sr-value" style="color: #059669;">$0.00</span>
-            </div>
-            <div class="summary-row">
-                <span class="sr-label">Estimated delivery</span>
-                <span class="sr-value">Instant</span>
-            </div>
-
-            <div class="summary-divider"></div>
-
-            <div class="summary-total">
-                <span class="st-label">Total to send</span>
-                <span class="st-value" id="summaryTotal">$0.00</span>
-            </div>
-        </div>
-
-        <!-- Security Info -->
-        <div class="security-info">
-            <h4><i class="fas fa-shield-alt"></i> Secure transfer</h4>
-            <div class="security-item">
-                <div class="si-icon"><i class="fas fa-check"></i></div>
-                <span>256-bit SSL encryption</span>
-            </div>
-            <div class="security-item">
-                <div class="si-icon"><i class="fas fa-check"></i></div>
-                <span>FDIC insured up to $250,000</span>
-            </div>
-            <div class="security-item">
-                <div class="si-icon"><i class="fas fa-check"></i></div>
-                <span>Two-factor authentication</span>
-            </div>
-            <div class="security-item">
-                <div class="si-icon"><i class="fas fa-check"></i></div>
-                <span>Fraud monitoring 24/7</span>
-            </div>
-        </div>
-
-        <!-- Recent Beneficiaries -->
-        <div class="recent-beneficiaries">
-            <h3>
-                <span>Recent recipients</span>
-                <a href="#">View all</a>
-            </h3>
-            <div class="beneficiary-list">
-                <div class="beneficiary-item" data-name="Sarah Miller" data-account="4829105627" data-bank="hampdens">
-                    <div class="beneficiary-avatar" style="background: linear-gradient(135deg, #F59E0B, #F43F5E);">SM</div>
-                    <div class="beneficiary-info">
-                        <p class="beneficiary-name">Sarah Miller</p>
-                        <p class="beneficiary-bank">•••• 5627 · Hampdens</p>
-                    </div>
-                    <span class="beneficiary-use">Use →</span>
-                </div>
-
-                <div class="beneficiary-item" data-name="John Davis" data-account="7156392841" data-bank="hampdens">
-                    <div class="beneficiary-avatar" style="background: linear-gradient(135deg, #5B5BF7, #7C3AED);">JD</div>
-                    <div class="beneficiary-info">
-                        <p class="beneficiary-name">John Davis</p>
-                        <p class="beneficiary-bank">•••• 2841 · Hampdens</p>
-                    </div>
-                    <span class="beneficiary-use">Use →</span>
-                </div>
-
-                <div class="beneficiary-item" data-name="Emily Chen" data-account="3391827465" data-bank="hampdens">
-                    <div class="beneficiary-avatar" style="background: linear-gradient(135deg, #00D4A8, #059669);">EC</div>
-                    <div class="beneficiary-info">
-                        <p class="beneficiary-name">Emily Chen</p>
-                        <p class="beneficiary-bank">•••• 7465 · Hampdens</p>
-                    </div>
-                    <span class="beneficiary-use">Use →</span>
-                </div>
-
-                <div class="beneficiary-item" data-name="Michael Brown" data-account="9024618375" data-bank="hampdens">
-                    <div class="beneficiary-avatar" style="background: linear-gradient(135deg, #3B82F6, #2563EB);">MB</div>
-                    <div class="beneficiary-info">
-                        <p class="beneficiary-name">Michael Brown</p>
-                        <p class="beneficiary-bank">•••• 8375 · Hampdens</p>
-                    </div>
-                    <span class="beneficiary-use">Use →</span>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
+</form>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// ===== AMOUNT INPUT FORMATTING =====
-const amountInput = document.getElementById('amountInput');
+// ===== AMOUNT INPUT =====
+const amountInput = document.getElementById('id_amount');
 const summaryAmount = document.getElementById('summaryAmount');
 const summaryTotal = document.getElementById('summaryTotal');
+const currencySymbol = '{{ request.user.bank_account.get_currency_symbol }}';
 
-amountInput.addEventListener('input', (e) => {
-    // Allow only numbers and one decimal
-    let value = e.target.value.replace(/[^0-9.]/g, '');
-    const parts = value.split('.');
-    if (parts.length > 2) {
-        value = parts[0] + '.' + parts.slice(1).join('');
-    }
-    if (parts[1] && parts[1].length > 2) {
-        value = parts[0] + '.' + parts[1].slice(0, 2);
-    }
-    e.target.value = value;
-    updateSummary(value);
-});
+if (amountInput) {
+    amountInput.addEventListener('input', (e) => {
+        updateSummary(e.target.value);
+    });
+}
 
 function updateSummary(amount) {
     const num = parseFloat(amount) || 0;
-    const formatted = '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const formatted = currencySymbol + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     summaryAmount.textContent = formatted;
     summaryTotal.textContent = formatted;
+}
+
+// Initialize with existing value if form was submitted with errors
+if (amountInput && amountInput.value) {
+    updateSummary(amountInput.value);
 }
 
 // Quick amount chips
@@ -322,57 +363,17 @@ document.querySelectorAll('.quick-amount-chip').forEach(chip => {
 
 // MAX button
 document.getElementById('maxBtn').addEventListener('click', () => {
-    amountInput.value = '24562.00';
-    updateSummary('24562.00');
-});
-
-// ===== DESCRIPTION CHARACTER COUNT =====
-const description = document.getElementById('description');
-const charCount = document.getElementById('charCount');
-description.addEventListener('input', () => {
-    charCount.textContent = description.value.length;
-});
-
-// ===== PIN INPUTS =====
-const pinBoxes = document.querySelectorAll('.pin-box');
-pinBoxes.forEach((box, idx) => {
-    box.addEventListener('input', (e) => {
-        const val = e.target.value.replace(/[^0-9]/g, '');
-        e.target.value = val;
-        if (val && idx < pinBoxes.length - 1) {
-            pinBoxes[idx + 1].focus();
-        }
-        if (val) {
-            box.classList.add('filled');
-        } else {
-            box.classList.remove('filled');
-        }
-    });
-
-    box.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !box.value && idx > 0) {
-            pinBoxes[idx - 1].focus();
-        }
-    });
-
-    box.addEventListener('paste', (e) => {
-        e.preventDefault();
-        const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
-        for (let i = 0; i < Math.min(paste.length, pinBoxes.length - idx); i++) {
-            pinBoxes[idx + i].value = paste[i];
-            pinBoxes[idx + i].classList.add('filled');
-        }
-        const nextIdx = Math.min(idx + paste.length, pinBoxes.length - 1);
-        pinBoxes[nextIdx].focus();
-    });
+    const balance = parseFloat('{{ request.user.bank_account.balance }}');
+    amountInput.value = balance.toFixed(2);
+    updateSummary(balance);
 });
 
 // ===== RECENT BENEFICIARIES =====
 document.querySelectorAll('.beneficiary-item').forEach(item => {
     item.addEventListener('click', () => {
-        document.getElementById('beneficiaryName').value = item.dataset.name;
-        document.getElementById('accountNumber').value = item.dataset.account;
-        document.getElementById('bankName').value = item.dataset.bank;
+        document.getElementById('id_beneficiary_name').value = item.dataset.name;
+        document.getElementById('id_beneficiary_number').value = item.dataset.account;
+        document.getElementById('id_bank_name').value = item.dataset.bank;
         
         // Visual feedback
         document.querySelectorAll('.beneficiary-item').forEach(i => i.style.background = '');
@@ -385,45 +386,12 @@ document.querySelectorAll('.beneficiary-item').forEach(item => {
     });
 });
 
-// ===== BACK BUTTON =====
-document.getElementById('backBtn').addEventListener('click', () => {
-    window.location.href = '#'; // Will be Django URL
-});
-
 // ===== FORM SUBMIT =====
 document.getElementById('transferForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Get PIN
-    let pin = '';
-    pinBoxes.forEach(b => pin += b.value);
-    
-    if (pin.length !== 6) {
-        alert('Please enter your 6-digit PIN');
-        pinBoxes[0].focus();
-        return;
-    }
-    
-    const amount = amountInput.value;
-    const name = document.getElementById('beneficiaryName').value;
-    const account = document.getElementById('accountNumber').value;
-    
-    if (!amount || !name || !account) {
-        alert('Please fill in all required fields');
-        return;
-    }
-    
-    // Success feedback
     const sendBtn = document.getElementById('sendBtn');
-    sendBtn.innerHTML = '<i class="fas fa-check"></i> <span>Transfer sent!</span>';
-    sendBtn.style.background = 'linear-gradient(135deg, #00D4A8, #059669)';
+    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Processing...</span>';
     sendBtn.disabled = true;
-    
-    setTimeout(() => {
-        sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Send transfer</span>';
-        sendBtn.style.background = '';
-        sendBtn.disabled = false;
-    }, 3000);
+    // Let the form submit naturally - Django will handle validation and redirect
 });
 </script>
 {% endblock %}

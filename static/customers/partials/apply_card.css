@@ -733,3 +733,52 @@
         font-size: 13px;
     }
 }
+
+
+/* ===== DJANGO FORM FIELD STYLING ===== */
+
+/* Make Django form inputs match the design */
+.form-control-custom,
+.form-select-custom {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: var(--ink);
+    font-family: inherit;
+    transition: all .2s;
+    outline: none;
+}
+.form-control-custom:hover,
+.form-select-custom:hover {
+    border-color: var(--muted-2);
+}
+.form-control-custom:focus,
+.form-select-custom:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.1);
+}
+.form-control-custom[readonly] {
+    background: var(--surface-2);
+    cursor: not-allowed;
+    color: var(--ink-2);
+}
+textarea.form-control-custom {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+/* Style the input-with-icon wrapper for Django fields */
+.input-with-icon .form-control-custom,
+.input-with-icon .form-select-custom {
+    padding-left: 40px;
+}
+
+/* Fix textarea inside input-with-icon */
+.input-with-icon textarea.form-control-custom {
+    padding-left: 40px;
+}

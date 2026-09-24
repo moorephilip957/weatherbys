@@ -1,8 +1,10 @@
 {% extends './base.html' %}
 {% load static %}
+{% load humanize %}
 {% block title %}Cards | Hampdens Bank{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/transaction_list.css' %}">
 <link rel="stylesheet" href="{% static 'customers/partials/cards.css' %}">
 {% endblock %}
 
@@ -11,10 +13,63 @@
 <div class="page-header">
     <div>
         <h1>My Cards</h1>
-        <p>Manage your debit, credit, and virtual cards</p>
+        <p>Manage your debit cards</p>
+    </div>
+    <a href="{% url 'customer:apply_card' %}" class="btn-export" style="background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #fff; border: none;">
+        <i class="fas fa-plus"></i>
+        <span>Apply for new card</span>
+    </a>
+</div>
+{% include "../components/messages.html" %}
+
+<!-- Summary Cards -->
+<div class="summary-grid">
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Total Cards</span>
+            <div class="sc-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                <i class="fas fa-credit-card"></i>
+            </div>
+        </div>
+        <div class="sc-value">{{ total_cards_count }}</div>
+        <span class="sc-change up"><i class="fas fa-info-circle"></i> All cards</span>
+    </div>
+
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Active</span>
+            <div class="sc-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+        <div class="sc-value" style="color: #059669;">{{ active_cards_count }}</div>
+        <span class="sc-change up"><i class="fas fa-circle" style="font-size: 6px;"></i> Ready to use</span>
+    </div>
+
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Pending</span>
+            <div class="sc-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                <i class="fas fa-clock"></i>
+            </div>
+        </div>
+        <div class="sc-value" style="color: #D97706;">{{ pending_cards_count }}</div>
+        <span class="sc-change down"><i class="fas fa-hourglass-half"></i> Being processed</span>
+    </div>
+
+    <div class="summary-card">
+        <div class="sc-head">
+            <span class="sc-label">Blocked</span>
+            <div class="sc-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                <i class="fas fa-ban"></i>
+            </div>
+        </div>
+        <div class="sc-value" style="color: var(--danger);">{{ blocked_cards_count }}</div>
+        <span class="sc-change down"><i class="fas fa-lock"></i> Temporarily blocked</span>
     </div>
 </div>
 
+{% if featured_card %}
 <!-- Featured Card + Controls -->
 <div class="cards-hero">
 
@@ -23,10 +78,24 @@
         <div class="featured-head">
             <div>
                 <h3>Primary Card</h3>
-                <p class="card-type">Platinum Debit · Active</p>
+                <p class="card-type">
+                    {{ featured_card.get_card_type_display }} · 
+                    {% if featured_card.status == 'active' %}
+                        <span style="color: #059669;">Active</span>
+                    {% elif featured_card.status == 'pending' %}
+                        <span style="color: #D97706;">Pending</span>
+                    {% elif featured_card.status == 'blocked' %}
+                        <span style="color: var(--danger);">Blocked</span>
+                    {% else %}
+                        <span style="color: var(--muted);">{{ featured_card.get_status_display }}</span>
+                    {% endif %}
+                    {% if featured_card.is_virtual %}
+                        <span style="background: rgba(0,212,168,0.12); color: #059669; padding: 2px 8px; border-radius: 100px; font-size: 10px; margin-left: 6px; font-weight: 700;">VIRTUAL</span>
+                    {% endif %}
+                </p>
             </div>
             <div class="featured-actions">
-                <button class="featured-action-btn" title="Copy card number">
+                <button class="featured-action-btn" title="Copy card number" data-copy="{{ featured_card.card_number }}">
                     <i class="far fa-copy"></i>
                 </button>
                 <button class="featured-action-btn" title="Download">
@@ -39,11 +108,11 @@
         </div>
 
         <!-- Big 3D Card -->
-        <div class="card-3d-big" id="card3dBig">
-            <div class="brand">HAMPDENS</div>
+        <div class="card-3d-big {% if featured_card.status == 'blocked' %}blocked{% endif %}" id="card3dBig">
+            <div class="brand">Weatherbys Bank</div>
             <div class="chip"></div>
             <div class="num">
-                <span id="cardNumber">4829 •••• •••• 4829</span>
+                <span id="cardNumber">{{ featured_card.card_number }}</span>
                 <button class="toggle-vis" id="toggleVis" title="Show/hide">
                     <i class="far fa-eye" id="eyeIcon"></i>
                 </button>
@@ -51,21 +120,29 @@
             <div class="bottom">
                 <div>
                     <div class="holder-label">Card holder</div>
-                    <div class="holder-val">ALEX KIM</div>
+                    <div class="holder-val">{{ featured_card.card_holder_name|upper }}</div>
                 </div>
                 <div>
                     <div class="exp-label">Expires</div>
-                    <div class="exp-val">09/29</div>
+                    <div class="exp-val">{{ featured_card.expiry_date|date:"m/y" }}</div>
                 </div>
-                <div class="mc-logo"><span></span><span></span></div>
+                <div class="mc-logo">
+                    {% if featured_card.card_type == 'master' %}
+                        <span></span><span></span>
+                    {% else %}
+                        <span style="background: transparent; color: #1A1F7E; font-weight: 800; font-style: italic; font-size: 16px; width: auto; height: auto; border-radius: 0;">VISA</span>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
         <div style="text-align: center;">
             <div class="card-balance-chip">
                 <i class="fas fa-wallet"></i>
-                <span>Available:</span>
-                <span class="bal">$24,562.00</span>
+                <span>Card balance:</span>
+                <span class="bal">
+                    {% if featured_card.currency == 'USD' %}${% elif featured_card.currency == 'EUR' %}€{% elif featured_card.currency == 'GBP' %}£{% elif featured_card.currency == 'AED' %}د.إ{% elif featured_card.currency == 'KWD' %}د.ك{% else %}{{ featured_card.currency }}{% endif %}{{ featured_card.account.balance|floatformat:2|intcomma }}
+                </span>
             </div>
         </div>
     </div>
@@ -86,7 +163,7 @@
                 </div>
             </div>
             <label class="toggle-switch">
-                <input type="checkbox">
+                <input type="checkbox" {% if featured_card.status == 'blocked' %}checked{% endif %}>
                 <span class="toggle-slider"></span>
             </label>
         </div>
@@ -158,15 +235,19 @@
         <!-- Spending Limit -->
         <div class="spending-limit">
             <div class="sl-head">
-                <span class="sl-label">Monthly spending limit</span>
-                <span class="sl-val">$3,180 / $5,000</span>
+                <span class="sl-label">Spending limit</span>
+                <span class="sl-val">
+                    {% widthratio featured_card.balance featured_card.spending_limit 100 as usage_pct %}
+                    {{ featured_card.balance|floatformat:0 }} / {{ featured_card.spending_limit|floatformat:0 }}
+                </span>
             </div>
             <div class="sl-bar">
-                <div class="fill" style="width: 63%;"></div>
+                {% widthratio featured_card.account.balance featured_card.spending_limit 100 as pct %}
+                <div class="fill" style="width: {{ pct }}%;"></div>
             </div>
             <div class="sl-foot">
-                <span>63% used</span>
-                <span>Resets in 7 days</span>
+                <span>{{ pct }}% used</span>
+                <span>Resets monthly</span>
             </div>
         </div>
     </div>
@@ -177,144 +258,58 @@
     <div class="gallery-head">
         <div>
             <h3>All Cards</h3>
-            <p class="sub">3 active cards · 1 frozen</p>
+            <p class="sub">
+                {{ active_cards_count }} active · 
+                {{ pending_cards_count }} pending · 
+                {{ blocked_cards_count }} blocked
+                {% if expired_cards_count %}· {{ expired_cards_count }} expired{% endif %}
+            </p>
         </div>
-        <a href="{% url 'customer:apply_card' %}" class="btn-add-card">
-            <i class="fas fa-plus"></i>
-            <span>Request new card</span>
-        </a>
     </div>
 
     <div class="cards-scroll">
-        <!-- Active Card 1 -->
-        <div class="mini-card active">
+        {% for card in cards %}
+        <div class="mini-card {% if forloop.first %}active{% endif %}" data-card-id="{{ card.id }}">
             <div class="mini-card-head">
-                <span class="mini-card-type debit">Debit</span>
-                <span class="mini-card-status"></span>
+                <span class="mini-card-type {% if card.card_type == 'visa' %}debit{% else %}credit{% endif %}">
+                    {% if card.card_type == 'visa' %}VISA{% else %}MASTERCARD{% endif %}
+                </span>
+                <span class="mini-card-status {% if card.status == 'blocked' %}frozen{% elif card.status == 'pending' %}frozen{% endif %}" 
+                      style="{% if card.status == 'active' %}background: #059669; box-shadow: 0 0 8px #059669;{% elif card.status == 'pending' %}background: #D97706; box-shadow: 0 0 8px #D97706;{% elif card.status == 'blocked' %}background: var(--danger); box-shadow: 0 0 8px var(--danger);{% else %}background: var(--muted);{% endif %}">
+                </span>
             </div>
-            <div class="mini-card-num">•••• 4829</div>
+            <div class="mini-card-num">•••• {{ card.card_number|slice:"-4:" }}</div>
             <div class="mini-card-foot">
                 <p class="mini-card-holder">
-                    Primary
-                    <strong>Alex Kim</strong>
+                    {% if card.status == 'active' %}Active
+                    {% elif card.status == 'pending' %}Pending
+                    {% elif card.status == 'blocked' %}Blocked
+                    {% else %}{{ card.get_status_display }}{% endif %}
+                    {% if card.is_virtual %} · Virtual{% endif %}
+                    <strong>{{ card.card_holder_name }}</strong>
                 </p>
-                <div class="mini-card-logo"><span></span><span></span></div>
+                <div class="mini-card-logo">
+                    {% if card.card_type == 'master' %}
+                        <span></span><span></span>
+                    {% else %}
+                        <span style="background: transparent; color: #1A1F7E; font-weight: 800; font-style: italic; font-size: 11px; width: auto; height: auto; border-radius: 0;">VISA</span>
+                    {% endif %}
+                </div>
             </div>
         </div>
-
-        <!-- Active Card 2 -->
-        <div class="mini-card">
-            <div class="mini-card-head">
-                <span class="mini-card-type credit">Credit</span>
-                <span class="mini-card-status"></span>
-            </div>
-            <div class="mini-card-num">•••• 7156</div>
-            <div class="mini-card-foot">
-                <p class="mini-card-holder">
-                    Travel Rewards
-                    <strong>Alex Kim</strong>
-                </p>
-                <div class="mini-card-logo"><span></span><span></span></div>
-            </div>
-        </div>
-
-        <!-- Active Card 3 -->
-        <div class="mini-card">
-            <div class="mini-card-head">
-                <span class="mini-card-type virtual">Virtual</span>
-                <span class="mini-card-status"></span>
-            </div>
-            <div class="mini-card-num">•••• 3391</div>
-            <div class="mini-card-foot">
-                <p class="mini-card-holder">
-                    Online Shopping
-                    <strong>Alex Kim</strong>
-                </p>
-                <div class="mini-card-logo"><span></span><span></span></div>
-            </div>
-        </div>
-
-        <!-- Frozen Card -->
-        <div class="mini-card">
-            <div class="mini-card-head">
-                <span class="mini-card-type debit">Debit</span>
-                <span class="mini-card-status frozen"></span>
-            </div>
-            <div class="mini-card-num">•••• 9024</div>
-            <div class="mini-card-foot">
-                <p class="mini-card-holder">
-                    Business · Frozen
-                    <strong>Alex Kim</strong>
-                </p>
-                <div class="mini-card-logo"><span></span><span></span></div>
-            </div>
-        </div>
+        {% endfor %}
 
         <!-- Add Card Tile -->
-        <div class="add-card-tile">
+        <a href="{% url 'customer:apply_card' %}" class="add-card-tile">
             <div class="aci"><i class="fas fa-plus"></i></div>
-            <p class="act">Add new card</p>
-            <p class="acs">Debit, credit, or virtual</p>
-        </div>
+            <p class="act">Apply for new card</p>
+            <p class="acs">Visa or Mastercard</p>
+        </a>
     </div>
 </div>
 
-<!-- Bottom Grid: Spending + Quick Actions -->
+<!-- Bottom Grid: Quick Actions -->
 <div class="cards-bottom">
-
-    <!-- Card Spending -->
-    <div class="card-spending-card">
-        <div class="card-head">
-            <div>
-                <div class="card-title">Spending on this card</div>
-                <div class="card-sub">Last 30 days · Primary card</div>
-            </div>
-        </div>
-        <div class="spend-list">
-            <div class="spend-row">
-                <div class="si" style="background: rgba(244,63,94,0.1); color: var(--danger);"><i class="fas fa-home"></i></div>
-                <div class="sm">
-                    <p class="sn">Housing</p>
-                    <div class="spend-bar-wrap"><div class="fill" style="width: 85%; background: var(--danger);"></div></div>
-                </div>
-                <div class="sv">$1,840</div>
-            </div>
-            <div class="spend-row">
-                <div class="si" style="background: rgba(245,158,11,0.12); color: #D97706;"><i class="fas fa-utensils"></i></div>
-                <div class="sm">
-                    <p class="sn">Food & Dining</p>
-                    <div class="spend-bar-wrap"><div class="fill" style="width: 55%; background: #F59E0B;"></div></div>
-                </div>
-                <div class="sv">$642</div>
-            </div>
-            <div class="spend-row">
-                <div class="si" style="background: rgba(59,130,246,0.1); color: #2563EB;"><i class="fas fa-car"></i></div>
-                <div class="sm">
-                    <p class="sn">Transport</p>
-                    <div class="spend-bar-wrap"><div class="fill" style="width: 35%; background: #3B82F6;"></div></div>
-                </div>
-                <div class="sv">$284</div>
-            </div>
-            <div class="spend-row">
-                <div class="si" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fas fa-shopping-bag"></i></div>
-                <div class="sm">
-                    <p class="sn">Shopping</p>
-                    <div class="spend-bar-wrap"><div class="fill" style="width: 45%; background: var(--primary);"></div></div>
-                </div>
-                <div class="sv">$412</div>
-            </div>
-            <div class="spend-row">
-                <div class="si" style="background: rgba(0,212,168,0.12); color: #059669;"><i class="fas fa-gamepad"></i></div>
-                <div class="sm">
-                    <p class="sn">Entertainment</p>
-                    <div class="spend-bar-wrap"><div class="fill" style="width: 25%; background: #00D4A8;"></div></div>
-                </div>
-                <div class="sv">$186</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
     <div class="card-spending-card">
         <div class="card-head">
             <div>
@@ -379,31 +374,106 @@
             </a>
         </div>
     </div>
+
+    <!-- Card Info -->
+    <div class="card-spending-card">
+        <div class="card-head">
+            <div>
+                <div class="card-title">Card details</div>
+                <div class="card-sub">Primary card information</div>
+            </div>
+        </div>
+        <div class="tx-list">
+            <div class="tx-item">
+                <div class="tx-icon out" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="tx-info">
+                    <p class="tx-name">Card type</p>
+                    <p class="tx-cat">{{ featured_card.get_card_type_display }}</p>
+                </div>
+                <div class="tx-amount">
+                    <div class="v">{{ featured_card.currency }}</div>
+                </div>
+            </div>
+            <div class="tx-item">
+                <div class="tx-icon out" style="background: rgba(0,212,168,0.12); color: #059669;">
+                    <i class="fas fa-calendar"></i>
+                </div>
+                <div class="tx-info">
+                    <p class="tx-name">Expiry date</p>
+                    <p class="tx-cat">{{ featured_card.expiry_date|date:"F Y" }}</p>
+                </div>
+                <div class="tx-amount">
+                    <div class="v">{{ featured_card.expiry_date|date:"m/y" }}</div>
+                </div>
+            </div>
+            <div class="tx-item">
+                <div class="tx-icon out" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="tx-info">
+                    <p class="tx-name">Spending limit</p>
+                    <p class="tx-cat">Daily/Monthly cap</p>
+                </div>
+                <div class="tx-amount">
+                    <div class="v">{{ featured_card.spending_limit|floatformat:2 }}</div>
+                </div>
+            </div>
+            <div class="tx-item">
+                <div class="tx-icon out" style="background: rgba(124,58,237,0.1); color: var(--primary-2);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="tx-info">
+                    <p class="tx-name">Issued on</p>
+                    <p class="tx-cat">{{ featured_card.created_at|date:"M d, Y" }}</p>
+                </div>
+                <div class="tx-amount">
+                    <div class="v">{{ featured_card.created_at|timesince }} ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+{% else %}
+<!-- Empty State: No Cards -->
+<div style="text-align: center; padding: 80px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px;">
+    <div style="width: 80px; height: 80px; border-radius: 20px; background: var(--surface-2); display: grid; place-items: center; margin: 0 auto 20px; font-size: 32px; color: var(--muted);">
+        <i class="fas fa-credit-card"></i>
+    </div>
+    <h2 style="font-size: 22px; font-weight: 800; margin: 0 0 8px;">No cards yet</h2>
+    <p style="color: var(--muted); font-size: 14px; margin: 0 0 24px; max-width: 400px; margin-left: auto; margin-right: auto;">
+        You haven't applied for any cards yet. Get started by applying for your first debit card.
+    </p>
+    <a href="#" class="hero-btn primary" style="display: inline-flex;">
+        <i class="fas fa-plus"></i>
+        <span>Apply for your first card</span>
+    </a>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// Toggle card number visibility
+// ===== TOGGLE CARD NUMBER VISIBILITY =====
 const toggleVis = document.getElementById('toggleVis');
 const cardNumber = document.getElementById('cardNumber');
 const eyeIcon = document.getElementById('eyeIcon');
 let isVisible = false;
 
-if (toggleVis) {
+if (toggleVis && cardNumber) {
+    const fullNumber = cardNumber.textContent;
+    const maskedNumber = fullNumber.replace(/\d(?=.{4})/g, '•');
+    
     toggleVis.addEventListener('click', () => {
         isVisible = !isVisible;
-        if (isVisible) {
-            cardNumber.textContent = '4829 3847 5621 4829';
-            eyeIcon.className = 'far fa-eye-slash';
-        } else {
-            cardNumber.textContent = '4829 •••• •••• 4829';
-            eyeIcon.className = 'far fa-eye';
-        }
+        cardNumber.textContent = isVisible ? fullNumber : maskedNumber;
+        eyeIcon.className = isVisible ? 'far fa-eye-slash' : 'far fa-eye';
     });
 }
 
-// 3D tilt for big card
+// ===== 3D TILT FOR BIG CARD =====
 const card3dBig = document.getElementById('card3dBig');
 if (card3dBig && window.matchMedia('(hover: hover)').matches) {
     card3dBig.addEventListener('mousemove', e => {
@@ -419,11 +489,28 @@ if (card3dBig && window.matchMedia('(hover: hover)').matches) {
     });
 }
 
-// Mini card selection
+// ===== MINI CARD SELECTION =====
 document.querySelectorAll('.mini-card').forEach(card => {
     card.addEventListener('click', () => {
         document.querySelectorAll('.mini-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
+    });
+});
+
+// ===== COPY CARD NUMBER =====
+document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const text = btn.dataset.copy;
+        navigator.clipboard.writeText(text).then(() => {
+            const icon = btn.querySelector('i');
+            const original = icon.className;
+            icon.className = 'fas fa-check';
+            btn.style.color = '#059669';
+            setTimeout(() => {
+                icon.className = original;
+                btn.style.color = '';
+            }, 2000);
+        });
     });
 });
 </script>

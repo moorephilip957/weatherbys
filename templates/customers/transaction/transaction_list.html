@@ -1,5 +1,6 @@
 {% extends '../base.html' %}
 {% load static %}
+{% load humanize %}
 {% block title %}Transactions | Hampdens Bank{% endblock %}
 
 {% block extra_css %}
@@ -28,8 +29,8 @@
                 <i class="fas fa-arrow-down"></i>
             </div>
         </div>
-        <div class="sc-value">$12,840.50</div>
-        <span class="sc-change up"><i class="fas fa-arrow-up"></i> 8.2% vs last month</span>
+        <div class="sc-value">{{ bank_account.get_currency_symbol }}{{ total_incoming|floatformat:2|intcomma }}</div>
+        <span class="sc-change up"><i class="fas fa-info-circle"></i> All time</span>
     </div>
 
     <div class="summary-card">
@@ -39,8 +40,8 @@
                 <i class="fas fa-arrow-up"></i>
             </div>
         </div>
-        <div class="sc-value">$6,420.30</div>
-        <span class="sc-change down"><i class="fas fa-arrow-down"></i> 3.1% vs last month</span>
+        <div class="sc-value">{{ bank_account.get_currency_symbol }}{{ total_outgoing|floatformat:2|intcomma }}</div>
+        <span class="sc-change down"><i class="fas fa-info-circle"></i> All time</span>
     </div>
 
     <div class="summary-card">
@@ -50,8 +51,12 @@
                 <i class="fas fa-chart-line"></i>
             </div>
         </div>
-        <div class="sc-value" style="color: #059669;">+$6,420.20</div>
-        <span class="sc-change up"><i class="fas fa-arrow-up"></i> 12.4% vs last month</span>
+        <div class="sc-value" style="color: {% if net_flow >= 0 %}#059669{% else %}var(--danger){% endif %};">
+            {% if net_flow >= 0 %}+{% endif %}{{ bank_account.get_currency_symbol }}{{ net_flow|floatformat:2|intcomma }}
+        </div>
+        <span class="sc-change {% if net_flow >= 0 %}up{% else %}down{% endif %}">
+            <i class="fas fa-calendar"></i> This month
+        </span>
     </div>
 
     <div class="summary-card">
@@ -61,8 +66,8 @@
                 <i class="fas fa-receipt"></i>
             </div>
         </div>
-        <div class="sc-value">148</div>
-        <span class="sc-change up"><i class="fas fa-arrow-up"></i> 24 this week</span>
+        <div class="sc-value">{{ total_count }}</div>
+        <span class="sc-change up"><i class="fas fa-info-circle"></i> Total count</span>
     </div>
 </div>
 
@@ -70,363 +75,410 @@
 <div class="filter-bar">
     <div class="filter-search">
         <i class="fas fa-search" style="color: var(--muted); font-size: 13px;"></i>
-        <input type="text" placeholder="Search by name, category, or amount...">
+        <input type="text" id="txSearchInput" placeholder="Search by name, reference, or amount...">
     </div>
-    <div class="filter-chip active">
+    <div class="filter-chip active" data-filter="all">
         <span>All</span>
+        <span class="tfc-count">{{ total_count }}</span>
     </div>
-    <div class="filter-chip">
+    <div class="filter-chip" data-filter="credit">
         <i class="fas fa-arrow-down"></i>
         <span>Incoming</span>
     </div>
-    <div class="filter-chip">
+    <div class="filter-chip" data-filter="debit">
         <i class="fas fa-arrow-up"></i>
         <span>Outgoing</span>
     </div>
-    <div class="filter-chip">
-        <i class="fas fa-calendar"></i>
-        <span>This month</span>
-        <i class="fas fa-chevron-down"></i>
+    <div class="filter-chip" data-filter="pending">
+        <i class="fas fa-clock"></i>
+        <span>Pending</span>
+        <span class="tfc-count">{{ pending_count }}</span>
     </div>
-    <div class="filter-chip">
-        <i class="fas fa-filter"></i>
-        <span>More filters</span>
+    <div class="filter-chip" data-filter="failed">
+        <i class="fas fa-times-circle"></i>
+        <span>Failed</span>
+        <span class="tfc-count">{{ failed_count }}</span>
     </div>
 </div>
 
 <!-- Transaction List -->
 <div class="tx-page-card">
 
-    <!-- Today -->
-    <div class="tx-group-header">
-        <div class="date-label">
-            <span class="dot"></span>
-            Today · Thursday, Sep 24
-        </div>
-        <div class="day-total">Net: +$4,175.51</div>
-    </div>
+    {% if grouped_transactions %}
+        {% for date, transactions in grouped_transactions %}
+            <!-- Date Group Header -->
+            <div class="tx-group-header">
+                <div class="date-label">
+                    <span class="dot"></span>
+                    {% if date == today %}
+                        Today · {{ date|date:"l, M d" }}
+                    {% elif date == yesterday %}
+                        Yesterday · {{ date|date:"l, M d" }}
+                    {% else %}
+                        {{ date|date:"l, M d, Y" }}
+                    {% endif %}
+                </div>
+                <div class="day-total">
+                    {{ transactions|length }} transaction{{ transactions|length|pluralize }}
+                </div>
+            </div>
 
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
-                <i class="fas fa-arrow-down"></i>
+            <!-- Transactions for this date -->
+            {% for tx in transactions %}
+            <div class="tx-row tx-clickable"
+                data-direction="{{ tx.direction }}"
+                data-status="{{ tx.status }}"
+                data-search="{{ tx.beneficiary_name|lower }} {{ tx.reference|lower }} {{ tx.amount|intcomma }}"
+                data-reference="{{ tx.reference }}"
+                data-type="{{ tx.get_transaction_type_display }}"
+                data-amount="{{ tx.amount|floatformat:2|intcomma }}"
+                data-beneficiary="{{ tx.beneficiary_name|default:'' }}"
+                data-beneficiary-number="{{ tx.beneficiary_number|default:'' }}"
+                data-bank="{{ tx.bank_name|default:'' }}"
+                data-description="{{ tx.description|default:'' }}"
+                data-balance-before="{{ tx.balance_before|floatformat:2|intcomma }}"
+                data-balance-after="{{ tx.balance_after|floatformat:2|intcomma }}"
+                data-date="{{ tx.created_at|date:'M d, Y' }}"
+                data-time="{{ tx.created_at|date:'H:i A' }}"
+                data-currency="{{ bank_account.get_currency_symbol }}">
+                <div class="tx-row-main">
+                    <div class="tx-row-icon" style="background: {% if tx.direction == 'credit' %}rgba(0,212,168,0.12); color: #059669{% else %}var(--surface-2); color: var(--ink-2){% endif %};">
+                        {% if tx.direction == 'credit' %}
+                            <i class="fas fa-arrow-down"></i>
+                        {% else %}
+                            <i class="fas fa-arrow-up"></i>
+                        {% endif %}
+                    </div>
+                    <div class="tx-row-info">
+                        <p class="tx-row-name">{{ tx.beneficiary_name|default:tx.get_transaction_type_display }}</p>
+                        <p class="tx-row-cat">{{ tx.get_transaction_type_display }} · {{ tx.reference }}</p>
+                    </div>
+                </div>
+                <div class="tx-row-method">
+                    {% if tx.bank_name %}
+                        <i class="fas fa-university"></i>
+                        <span>{{ tx.bank_name }}</span>
+                    {% else %}
+                        <i class="fas fa-wallet"></i>
+                        <span>{{ tx.get_transaction_type_display }}</span>
+                    {% endif %}
+                </div>
+                <div class="tx-row-date">{{ tx.created_at|date:"H:i" }}</div>
+                <div class="tx-row-amount">
+                    <div class="{% if tx.direction == 'credit' %}in{% else %}out{% endif %}">
+                        {% if tx.direction == 'credit' %}+{% else %}-{% endif %}{{ bank_account.get_currency_symbol }}{{ tx.amount|floatformat:2 }}
+                    </div>
+                    {% if tx.status == 'pending' %}
+                        <span class="status-badge pending">
+                            <span class="sdot"></span> Pending
+                        </span>
+                    {% elif tx.status == 'failed' %}
+                        <span class="status-badge failed">
+                            <span class="sdot"></span> Failed
+                        </span>
+                    {% else %}
+                        <span class="status-badge completed">
+                            <span class="sdot"></span> Completed
+                        </span>
+                    {% endif %}
+                </div>
             </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Salary · Acme Corp</p>
-                <p class="tx-row-cat">Income · Direct deposit</p>
-            </div>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-receipt"></i></div>
+            <h3>No transactions yet</h3>
+            <p>Your transaction history will appear here once you make your first transaction.</p>
         </div>
-        <div class="tx-row-method">
-            <i class="fas fa-building"></i>
-            <span>Bank transfer</span>
-        </div>
-        <div class="tx-row-date">09:12 AM</div>
-        <div class="tx-row-amount in">+$4,200.00</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
-                <i class="fab fa-spotify"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Spotify Premium</p>
-                <p class="tx-row-cat">Subscription · Entertainment</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-credit-card"></i>
-            <span>Card •4829</span>
-        </div>
-        <div class="tx-row-date">08:00 AM</div>
-        <div class="tx-row-amount out">-$9.99</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
-                <i class="fas fa-utensils"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Blue Bottle Coffee</p>
-                <p class="tx-row-cat">Food & Drink · Restaurant</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-credit-card"></i>
-            <span>Card •4829</span>
-        </div>
-        <div class="tx-row-date">07:45 AM</div>
-        <div class="tx-row-amount out">-$14.50</div>
-    </div>
-
-    <!-- Yesterday -->
-    <div class="tx-group-header">
-        <div class="date-label">
-            <span class="dot"></span>
-            Yesterday · Wednesday, Sep 23
-        </div>
-        <div class="day-total">Net: -$1,444.00</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: var(--surface-2); color: var(--ink-2);">
-                <i class="fas fa-shopping-bag"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Apple Store</p>
-                <p class="tx-row-cat">Shopping · Electronics</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-credit-card"></i>
-            <span>Card •4829</span>
-        </div>
-        <div class="tx-row-date">06:22 PM</div>
-        <div class="tx-row-amount out">-$1,299.00</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
-                <i class="fas fa-user-friends"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Sarah Miller</p>
-                <p class="tx-row-cat">P2P Transfer · Received</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-wallet"></i>
-            <span>Hampdens P2P</span>
-        </div>
-        <div class="tx-row-date">02:14 PM</div>
-        <div class="tx-row-amount in">+$120.00</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
-                <i class="fas fa-gas-pump"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Shell Gas Station</p>
-                <p class="tx-row-cat">Transport · Fuel</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-credit-card"></i>
-            <span>Card •4829</span>
-        </div>
-        <div class="tx-row-date">11:30 AM</div>
-        <div class="tx-row-amount out">-$58.40</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
-                <i class="fab fa-amazon"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Amazon.com</p>
-                <p class="tx-row-cat">Shopping · Online</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-credit-card"></i>
-            <span>Card •4829</span>
-        </div>
-        <div class="tx-row-date">09:15 AM</div>
-        <div class="tx-row-amount out">-$206.60</div>
-    </div>
-
-    <!-- This Week -->
-    <div class="tx-group-header">
-        <div class="date-label">
-            <span class="dot"></span>
-            Tuesday, Sep 22
-        </div>
-        <div class="day-total">Net: -$842.15</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
-                <i class="fas fa-building"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Landlord · Rent Payment</p>
-                <p class="tx-row-cat">Housing · Monthly</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-building"></i>
-            <span>Bank transfer</span>
-        </div>
-        <div class="tx-row-date">10:00 AM</div>
-        <div class="tx-row-amount out">-$1,840.00</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
-                <i class="fas fa-shopping-basket"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Whole Foods Market</p>
-                <p class="tx-row-cat">Groceries · Food</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-credit-card"></i>
-            <span>Card •4829</span>
-        </div>
-        <div class="tx-row-date">05:42 PM</div>
-        <div class="tx-row-amount out">-$124.80</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
-                <i class="fas fa-film"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Netflix</p>
-                <p class="tx-row-cat">Subscription · Entertainment</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-credit-card"></i>
-            <span>Card •4829</span>
-        </div>
-        <div class="tx-row-date">12:00 AM</div>
-        <div class="tx-row-amount out">-$15.99</div>
-    </div>
-
-    <!-- Status examples -->
-    <div class="tx-group-header">
-        <div class="date-label">
-            <span class="dot"></span>
-            Monday, Sep 21
-        </div>
-        <div class="day-total">Net: +$2,850.00</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
-                <i class="fas fa-arrow-down"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">Client Payment · Design Co</p>
-                <p class="tx-row-cat">Income · Freelance</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-globe"></i>
-            <span>Wire transfer</span>
-        </div>
-        <div class="tx-row-date">03:45 PM</div>
-        <div class="tx-row-amount in">+$3,200.00</div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
-                <i class="fas fa-bolt"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">ConEdison · Electric</p>
-                <p class="tx-row-cat">Utilities · Bills</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-building"></i>
-            <span>Auto-pay</span>
-        </div>
-        <div class="tx-row-date">09:00 AM</div>
-        <div class="tx-row-amount out">
-            <div>-$94.20</div>
-            <span class="status-badge pending" style="margin-top: 4px;">
-                <span class="sdot"></span> Pending
-            </span>
-        </div>
-    </div>
-
-    <div class="tx-row">
-        <div class="tx-row-main">
-            <div class="tx-row-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
-                <i class="fas fa-exclamation"></i>
-            </div>
-            <div class="tx-row-info">
-                <p class="tx-row-name">International Wire · Failed</p>
-                <p class="tx-row-cat">Transfer · Refunded</p>
-            </div>
-        </div>
-        <div class="tx-row-method">
-            <i class="fas fa-globe"></i>
-            <span>Wire transfer</span>
-        </div>
-        <div class="tx-row-date">08:12 AM</div>
-        <div class="tx-row-amount in">
-            <div>+$250.00</div>
-            <span class="status-badge failed" style="margin-top: 4px;">
-                <span class="sdot"></span> Failed
-            </span>
-        </div>
-    </div>
+    {% endif %}
 
     <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
     <div class="pagination-bar">
         <div class="pagination-info">
-            Showing <strong>1-12</strong> of <strong>148</strong> transactions
+            Showing <strong>{{ page_obj.start_index }}-{{ page_obj.end_index }}</strong> of <strong>{{ total_count }}</strong> transactions
         </div>
         <div class="pagination-controls">
-            <button class="page-btn" disabled>
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn">...</button>
-            <button class="page-btn">13</button>
-            <button class="page-btn">
-                <i class="fas fa-chevron-right"></i>
-            </button>
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="page-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            {% else %}
+                <button class="page-btn" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <button class="page-btn active">{{ num }}</button>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+                {% elif num == 1 or num == page_obj.paginator.num_pages %}
+                    <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                    <span class="page-btn" style="cursor: default;">...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="page-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            {% else %}
+                <button class="page-btn" disabled>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            {% endif %}
         </div>
     </div>
+    {% endif %}
 
+</div>
+
+
+<!-- Transaction Detail Modal -->
+<div class="tx-detail-modal" id="txDetailModal">
+    <div class="tx-detail-content">
+
+        <!-- Header -->
+        <div class="tx-detail-header">
+            <div class="tdh-left">
+                <div class="tdh-icon" id="modalIcon">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                <div>
+                    <p class="tdh-title" id="modalTitle">Transaction</p>
+                    <p class="tdh-ref">
+                        <span id="modalRef">TXN-XXXXXXXXXX</span>
+                        <button class="copy-ref" id="copyRefBtn" title="Copy reference">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </p>
+                </div>
+            </div>
+            <button class="tx-detail-close" id="txDetailClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="tx-detail-body">
+
+            <!-- Amount Hero -->
+            <div class="tx-detail-amount">
+                <p class="tda-label">Transaction amount</p>
+                <p class="tda-value" id="modalAmount">+$0.00</p>
+                <div class="tda-status" id="modalStatus"></div>
+            </div>
+
+            <!-- Transaction Info -->
+            <div class="tx-detail-section">
+                <p class="tx-detail-section-title"><i class="fas fa-info-circle"></i> Transaction info</p>
+                
+                <div class="tx-detail-row">
+                    <span class="tdr-label"><i class="fas fa-exchange-alt"></i> Type</span>
+                    <span class="tdr-value" id="modalType">Local Transfer</span>
+                </div>
+                <div class="tx-detail-row">
+                    <span class="tdr-label"><i class="fas fa-calendar"></i> Date</span>
+                    <span class="tdr-value" id="modalDate">Sep 24, 2026</span>
+                </div>
+                <div class="tx-detail-row">
+                    <span class="tdr-label"><i class="far fa-clock"></i> Time</span>
+                    <span class="tdr-value" id="modalTime">09:12 AM</span>
+                </div>
+            </div>
+
+            <!-- Beneficiary Info (conditional) -->
+            <div class="tx-detail-section" id="modalBeneficiarySection">
+                <p class="tx-detail-section-title"><i class="fas fa-user"></i> Beneficiary details</p>
+                
+                <div class="tx-detail-row" id="modalBeneficiaryRow">
+                    <span class="tdr-label"><i class="fas fa-user"></i> Name</span>
+                    <span class="tdr-value" id="modalBeneficiary">—</span>
+                </div>
+                <div class="tx-detail-row" id="modalBeneficiaryNumRow">
+                    <span class="tdr-label"><i class="fas fa-hashtag"></i> Account</span>
+                    <span class="tdr-value mono" id="modalBeneficiaryNum">—</span>
+                </div>
+                <div class="tx-detail-row" id="modalBankRow">
+                    <span class="tdr-label"><i class="fas fa-university"></i> Bank</span>
+                    <span class="tdr-value" id="modalBank">—</span>
+                </div>
+            </div>
+
+            <!-- Balance Change -->
+            <div class="tx-detail-section">
+                <p class="tx-detail-section-title"><i class="fas fa-wallet"></i> Balance change</p>
+                <div class="balance-change">
+                    <div class="bc-item">
+                        <p class="bc-label">Before</p>
+                        <p class="bc-value" id="modalBalBefore">$0.00</p>
+                    </div>
+                    <div class="bc-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="bc-item">
+                        <p class="bc-label">After</p>
+                        <p class="bc-value" id="modalBalAfter">$0.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description (conditional) -->
+            <div class="tx-detail-section" id="modalDescSection" style="display: none;">
+                <p class="tx-detail-section-title"><i class="fas fa-comment-alt"></i> Description</p>
+                <div class="tx-detail-desc" id="modalDesc"></div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="tx-detail-footer">
+            <button class="tdf-btn secondary" id="modalReportBtn">
+                <i class="fas fa-flag"></i>
+                <span>Report issue</span>
+            </button>
+            <button class="tdf-btn primary" id="modalDownloadBtn">
+                <i class="fas fa-download"></i>
+                <span>Download receipt</span>
+            </button>
+        </div>
+
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// Filter chip toggle
-document.querySelectorAll('.filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-        // For single-select chips (All, Incoming, Outgoing)
-        if (chip.parentElement.querySelector('.filter-chip.active') && 
-            !chip.querySelector('.fa-calendar') && 
-            !chip.querySelector('.fa-filter')) {
-            document.querySelectorAll('.filter-chip').forEach(c => {
-                if (!c.querySelector('.fa-calendar') && !c.querySelector('.fa-filter')) {
-                    c.classList.remove('active');
-                }
-            });
+// ===== ELEMENTS =====
+const modal = document.getElementById('txDetailModal');
+const closeBtn = document.getElementById('txDetailClose');
+const txRows = document.querySelectorAll('.tx-clickable');
+const filterChips = document.querySelectorAll('.filter-chip');
+const searchInput = document.getElementById('txSearchInput');
+
+// ===== OPEN MODAL =====
+txRows.forEach(row => {
+    row.addEventListener('click', () => {
+        const d = row.dataset;
+        const isCredit = d.direction === 'credit';
+        const currency = d.currency || '$';
+
+        // Icon
+        const icon = document.getElementById('modalIcon');
+        icon.className = 'tdh-icon ' + d.direction;
+        icon.innerHTML = isCredit 
+            ? '<i class="fas fa-arrow-down"></i>' 
+            : '<i class="fas fa-arrow-up"></i>';
+
+        // Title & Reference
+        document.getElementById('modalTitle').textContent = d.beneficiary || d.type;
+        document.getElementById('modalRef').textContent = d.reference;
+
+        // Amount
+        const amountEl = document.getElementById('modalAmount');
+        amountEl.className = 'tda-value ' + d.direction;
+        amountEl.textContent = (isCredit ? '+' : '-') + currency + d.amount;
+
+        // Status badge
+        const statusEl = document.getElementById('modalStatus');
+        const statusMap = {
+            'success': '<span class="status-badge completed"><span class="sdot"></span> Completed</span>',
+            'pending': '<span class="status-badge pending"><span class="sdot"></span> Pending</span>',
+            'failed': '<span class="status-badge failed"><span class="sdot"></span> Failed</span>',
+        };
+        statusEl.innerHTML = statusMap[d.status] || '';
+
+        // Info
+        document.getElementById('modalType').textContent = d.type;
+        document.getElementById('modalDate').textContent = d.date;
+        document.getElementById('modalTime').textContent = d.time;
+
+        // Beneficiary section
+        const benSection = document.getElementById('modalBeneficiarySection');
+        if (d.beneficiary || d.beneficiaryNumber || d.bank) {
+            benSection.style.display = '';
+            document.getElementById('modalBeneficiary').textContent = d.beneficiary || '—';
+            document.getElementById('modalBeneficiaryNum').textContent = d.beneficiaryNumber || '—';
+            document.getElementById('modalBank').textContent = d.bank || '—';
+            
+            // Hide empty rows
+            document.getElementById('modalBeneficiaryRow').style.display = d.beneficiary ? '' : 'none';
+            document.getElementById('modalBeneficiaryNumRow').style.display = d.beneficiaryNumber ? '' : 'none';
+            document.getElementById('modalBankRow').style.display = d.bank ? '' : 'none';
+        } else {
+            benSection.style.display = 'none';
         }
-        chip.classList.toggle('active');
+
+        // Balance change
+        document.getElementById('modalBalBefore').textContent = currency + d.balanceBefore;
+        document.getElementById('modalBalAfter').textContent = currency + d.balanceAfter;
+
+        // Description
+        const descSection = document.getElementById('modalDescSection');
+        if (d.description && d.description.trim()) {
+            descSection.style.display = '';
+            document.getElementById('modalDesc').textContent = d.description;
+        } else {
+            descSection.style.display = 'none';
+        }
+
+        // Show modal
+        modal.classList.add('active');
     });
 });
 
-// Page button toggle
-document.querySelectorAll('.page-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        if (!btn.disabled && !btn.querySelector('i')) {
-            document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
+// ===== CLOSE MODAL =====
+closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.remove('active');
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') modal.classList.remove('active');
+});
+
+// ===== COPY REFERENCE =====
+document.getElementById('copyRefBtn').addEventListener('click', function() {
+    const ref = document.getElementById('modalRef').textContent;
+    navigator.clipboard.writeText(ref).then(() => {
+        const original = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-check"></i>';
+        this.style.color = '#059669';
+        setTimeout(() => {
+            this.innerHTML = original;
+            this.style.color = '';
+        }, 2000);
     });
 });
+
+// ===== FILTER =====
+filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+        filterChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const filter = chip.dataset.filter;
+        
+        txRows.forEach(row => {
+            let show = true;
+            if (filter === 'credit' && row.dataset.direction !== 'credit') show = false;
+            if (filter === 'debit' && row.dataset.direction !== 'debit') show = false;
+            if (filter === 'pending' && row.dataset.status !== 'pending') show = false;
+            if (filter === 'failed' && row.dataset.status !== 'failed') show = false;
+            row.style.display = show ? '' : 'none';
+        });
+    });
+});
+
+// ===== SEARCH =====
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        txRows.forEach(row => {
+            row.style.display = row.dataset.search.includes(term) ? '' : 'none';
+        });
+    });
+}
 </script>
 {% endblock %}

@@ -8,6 +8,7 @@ from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
 from django.core.paginator import Paginator
+from collections import defaultdict
 
 from .models import UserBankAccount, DebitCard
 from .forms import DebitCardApplicationForm, ChangePasswordForm
@@ -22,7 +23,6 @@ from kyc.forms import PassportPhotoForm
 @kyc_required
 @block_blocked_users
 def dashboard(request):
-
     bank_account = UserBankAccount.objects.select_related('user').get(
         user=request.user
     )
@@ -82,6 +82,9 @@ def dashboard(request):
         .order_by('-created_at')[:3]
     )
 
+    # --- NEW ADDITIONS ---
+    net_flow = monthly_incoming - monthly_outgoing
+    unread_notifications = request.user.notifications.filter(read=False).count()
 
     context = {
         'bank_account': bank_account,
@@ -91,13 +94,10 @@ def dashboard(request):
         'pending_transactions': pending_transactions,
         'transaction_volume': transaction_volume,
         'recent_transactions': recent_transactions,
+        'net_flow': net_flow,                      # <-- Added
+        'unread_notifications': unread_notifications, # <-- Added
     }
 
-    # return render(
-    #     request,
-    #     'customer/dashboard.html',
-    #     context
-    # )
     return render(
         request,
         'customers/dashboard.html',
@@ -109,22 +109,93 @@ def dashboard(request):
 @kyc_required
 @block_blocked_users
 def transaction_list(request):
-
+    # Base queryset
     transactions = TransactionHistory.objects.filter(
         user=request.user
-    ).order_by('-created_at')
+    ).select_related('user').order_by('-created_at')
+
+    # Get bank account for currency symbol
+    bank_account = UserBankAccount.objects.get(user=request.user)
+
+    now = timezone.now()
+
+    # Summary Statistics
+    # Total Incoming (all time)
+    total_incoming = transactions.filter(
+        status=TransactionHistory.Status.SUCCESS,
+        direction=TransactionHistory.Direction.CREDIT
+    ).aggregate(total=Sum('amount'))['total'] or 0
+
+    # Total Outgoing (all time)
+    total_outgoing = transactions.filter(
+        status=TransactionHistory.Status.SUCCESS,
+        direction=TransactionHistory.Direction.DEBIT
+    ).aggregate(total=Sum('amount'))['total'] or 0
+
+    # Monthly Incoming
+    monthly_incoming = transactions.filter(
+        status=TransactionHistory.Status.SUCCESS,
+        direction=TransactionHistory.Direction.CREDIT,
+        created_at__year=now.year,
+        created_at__month=now.month
+    ).aggregate(total=Sum('amount'))['total'] or 0
+
+    # Monthly Outgoing
+    monthly_outgoing = transactions.filter(
+        status=TransactionHistory.Status.SUCCESS,
+        direction=TransactionHistory.Direction.DEBIT,
+        created_at__year=now.year,
+        created_at__month=now.month
+    ).aggregate(total=Sum('amount'))['total'] or 0
+
+    # Net Flow (monthly)
+    net_flow = monthly_incoming - monthly_outgoing
+
+    # Total transaction count
+    total_count = transactions.count()
+
+    # Status counts for filters
+    pending_count = transactions.filter(status=TransactionHistory.Status.PENDING).count()
+    success_count = transactions.filter(status=TransactionHistory.Status.SUCCESS).count()
+    failed_count = transactions.filter(status=TransactionHistory.Status.FAILED).count()
+
+    # Group transactions by date
+    transactions_by_date = defaultdict(list)
+    for tx in transactions:
+        date_key = tx.created_at.date()
+        transactions_by_date[date_key].append(tx)
+
+    # Convert to sorted list of tuples: [(date, [transactions]), ...]
+    grouped_transactions = sorted(
+        transactions_by_date.items(),
+        key=lambda x: x[0],
+        reverse=True
+    )
 
     # Pagination
-    paginator = Paginator(transactions, 10)  # 10 transactions per page
+    paginator = Paginator(transactions, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'bank_account': bank_account,
+        'total_incoming': total_incoming,
+        'total_outgoing': total_outgoing,
+        'monthly_incoming': monthly_incoming,
+        'monthly_outgoing': monthly_outgoing,
+        'net_flow': net_flow,
+        'total_count': total_count,
+        'pending_count': pending_count,
+        'success_count': success_count,
+        'failed_count': failed_count,
+        'grouped_transactions': grouped_transactions,
+    }
 
     return render(
         request,
         'customers/transaction/transaction_list.html',
-        {
-            'transactions': page_obj
-        }
+        context
     )
 
 
@@ -139,26 +210,28 @@ def card(request):
         account=account
     ).order_by('-created_at')
 
-    active_cards_count = cards.filter(
-        status='active'
-    ).count()
+    active_cards_count = cards.filter(status='active').count()
+    pending_cards_count = cards.filter(status='pending').count()
+    blocked_cards_count = cards.filter(status='blocked').count()
+    expired_cards_count = cards.filter(status='expired').count()
 
-    pending_cards_count = cards.filter(
-        status='pending'
-    ).count()
+    # Get the primary (featured) card - first active, or first card
+    featured_card = cards.filter(status='active').first() or cards.first()
 
-    blocked_cards_count = cards.filter(
-        status='blocked'
-    ).count()
+    # Total cards count
+    total_cards_count = cards.count()
 
     return render(
         request,
         'customers/cards.html',
         {
             'cards': cards,
+            'featured_card': featured_card,
             'active_cards_count': active_cards_count,
             'pending_cards_count': pending_cards_count,
             'blocked_cards_count': blocked_cards_count,
+            'expired_cards_count': expired_cards_count,
+            'total_cards_count': total_cards_count,
         }
     )
 

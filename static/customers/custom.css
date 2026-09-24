@@ -866,3 +866,128 @@ a{
 ::-webkit-scrollbar-thumb:hover { background: var(--muted-2); }
 
 .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+
+
+/* ===== DJANGO FORM FIELD BRIDGE ===== */
+/* Make Django form widget classes match the design system */
+
+/* Text inputs, number inputs, textareas */
+.form-control-custom {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: var(--ink);
+    font-family: inherit;
+    transition: all .2s;
+    outline: none;
+}
+.form-control-custom:hover {
+    border-color: var(--muted-2);
+}
+.form-control-custom:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.1);
+}
+.form-control-custom[readonly] {
+    background: var(--surface-2);
+    cursor: not-allowed;
+    color: var(--ink-2);
+}
+
+/* Select dropdowns */
+.form-select-custom {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 38px 12px 14px;
+    font-size: 14px;
+    color: var(--ink);
+    font-family: inherit;
+    transition: all .2s;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+}
+.form-select-custom:hover {
+    border-color: var(--muted-2);
+}
+.form-select-custom:focus {
+    border-color: var(--primary);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.1);
+}
+
+/* Textareas */
+textarea.form-control-custom {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+/* Password inputs (for PIN field) */
+input[type="password"].form-control-custom {
+    letter-spacing: 0.2em;
+    font-family: 'Courier New', monospace;
+}
+
+/* ===== INPUT-WITH-ICON INTEGRATION ===== */
+/* Auto-add left padding when Django fields are inside .input-with-icon */
+.input-with-icon .form-control-custom,
+.input-with-icon .form-select-custom {
+    padding-left: 40px;
+}
+
+/* ===== AMOUNT INPUT IN HERO FIELD ===== */
+/* Make Django's amount field work inside the dark hero amount-field */
+.amount-field .amount-input,
+.amount-field .form-control-custom.amount-input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 48px !important;
+    font-weight: 800 !important;
+    color: #fff !important;
+    width: 100% !important;
+    letter-spacing: -0.02em !important;
+    caret-color: var(--accent) !important;
+    padding: 0 !important;
+}
+.amount-field .amount-input::placeholder,
+.amount-field .form-control-custom.amount-input::placeholder {
+    color: rgba(255,255,255,0.25) !important;
+}
+.amount-field .amount-input:focus,
+.amount-field .form-control-custom.amount-input:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Remove number input spinners */
+input[type="number"].form-control-custom::-webkit-outer-spin-button,
+input[type="number"].form-control-custom::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"].form-control-custom {
+    -moz-appearance: textfield;
+}
+
+/* ===== ERROR STATE STYLING ===== */
+.form-control-custom.is-invalid,
+.form-select-custom.is-invalid {
+    border-color: var(--danger);
+    background: rgba(244,63,94,0.02);
+}
+.form-control-custom.is-invalid:focus,
+.form-select-custom.is-invalid:focus {
+    box-shadow: 0 0 0 4px rgba(244,63,94,0.1);
+}
