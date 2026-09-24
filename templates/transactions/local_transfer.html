@@ -1,0 +1,322 @@
+{% extends '../customer/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'transaction/custom_css/local_transfer.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- MAIN CONTENT AREA -->
+<div class="container-fluid py-4 px-3 px-md-4 mb-5">
+    
+    <!-- Page Header with Breadcrumbs -->
+    <div class="d-flex flex-column mb-5 animate-fadeIn" style="animation-delay: 0.05s;">
+        <h1 class="h4 fw-bold text-dark mb-1">Local Transfer</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'customer:dashboard' %}" class="text-decoration-none text-muted" style="transition: var(--transition-fast);">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active text-secondary">Local Transfer</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-4xl mx-auto animate-fadeIn" style="animation-delay: 0.1s; max-width: 900px;">
+        
+        <!-- Transfer Card -->
+        <div class="card-transfer">
+            <!-- Card Header with Gradient & Wave -->
+            <div class="card-header-gradient">
+                <div class="position-relative mb-4">
+                    <div class="header-icon-container">
+                        <i data-lucide="send" style="width:1.75rem;height:1.75rem;"></i>
+                    </div>
+                    <h2 class="h4 fw-bold mb-4">Local Bank Transfer</h2>
+                    <p class="mb-0 opacity-75 small">Send money to any local bank account securely</p>
+                </div>
+                <!-- Wave SVG -->
+                <div class="wave-decoration">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+                        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+                        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Form Body -->
+            <div class="form-card-body">
+                <form id="transferForm" method="post" class="spinner-form">
+
+                    {% csrf_token %}
+
+                    {% include "../components/form_errors.html" %}
+                    {% include "../components/messages.html" %}
+
+                    <!-- Balance Card -->
+                    <div class="balance-card">
+                        <div class="d-flex align-items-center">
+                            <div class="balance-icon">
+                                <i data-lucide="wallet" style="width:1.25rem;height:1.25rem;color:#2563eb;"></i>
+                            </div>
+                            <div>
+                                <div class="balance-label">Available Balance</div>
+                                <div class="balance-amount">{{request.user.bank_account.get_currency_symbol}} <span id="availableBalance">{{request.user.bank_account.balance|intcomma}}</span></div>
+                            </div>
+                        </div>
+                        <span class="balance-status">Available</span>
+                    </div>
+                    
+                    <!-- Amount Section -->
+                    <div class="mb-4 p-4 rounded-xl border" style="background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); border-color: var(--border-color);">
+                        <label for="id_amount" class="form-label">Transfer Amount<span class="text-danger">*</span></label>
+                        <div class="input-wrapper">
+                            <span class="currency-symbol">{{request.user.bank_account.get_currency_symbol}}</span>
+                            {{form.amount}}
+                            <span class="currency-decimal">.00</span>
+                        </div>
+                        
+                        
+                        <!-- Quick Amount Buttons -->
+                        <!-- <div class="d-flex flex-wrap gap-2 mt-3">
+                            <button type="button" class="quick-amount-btn" data-amount="100">$100</button>
+                            <button type="button" class="quick-amount-btn" data-amount="500">$500</button>
+                            <button type="button" class="quick-amount-btn" data-amount="1000">$1000</button>
+                            <button type="button" class="quick-amount-btn" id="btnAll">All</button>
+                        </div> -->
+                    </div>
+
+                    <!-- Beneficiary Details -->
+                    <div class="mb-4">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i data-lucide="user" style="width:1rem;height:1rem;color:#6b7280;"></i>
+                            </div>
+                            <h3 class="section-title">Beneficiary Details</h3>
+                        </div>
+
+                        <div class="beneficiary-card">
+                            <div class="row g-4">
+                                <!-- Account Name -->
+                                <div class="col-md-6">
+                                    <label for="id_beneficiary_name" class="form-label">Beneficiary Account Name<span class="text-danger">*</span></label>
+                                    <div class="input-wrapper">
+                                        <span class="input-icon">
+                                            <i data-lucide="user" style="width:1.25rem;height:1.25rem;"></i>
+                                        </span>
+                                        {{form.beneficiary_name}}
+                                    </div>
+                                </div>
+                                
+                                <!-- Account Number -->
+                                <div class="col-md-6">
+                                    <label for="id_beneficiary_number" class="form-label">Beneficiary Account Number<span class="text-danger">*</span></label>
+                                    <div class="input-wrapper">
+                                        <span class="input-icon">
+                                            <i data-lucide="hash" style="width:1.25rem;height:1.25rem;"></i>
+                                        </span>
+                                        {{form.beneficiary_number}}
+                                    </div>
+                                </div>
+                                
+                                <!-- Bank Name -->
+                                <div class="col-md-6">
+                                    <label for="id_bank_name" class="form-label">Bank Name<span class="text-danger">*</span></label>
+                                    <div class="input-wrapper">
+                                        <span class="input-icon">
+                                            <i data-lucide="building" style="width:1.25rem;height:1.25rem;"></i>
+                                        </span>
+                                        {{form.bank_name}}
+                                    </div>
+                                </div>
+                                
+                                <!-- Account Type -->
+                                <div class="col-md-6">
+                                    <label for="id_transfer_type" class="form-label">Transfer Type<span class="text-danger">*</span></label>
+                                    <div class="select-wrapper">
+                                        <div class="input-wrapper">
+                                            <span class="input-icon">
+                                                <i data-lucide="credit-card" style="width:1.25rem;height:1.25rem;"></i>
+                                            </span>
+                                            {{form.transfer_type}}
+                                        </div>
+                                        <span class="select-chevron">
+                                            <i data-lucide="chevron-down" style="width:1.25rem;height:1.25rem;"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="mb-4">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i data-lucide="info" style="width:1rem;height:1rem;color:#6b7280;"></i>
+                            </div>
+                            <h3 class="section-title">Additional Information</h3>
+                        </div>
+
+                        <div class="beneficiary-card">
+                            <!-- Description -->
+                            <div class="mb-4">
+                                <label for="id_description" class="form-label">Description/Memo</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon textarea-icon">
+                                        <i data-lucide="message-square" style="width:1.25rem;height:1.25rem;"></i>
+                                    </span>
+                                    {{form.description}}
+                                </div>
+                            </div>
+
+                            <!-- Transaction PIN -->
+                            <div>
+                                <label for="id_transfer_pin" class="form-label">Transaction PIN<span class="text-danger">*</span></label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">
+                                        <i data-lucide="lock" style="width:1.25rem;height:1.25rem;"></i>
+                                    </span>
+                                    {{form.transfer_pin}}
+                                    <button type="button" class="password-toggle" id="pinToggle" aria-label="Toggle PIN visibility">
+                                        <i data-lucide="eye" id="pinToggleIcon" style="width:1.25rem;height:1.25rem;"></i>
+                                    </button>
+                                </div>
+                                <small class="form-text text-muted">This is your transaction PIN, not your login password</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Summary (shown when amount > 0) -->
+                    <div id="summaryCard" class="summary-card hidden">
+                        <div class="summary-header">
+                            <i data-lucide="clipboard-list" style="width:1.25rem;height:1.25rem;margin-right:0.5rem;"></i>
+                            Transaction Summary
+                        </div>
+                        <div class="summary-row">
+                            <span class="label">Amount</span>
+                            <span class="value">$<span id="summaryAmount">0.00</span></span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="label">Fee</span>
+                            <span class="value">$0.00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="label">Total</span>
+                            <span class="value">$<span id="summaryTotal">0.00</span></span>
+                        </div>
+                        <!-- <div class="summary-row new-balance">
+                            <span>New Balance After Transfer</span>
+                            <span>$<span id="newBalance">0.00</span></span>
+                        </div> -->
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="button-group">
+                        <button type="submit" class="btn-preview" id="previewBtn" disabled>
+                            <span class="btn-content">
+                                <i data-lucide="eye" style="width:1.25rem;height:1.25rem;"></i>
+                                Preview Transfer
+                            </span>
+                            <span class="btn-glow"></span>
+                        </button>
+                        <a href="{% url 'customer:dashboard' %}" class="btn-secondary">
+                            <i data-lucide="arrow-left" style="width:1.25rem;height:1.25rem;"></i>
+                            Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="security-notice">
+            <div class="security-notice-icon">
+                <i data-lucide="shield" style="width:1.25rem;height:1.25rem;"></i>
+            </div>
+            <div>
+                <h6 class="security-notice-title">Secure Transaction</h6>
+                <p class="security-notice-text">All transfers are encrypted and processed securely. Your financial information is never stored on our servers.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title modal-title-custom">
+                    <i data-lucide="file-check" style="width:1.25rem;height:1.25rem;color:var(--primary-color);"></i>
+                    Confirm Transfer Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body modal-body-custom">
+                <!-- Preview Summary -->
+                <div class="preview-summary">
+                    <div class="preview-row">
+                        <span class="label">Amount</span>
+                        <span class="value">$<span id="modalAmount">0.00</span></span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="label">Recipient</span>
+                        <span class="value" id="modalRecipient">-</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="label">Account Number</span>
+                        <span class="value" id="modalAccountNumber">-</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="label">Bank</span>
+                        <span class="value" id="modalBank">-</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="label">Account Type</span>
+                        <span class="value" id="modalAccountType">-</span>
+                    </div>
+                    <div class="preview-row" id="modalDescriptionRow">
+                        <span class="label">Description</span>
+                        <span class="value" id="modalDescription">-</span>
+                    </div>
+                    <div class="preview-row total">
+                        <span class="label">Total</span>
+                        <span class="value">$<span id="modalTotal">0.00</span></span>
+                    </div>
+                    <div class="preview-row" style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">
+                        <span>New Balance After Transfer</span>
+                        <span>$<span id="modalNewBalance">0.00</span></span>
+                    </div>
+                </div>
+
+                <!-- Security Alert -->
+                <div class="modal-alert">
+                    <span class="modal-alert-icon">
+                        <i data-lucide="alert-triangle" style="width:1.25rem;height:1.25rem;"></i>
+                    </span>
+                    <span>Please verify the transfer details carefully before proceeding. Once confirmed, transfers cannot be reversed.</span>
+                </div>
+            </div>
+            <div class="modal-footer modal-footer-custom">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i data-lucide="x" style="width:1.125rem;height:1.125rem;margin-right:0.375rem;"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary spinner-btn" id="confirmTransferBtn">
+                    <span id="confirmBtnSpinner" class="spinner-border spinner-border-sm d-none me-2" style="width:1rem;height:1rem;border-width:2px;"></span>
+                    <span id="confirmBtnText">Confirm Transfer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'transaction/custom_js/local_transfer.js' %}"></script>
+{% endblock %}

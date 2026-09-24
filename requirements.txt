@@ -1,0 +1,15 @@
+django==4.2
+django-countries
+qrcode 
+pillow
+django-user-agents
+python-dotenv
+cloudinary
+django-cloudinary-storage
+whitenoise
+gunicorn
+django-pwa
+dj_database_url
+django-cockroachdb==4.2
+psycopg2-binary
+twilio

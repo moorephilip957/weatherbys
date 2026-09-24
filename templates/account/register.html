@@ -1,0 +1,434 @@
+{% extends './base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<!-- Main Layout -->
+<div class="container-fluid p-0">
+    <div class="row g-0 min-vh-100">
+
+        <!-- Branding Side (Desktop) -->
+        <div class="col-lg-6 d-none d-lg-flex brand-side align-items-center justify-content-center position-relative">
+            <div class="brand-overlay">
+                <div class="brand-dot floating-slow" style="width:120px;height:120px;top:25%;left:20%"></div>
+                <div class="brand-dot floating" style="width:180px;height:180px;bottom:30%;right:25%"></div>
+                <div class="brand-dot floating-slower" style="width:80px;height:80px;top:65%;left:35%"></div>
+                <div class="brand-grid"></div>
+            </div>
+            <div class="text-center text-white px-5 position-relative z-1">
+
+                <div class="mb-4">
+                    <i class="bi bi-stars display-4"></i>
+                </div>
+
+                <h2 class="display-5 fw-bold mb-3">Bank Smarter with First Havin</h2>
+
+                <p class="lead mb-4 opacity-90">
+                    Create your account in minutes and take control of your finances with ease.
+                </p>
+
+                <!-- Feature List -->
+                <div class="d-flex flex-column align-items-center gap-3 mt-4">
+
+                    <div class="feature-item d-flex align-items-start gap-3 text-start">
+                        <span class="feature-icon flex-shrink-0">
+                            <i class="bi bi-shield-check"></i>
+                        </span>
+                        <span class="feature-text">
+                            <strong>Secure Digital Platform</strong> – Industry leading security protocols to keep your
+                            funds safe
+                        </span>
+                    </div>
+
+                    <div class="feature-item d-flex align-items-start gap-3 text-start">
+                        <span class="feature-icon flex-shrink-0">
+                            <i class="bi bi-lightning-charge"></i>
+                        </span>
+                        <span class="feature-text">
+                            <strong>24/7 Account Access</strong> - Manage your finances anytime, anywhere on any device
+                        </span>
+                    </div>
+
+                    <div class="feature-item d-flex align-items-start gap-3 text-start">
+                        <span class="feature-icon flex-shrink-0">
+                            <i class="bi bi-phone"></i>
+                        </span>
+                        <span class="feature-text">
+                            <strong>Fast Transfers</strong> - Send and receive money quickly to anyone, anywhere
+                        </span>
+                    </div>
+
+                    <div class="feature-item d-flex align-items-start gap-3 text-start">
+                        <span class="feature-icon flex-shrink-0">
+                            <i class="bi bi-people"></i>
+                        </span>
+                        <span class="feature-text">
+                            <strong>Built for Individuals & Teams</strong> - Flexible banking for personal and business
+                            use
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="col-12 col-lg-6 d-flex align-items-center justify-content-center p-4">
+            <div class="w-100" style="max-width: 520px;">
+
+                <!-- Mobile Logo -->
+                <div class="text-center mb-4 d-lg-none">
+                    <!-- <i class="bi bi-stars text-primary fs-1"></i> -->
+                    <img src="{% static 'frontend/custom/firsthavin-logo.png' %}" alt="logo" width="130">
+                    <!-- <h3 class="mt-2 fw-bold text-gradient">First Havin</h3> -->
+                </div>
+
+                <!-- Registration Card -->
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+                    <!-- Progress Header -->
+                    <div class="bg-gray-50 px-4 py-4 border-bottom">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="h5 fw-bold mb-0">Create your account</h2>
+                            <span class="text-muted small">Step <span id="currentStep">1</span> of <span
+                                    id="totalSteps">4</span></span>
+                        </div>
+                        <div class="progress mb-3" style="height: 6px;">
+                            <div class="progress-bar bg-primary" id="progressBar" role="progressbar" style="width: 25%">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div class="text-center flex-grow-1">
+                                <div class="progress-step active mx-auto mb-1" id="stepIndicator1">1</div>
+                                <div class="step-label active" id="label1">Personal Details</div>
+                            </div>
+                            <div class="text-center flex-grow-1">
+                                <div class="progress-step mx-auto mb-1" id="stepIndicator2">2</div>
+                                <div class="step-label" id="label2">Contact Details</div>
+                            </div>
+                            <div class="text-center flex-grow-1">
+                                <div class="progress-step mx-auto mb-1" id="stepIndicator3">3</div>
+                                <div class="step-label" id="label3">Account Setup</div>
+                            </div>
+                            <div class="text-center flex-grow-1">
+                                <div class="progress-step mx-auto mb-1" id="stepIndicator4">4</div>
+                                <div class="step-label" id="label4">Security</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Body -->
+                    <div class="card-body p-4 p-md-5">
+                        <form method="post" action="." id="registerForm" class="spinner-form">
+                            {% csrf_token %}
+                            {% include "../components/form_errors.html" %}
+                            {% include "../components/messages.html" %}
+                            <!-- STEP 1: Personal Details -->
+                            <div class="step-content active" id="step1">
+                                <div class="text-center mb-4">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                        style="width:64px;height:64px">
+                                        <i class="bi bi-person fs-4 text-primary"></i>
+                                    </div>
+                                    <h4 class="fw-semibold">Personal Details</h4>
+                                    <p class="text-muted small mb-0">Tell us a bit about yourself</p>
+                                </div>
+                                <div class="row g-3">
+                                    <!-- First Name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-medium">First Name *</label>
+                                        <div class="input-group-custom">
+                                            <i class="bi bi-person input-icon"></i>
+                                            {{ form.first_name }}
+                                        </div>
+                                        {% if form.first_name.errors %}
+                                        <small class="text-danger">{{ form.first_name.errors|striptags }}</small>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Middle Name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-medium">Middle Name</label>
+                                        <div class="input-group-custom">
+                                            <i class="bi bi-person input-icon"></i>
+                                            {{ form.middle_name }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Last Name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-medium">Last Name *</label>
+                                        <div class="input-group-custom">
+                                            <i class="bi bi-person input-icon"></i>
+                                            {{ form.last_name }}
+                                        </div>
+                                        {% if form.last_name.errors %}
+                                        <small class="text-danger">{{ form.last_name.errors|striptags }}</small>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Username -->
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-medium">Username *</label>
+                                        <div class="input-group-custom">
+                                            <i class="bi bi-at input-icon"></i>
+                                            {{ form.username }}
+                                        </div>
+                                        {% if form.username.errors %}
+                                        <small class="text-danger">{{ form.username.errors|striptags }}</small>
+                                        {% endif %}
+                                        {% if form.username.help_text %}
+                                        <small class="text-muted">{{ form.username.help_text }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 2: Contact Info -->
+                            <div class="step-content" id="step2">
+                                <div class="text-center mb-4">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                        style="width:64px;height:64px">
+                                        <i class="bi bi-envelope fs-4 text-primary"></i>
+                                    </div>
+                                    <h4 class="fw-semibold">Contact Information</h4>
+                                    <p class="text-muted small mb-0">
+                                        We'll use this information to reach you with updates, alerts, and account
+                                        notifications.
+                                    </p>
+                                </div>
+                                <div class="space-y-3">
+                                    <!-- Email -->
+                                    <div>
+                                        <label class="form-label small fw-medium">Email Address *</label>
+                                        <div class="input-group-custom">
+                                            <i class="bi bi-envelope input-icon"></i>
+                                            {{ form.email }}
+                                        </div>
+                                        {% if form.email.errors %}
+                                        <small class="text-danger">{{ form.email.errors|striptags }}</small>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Phone -->
+                                    <div>
+                                        <label class="form-label small fw-medium">Phone (Optional)</label>
+                                        <div class="input-group-custom">
+                                            <i class="bi bi-phone input-icon"></i>
+                                            {{ form.phone_number }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Country -->
+                                    <div>
+                                        <label class="form-label small fw-medium">Select Country</label>
+                                        <div class="input-group-custom">
+                                            <!-- <i class="bi bi-geo-alt input-icon mb-3"></i> -->
+                                            {{ form.country }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 3: Preferences -->
+                            <div class="step-content" id="step3">
+                                <div class="text-center mb-4">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                        style="width:64px;height:64px">
+                                        <i class="bi bi-sliders fs-4 text-primary"></i>
+                                    </div>
+                                    <h4 class="fw-semibold">Account Setup</h4>
+                                    <p class="text-muted small mb-0">
+                                        Choose your preferred account type and establish your transaction PIN for secure
+                                        transactions.
+                                    </p>
+                                </div>
+
+                                <!-- Plan Selection -->
+                                <label class="form-label small fw-medium mb-2">Account Type *</label>
+                                <hr class="border-dark">
+
+                                <!-- hidden django field -->
+                                <div class="d-none">
+                                    {{ bank_form.account_type }}
+                                </div>
+                                <div class="row g-3 mb-4">
+                                    <h4 class="text-center text-primary mb-3">Domestic Accounts</h4>
+                                    {% for type in account_types|slice:":2" %}
+                                    <div class="col-12 col-lg-6">
+                                        <label class="account-type-card d-block account-type-card" data-value="{{ type.id }}">
+
+                                            <div class="check-badge"><i class="bi bi-check-lg"></i></div>
+
+                                            <div class="d-flex align-items-start gap-3 justify-content-between">
+                                                <div class="bg-primary bg-opacity-10 rounded p-2">
+                                                    <i class="bi bi-gift text-primary"></i>
+                                                </div>
+
+                                                <div>
+                                                    <h6 class="fw-semibold mb-0">{{ type.name }}</h6>
+                                                    <p class="small text-muted mb-0">
+                                                        Activation fee: ${{ type.activation_fee|intcomma}}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+
+                                    {# MORE OPTIONS (HIDDEN INITIALLY) #}
+                                    <div class="collapse mt-2" id="moreAccounts">
+                                        <div class="row">
+                                            {% for type in account_types|slice:"2:" %}
+                                            <div class="col-12 col-lg-6 mb-3">
+                                                <label class="account-type-card d-block account-type-card"
+                                                    data-value="{{ type.id }}">
+
+                                                    <div class="check-badge"><i class="bi bi-check-lg"></i></div>
+
+                                                    <div class="d-flex align-items-start gap-3 justify-content-between">
+                                                        <div class="bg-primary bg-opacity-10 rounded p-2">
+                                                            <i class="bi bi-gift text-primary"></i>
+                                                        </div>
+
+                                                        <div>
+                                                            <h6 class="fw-semibold mb-0">{{ type.name }}</h6>
+                                                            <p class="small text-muted mb-0">
+                                                                Activation fee: ${{ type.activation_fee|intcomma}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <!-- TOGGLE BUTTON -->
+                                    {% if account_types|length > 2 %}
+                                    <div class="mt-3 text-center">
+                                        <button class="btn btn-sm btn-outline-primary" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#moreAccounts">
+                                            Offshore Accounts <i class="bi bi-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- Currency -->
+                                <div>
+                                    <label class="form-label small fw-medium">Currency</label>
+                                    <div class="input-group-custom">
+                                        <i class="bi bi-currency-exchange input-icon"></i>
+                                        {{bank_form.currency}}
+                                    </div>
+                                </div>
+
+                                <!-- Transaction PIN -->
+                                <div mt-3>
+                                    <label class="form-label small fw-medium">Transaction PIN</label>
+                                    <div class="input-group-custom">
+                                        <i class="bi bi-shield-lock input-icon"></i>
+                                        {{bank_form.transaction_pin}}
+                                            <small>{{bank_form.transaction_pin.help_text}}</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 4: Secure Your Account -->
+                            <div class="step-content" id="step4">
+                                <div class="text-center mb-4">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                        style="width:64px;height:64px">
+                                        <i class="bi bi-shield-lock fs-4 text-primary"></i>
+                                    </div>
+                                    <h4 class="fw-semibold">Secure Your Account</h4>
+                                    <p class="text-muted small mb-0">Create a strong password</p>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="mb-3">
+                                    <label class="form-label small fw-medium">Password *</label>
+                                    <div class="input-group-custom">
+                                        <i class="bi bi-lock input-icon"></i>
+                                        {{ form.password1 }}
+                                        <button type="button" class="password-toggle" id="togglePassword"
+                                            aria-label="Toggle password visibility">
+                                            <i class="bi bi-eye" id="eyeIcon"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Strength Meter (hidden by default) -->
+                                    <div class="mt-2" id="strengthContainer" style="display:none">
+                                        <div class="d-flex justify-content-between small mb-1">
+                                            <span class="text-muted">Strength:</span>
+                                            <span id="strengthLabel" class="fw-medium">Very Weak</span>
+                                        </div>
+                                        <div class="strength-meter">
+                                            <div class="strength-fill strength-weak" id="strengthFill"
+                                                style="width:20%"></div>
+                                        </div>
+                                        <ul class="list-unstyled small text-muted mt-2 mb-0" style="font-size:0.75rem">
+                                            <li id="ruleLength"><i class="bi bi-circle small me-1"></i> At least 8
+                                                characters</li>
+                                            <li id="ruleUpper"><i class="bi bi-circle small me-1"></i> One uppercase
+                                                letter</li>
+                                            <li id="ruleNumber"><i class="bi bi-circle small me-1"></i> One number</li>
+                                            <li id="ruleSpecial"><i class="bi bi-circle small me-1"></i> One special
+                                                character</li>
+                                        </ul>
+                                    </div>
+                                    {% if form.password1.errors %}
+                                    <small class="text-danger">{{ form.password1.errors|striptags }}</small>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div class="mb-3">
+                                    <label class="form-label small fw-medium">Confirm Password *</label>
+                                    <div class="input-group-custom">
+                                        <i class="bi bi-lock input-icon"></i>
+                                        {{ form.password2 }}
+                                    </div>
+                                    <small class="text-danger d-none" id="passwordMatchError">Passwords do not
+                                        match</small>
+                                    {% if form.password2.errors %}
+                                    <small class="text-danger">{{ form.password2.errors|striptags }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Navigation Buttons -->
+                            <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                                <button type="button" class="btn btn-outline-custom" id="prevBtn" style="display:none">
+                                    <i class="bi bi-arrow-left"></i> Back
+                                </button>
+                                <div></div> <!-- spacer -->
+                                <button type="button" class="btn btn-primary-custom" id="nextBtn">
+                                    Next <i class="bi bi-arrow-right"></i>
+                                </button>
+                                <button type="submit" class="btn btn-primary-custom spinner-btn" id="submitBtn"
+                                    style="display:none">
+                                    <i class="bi bi-check-lg"></i> Create Account
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-center mt-4">
+                    <p class="small text-muted mb-0">
+                        Already have an account?
+                        <a href="{% url 'account:login' %}" class="text-decoration-none"
+                            style="color:var(--primary);font-weight:500">Sign in</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

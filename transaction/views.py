@@ -1,0 +1,334 @@
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.decorators import login_required
+
+from .forms import LocalTransferForm, InternationalTransferForm, DepositCreateForm, DepositProofForm
+from .services import create_transaction
+from customer.models import UserBankAccount
+from .models import TransactionHistory, Deposit, CryptoWallet
+from .utils import generate_reference
+from notification.utils import create_notification
+from kyc.decorator import kyc_required
+from account.decorator import block_blocked_users
+from customer.utils import handle_transaction_events
+
+
+@login_required
+@kyc_required
+@block_blocked_users
+def local_transfer(request):
+    if request.method == "POST":
+
+        form = LocalTransferForm(request.POST, user=request.user)
+
+        if form.is_valid():
+
+            data = form.cleaned_data
+            account = UserBankAccount.objects.get(user=request.user)
+
+            result = create_transaction(
+                user=request.user,
+                account=account,
+                amount=data["amount"],
+                transaction_type="local_transfer",
+                direction="debit",
+                description=data["description"],
+                beneficiary_name=data["beneficiary_name"],
+                beneficiary_number=data["beneficiary_number"],
+                bank_name=data["bank_name"],
+            )
+
+            # handle email + notifications
+            handle_transaction_events(
+                result=result,
+                user=request.user,
+                data=data,
+                account=account
+            )
+
+            # =========================
+            # REDIRECTS (ONLY HERE)
+            # =========================
+            if result.status == "success":
+                
+                return redirect("transaction:transfer_success", tx_id=result.transaction.id)
+
+            elif result.status == "pending":
+                return redirect("transaction:transfer_pending", tx_id=result.transaction.id)
+
+            else:
+                return redirect("transaction:transfer_failed", tx_id=result.transaction.id)
+
+    else:
+        form = LocalTransferForm(user=request.user)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'transactions/local_transfer.html', context)
+
+
+@login_required
+@kyc_required
+@block_blocked_users
+def wire_transfer(request):
+    if request.method == 'POST':
+        form = InternationalTransferForm(request.POST, user=request.user)
+
+        if form.is_valid():
+
+            data = form.cleaned_data
+            account = UserBankAccount.objects.get(user=request.user)
+
+            result = create_transaction(
+                user=request.user,
+                account=account,
+                amount=data["amount"],
+                transaction_type="wire_transfer",
+                direction="debit",
+                description=data["description"],
+                beneficiary_name=data["beneficiary_name"],
+                beneficiary_number=data["beneficiary_number"],
+                bank_name=data["bank_name"],
+            )
+
+            # handle email + notifications
+            handle_transaction_events(
+                result=result,
+                user=request.user,
+                data=data,
+                account=account
+            )
+
+            if result.status == "success":
+                return redirect("transaction:transfer_success", tx_id=result.transaction.id)
+
+            elif result.status == "pending":
+                return redirect("transaction:transfer_pending", tx_id=result.transaction.id)
+
+            else:
+                return redirect("transaction:transfer_failed", tx_id=result.transaction.id)
+    else:
+        form = InternationalTransferForm(user=request.user)
+
+    context = {
+        'form': form,
+    }
+    return render(
+        request,
+        'transactions/wire_transfer.html',
+        context
+    )
+
+
+@login_required
+@kyc_required
+@block_blocked_users
+def transfer_success(request, tx_id):
+
+    transaction = get_object_or_404(
+        TransactionHistory,
+        id=tx_id,
+        user=request.user
+    )
+
+    return render(
+        request,
+        "transactions/transfer_success.html",
+        {
+            "transaction": transaction
+        }
+    )
+
+@login_required
+@kyc_required
+@block_blocked_users
+def transfer_pending(request, tx_id):
+
+    transaction = get_object_or_404(
+        TransactionHistory,
+        id=tx_id,
+        user=request.user
+    )
+
+    return render(
+        request,
+        "transactions/transfer_pending.html",
+        {
+            "transaction": transaction
+        }
+    )
+
+
+@login_required
+@kyc_required
+@block_blocked_users
+def transfer_failed(request, tx_id):
+
+    transaction = get_object_or_404(
+        TransactionHistory,
+        id=tx_id,
+        user=request.user
+    )
+
+    return render(
+        request,
+        "transactions/transfer_failed.html",
+        {
+            "transaction": transaction
+        }
+    )
+
+
+@login_required
+@kyc_required
+@block_blocked_users
+def create_deposit(request):
+
+    if request.method == "POST":
+
+        form = DepositCreateForm(request.POST)
+
+        if form.is_valid():
+
+            deposit = form.save(commit=False)
+
+            deposit.user = request.user
+            deposit.save()
+
+            return redirect(
+                "transaction:deposit_detail",
+                deposit_id=deposit.id
+            )
+
+    else:
+
+        form = DepositCreateForm()
+
+    return render(
+        request,
+        "transactions/create_deposit.html",
+        {
+            "form": form
+        }
+    )
+
+
+@login_required
+@kyc_required
+@block_blocked_users
+def deposit_detail(request, deposit_id):
+
+    deposit = get_object_or_404(
+        Deposit,
+        id=deposit_id,
+        user=request.user
+    )
+
+    wallet = None
+    form = None
+
+    # =========================
+    # CRYPTO DEPOSITS
+    # =========================
+
+    if deposit.method in ["BTC", "USDT"]:
+
+        wallet = CryptoWallet.objects.filter(
+            currency=deposit.method,
+            active=True
+        ).first()
+
+        # =========================
+        # PROOF FORM
+        # =========================
+
+        if request.method == "POST":
+
+            form = DepositProofForm(
+                request.POST,
+                request.FILES,
+                instance=deposit
+            )
+
+            if form.is_valid():
+
+                form.save()
+
+                # Create transaction history
+                TransactionHistory.objects.create(
+                    user=request.user,
+                    amount=deposit.amount,
+                    transaction_type='deposit',
+                    direction='credit',
+                    description="**** self deposit",
+                    reference=generate_reference(),
+                    status="pending",
+
+                    # Beneficiary Details
+                    beneficiary_name="****self",
+                    beneficiary_number="******self",
+                    bank_name="Dew Trust Bank",
+                )
+
+                # =========================
+                # CREATE NOTIFICATION
+                # =========================
+                create_notification(
+                    user=request.user,
+                    title="Deposit request Submitted",
+                    message=f"Your deposit of {deposit.user.bank_account.get_currency_symbol()}{deposit.amount} has been submitted successfully and is pending approval.",
+                    notif_type="info",
+                    related_object=deposit  
+                )
+
+                return redirect(
+                    "transaction:deposit_pending",
+                    deposit_id=deposit.id
+                )
+
+        else:
+
+            form = DepositProofForm(
+                instance=deposit
+            )
+
+    # =========================
+    # WIRE TRANSFER
+    # =========================
+
+    elif deposit.method == "WIRE":
+
+        # No form
+        # Just instructions message
+
+        form = None
+
+    return render(
+        request,
+        "transactions/deposit_detail.html",
+        {
+            "deposit": deposit,
+            "wallet": wallet,
+            "form": form
+        }
+    )
+
+
+@login_required
+@kyc_required
+@block_blocked_users
+def deposit_pending(request, deposit_id):
+
+    deposit = get_object_or_404(
+        Deposit,
+        id=deposit_id,
+        user=request.user
+    )
+
+    return render(
+        request,
+        "transactions/deposit_pending.html",
+        {
+            "deposit": deposit
+        }
+    )

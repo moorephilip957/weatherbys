@@ -1,0 +1,389 @@
+{% extends './base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'customer/custom_css/apply_card.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Toast Notifications Container -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- MAIN CONTENT AREA -->
+<div class="container-fluid py-4 px-3 px-md-4">
+    
+    <!-- Page Header with Breadcrumbs -->
+    <div class="d-flex flex-column mb-5 animate-fadeIn" style="animation-delay: 0.05s;">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-2 small">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'customer:dashboard' %}" class="text-decoration-none text-muted" style="transition: var(--transition-fast);">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'customer:cards' %}" class="text-decoration-none text-muted" style="transition: var(--transition-fast);">Cards</a>
+                        </li>
+                        <li class="breadcrumb-item active text-secondary">Apply</li>
+                    </ol>
+                </nav>
+                <h1 class="h4 fw-bold text-dark mb-0">Apply for Debit Card</h1>
+            </div>
+            <a href="{% url 'customer:cards' %}" class="btn-back">
+                <i data-lucide="arrow-left" style="width:1rem;height:1rem;"></i>
+                Back to Cards
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-4xl mx-auto animate-fadeIn" style="animation-delay: 0.1s; max-width: 900px;">
+        
+        <!-- Application Card -->
+        <div class="card-application">
+            <!-- Card Header with Gradient & Wave -->
+            <div class="card-header-gradient">
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
+                    <div>
+                        <h2 class="h4 fw-bold mb-1">Apply for a Debit Card</h2>
+                        <p class="mb-0 opacity-75 small">
+                            Get secure access to a physical debit card for everyday purchases, ATM withdrawals, and online payments
+                        </p>
+                    </div>
+                    <div class="d-none d-md-block mt-3 mt-md-0">
+                        <i data-lucide="credit-card" style="width:4rem;height:4rem;opacity:0.75;color:rgba(255,255,255,0.75);"></i>
+                    </div>
+                </div>
+            </div>
+            {% include "../components/form_errors.html" %}
+            {% include "../components/messages.html" %}
+            <!-- Form Body -->
+            <div class="form-card-body">
+                <form method="post" class="spinner-form">
+                    {% csrf_token %}
+                    
+                    <!-- Card Details Section -->
+                    <section class="mb-5">
+                        <h3 class="h6 fw-medium text-dark mb-4">Card Details</h3>
+                        
+                        <div class="row g-4">
+                            <!-- Card Type -->
+                            <div class="col-12">
+                                <label class="form-label">Card Type</label>
+
+                                <div class="d-flex flex-column gap-3">
+
+                                    <!-- Visa -->
+                                    <label class="card-type-option" id="cardTypeVisa">
+
+                                        <input type="radio" name="card_type" value="visa" {% if form.card_type.value == "visa" %}checked{% endif %}>
+
+                                        <div class="card-type-content">
+
+                                            <div class="card-type-radio"></div>
+
+                                            <div class="card-type-info">
+                                                <h4>Visa Debit Card</h4>
+                                                <p>Accepted worldwide, suitable for online and in-store payments</p>
+                                            </div>
+
+                                            <div class="card-type-logo">
+                                                <div class="card-type-logo">
+                                                    <svg viewBox="0 0 1000 324" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                        style="height:2rem;width:auto;">
+                                                        <path d="M433.334 318.516H348.568L403.315 5.01855H488.081L433.334 318.516Z"
+                                                            fill="#1434CB" />
+                                                        <path
+                                                            d="M727.98 15.9043C712.039 9.56622 686.227 2.51855 653.355 2.51855C574.054 2.51855 519.055 45.5277 518.802 106.826C518.306 152.343 558.126 177.912 587.98 193.316C618.34 209.233 629.315 219.335 629.315 233.014C629.061 254.008 603.493 263.591 579.702 263.591C547.839 263.591 530.7 258.287 505.123 245.892L493.902 240.335L482.166 313.221C501.069 323.07 536.096 331.667 572.643 332.163C657.14 332.163 711.128 289.897 711.895 224.144C712.394 188.508 689.871 160.445 643.015 136.91C615.2 121.744 598.306 111.638 598.554 97.2356C598.554 84.5987 613.224 70.9167 648.747 70.9167C677.823 70.4206 699.053 77.7188 715.707 85.5144L726.681 90.8186L738.417 19.9214L727.98 15.9043Z"
+                                                            fill="#1434CB" />
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M841.897 5.01855H773.691C755.782 5.01855 742.397 10.0624 734.862 30.0238L630.236 318.516H715.464C715.464 318.516 729.143 280.806 732.429 272.002C742.901 272.002 822.706 272.002 835.844 272.002C838.373 283.215 845.93 318.516 845.93 318.516H922.667L841.897 5.01855ZM762.22 208.49C769.018 189.752 796.85 116.686 796.85 116.686C796.602 117.174 803.16 99.19 806.699 88.0899L812.02 114.188C812.02 114.188 829.775 192.026 833.061 208.49H762.22Z"
+                                                            fill="#1434CB" />
+                                                        <path
+                                                            d="M251.994 5.01855L171.471 219.335L162.137 174.313C146.216 129.054 102.175 80.0894 52.8662 56.8035L126.462 318.02H212.215L336.832 5.01855H251.994Z"
+                                                            fill="#1434CB" />
+                                                        <path
+                                                            d="M127.963 5.01855H0.66211L0.167969 10.3101C98.1497 31.7971 163.301 76.5646 190.132 129.298L162.633 13.5747C157.329 -0.60098 144.316 5.51465 127.963 5.01855Z"
+                                                            fill="#1434CB" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </label>
+
+                                    <!-- Mastercard -->
+                                    <label class="card-type-option" id="cardTypeMaster">
+
+                                        <input type="radio" name="card_type" value="master" {% if form.card_type.value == "master" %}checked{% endif %}>
+
+                                        <div class="card-type-content">
+
+                                            <div class="card-type-radio"></div>
+
+                                            <div class="card-type-info">
+                                                <h4>Master Debit Card</h4>
+                                                <p>Global acceptance with strong security features</p>
+                                            </div>
+
+                                            <div class="card-type-logo">
+                                                <div class="card-type-logo">
+                                                    <svg viewBox="0 0 131.39 86.9" xmlns="http://www.w3.org/2000/svg"
+                                                        style="height:2rem;width:auto;">
+                                                        <path d="M48.37 15.14h34.66v56.61H48.37z" fill="#ff5f00" />
+                                                        <path
+                                                            d="M52.37 43.45a35.94 35.94 0 0113.75-28.3 36 36 0 100 56.61 35.94 35.94 0 01-13.75-28.31z"
+                                                            fill="#eb001b" />
+                                                        <path
+                                                            d="M120.39 65.54V64.5h.48v-.24h-1.19v.24h.47v1.04zm2.31 0v-1.29h-.36l-.42.91-.42-.91h-.36v1.29h.26V64.9l.39.89h.27l.39-.89v.89z"
+                                                            fill="#f79e1b" />
+                                                        <path d="M123.94 43.45a36 36 0 01-58 28.3 36 36 0 000-56.61 36 36 0 0158 28.3z"
+                                                            fill="#f79e1b" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </label>
+
+                                </div>
+
+                                {% if form.card_type.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.card_type.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Card Level -->
+                            <div class="col-md-6">
+                                <label for="{{ form.issuance_fee.id_for_label }}" class="form-label">
+                                    Card Issuance Fee
+                                </label>
+                                <div class="select-wrapper">
+                                    {{ form.issuance_fee }}
+                                </div>
+                                <small class="form-text text-muted">Different levels offer varied spending limits and features</small>
+
+                                {% if form.issuance_fee.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.issuance_fee.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Currency -->
+                            <div class="col-md-6">
+                                <label for="{{ form.currency.id_for_label }}" class="form-label">
+                                    Currency
+                                </label>
+
+                                <div class="select-wrapper">
+                                    {{ form.currency }}
+                                </div>
+
+                                {% if form.currency.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.currency.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Spending Limit -->
+                            <div class="col-md-6">
+                                <label for="{{ form.spending_limit.id_for_label }}" class="form-label">
+                                    Daily Spending Limit
+                                </label>
+
+                                <div class="currency-input-wrapper">
+                                    {{ form.spending_limit }}
+                                </div>
+
+                                <small class="form-text text-muted">
+                                    Set your preferred daily card spending limit
+                                </small>
+
+                                {% if form.spending_limit.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.spending_limit.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Billing Information Section -->
+                    <section class="mb-5">
+                        <h3 class="h6 fw-medium text-dark mb-4">Billing Information</h3>
+                        
+                        <div class="row g-4">
+                            <!-- Card Holder Name -->
+                            <div class="col-12">
+                                <label for="{{ form.full_name.id_for_label }}" class="form-label">
+                                    Cardholder Name
+                                    <span class="required">*</span>
+                                </label>
+
+                                {{ form.full_name }}
+
+                                <small class="form-text text-muted">
+                                    Name as it will appear on your card
+                                </small>
+
+                                {% if form.full_name.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.full_name.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">
+                                    Email Address
+                                </label>
+
+                                {{ form.email }}
+
+                                {% if form.email.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="col-md-6">
+                                <label for="{{ form.phone.id_for_label }}" class="form-label">
+                                    Phone Number
+                                </label>
+
+                                {{ form.phone }}
+
+                                {% if form.phone.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.phone.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Address -->
+                            <div class="col-12">
+                                <label for="{{ form.address.id_for_label }}" class="form-label">
+                                    Billing Address
+                                </label>
+
+                                {{ form.address }}
+
+                                <small class="form-text text-muted">
+                                    Address used for verification when making purchases
+                                </small>
+
+                                {% if form.address.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.address.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Delivery Method -->
+                            <div class="col-md-6">
+                                <label for="{{ form.delivery_method.id_for_label }}" class="form-label">
+                                    Delivery Method
+                                </label>
+
+                                <div class="select-wrapper">
+                                    {{ form.delivery_method }}
+                                </div>
+
+                                {% if form.delivery_method.errors %}
+                                <div class="text-danger small mt-2">
+                                    {{ form.delivery_method.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                        </div>
+                    </section>
+                    
+                    <!-- Fee and Terms -->
+                    <section class="border-top pt-4 mt-4">
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <i data-lucide="info" style="width:1.25rem;height:1.25rem;"></i>
+                            </div>
+                            <div>
+                                <h6 class="info-card-title">Card Issuance Fee</h6>
+                                <div class="info-card-text">
+                                    <p>There is a one-time issuance fee for your new virtual card:</p>
+                                    <ul>
+                                        <li>Standard: $5.00</li>
+                                        <li>Gold: $15.00</li>
+                                        <li>Platinum: $25.00</li>
+                                        <li>Black: $50.00</li>
+                                    </ul>
+                                    <p class="mt-2">The fee will be charged to your account immediately upon approval.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="terms-checkbox">
+                            <input type="checkbox" id="terms" name="terms_accepted" required>
+                            <label for="terms">
+                                I agree to the terms and conditions. By applying for this card, you agree to our <a href="#">Terms of Service</a> and <a href="#">Card Agreement</a>.
+                            </label>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end pt-3">
+                            <button type="submit" class="btn-submit spinner-btn" id="submitBtn">
+                                <!-- <span class="spinner-border spinner-border-sm d-none me-2" id="submitSpinner" style="width:1rem;height:1rem;border-width:2px;"></span> -->
+                                <span id="submitText">Apply for Card</span>
+                            </button>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+
+        <!-- FAQs Section -->
+        <div class="faqs-section mb-5">
+            <h2 class="faqs-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">How long does it take to receive my debit card?</div>
+                <div class="faq-answer">
+                    Debit cards are typically processed within 3-7 business days after approval. Delivery times may vary depending on your location, and you'll receive a notification once your card has been shipped.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I use my debit card for online and in store purchases?</div>
+                <div class="faq-answer">
+                    Yes, your debit card can be used for both online and in store purchases anywhere Visa or Mastercard is accepted. You can also use it for ATM withdrawals where supported.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">What are the differences between card levels?</div>
+                <div class="faq-answer">
+                    <span class="block"><strong>Standard:</strong> Everyday banking features with basic spending limits and fraud protection.</span>
+                    <span class="block"><strong>Gold:</strong> Higher withdrawal and spending limits with enhanced security features.</span>
+                    <span class="block"><strong>Platinum:</strong> Premium spending limits, priority customer support, and added rewards benefits.</span>
+                    <span class="block"><strong>Black:</strong> Elite banking experience with exclusive rewards, concierge services, and maximum transaction limits.</span>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I fund my debit card?</div>
+                <div class="faq-answer">
+                    Your debit card is directly linked to your bank account balance. Any deposits or transfers made to your account will automatically be available for card transactions and ATM withdrawals.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'customer/custom_js/apply_card.js' %}"></script>
+{% endblock %}

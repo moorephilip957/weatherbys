@@ -1,0 +1,250 @@
+{% load static %}
+{% load humanize %}
+
+<!-- Header -->
+<header class="header">
+    <div class="d-flex align-items-center justify-content-between">
+        <!-- Mobile: Menu + Logo -->
+        <div class="d-md-none d-flex align-items-center">
+            <button class="btn btn-link text-dark p-0 me-2" id="mobileMenuToggle" aria-label="Toggle menu">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+            <a href="#" class="text-decoration-none">
+                <div class=" text-white rounded d-flex align-items-center justify-content-center"
+                    style="width: 2rem; height: 2rem;">
+                    <img src="{% static 'frontend/custom/firsthavin-logo-favicon.png' %}" alt="" width="40">
+                </div>
+            </a>
+        </div>
+
+        <!-- Desktop: Date -->
+        <div class="d-none d-md-flex align-items-center" style="margin-left: 250px;">
+            <i class="bi bi-calendar me-2 text-muted"></i>
+            <span class="text-sm text-dark" id="headerDate">{% now "l, F j, Y" %}</span>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="d-flex align-items-center gap-3">
+            <!-- Balance (Desktop) -->
+            <div class="d-none d-md-flex align-items-center px-2 py-1 bg-primary-light rounded-pill">
+                <i class="bi bi-wallet me-1 text-dark"></i>
+                <span class="text-sm fw-medium text-dark">${{request.user.bank_account.balance|intcomma}}</span>
+            </div>
+
+
+            <!-- Notifications -->
+            <div class="dropdown">
+                <button class="btn btn-link text-dark p-0 position-relative" type="button" id="notificationDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell fs-5"></i>
+                    {% if navbar_unread_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ navbar_unread_count }}
+                        </span>
+                    {% endif %}
+                </button>
+                <div class="dropdown-menu dropdown-menu-end p-0" style="width: 20rem;">
+                    <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                        <h6 class="mb-0 fw-semibold">Notifications</h6>
+                        <form method="POST" action="{% url 'notification:mark_all_notifications_read' %}">
+                            {% csrf_token %}
+                            <button class="btn btn-link btn-sm p-0 text-primary">Mark all as read</button>
+                        </form>
+                    </div>
+                    <div class="overflow-auto" style="max-height: 15rem;">
+                        {% for notif in navbar_notifications %}
+                        <a href="{% url 'notification:mark_read' notif.pk %}" 
+                        class="notification-item d-flex {% if not notif.read %}fw-bold{% endif %}">
+                        <!-- <a href="{% if notif.content_object %}{{ notif.content_object.get_absolute_url }}{% else %}{% url 'notification:mark_read' notif.pk %}{% endif %}" 
+                        class="notification-item d-flex {% if not notif.read %}fw-bold{% endif %}"> -->
+                            <div class="notification-icon {{ notif.notif_type }} me-3">
+                                {% if notif.notif_type == 'success' %}
+                                    <i class="bi bi-check-circle"></i>
+                                {% elif notif.notif_type == 'warning' %}
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                {% elif notif.notif_type == 'error' %}
+                                    <i class="bi bi-x-circle"></i>
+                                {% else %}
+                                    <i class="bi bi-info-circle"></i>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1 min-w-0" style="word-wrap: break-word; overflow-wrap: break-word;">
+                                <p class="mb-0 fw-medium text-dark">{{ notif.title }}</p>
+                                <p class="mb-0 text-sm text-muted">{{ notif.message }}</p>
+                                <p class="mb-0 text-xs text-muted mt-1 local-time" data-utc="{{ notif.created_at|date:'c' }}"></p>
+                            </div>
+                        </a>
+                        {% empty %}
+                        <p class="p-3 text-center text-muted">No notifications</p>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center p-2 border-top">
+                        <a href="{% url 'notification:notification_list' %}" class="text-sm fw-medium text-primary text-decoration-none">View all notifications</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Dropdown -->
+            <div class="dropdown">
+                <button class="btn btn-link p-0 d-flex align-items-center" type="button" id="userDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if request.user.kycverification.passport_photograph %}
+                    <img src="{{request.user.kycverification.passport_photograph.url}}" alt="User"
+                        class="rounded-circle border border-2" style="width: 2rem; height: 2rem; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'frontend/custom/default-img.jpg' %}" alt="User"
+                        class="rounded-circle border border-2" style="width: 2rem; height: 2rem; object-fit: cover;">
+                    {% endif %}
+                </button>
+                <div class="dropdown-menu dropdown-menu-end p-0" style="width: 12rem;">
+                    <div class="p-3 border-bottom">
+                        <p class="mb-0 fw-medium text-dark">{{request.user.full_name}}</p>
+                        <p class="mb-0 text-xs text-muted">ID: {{request.user.id}}</p>
+                        {% with kyc=request.user.kycverification %}
+                            {% if kyc.status == "approved" %}
+                            <span class="badge-kyc badge-verified mt-1">
+                                <i class="bi bi-check-circle-fill"></i>
+                                KYC Verified
+                            </span>
+                            {% else %}
+                                <span class="badge-kyc badge-rejected mt-1">
+                                <i class="bi bi-check-circle-fill"></i>
+                                KYC Not Verified
+                                </span>
+                            {% endif %}
+                            
+                        {% endwith %}
+                    </div>
+                    <a href="{% url 'support:create_ticket' %}" class="dropdown-item">
+                        <i class="bi bi-question-circle"></i> Support Ticket
+                    </a>
+                    <a href="{% url 'customer:settings' %}" class="dropdown-item">
+                        <i class="bi bi-person"></i> My Profile
+                    </a>
+                    <a href="{% url 'account:logout' %}" class="dropdown-item text-danger">
+                        <i class="bi bi-box-arrow-right"></i> Sign Out
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!-- Mobile Menu Modal -->
+<div class="mobile-menu-modal" id="mobileMenuModal">
+    <div class="mobile-menu-content">
+        <button class="btn btn-link position-absolute top-0 end-0 p-2 text-muted" id="closeMobileMenu">
+            <i class="bi bi-x fs-5"></i>
+        </button>
+
+        <!-- User Info -->
+        <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+            <img src="https://ui-avatars.com/api/?name=Andrew+Levin&background=0147E1&color=fff" alt="User"
+                class="rounded-circle border border-2 border-primary-light"
+                style="width: 3rem; height: 3rem; object-fit: cover;">
+            <div class="ms-3">
+                <h6 class="mb-0 fw-semibold">{{request.user.full_name}}</h6>
+                <p class="mb-0 text-sm text-muted">Account: {{request.user.bank_account.account_number}}</p>
+                {% with kyc=request.user.kycverification %}
+                    {% if kyc.status == "approved" %}
+                    <span class="badge-kyc badge-verified mt-1">
+                        <i class="bi bi-check-circle-fill"></i>
+                         KYC Verified
+                    </span>
+                    {% else %}
+                        <span class="badge-kyc badge-rejected mt-1">
+                        <i class="bi bi-check-circle-fill"></i>
+                         KYC Not Verified
+                        </span>
+                    {% endif %}
+                    
+                {% endwith %}
+            </div>
+        </div>
+
+        <!-- Menu Title -->
+        <div class="text-center mb-4">
+            <h5 class="mb-0 fw-bold">Banking Menu</h5>
+            <p class="mb-0 text-sm text-muted">Select an option to continue</p>
+        </div>
+
+        <!-- Grid Menu -->
+        <div class="mobile-menu-grid">
+            <a href="{% url 'customer:dashboard' %}" class="mobile-menu-item">
+                <div class="icon-circle"><i class="bi bi-house text-primary"></i></div>
+                <span>Home</span>
+            </a>
+            <a href="{% url 'customer:transactions' %}" class="mobile-menu-item secondary">
+                <div class="icon-circle"><i class="bi bi-graph-up text-warning"></i></div>
+                <span>Activity</span>
+            </a>
+            <a href="{% url 'customer:cards' %}" class="mobile-menu-item">
+                <div class="icon-circle"><i class="bi bi-credit-card text-primary"></i></div>
+                <span>Cards</span>
+            </a>
+            <a href="{% url 'transaction:local_transfer' %}" class="mobile-menu-item secondary">
+                <div class="icon-circle"><i class="bi bi-send text-warning"></i></div>
+                <span>Transfer</span>
+            </a>
+            <a href="{% url 'transaction:wire_transfer' %}" class="mobile-menu-item secondary">
+                <div class="icon-circle"><i class="bi bi-globe text-warning"></i></div>
+                <span>Int'l Wire</span>
+            </a>
+            <a href="{% url 'transaction:create_deposit' %}" class="mobile-menu-item">
+                <div class="icon-circle"><i class="bi bi-download text-primary"></i></div>
+                <span>Deposit</span>
+            </a>
+            <a href="{% url 'customer:download_app' %}" class="mobile-menu-item">
+                <div class="icon-circle"><i class="bi bi-phone text-primary"></i></div>
+                <span>Download</span>
+            </a>
+            <a href="{% url 'loan:apply_loan' %}" class="mobile-menu-item secondary">
+                <div class="icon-circle"><i class="bi bi-receipt text-warning"></i></div>
+                <span>Loan</span>
+            </a>
+            <!-- <a href="#" class="mobile-menu-item">
+                <div class="icon-circle"><i class="bi bi-file-earmark-text text-primary"></i></div>
+                <span>IRS Refund</span>
+            </a> -->
+            <a href="{% url 'customer:settings' %}" class="mobile-menu-item">
+                <div class="icon-circle"><i class="bi bi-gear text-primary"></i></div>
+                <span>Settings</span>
+            </a>
+            <a href="{% url 'support:create_ticket' %}" class="mobile-menu-item secondary">
+                <div class="icon-circle"><i class="bi bi-question-circle text-warning"></i></div>
+                <span>Support</span>
+            </a>
+            <a href="{% url 'account:logout' %}" class="mobile-menu-item accent">
+                <div class="icon-circle"><i class="bi bi-box-arrow-right text-danger"></i></div>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-bottom-nav d-md-none">
+    <div class="d-flex justify-content-between align-items-center px-4 position-relative">
+        <a href="{% url 'customer:dashboard' %}" class="nav-item active">
+            <i class="bi bi-house-door"></i>
+            <span>Home</span>
+        </a>
+        <a href="{% url 'customer:transactions' %}" class="nav-item">
+            <i class="bi bi-bar-chart"></i>
+            <span>Stats</span>
+        </a>
+        <button class="fab-button" id="openMobileMenu">
+            <i class="bi bi-grid-3x3 fs-4"></i>
+        </button>
+        <a href="{% url 'customer:cards' %}" class="nav-item">
+            <i class="bi bi-credit-card"></i>
+            <span>Cards</span>
+        </a>
+        <a href="{% url 'customer:loan' %}" class="nav-item">
+            <i class="bi bi-phone"></i>
+            <span>loan</span>
+        </a>
+    </div>
+</nav>

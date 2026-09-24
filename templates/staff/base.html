@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static pwa %}
+    {% progressive_web_app_meta %}
+
+    <title>
+        {% block title %}
+        Staff Dashboard
+        {% endblock %}
+    </title>
+
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'frontend/custom/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'frontend/custom/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'frontend/custom/favicons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'frontend/custom/favicons/site.webmanifest' %}">
+
+    <!-- Bootstrap -->
+    <link
+        href="{% static 'bootstrap/bootstrap.min.css' %}"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'staff/style.css' %}">
+</head>
+<body>
+
+<!-- Mobile Overlay -->
+<div class="sidebar-overlay"></div>
+
+<div class="dashboard-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+
+        <!-- Logo -->
+        <div class="logo-area">
+
+            <div class="logo-text">
+                <img src="{% static 'frontend/custom/firsthavin-logo-white.png' %}" alt="logo" width="160">
+            </div>
+
+            <!-- Close Button Mobile -->
+            <button class="close-sidebar d-lg-none">
+                <i class="bi bi-x-lg"></i>
+            </button>
+
+        </div>
+
+        <!-- Navigation -->
+        <ul class="sidebar-menu">
+
+            <li>
+                <a
+                    href="{% url 'staff:staff_dashboard' %}"
+                    class="{% if request.resolver_match.url_name == 'staff_dashboard' %}active{% endif %}"
+                >
+                    <i class="bi bi-grid"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="{% url 'staff:account_holders' %}"
+                    class="{% if request.resolver_match.url_name == 'account_holders' %}active{% endif %}"
+                >
+                    <i class="bi bi-people"></i>
+                    <span>Account Holders</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="{% url 'staff:fund_customer' %}"
+                    class="{% if request.resolver_match.url_name == 'fund_account' %}active{% endif %}"
+                >
+                    <i class="bi bi-wallet2"></i>
+                    <span>Fund Account</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="{% url 'staff:debit_customer' %}"
+                    class="{% if request.resolver_match.url_name == 'debit_account' %}active{% endif %}"
+                >
+                    <i class="bi bi-cash-stack"></i>
+                    <span>Debit Account</span>
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="{% url 'staff:kyc_requests' %}"
+                    class="{% if request.resolver_match.url_name == 'kyc_requests' %}active{% endif %}"
+                >
+                    <i class="bi bi-shield-check"></i>
+                    <span>KYC Requests</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'staff:ticket_list' %}">
+                    <i class="bi bi-gear"></i>
+                    <span>Tickets</span>
+                </a>
+            </li>
+            <li class="{% if request.resolver_match.url_name == 'card_applications' %}active{% endif %}">
+                <a href="{% url 'staff:card_applications' %}">
+                    <i class="bi bi-credit-card-2-front"></i>
+                    <span>Card Applications</span>
+                </a>
+            </li>
+            <li class="{% if request.resolver_match.url_name == 'loan_applications' %}active{% endif %}">
+                <a href="{% url 'staff:loan_applications' %}">
+                    <i class="bi bi-cash-stack"></i>
+                    <span>Loans</span>
+                </a>
+            </li>
+            <li class="{% if request.resolver_match.url_name == 'copy_transaction_history' %}active{% endif %}">
+                <a href="{% url 'staff:copy_transaction_history' %}">
+                    <i class="bi bi-arrow-left-right"></i>
+                    <span>Copy History</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'staff:otp_list' %}">
+                    <i class="bi bi-shield-lock"></i>
+                    <span>OTP Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'account:logout' %}">
+                    <i class="bi bi-lock"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+        <!-- Topbar -->
+        <div class="topbar">
+
+            <div class="topbar-left">
+
+                <!-- Sidebar Toggle -->
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <h4 class="page-title">
+                    {% block page_title %}
+                    Dashboard
+                    {% endblock %}
+                </h4>
+
+            </div>
+
+            <div class="admin-info">
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <!-- <div>
+                    <h6 class="mb-0">Admin Staff</h6>
+                    <small>Super Admin</small>
+                </div> -->
+            </div>
+
+        </div>
+
+        <!-- Page Content -->
+        <div class="content-area">
+
+            {% block content %}
+
+            {% endblock %}
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JS -->
+<script src="{% static 'staff/app.js' %}"></script>
+
+<!-- spinner js -->
+<script src="{% static 'general/spinner.js' %}"></script>
+
+<!-- local time js -->
+<script src="{% static 'general/local_time.js' %}"></script>
+
+</body>
+</html>
