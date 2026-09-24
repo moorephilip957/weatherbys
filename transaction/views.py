@@ -184,32 +184,37 @@ def transfer_failed(request, tx_id):
 @block_blocked_users
 def create_deposit(request):
 
-    if request.method == "POST":
+    # Get active crypto wallets for QR codes
+    crypto_wallets = {
+        wallet.currency: wallet
+        for wallet in CryptoWallet.objects.filter(active=True)
+    }
 
+    if request.method == "POST":
         form = DepositCreateForm(request.POST)
 
         if form.is_valid():
-
             deposit = form.save(commit=False)
-
             deposit.user = request.user
             deposit.save()
 
             return redirect(
-                "transaction:deposit_detail",
+                "transaction:deposit_pending",
                 deposit_id=deposit.id
             )
-
     else:
-
         form = DepositCreateForm()
+
+    context = {
+        "form": form,
+        "btc_wallet": crypto_wallets.get("BTC"),
+        "usdt_wallet": crypto_wallets.get("USDT"),
+    }
 
     return render(
         request,
         "customers/transaction/create_deposit.html",
-        {
-            "form": form
-        }
+        context
     )
 
 

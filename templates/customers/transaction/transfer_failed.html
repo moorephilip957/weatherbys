@@ -1,6 +1,6 @@
 {% extends '../base.html' %}
 {% load static %}
-
+{% load humanize %}
 {% block title %}Transfer Failed | Hampdens Bank{% endblock %}
 
 {% block extra_css %}
@@ -9,6 +9,7 @@
 
 {% block content %}
 <div class="status-page">
+
     <!-- Failed Icon -->
     <div class="status-icon-wrap failed">
         <i class="fas fa-times-circle status-icon"></i>
@@ -24,34 +25,48 @@
 
         <div class="status-detail-row">
             <span class="sdr-label">
+                <i class="fas fa-exchange-alt"></i>
+                Transaction type
+            </span>
+            <span class="sdr-value">{{ transaction.get_transaction_type_display }}</span>
+        </div>
+
+        {% if transaction.beneficiary_name %}
+        <div class="status-detail-row">
+            <span class="sdr-label">
                 <i class="fas fa-user"></i>
                 Recipient
             </span>
-            <span class="sdr-value">John Davis</span>
+            <span class="sdr-value">{{ transaction.beneficiary_name }}</span>
         </div>
+        {% endif %}
 
+        {% if transaction.beneficiary_number %}
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-hashtag"></i>
                 Account number
             </span>
-            <span class="sdr-value mono">•••• 2841</span>
+            <span class="sdr-value mono">•••• {{ transaction.beneficiary_number|slice:"-4:" }}</span>
         </div>
+        {% endif %}
 
+        {% if transaction.bank_name %}
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-university"></i>
                 Bank
             </span>
-            <span class="sdr-value">Hampdens Bank</span>
+            <span class="sdr-value">{{ transaction.bank_name }}</span>
         </div>
+        {% endif %}
 
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-calendar"></i>
                 Attempted at
             </span>
-            <span class="sdr-value">Sep 24, 2026 · 10:12 AM</span>
+            <span class="sdr-value">{{ transaction.created_at|date:"M d, Y · h:i A" }}</span>
         </div>
 
         <div class="status-detail-row">
@@ -59,34 +74,53 @@
                 <i class="fas fa-file-invoice"></i>
                 Reference
             </span>
-            <span class="sdr-value mono">TXN-2026-847292</span>
+            <span class="sdr-value mono">{{ transaction.reference }}</span>
         </div>
 
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-exclamation-circle" style="color: var(--danger);"></i>
-                Error code
+                Status
             </span>
-            <span class="sdr-value mono" style="color: var(--danger);">ERR_INSUFFICIENT_FUNDS</span>
+            <span class="sdr-value" style="color: var(--danger);">Failed</span>
         </div>
+
+        {% if transaction.description %}
+        <div class="status-detail-row">
+            <span class="sdr-label">
+                <i class="fas fa-comment"></i>
+                Memo
+            </span>
+            <span class="sdr-value">{{ transaction.description }}</span>
+        </div>
+        {% endif %}
 
         <div class="status-amount-highlight" style="background: linear-gradient(135deg, rgba(244,63,94,0.06), rgba(225,29,72,0.06));">
             <div class="sah-label">Attempted amount</div>
-            <div class="sah-value" style="color: var(--danger);">$5,000.00</div>
+            <div class="sah-value" style="color: var(--danger);">
+                {{ transaction.user.bank_account.get_currency_symbol }}{{ transaction.amount|floatformat:2|intcomma }}
+            </div>
         </div>
     </div>
 
     <!-- Action Buttons -->
     <div class="status-actions">
-        <a href="#" class="status-btn danger">
-            <i class="fas fa-redo"></i>
-            <span>Try again</span>
-        </a>
-        <a href="#" class="status-btn secondary">
+        {% if transaction.transaction_type == 'local_transfer' %}
+            <a href="{% url 'transaction:local_transfer' %}" class="status-btn danger">
+                <i class="fas fa-redo"></i>
+                <span>Try again</span>
+            </a>
+        {% elif transaction.transaction_type == 'wire_transfer' %}
+            <a href="{% url 'transaction:wire_transfer' %}" class="status-btn danger">
+                <i class="fas fa-redo"></i>
+                <span>Try again</span>
+            </a>
+        {% endif %}
+        <a href="{% url 'customer:dashboard' %}" class="status-btn secondary">
             <i class="fas fa-home"></i>
             <span>Back to dashboard</span>
         </a>
-        <a href="#" class="status-btn secondary">
+        <a href="{% url 'support:create_ticket' %}" class="status-btn secondary">
             <i class="fas fa-headset"></i>
             <span>Contact support</span>
         </a>
@@ -99,8 +133,9 @@
         </div>
         <div class="sib-content">
             <p class="sib-title">Why did this fail?</p>
-            <p class="sib-text">Your account balance is insufficient to complete this transfer. Please add funds to your account or reduce the transfer amount. No charges were applied to your account.</p>
+            <p class="sib-text">Common reasons include insufficient balance, incorrect recipient details, network issues, or security restrictions. Please verify your information and try again. No charges were applied to your account for this failed transaction.</p>
         </div>
     </div>
+
 </div>
 {% endblock %}

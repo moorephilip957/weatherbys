@@ -10,6 +10,7 @@
 
 {% block content %}
 <div class="status-page">
+
     <!-- Success Icon -->
     <div class="status-icon-wrap success">
         <i class="fas fa-check-circle status-icon"></i>
@@ -25,21 +26,33 @@
 
         <div class="status-detail-row">
             <span class="sdr-label">
+                <i class="fas fa-exchange-alt"></i>
+                Transaction type
+            </span>
+            <span class="sdr-value">{{ transaction.get_transaction_type_display }}</span>
+        </div>
+
+        {% if transaction.beneficiary_name %}
+        <div class="status-detail-row">
+            <span class="sdr-label">
                 <i class="fas fa-user"></i>
                 Recipient
             </span>
             <span class="sdr-value">{{ transaction.beneficiary_name }}</span>
         </div>
+        {% endif %}
 
+        {% if transaction.beneficiary_number %}
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-hashtag"></i>
                 Account number
             </span>
-            <span class="sdr-value mono">••••
-                    {{ transaction.beneficiary_number|slice:"-4:" }}</span>
+            <span class="sdr-value mono">•••• {{ transaction.beneficiary_number|slice:"-4:" }}</span>
         </div>
+        {% endif %}
 
+        {% if transaction.bank_name %}
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-university"></i>
@@ -47,13 +60,14 @@
             </span>
             <span class="sdr-value">{{ transaction.bank_name }}</span>
         </div>
+        {% endif %}
 
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-calendar"></i>
                 Date & time
             </span>
-            <span class="sdr-value">{{ transaction.created_at|date:"M d, Y • g:i A" }}</span>
+            <span class="sdr-value">{{ transaction.created_at|date:"M d, Y · h:i A" }}</span>
         </div>
 
         <div class="status-detail-row">
@@ -64,18 +78,36 @@
             <span class="sdr-value mono">{{ transaction.reference }}</span>
         </div>
 
-        <!-- <div class="status-detail-row">
+        {% if transaction.description %}
+        <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-comment"></i>
                 Memo
             </span>
-            <span class="sdr-value">Dinner split</span>
-        </div> -->
+            <span class="sdr-value">{{ transaction.description }}</span>
+        </div>
+        {% endif %}
 
         <div class="status-amount-highlight">
-            <div class="sah-label">Amount sent</div>
-            <div class="sah-value">{{request.user.bank_account.get_currency_symbol}} {{transaction.amount|intcomma}}</div>
+            <div class="sah-label">Amount {{ transaction.get_direction_display|lower }}ed</div>
+            <div class="sah-value">
+                {{ transaction.user.bank_account.get_currency_symbol }}{{ transaction.amount|floatformat:2|intcomma }}
+            </div>
         </div>
+
+        {% if transaction.balance_before or transaction.balance_after %}
+        <div class="balance-change" style="margin-top: 16px;">
+            <div class="bc-item">
+                <p class="bc-label">Balance before</p>
+                <p class="bc-value">{{ transaction.user.bank_account.get_currency_symbol }}{{ transaction.balance_before|floatformat:2 }}</p>
+            </div>
+            <div class="bc-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="bc-item">
+                <p class="bc-label">Balance after</p>
+                <p class="bc-value">{{ transaction.user.bank_account.get_currency_symbol }}{{ transaction.balance_after|floatformat:2 }}</p>
+            </div>
+        </div>
+        {% endif %}
     </div>
 
     <!-- Action Buttons -->
@@ -84,10 +116,17 @@
             <i class="fas fa-home"></i>
             <span>Back to dashboard</span>
         </a>
-        <a href="{% url 'transaction:local_transfer' %}" class="status-btn secondary">
-            <i class="fas fa-paper-plane"></i>
-            <span>Send another</span>
-        </a>
+        {% if transaction.transaction_type == 'local_transfer' %}
+            <a href="{% url 'transaction:local_transfer' %}" class="status-btn secondary">
+                <i class="fas fa-paper-plane"></i>
+                <span>Send another</span>
+            </a>
+        {% elif transaction.transaction_type == 'wire_transfer' %}
+            <a href="{% url 'transaction:wire_transfer' %}" class="status-btn secondary">
+                <i class="fas fa-paper-plane"></i>
+                <span>Send another</span>
+            </a>
+        {% endif %}
         <button class="status-btn secondary" id="downloadReceiptBtn">
             <i class="fas fa-download"></i>
             <span>Download receipt</span>
@@ -104,13 +143,15 @@
             <p class="sib-text">The recipient will receive a notification once the funds are available in their account. You can track this transaction in your transaction history.</p>
         </div>
     </div>
+
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
 document.getElementById('downloadReceiptBtn')?.addEventListener('click', () => {
-    alert('Receipt download will be implemented with Django backend');
+    // Will be implemented with Django backend
+    alert('Receipt download will be available soon.');
 });
 </script>
 {% endblock %}

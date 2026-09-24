@@ -18,33 +18,30 @@ class DepositCreateForm(forms.ModelForm):
 
         widgets = {
 
-            # HIDDEN FIELD
+            # HIDDEN FIELD - synced via JS when user picks a method tab
             "method": forms.HiddenInput(),
 
             "amount": forms.NumberInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-input amount-input",  # Matches design system
+                    "id": "id_deposit_amount",
                     "min": "100",
                     "max": "5000000",
                     "step": "0.01",
-                    "placeholder": "0.00"
+                    "placeholder": "0.00",
+                    "inputmode": "decimal",
                 }
             )
         }
 
     def clean_amount(self):
-
         amount = self.cleaned_data["amount"]
 
         if amount < 100:
-            raise forms.ValidationError(
-                "Minimum deposit is $100"
-            )
+            raise forms.ValidationError("Minimum deposit is $100")
 
         if amount > 5000000:
-            raise forms.ValidationError(
-                "Maximum deposit is $5,000,000"
-            )
+            raise forms.ValidationError("Maximum deposit is $5,000,000")
 
         return amount
 
@@ -180,15 +177,40 @@ class LocalTransferForm(forms.ModelForm):
         return cleaned_data
     
 
+COUNTRY_CHOICES = [
+    ('', 'Select country'),
+    ('DE', '🇩🇪 Germany'),
+    ('FR', '🇫🇷 France'),
+    ('GB', '🇬🇧 United Kingdom'),
+    ('IT', '🇮🇹 Italy'),
+    ('ES', '🇪🇸 Spain'),
+    ('NL', '🇳🇱 Netherlands'),
+    ('CH', '🇨🇭 Switzerland'),
+    ('JP', '🇯🇵 Japan'),
+    ('CN', '🇨🇳 China'),
+    ('AU', '🇦🇺 Australia'),
+    ('CA', '🇨🇦 Canada'),
+    ('SG', '🇸🇬 Singapore'),
+    ('AE', '🇦🇪 United Arab Emirates'),
+    ('US', '🇺🇸 United States'),
+    ('IN', '🇮🇳 India'),
+    ('BR', '🇧🇷 Brazil'),
+    ('NG', '🇳🇬 Nigeria'),
+    ('ZA', '🇿🇦 South Africa'),
+]
+
+
 class InternationalTransferForm(forms.ModelForm):
 
     transfer_pin = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "class": "form-control my-input",
-                "placeholder": "Enter 6-10 digit PIN",
-                "minlength": "4",
-                "maxlength": "10"
+                "class": "form-input",
+                "placeholder": "Enter your 6-digit PIN",
+                "autocomplete": "off",
+                "maxlength": "6",
+                "inputmode": "numeric",
+                "pattern": "[0-9]*",
             }
         )
     )
@@ -213,100 +235,96 @@ class InternationalTransferForm(forms.ModelForm):
 
             "beneficiary_name": forms.TextInput(
                 attrs={
-                    "class": "form-control my-input",
-                    "placeholder": "Enter beneficiary's full name"
+                    "class": "form-input",
+                    "placeholder": "Full name as it appears on the account"
                 }
             ),
 
             "beneficiary_number": forms.TextInput(
                 attrs={
-                    "class": "form-control my-input",
-                    "placeholder": "Enter account number"
+                    "class": "form-input",
+                    "placeholder": "Account number or IBAN"
                 }
             ),
 
             "bank_name": forms.TextInput(
                 attrs={
-                    "class": "form-control my-input",
-                    "placeholder": "Enter bank name"
+                    "class": "form-input",
+                    "placeholder": "e.g. Deutsche Bank"
                 }
             ),
 
-            "bank_address": forms.Textarea(
+            "bank_address": forms.TextInput(
                 attrs={
-                    "class": "form-control my-input",
-                    "rows": 1,
-                    "placeholder": "Enter bank address"
+                    "class": "form-input",
+                    "placeholder": "Full bank address"
                 }
             ),
 
-            "country": forms.TextInput(
+            "country": forms.Select(
                 attrs={
-                    "class": "form-control my-input",
-                    "placeholder": "Enter beneficiary country"
-                }
+                    "class": "form-select",
+                },
+                choices=COUNTRY_CHOICES
             ),
 
             "swift_code": forms.TextInput(
                 attrs={
-                    "class": "form-control my-input",
-                    "placeholder": "SWIFT/BIC"
+                    "class": "form-input",
+                    "placeholder": "8-11 characters",
+                    "maxlength": "11",
+                    "style": "text-transform: uppercase;"
                 }
             ),
 
             "iban_number": forms.TextInput(
                 attrs={
-                    "class": "form-control my-input",
-                    "placeholder": "Enter IBAN number"
+                    "class": "form-input",
+                    "placeholder": "e.g. DE89 3704 0044 0532 0130 00",
+                    "maxlength": "34",
                 }
             ),
 
             "amount": forms.NumberInput(
                 attrs={
-                    "class": "form-control border-start-0 ps-0 fw-bold",
+                    "class": "form-input amount-input",
                     "placeholder": "0.00",
                     "min": "1",
                     "step": "0.01",
+                    "inputmode": "decimal",
                 }
             ),
 
             "description": forms.Textarea(
                 attrs={
-                    "class": "form-control my-input",
+                    "class": "form-textarea",
                     "rows": 3,
-                    "placeholder": "Optional payment description"
+                    "placeholder": "Add a note for this transfer...",
+                    "maxlength": "200",
                 }
             )
         }
 
     def __init__(self, *args, **kwargs):
-
         self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
 
     def clean(self):
-
         cleaned_data = super().clean()
 
         amount = cleaned_data.get("amount")
         pin = cleaned_data.get("transfer_pin")
 
-        account = UserBankAccount.objects.get(user=self.user)
+        try:
+            account = UserBankAccount.objects.get(user=self.user)
+        except UserBankAccount.DoesNotExist:
+            raise forms.ValidationError("Account not found.")
 
         if amount and amount > account.balance:
+            raise forms.ValidationError("Insufficient balance.")
 
-            raise forms.ValidationError(
-                "Insufficient balance."
-            )
-
-        if pin and not check_password(
-            pin,
-            account.transaction_pin
-        ):
-
-            raise forms.ValidationError(
-                "Invalid transfer PIN."
-            )
+        if pin and not check_password(pin, account.transaction_pin):
+            raise forms.ValidationError("Invalid transfer PIN.")
 
         return cleaned_data
     

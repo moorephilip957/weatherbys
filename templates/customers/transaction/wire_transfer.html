@@ -17,11 +17,28 @@
     </div>
 </div>
 
-<div class="transfer-layout">
+<!-- Non-field Errors -->
+{% if form.non_field_errors %}
+<div class="loan-alert" style="margin-bottom: 24px;">
+    <div class="la-icon"><i class="fas fa-exclamation-triangle"></i></div>
+    <div class="la-content">
+        <p class="la-title">Transfer cannot be completed</p>
+        <p class="la-text">
+            {% for error in form.non_field_errors %}
+                {{ error }}<br>
+            {% endfor %}
+        </p>
+    </div>
+</div>
+{% endif %}
 
-    <!-- Main Form -->
-    <div class="transfer-form-card">
-        <form id="wireForm">
+<form method="POST" id="wireForm">
+    {% csrf_token %}
+
+    <div class="transfer-layout">
+
+        <!-- Main Form -->
+        <div class="transfer-form-card">
 
             <!-- Section 1: Amount & Currency -->
             <div class="form-section">
@@ -70,11 +87,17 @@
                             Transfer amount
                         </div>
                         <div class="amount-input-wrap">
-                            <span class="amount-currency" id="currencySymbol">$</span>
-                            <input type="text" class="amount-input" id="amountInput" placeholder="0.00" inputmode="decimal">
+                            <span class="amount-currency" id="currencySymbol">{{ request.user.bank_account.get_currency_symbol }}</span>
+                            {{ form.amount }}
                         </div>
+                        {% if form.amount.errors %}
+                            <div style="color: #FFD700; font-size: 12px; margin-top: 8px;">
+                                <i class="fas fa-exclamation-circle"></i>
+                                {{ form.amount.errors.0 }}
+                            </div>
+                        {% endif %}
                         <div class="amount-available">
-                            <span>Available: <strong>$24,562.00</strong></span>
+                            <span>Available: <strong>{{ request.user.bank_account.formatted_balance }}</strong></span>
                             <button type="button" class="max-btn" id="maxBtn">MAX</button>
                         </div>
                     </div>
@@ -92,23 +115,6 @@
                     <div class="fx-rate-live">
                         <span class="dot-live"></span>
                         <span>Live rate</span>
-                    </div>
-                </div>
-
-                <!-- Recipient Preview -->
-                <div class="recipient-preview" id="recipientPreview">
-                    <div class="rp-head">
-                        <div class="rp-avatar" id="rpAvatar">JD</div>
-                        <div>
-                            <p class="rp-name" id="rpName">John Doe</p>
-                            <p class="rp-bank" id="rpBank">Deutsche Bank · Germany</p>
-                        </div>
-                    </div>
-                    <div class="rp-details">
-                        <span class="rd-label">You send:</span>
-                        <span class="rd-value" id="rpSend">$1,000.00</span>
-                        <span class="rd-label">They receive:</span>
-                        <span class="rd-value" id="rpReceive">€920.00</span>
                     </div>
                 </div>
             </div>
@@ -132,8 +138,14 @@
                         </label>
                         <div class="input-with-icon">
                             <i class="fas fa-user input-icon"></i>
-                            <input type="text" class="form-input" id="beneficiaryName" placeholder="Full name as it appears on the account" required>
+                            {{ form.beneficiary_name }}
                         </div>
+                        {% if form.beneficiary_name.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.beneficiary_name.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="form-field full">
@@ -142,8 +154,14 @@
                         </label>
                         <div class="input-with-icon">
                             <i class="fas fa-hashtag input-icon"></i>
-                            <input type="text" class="form-input" id="accountNumber" placeholder="Account number or IBAN" required>
+                            {{ form.beneficiary_number }}
                         </div>
+                        {% if form.beneficiary_number.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.beneficiary_number.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -167,8 +185,14 @@
                         </label>
                         <div class="input-with-icon">
                             <i class="fas fa-university input-icon"></i>
-                            <input type="text" class="form-input" id="bankName" placeholder="e.g. Deutsche Bank" required>
+                            {{ form.bank_name }}
                         </div>
+                        {% if form.bank_name.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.bank_name.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="form-field full">
@@ -177,8 +201,14 @@
                         </label>
                         <div class="input-with-icon">
                             <i class="fas fa-map-marker-alt input-icon"></i>
-                            <input type="text" class="form-input" id="bankAddress" placeholder="Full bank address" required>
+                            {{ form.bank_address }}
                         </div>
+                        {% if form.bank_address.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.bank_address.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="form-field">
@@ -186,24 +216,15 @@
                             Country <span class="req">*</span>
                         </label>
                         <div class="country-select-wrap">
-                            <span class="country-flag-icon" id="countryFlag">🇩🇪</span>
-                            <select class="country-select" id="country" required>
-                                <option value="">Select country</option>
-                                <option value="DE" data-flag="🇩🇪">Germany</option>
-                                <option value="FR" data-flag="🇫🇷">France</option>
-                                <option value="GB" data-flag="🇬🇧">United Kingdom</option>
-                                <option value="IT" data-flag="🇮🇹">Italy</option>
-                                <option value="ES" data-flag="🇪🇸">Spain</option>
-                                <option value="NL" data-flag="🇳🇱">Netherlands</option>
-                                <option value="CH" data-flag="🇨🇭">Switzerland</option>
-                                <option value="JP" data-flag="🇯🇵">Japan</option>
-                                <option value="CN" data-flag="🇨🇳">China</option>
-                                <option value="AU" data-flag="🇦🇺">Australia</option>
-                                <option value="CA" data-flag="🇨🇦">Canada</option>
-                                <option value="SG" data-flag="🇸🇬">Singapore</option>
-                                <option value="AE" data-flag="🇦🇪">United Arab Emirates</option>
-                            </select>
+                            <span class="country-flag-icon" id="countryFlag">🌍</span>
+                            {{ form.country }}
                         </div>
+                        {% if form.country.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.country.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="form-field">
@@ -212,12 +233,19 @@
                         </label>
                         <div class="input-with-icon">
                             <i class="fas fa-code input-icon"></i>
-                            <input type="text" class="form-input" id="swiftCode" placeholder="8-11 characters" maxlength="11" required>
+                            {{ form.swift_code }}
                         </div>
-                        <div class="form-hint">
-                            <i class="fas fa-info-circle"></i>
-                            Ask your recipient or check their bank statement
-                        </div>
+                        {% if form.swift_code.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.swift_code.errors.0 }}</span>
+                            </div>
+                        {% else %}
+                            <div class="form-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Ask your recipient or check their bank statement
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="form-field full">
@@ -226,12 +254,19 @@
                         </label>
                         <div class="input-with-icon">
                             <i class="fas fa-credit-card input-icon"></i>
-                            <input type="text" class="form-input" id="ibanNumber" placeholder="e.g. DE89 3704 0044 0532 0130 00" required>
+                            {{ form.iban_number }}
                         </div>
-                        <div class="form-hint">
-                            <i class="fas fa-info-circle"></i>
-                            International Bank Account Number (up to 34 characters)
-                        </div>
+                        {% if form.iban_number.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.iban_number.errors.0 }}</span>
+                            </div>
+                        {% else %}
+                            <div class="form-hint">
+                                <i class="fas fa-info-circle"></i>
+                                International Bank Account Number (up to 34 characters)
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -262,11 +297,18 @@
                         <label class="form-label">
                             Note <span class="opt">(optional)</span>
                         </label>
-                        <textarea class="form-textarea" id="note" placeholder="Add a note for this transfer..." maxlength="200"></textarea>
-                        <div class="form-hint">
-                            <i class="fas fa-info-circle"></i>
-                            <span id="charCount">0</span>/200 characters
-                        </div>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.description.errors.0 }}</span>
+                            </div>
+                        {% else %}
+                            <div class="form-hint">
+                                <i class="fas fa-info-circle"></i>
+                                <span id="charCount">0</span>/200 characters
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -284,16 +326,20 @@
                         </div>
                     </div>
 
-                    <div class="pin-input-wrap">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="0">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="1">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="2">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="3">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="4">
-                        <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin-index="5">
+                    <div style="margin-top: 20px;">
+                        <label class="form-label">
+                            Transfer PIN <span class="req">*</span>
+                        </label>
+                        {{ form.transfer_pin }}
+                        {% if form.transfer_pin.errors %}
+                            <div class="form-hint" style="color: var(--danger);">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ form.transfer_pin.errors.0 }}</span>
+                            </div>
+                        {% endif %}
                     </div>
 
-                    <div class="pin-helper">
+                    <div class="pin-helper" style="margin-top: 12px;">
                         <i class="fas fa-shield-alt"></i>
                         <span>Your PIN is encrypted and never stored in plain text</span>
                     </div>
@@ -302,7 +348,7 @@
 
             <!-- Action Buttons -->
             <div class="form-actions">
-                <button type="button" class="btn-cancel" id="cancelBtn">
+                <button type="button" class="btn-cancel" onclick="history.back()">
                     <i class="fas fa-times"></i>
                     <span>Cancel</span>
                 </button>
@@ -312,120 +358,120 @@
                 </button>
             </div>
 
-        </form>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="transfer-sidebar">
+
+            <!-- Transfer Summary -->
+            <div class="summary-card">
+                <h3><i class="fas fa-receipt"></i> Transfer summary</h3>
+
+                <div class="summary-row">
+                    <span class="sr-label">Amount</span>
+                    <span class="sr-value" id="summaryAmount">{{ request.user.bank_account.get_currency_symbol }}0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="sr-label">
+                        Wire transfer fee
+                        <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="International wire transfer processing fee"></i>
+                    </span>
+                    <span class="sr-value">{{ request.user.bank_account.get_currency_symbol }}25.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="sr-label">
+                        Exchange rate
+                        <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="Live market rate with 0.5% markup"></i>
+                    </span>
+                    <span class="sr-value" id="summaryRate">1.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="sr-label">Estimated delivery</span>
+                    <span class="sr-value">1-3 business days</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-row">
+                    <span class="sr-label">Recipient receives</span>
+                    <span class="sr-value" id="summaryReceive" style="color: #059669;">{{ request.user.bank_account.get_currency_symbol }}0.00</span>
+                </div>
+
+                <div class="summary-total">
+                    <span class="st-label">Total to debit</span>
+                    <span class="st-value" id="summaryTotal">{{ request.user.bank_account.get_currency_symbol }}0.00</span>
+                </div>
+            </div>
+
+            <!-- Wire Transfer Info -->
+            <div class="wire-info-card">
+                <h3><i class="fas fa-info-circle"></i> Wire transfer details</h3>
+                
+                <div class="wire-info-item">
+                    <div class="wii-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="wii-content">
+                        <p class="wii-label">Processing time</p>
+                        <p class="wii-value">1-3 business days</p>
+                    </div>
+                </div>
+
+                <div class="wire-info-item">
+                    <div class="wii-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="wii-content">
+                        <p class="wii-label">Supported countries</p>
+                        <p class="wii-value">180+ countries</p>
+                    </div>
+                </div>
+
+                <div class="wire-info-item">
+                    <div class="wii-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="wii-content">
+                        <p class="wii-label">Daily limit</p>
+                        <p class="wii-value">{{ request.user.bank_account.account_type.daily_transfer_limit|floatformat:2 }}</p>
+                    </div>
+                </div>
+
+                <div class="wire-info-item">
+                    <div class="wii-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="wii-content">
+                        <p class="wii-label">Intermediary fees</p>
+                        <p class="wii-value">May apply</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="security-info">
+                <h4><i class="fas fa-shield-alt"></i> Secure transfer</h4>
+                <div class="security-item">
+                    <div class="si-icon"><i class="fas fa-check"></i></div>
+                    <span>SWIFT network secured</span>
+                </div>
+                <div class="security-item">
+                    <div class="si-icon"><i class="fas fa-check"></i></div>
+                    <span>End-to-end encryption</span>
+                </div>
+                <div class="security-item">
+                    <div class="si-icon"><i class="fas fa-check"></i></div>
+                    <span>Fraud monitoring 24/7</span>
+                </div>
+                <div class="security-item">
+                    <div class="si-icon"><i class="fas fa-check"></i></div>
+                    <span>Compliance verified</span>
+                </div>
+            </div>
+
+        </div>
     </div>
-
-    <!-- Sidebar -->
-    <div class="transfer-sidebar">
-
-        <!-- Transfer Summary -->
-        <div class="summary-card">
-            <h3><i class="fas fa-receipt"></i> Transfer summary</h3>
-
-            <div class="summary-row">
-                <span class="sr-label">Amount</span>
-                <span class="sr-value" id="summaryAmount">$0.00</span>
-            </div>
-            <div class="summary-row">
-                <span class="sr-label">
-                    Wire transfer fee
-                    <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="International wire transfer processing fee"></i>
-                </span>
-                <span class="sr-value">$25.00</span>
-            </div>
-            <div class="summary-row">
-                <span class="sr-label">
-                    Exchange rate
-                    <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="Live market rate with 0.5% markup"></i>
-                </span>
-                <span class="sr-value" id="summaryRate">0.92</span>
-            </div>
-            <div class="summary-row">
-                <span class="sr-label">Estimated delivery</span>
-                <span class="sr-value">1-3 business days</span>
-            </div>
-
-            <div class="summary-divider"></div>
-
-            <div class="summary-row">
-                <span class="sr-label">Recipient receives</span>
-                <span class="sr-value" id="summaryReceive" style="color: #059669;">€0.00</span>
-            </div>
-
-            <div class="summary-total">
-                <span class="st-label">Total to debit</span>
-                <span class="st-value" id="summaryTotal">$0.00</span>
-            </div>
-        </div>
-
-        <!-- Wire Transfer Info -->
-        <div class="wire-info-card">
-            <h3><i class="fas fa-info-circle"></i> Wire transfer details</h3>
-            
-            <div class="wire-info-item">
-                <div class="wii-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="wii-content">
-                    <p class="wii-label">Processing time</p>
-                    <p class="wii-value">1-3 business days</p>
-                </div>
-            </div>
-
-            <div class="wire-info-item">
-                <div class="wii-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
-                    <i class="fas fa-globe"></i>
-                </div>
-                <div class="wii-content">
-                    <p class="wii-label">Supported countries</p>
-                    <p class="wii-value">180+ countries</p>
-                </div>
-            </div>
-
-            <div class="wire-info-item">
-                <div class="wii-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
-                    <i class="fas fa-dollar-sign"></i>
-                </div>
-                <div class="wii-content">
-                    <p class="wii-label">Daily limit</p>
-                    <p class="wii-value">$50,000.00</p>
-                </div>
-            </div>
-
-            <div class="wire-info-item">
-                <div class="wii-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="wii-content">
-                    <p class="wii-label">Intermediary fees</p>
-                    <p class="wii-value">May apply</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Security Info -->
-        <div class="security-info">
-            <h4><i class="fas fa-shield-alt"></i> Secure transfer</h4>
-            <div class="security-item">
-                <div class="si-icon"><i class="fas fa-check"></i></div>
-                <span>SWIFT network secured</span>
-            </div>
-            <div class="security-item">
-                <div class="si-icon"><i class="fas fa-check"></i></div>
-                <span>End-to-end encryption</span>
-            </div>
-            <div class="security-item">
-                <div class="si-icon"><i class="fas fa-check"></i></div>
-                <span>Fraud monitoring 24/7</span>
-            </div>
-            <div class="security-item">
-                <div class="si-icon"><i class="fas fa-check"></i></div>
-                <span>Compliance verified</span>
-            </div>
-        </div>
-
-    </div>
-</div>
+</form>
 {% endblock %}
 
 {% block extra_js %}
@@ -436,11 +482,20 @@ const currencySymbol = document.getElementById('currencySymbol');
 const fxRateValue = document.getElementById('fxRateValue');
 const summaryRate = document.getElementById('summaryRate');
 const summaryReceive = document.getElementById('summaryReceive');
-let currentCurrency = 'USD';
+let currentCurrency = '{{ request.user.bank_account.currency|default:"USD" }}';
 let currentRate = 1;
-let currentSymbol = '$';
+let currentSymbol = '{{ request.user.bank_account.get_currency_symbol }}';
 
 currencyOptions.forEach(option => {
+    // Set initial active state
+    if (option.dataset.currency === currentCurrency) {
+        currencyOptions.forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+        currentRate = parseFloat(option.dataset.rate);
+        currentSymbol = option.dataset.symbol;
+        currencySymbol.textContent = currentSymbol;
+    }
+
     option.addEventListener('click', () => {
         currencyOptions.forEach(o => o.classList.remove('active'));
         option.classList.add('active');
@@ -454,28 +509,33 @@ currencyOptions.forEach(option => {
         summaryRate.textContent = currentRate;
         
         updateSummary();
-        updateRecipientPreview();
     });
 });
 
 // ===== AMOUNT INPUT =====
-const amountInput = document.getElementById('amountInput');
+const amountInput = document.getElementById('id_amount');
 const summaryAmount = document.getElementById('summaryAmount');
 const summaryTotal = document.getElementById('summaryTotal');
 
-amountInput.addEventListener('input', (e) => {
-    let value = e.target.value.replace(/[^0-9.]/g, '');
-    const parts = value.split('.');
-    if (parts.length > 2) {
-        value = parts[0] + '.' + parts.slice(1).join('');
+if (amountInput) {
+    amountInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/[^0-9.]/g, '');
+        const parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        if (parts[1] && parts[1].length > 2) {
+            value = parts[0] + '.' + parts[1].slice(0, 2);
+        }
+        e.target.value = value;
+        updateSummary();
+    });
+
+    // Initialize with existing value if form was submitted with errors
+    if (amountInput.value) {
+        updateSummary();
     }
-    if (parts[1] && parts[1].length > 2) {
-        value = parts[0] + '.' + parts[1].slice(0, 2);
-    }
-    e.target.value = value;
-    updateSummary();
-    updateRecipientPreview();
-});
+}
 
 function updateSummary() {
     const amount = parseFloat(amountInput.value) || 0;
@@ -484,138 +544,55 @@ function updateSummary() {
     const receiveAmount = amount * currentRate;
     
     summaryAmount.textContent = currentSymbol + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    summaryTotal.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    summaryTotal.textContent = '{{ request.user.bank_account.get_currency_symbol }}' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     summaryReceive.textContent = currentSymbol + receiveAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function updateRecipientPreview() {
-    const preview = document.getElementById('recipientPreview');
-    const name = document.getElementById('beneficiaryName').value;
-    const bank = document.getElementById('bankName').value;
-    const country = document.getElementById('country');
-    const countryText = country.options[country.selectedIndex]?.text || '';
-    
-    if (name && bank) {
-        preview.classList.add('active');
-        document.getElementById('rpAvatar').textContent = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-        document.getElementById('rpName').textContent = name;
-        document.getElementById('rpBank').textContent = `${bank} · ${countryText}`;
-        
-        const amount = parseFloat(amountInput.value) || 0;
-        const receiveAmount = amount * currentRate;
-        document.getElementById('rpSend').textContent = currentSymbol + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        document.getElementById('rpReceive').textContent = currentSymbol + receiveAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    } else {
-        preview.classList.remove('active');
-    }
-}
-
-// Update preview on input
-document.getElementById('beneficiaryName').addEventListener('input', updateRecipientPreview);
-document.getElementById('bankName').addEventListener('input', updateRecipientPreview);
-document.getElementById('country').addEventListener('change', updateRecipientPreview);
-
 // MAX button
 document.getElementById('maxBtn').addEventListener('click', () => {
-    amountInput.value = '24562.00';
+    const balance = parseFloat('{{ request.user.bank_account.balance }}');
+    amountInput.value = balance.toFixed(2);
     updateSummary();
-    updateRecipientPreview();
 });
 
 // ===== COUNTRY FLAG =====
-const countrySelect = document.getElementById('country');
+const countrySelect = document.getElementById('id_country');
 const countryFlag = document.getElementById('countryFlag');
 
+const countryFlagMap = {
+    'DE': '🇩🇪', 'FR': '🇫🇷', 'GB': '🇬🇧', 'IT': '🇮🇹', 'ES': '🇪🇸',
+    'NL': '🇳🇱', 'CH': '🇨🇭', 'JP': '🇯🇵', 'CN': '🇨🇳', 'AU': '🇦🇺',
+    'CA': '🇨🇦', 'SG': '🇸🇬', 'AE': '🇦🇪', 'US': '🇺🇸', 'IN': '🇮🇳',
+    'BR': '🇧🇷', 'NG': '🇳🇬', 'ZA': '🇿🇦'
+};
+
+// Set initial flag
+if (countrySelect.value && countryFlagMap[countrySelect.value]) {
+    countryFlag.textContent = countryFlagMap[countrySelect.value];
+}
+
 countrySelect.addEventListener('change', () => {
-    const selected = countrySelect.options[countrySelect.selectedIndex];
-    if (selected.dataset.flag) {
-        countryFlag.textContent = selected.dataset.flag;
-    }
+    const flag = countryFlagMap[countrySelect.value] || '🌍';
+    countryFlag.textContent = flag;
 });
 
-// ===== NOTE CHARACTER COUNT =====
-const note = document.getElementById('note');
+// ===== DESCRIPTION CHARACTER COUNT =====
+const description = document.getElementById('id_description');
 const charCount = document.getElementById('charCount');
-note.addEventListener('input', () => {
-    charCount.textContent = note.value.length;
-});
-
-// ===== PIN INPUTS =====
-const pinBoxes = document.querySelectorAll('.pin-box');
-pinBoxes.forEach((box, idx) => {
-    box.addEventListener('input', (e) => {
-        const val = e.target.value.replace(/[^0-9]/g, '');
-        e.target.value = val;
-        if (val && idx < pinBoxes.length - 1) {
-            pinBoxes[idx + 1].focus();
-        }
-        if (val) {
-            box.classList.add('filled');
-        } else {
-            box.classList.remove('filled');
-        }
+if (description && charCount) {
+    description.addEventListener('input', () => {
+        charCount.textContent = description.value.length;
     });
-
-    box.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !box.value && idx > 0) {
-            pinBoxes[idx - 1].focus();
-        }
-    });
-
-    box.addEventListener('paste', (e) => {
-        e.preventDefault();
-        const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
-        for (let i = 0; i < Math.min(paste.length, pinBoxes.length - idx); i++) {
-            pinBoxes[idx + i].value = paste[i];
-            pinBoxes[idx + i].classList.add('filled');
-        }
-        const nextIdx = Math.min(idx + paste.length, pinBoxes.length - 1);
-        pinBoxes[nextIdx].focus();
-    });
-});
-
-// ===== CANCEL BUTTON =====
-document.getElementById('cancelBtn').addEventListener('click', () => {
-    if (confirm('Are you sure you want to cancel this wire transfer?')) {
-        window.location.href = '#'; // Will be Django URL
-    }
-});
+    // Initialize count
+    charCount.textContent = description.value.length;
+}
 
 // ===== FORM SUBMIT =====
 document.getElementById('wireForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    let pin = '';
-    pinBoxes.forEach(b => pin += b.value);
-    
-    if (pin.length !== 6) {
-        alert('Please enter your 6-digit PIN');
-        pinBoxes[0].focus();
-        return;
-    }
-    
-    const amount = amountInput.value;
-    const name = document.getElementById('beneficiaryName').value;
-    const account = document.getElementById('accountNumber').value;
-    const bank = document.getElementById('bankName').value;
-    const swift = document.getElementById('swiftCode').value;
-    const iban = document.getElementById('ibanNumber').value;
-    
-    if (!amount || !name || !account || !bank || !swift || !iban) {
-        alert('Please fill in all required fields');
-        return;
-    }
-    
     const sendBtn = document.getElementById('sendBtn');
-    sendBtn.innerHTML = '<i class="fas fa-check"></i> <span>Wire transfer sent!</span>';
-    sendBtn.style.background = 'linear-gradient(135deg, #00D4A8, #059669)';
+    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Processing...</span>';
     sendBtn.disabled = true;
-    
-    setTimeout(() => {
-        sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Send wire transfer</span>';
-        sendBtn.style.background = '';
-        sendBtn.disabled = false;
-    }, 3000);
+    // Let Django handle validation and redirect
 });
 </script>
 {% endblock %}
