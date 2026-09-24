@@ -12,7 +12,7 @@ from account.decorator import block_blocked_users
 def notification_list(request):
     notifications = request.user.notifications.all()
     unread_count = notifications.filter(read=False).count()
-    return render(request, "notifications/notification_list.html", {
+    return render(request, "customers/notification/notification_list.html", {
         "notifications": notifications,
         "unread_count": unread_count
     })

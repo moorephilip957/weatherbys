@@ -1,0 +1,414 @@
+/* ===== SECURITY PAGES (Change Password / Change PIN) ===== */
+
+.security-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Security Form Card */
+.security-form-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+}
+.security-form-card .sfc-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line-2);
+    margin-bottom: 24px;
+}
+.security-form-card .sfc-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.security-form-card .sfc-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 2px;
+}
+.security-form-card .sfc-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* Password Field with Toggle */
+.password-field {
+    position: relative;
+    margin-bottom: 18px;
+}
+.password-field .form-input {
+    padding-right: 44px;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+}
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    transition: all .2s;
+}
+.password-toggle:hover {
+    background: var(--surface-2);
+    color: var(--primary);
+}
+
+/* Password Strength Meter */
+.password-strength {
+    margin-top: -10px;
+    margin-bottom: 18px;
+}
+.strength-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+.strength-segment {
+    flex: 1;
+    height: 4px;
+    border-radius: 100px;
+    background: var(--line-2);
+    transition: background .3s;
+}
+.strength-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+}
+.strength-label {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.strength-hint {
+    color: var(--muted);
+}
+
+/* Strength levels */
+.password-strength[data-strength="0"] .strength-label { color: var(--muted); }
+.password-strength[data-strength="1"] .strength-segment:nth-child(1) { background: var(--danger); }
+.password-strength[data-strength="1"] .strength-label { color: var(--danger); }
+.password-strength[data-strength="2"] .strength-segment:nth-child(-n+2) { background: var(--warning); }
+.password-strength[data-strength="2"] .strength-label { color: #D97706; }
+.password-strength[data-strength="3"] .strength-segment:nth-child(-n+3) { background: #3B82F6; }
+.password-strength[data-strength="3"] .strength-label { color: #2563EB; }
+.password-strength[data-strength="4"] .strength-segment { background: #059669; }
+.password-strength[data-strength="4"] .strength-label { color: #059669; }
+
+/* Password Requirements */
+.password-requirements {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+}
+.password-requirements h5 {
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.password-requirements h5 i {
+    color: var(--primary);
+    font-size: 11px;
+}
+.requirement-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 14px;
+}
+.requirement-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    transition: color .2s;
+}
+.requirement-item .req-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--line);
+    display: grid;
+    place-items: center;
+    font-size: 8px;
+    color: var(--muted);
+    transition: all .2s;
+    flex-shrink: 0;
+}
+.requirement-item.met {
+    color: #059669;
+}
+.requirement-item.met .req-icon {
+    background: #059669;
+    color: #fff;
+}
+
+/* Match Indicator */
+.match-indicator {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: -10px;
+    margin-bottom: 14px;
+}
+.match-indicator.show { display: flex; }
+.match-indicator.match { color: #059669; }
+.match-indicator.no-match { color: var(--danger); }
+.match-indicator i { font-size: 10px; }
+
+/* PIN Section */
+.pin-confirm-section {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.pin-confirm-section .pcs-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.pin-confirm-section .pcs-title i {
+    color: var(--primary);
+}
+.pin-confirm-section .pcs-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0 0 14px;
+}
+.pin-confirm-wrap {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+.pin-confirm-box {
+    width: 44px;
+    height: 52px;
+    background: var(--surface);
+    border: 2px solid var(--line);
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    outline: none;
+    transition: all .2s;
+    caret-color: var(--primary);
+}
+.pin-confirm-box:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.15);
+    transform: translateY(-2px);
+}
+.pin-confirm-box.filled {
+    border-color: var(--primary);
+    background: rgba(91,91,247,0.04);
+}
+
+/* Security Actions */
+.security-form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+}
+.btn-security {
+    flex: 1;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all .2s;
+    border: none;
+}
+.btn-security.cancel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+}
+.btn-security.cancel:hover {
+    border-color: var(--ink-2);
+    background: var(--surface-2);
+}
+.btn-security.submit {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: #fff;
+    box-shadow: 0 8px 20px -6px rgba(91,91,247,0.5);
+}
+.btn-security.submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px -6px rgba(91,91,247,0.6);
+}
+.btn-security.submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Security Info Sidebar */
+.security-info-sidebar {
+    position: sticky;
+    top: 24px;
+}
+.security-tips-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+.security-tips-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.security-tips-card h3 i {
+    color: #059669;
+}
+.tip-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line-2);
+}
+.tip-item:last-child { border-bottom: none; }
+.tip-item .ti-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(0,212,168,0.12);
+    color: #059669;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    flex-shrink: 0;
+}
+.tip-item .ti-text {
+    flex: 1;
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    margin: 0;
+}
+.tip-item .ti-text strong {
+    color: var(--ink);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* Last Changed Info */
+.last-changed-card {
+    background: linear-gradient(135deg, rgba(91,91,247,0.04), rgba(124,58,237,0.04));
+    border: 1px solid rgba(91,91,247,0.15);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.last-changed-card .lcc-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(91,91,247,0.12);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+.last-changed-card .lcc-content {
+    flex: 1;
+    min-width: 0;
+}
+.last-changed-card .lcc-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0 0 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+.last-changed-card .lcc-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .security-layout {
+        grid-template-columns: 1fr;
+    }
+    .security-info-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .security-form-card {
+        padding: 20px;
+    }
+    .requirement-list {
+        grid-template-columns: 1fr;
+    }
+    .security-form-actions {
+        flex-direction: column-reverse;
+    }
+    .btn-security {
+        width: 100%;
+    }
+    .pin-confirm-box {
+        width: 40px;
+        height: 48px;
+        font-size: 18px;
+    }
+}

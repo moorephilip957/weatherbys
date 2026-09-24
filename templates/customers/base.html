@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Hampdens Bank{% endblock %}</title>
+    <title>{% block title %}Weatherbys Racing Bank{% endblock %}</title>
     
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -24,68 +24,61 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Notification Modal -->
-    <div class="notif-modal" id="notifModal">
-        <div class="notif-modal-content">
-            <div class="notif-modal-header">
-                <h3>Notifications</h3>
-                <button class="notif-modal-close" id="notifModalClose">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="notif-modal-body">
-                <div class="notif-item">
+<div class="notif-modal" id="notifModal">
+    <div class="notif-modal-content">
+        <div class="notif-modal-header">
+            <h3>Notifications</h3>
+            <button class="notif-modal-close" id="notifModalClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notif-modal-body">
+            {% for notif in navbar_notifications %}
+                <a href="{% url 'notification:mark_read' notif.pk %}">
+                    <div class="notif-item">
+                    {% if notif.notif_type == 'success' %}
                     <div class="notif-icon success">
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <div class="notif-content">
-                        <p class="notif-title">Payment received</p>
-                        <p class="notif-desc">You received $4,200.00 from Acme Corp</p>
-                        <p class="notif-time">2 minutes ago</p>
-                    </div>
-                </div>
-                <div class="notif-item">
-                    <div class="notif-icon warning">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="notif-content">
-                        <p class="notif-title">Upcoming payment</p>
-                        <p class="notif-desc">Netflix subscription ($15.99) due in 3 days</p>
-                        <p class="notif-time">1 hour ago</p>
-                    </div>
-                </div>
-                <div class="notif-item">
+                    {% elif notif.notif_type == 'warning' %}
                     <div class="notif-icon info">
                         <i class="fas fa-info-circle"></i>
                     </div>
-                    <div class="notif-content">
-                        <p class="notif-title">New feature available</p>
-                        <p class="notif-desc">Try our new budget tracking tool</p>
-                        <p class="notif-time">Yesterday</p>
-                    </div>
-                </div>
-                <div class="notif-item">
+                    {% elif notif.notif_type == 'error' %}
                     <div class="notif-icon danger">
                         <i class="fas fa-shield-alt"></i>
                     </div>
+                    {% else %}
+                    <div class="notif-icon info">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    {% endif %}
+
                     <div class="notif-content">
-                        <p class="notif-title">Security alert</p>
-                        <p class="notif-desc">New login from Chrome on Windows</p>
-                        <p class="notif-time">2 days ago</p>
+                        <p class="notif-title">{{ notif.title }}</p>
+                        <p class="notif-desc">{{ notif.message }}</p>
+                        <p class="notif-time local-time" data-utc="{{ notif.created_at|date:'c' }}"></p>
                     </div>
                 </div>
-                <div class="notif-item">
-                    <div class="notif-icon success">
-                        <i class="fas fa-gift"></i>
-                    </div>
-                    <div class="notif-content">
-                        <p class="notif-title">Reward unlocked</p>
-                        <p class="notif-desc">You earned 500 points this month</p>
-                        <p class="notif-time">3 days ago</p>
-                    </div>
-                </div>
+            </a>
+            {% empty %}
+                <p class="p-3 text-center text-muted">No notifications</p>
+            {% endfor %}
+        </div>
+        
+        <!-- NEW: View All Footer -->
+        <div class="notif-modal-footer">
+            <div class="nmf-info">
+                <span class="nmf-dot"></span>
+                <span>You have <strong>{{ navbar_unread_count }} unread</strong> notifications</span>
             </div>
+            <a href="{% url 'notification:notification_list' %}" class="view-all-link" id="viewAllNotifLink">
+                <span>View all notifications</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
     </div>
+</div>
 
     <div class="app">
         <!-- Sidebar -->
@@ -107,6 +100,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Custom JS -->
     <script src="{% static 'customers/main.js' %}"></script>
+
+    <!-- spinner js -->
+    <script src="{% static 'general/spinner.js' %}"></script>
+
+    <!-- local time js -->
+    <script src="{% static 'general/local_time.js' %}"></script>
     
     {% block extra_js %}{% endblock %}
 </body>

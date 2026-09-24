@@ -1,13 +1,13 @@
 <aside class="sidebar" id="sidebar">
     <div class="logo">
         <div class="logo-mark">H</div>
-        <div class="logo-text">Hampdens Bank</div>
+        <div class="logo-text">Weatherbys Racing Bank</div>
     </div>
 
     <nav>
         <div class="nav-section-label">Main</div>
         <a href="{% url 'customer:dashboard' %}" class="nav-item-link active"><i class="fas fa-th-large"></i> Dashboard</a>
-        <a href="{% url 'customer:transactions' %}" class="nav-item-link"><i class="fas fa-exchange-alt"></i> Transactions <span class="badge-dot">12</span></a>
+        <a href="{% url 'customer:transactions' %}" class="nav-item-link"><i class="fas fa-exchange-alt"></i> Transactions </a>
         <a href="{% url 'customer:cards' %}" class="nav-item-link"><i class="fas fa-credit-card"></i> Cards</a>
 
         <div class="nav-section-label">Transfers</div>
@@ -26,8 +26,8 @@
     </nav>
 
     <div class="sidebar-footer">
-        <div class="upgrade-title">✨ Go Premium</div>
-        <div class="upgrade-text">Unlock higher limits, metal cards, and zero fees.</div>
-        <button class="btn-upgrade">Upgrade now</button>
+        <div class="upgrade-title">👋 Sign out</div>
+        <div class="upgrade-text">Securely sign out of your account when you're finished.</div>
+        <a class="btn-upgrade text-decoration-none mt-2">Sign Out Now</a>
     </div>
 </aside>

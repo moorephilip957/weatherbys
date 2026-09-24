@@ -383,7 +383,62 @@ def change_transaction_pin(request):
                 "Something went wrong."
             )
 
-    return redirect(request.META.get('HTTP_REFERER'))
+        return redirect('customer:change_transaction_pin')
+    else:
+        return render(request, 'customers/change_pin.html')
+# @login_required
+# @kyc_required
+# @block_blocked_users
+# def change_transaction_pin(request):
+
+#     if request.method == "POST":
+
+#         new_pin = request.POST.get("pin")
+#         current_password = request.POST.get("current_password")
+
+#         # Verify login password
+#         if not request.user.check_password(current_password):
+
+#             messages.error(
+#                 request,
+#                 "Incorrect account password."
+#             )
+
+#             return redirect(request.META.get('HTTP_REFERER'))
+
+#         try:
+#             bank_account = request.user.bank_account
+
+#             # Save hashed PIN
+#             bank_account.set_transaction_pin(new_pin)
+
+#             messages.success(
+#                 request,
+#                 "Transaction PIN updated successfully."
+#             )
+
+#         except UserBankAccount.DoesNotExist:
+
+#             messages.error(
+#                 request,
+#                 "Bank account not found."
+#             )
+
+#         except ValidationError as e:
+
+#             messages.error(
+#                 request,
+#                 str(e)
+#             )
+
+#         except Exception:
+
+#             messages.error(
+#                 request,
+#                 "Something went wrong."
+#             )
+
+#     return redirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -441,7 +496,7 @@ def change_password(request):
 
     return render(
         request,
-        "customer/change_password.html",
+        "customers/change_password.html",
         {
             "form": form
         }
@@ -452,12 +507,12 @@ def change_password(request):
 def account_blocked(request):
 
     # If user is not actually blocked, redirect them away
-    if request.user.status != "blocked":
-        return redirect("customer:dashboard")
+    # if request.user.status != "blocked":
+    #     return redirect("customer:dashboard")
 
     return render(
         request,
-        "customer/account_blocked.html",
+        "customers/account_blocked.html",
     )
 
 

@@ -1,0 +1,264 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %}Change Transaction PIN | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/local_transfer.css' %}">
+<link rel="stylesheet" href="{% static 'customers/partials/change_pin.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>Change Transaction PIN</h1>
+        <p>Update the PIN used to authorize transactions</p>
+    </div>
+</div>
+
+<div class="security-layout">
+
+    <!-- Main Form -->
+    <div class="security-form-card">
+        <div class="sfc-head">
+            <div class="sfc-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                <i class="fas fa-lock"></i>
+            </div>
+            <div>
+                <h2 class="sfc-title">Update your transaction PIN</h2>
+                <p class="sfc-sub">This 6-digit PIN is required for transfers and sensitive actions</p>
+            </div>
+        </div>
+
+        <form id="changePinForm">
+
+            <!-- New PIN -->
+            <div class="pin-confirm-section">
+                <p class="pcs-title"><i class="fas fa-key"></i> New transaction PIN</p>
+                <p class="pcs-sub">Enter a new 6-digit PIN for your transactions</p>
+                <div class="pin-confirm-wrap" id="newPinWrap">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="new" data-pin-index="0">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="new" data-pin-index="1">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="new" data-pin-index="2">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="new" data-pin-index="3">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="new" data-pin-index="4">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="new" data-pin-index="5">
+                </div>
+            </div>
+
+            <!-- Confirm PIN -->
+            <div class="pin-confirm-section">
+                <p class="pcs-title"><i class="fas fa-redo"></i> Confirm new PIN</p>
+                <p class="pcs-sub">Re-enter the same PIN to confirm</p>
+                <div class="pin-confirm-wrap" id="confirmPinWrap">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="confirm" data-pin-index="0">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="confirm" data-pin-index="1">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="confirm" data-pin-index="2">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="confirm" data-pin-index="3">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="confirm" data-pin-index="4">
+                    <input type="password" class="pin-confirm-box" maxlength="1" inputmode="numeric" data-pin-group="confirm" data-pin-index="5">
+                </div>
+                <div class="match-indicator" id="pinMatchIndicator">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="pinMatchText">PINs match</span>
+                </div>
+            </div>
+
+            <!-- Account Password Verification -->
+            <div class="form-field">
+                <label class="form-label">Account password <span class="req">*</span></label>
+                <div class="password-field">
+                    <input type="password" class="form-input" id="accountPassword" placeholder="Enter your account password to verify" required>
+                    <button type="button" class="password-toggle" data-target="accountPassword">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+                <div class="form-hint">
+                    <i class="fas fa-info-circle"></i>
+                    <span>For security, we require your password to change your PIN</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="security-form-actions">
+                <button type="button" class="btn-security cancel" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Cancel</span>
+                </button>
+                <button type="submit" class="btn-security submit" id="submitBtn" disabled>
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Update PIN</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="security-info-sidebar">
+
+        <!-- Last Changed -->
+        <div class="last-changed-card">
+            <div class="lcc-icon"><i class="fas fa-clock"></i></div>
+            <div class="lcc-content">
+                <p class="lcc-label">Last changed</p>
+                <p class="lcc-value">12 days ago · Sep 12, 2026</p>
+            </div>
+        </div>
+
+        <!-- Security Tips -->
+        <div class="security-tips-card">
+            <h3><i class="fas fa-lightbulb"></i> PIN security tips</h3>
+            <div class="tip-item">
+                <div class="ti-icon"><i class="fas fa-check"></i></div>
+                <p class="ti-text">
+                    <strong>Avoid obvious patterns</strong>
+                    Don't use birthdays, 123456, or repeated digits.
+                </p>
+            </div>
+            <div class="tip-item">
+                <div class="ti-icon"><i class="fas fa-check"></i></div>
+                <p class="ti-text">
+                    <strong>Keep it private</strong>
+                    Never share your PIN with anyone, including bank staff.
+                </p>
+            </div>
+            <div class="tip-item">
+                <div class="ti-icon"><i class="fas fa-check"></i></div>
+                <p class="ti-text">
+                    <strong>Memorize it</strong>
+                    Don't write your PIN down or store it on your phone.
+                </p>
+            </div>
+            <div class="tip-item">
+                <div class="ti-icon"><i class="fas fa-check"></i></div>
+                <p class="ti-text">
+                    <strong>Change regularly</strong>
+                    Update your PIN every 3-6 months for better security.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== PASSWORD TOGGLE =====
+document.querySelectorAll('.password-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.target);
+        const icon = btn.querySelector('i');
+        if (target.type === 'password') {
+            target.type = 'text';
+            icon.className = 'far fa-eye-slash';
+        } else {
+            target.type = 'password';
+            icon.className = 'far fa-eye';
+        }
+    });
+});
+
+// ===== PIN INPUTS =====
+function setupPinGroup(groupName) {
+    const boxes = document.querySelectorAll(`[data-pin-group="${groupName}"]`);
+    
+    boxes.forEach((box, idx) => {
+        box.addEventListener('input', (e) => {
+            const val = e.target.value.replace(/[^0-9]/g, '');
+            e.target.value = val;
+            
+            if (val && idx < boxes.length - 1) {
+                boxes[idx + 1].focus();
+            }
+            
+            box.classList.toggle('filled', val.length > 0);
+            validatePins();
+        });
+
+        box.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !box.value && idx > 0) {
+                boxes[idx - 1].focus();
+            }
+        });
+
+        box.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+            for (let i = 0; i < Math.min(paste.length, boxes.length - idx); i++) {
+                boxes[idx + i].value = paste[i];
+                boxes[idx + i].classList.add('filled');
+            }
+            const nextIdx = Math.min(idx + paste.length, boxes.length - 1);
+            boxes[nextIdx].focus();
+            validatePins();
+        });
+    });
+}
+
+setupPinGroup('new');
+setupPinGroup('confirm');
+
+function getPinValue(groupName) {
+    const boxes = document.querySelectorAll(`[data-pin-group="${groupName}"]`);
+    return Array.from(boxes).map(b => b.value).join('');
+}
+
+// ===== VALIDATION =====
+const pinMatchIndicator = document.getElementById('pinMatchIndicator');
+const pinMatchText = document.getElementById('pinMatchText');
+const submitBtn = document.getElementById('submitBtn');
+const accountPassword = document.getElementById('accountPassword');
+
+function validatePins() {
+    const newPin = getPinValue('new');
+    const confirmPin = getPinValue('confirm');
+    const password = accountPassword.value;
+    
+    // Show match indicator only when confirm PIN has content
+    if (confirmPin.length > 0) {
+        pinMatchIndicator.classList.add('show');
+        const matches = newPin === confirmPin;
+        pinMatchIndicator.classList.toggle('match', matches);
+        pinMatchIndicator.classList.toggle('no-match', !matches);
+        
+        const icon = pinMatchIndicator.querySelector('i');
+        icon.className = matches ? 'fas fa-check-circle' : 'fas fa-times-circle';
+        pinMatchText.textContent = matches ? 'PINs match' : 'PINs do not match';
+    } else {
+        pinMatchIndicator.classList.remove('show');
+    }
+    
+    // Enable submit only when all conditions met
+    const pinsComplete = newPin.length === 6 && confirmPin.length === 6;
+    const pinsMatch = newPin === confirmPin;
+    const passwordEntered = password.length > 0;
+    
+    submitBtn.disabled = !(pinsComplete && pinsMatch && passwordEntered);
+}
+
+accountPassword.addEventListener('input', validatePins);
+
+// ===== FORM SUBMIT =====
+document.getElementById('changePinForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Updating...</span>';
+    submitBtn.disabled = true;
+    
+    setTimeout(() => {
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> <span>PIN updated!</span>';
+        submitBtn.style.background = 'linear-gradient(135deg, #00D4A8, #059669)';
+        
+        setTimeout(() => {
+            // Redirect to profile (will be Django URL)
+            // window.location.href = '#';
+            submitBtn.innerHTML = '<i class="fas fa-shield-alt"></i> <span>Update PIN</span>';
+            submitBtn.style.background = '';
+            submitBtn.disabled = false;
+        }, 2000);
+    }, 1500);
+});
+</script>
+{% endblock %}

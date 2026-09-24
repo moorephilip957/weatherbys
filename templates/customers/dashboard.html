@@ -1,12 +1,27 @@
 {% extends './base.html' %}
-
-{% block title %}Dashboard | Hampdens Bank{% endblock %}
+{% load humanize %}
+{% block title %}Dashboard | Weatherbys Racing Bank{% endblock %}
 
 {% block content %}
 <!-- Greeting -->
 <div class="greeting">
-    <h1>Good morning, Alex 👋</h1>
-    <p>Here's what's happening with your money today, Thursday, September 24.</p>
+    <h1><span id="greeting">Welcome Back, </span> {{request.user.first_name}} 👋</h1>
+    <p>Here's what's happening with your money today, {% now "l, F j, Y" %}</p>
+
+    <script>
+        const hour = new Date().getHours();
+        let greeting = "";
+
+        if (hour < 12) {
+            greeting = "Good Morning, ";
+        } else if (hour < 18) {
+            greeting = "Good Afternoon, ";
+        } else {
+            greeting = "Good Evening, ";
+        }
+
+        document.getElementById("greeting").innerText = greeting;
+    </script>
 </div>
 
 <!-- Bento Grid -->
@@ -17,18 +32,18 @@
         <div class="content">
             <div class="hero-label">
                 <span class="dot-live"></span>
-                Available balance · Primary account
+                Available balance · {{request.user.bank_account.account_type}}
             </div>
-            <div class="hero-balance">$24,562<span class="cents">.00</span></div>
+            <div class="hero-balance">{{request.user.bank_account.get_currency_symbol}}{{ bank_account.balance|floatformat:0|intcomma }}<span class="cents">.00</span></div>
             <div class="hero-change">
-                <span class="up"><i class="fas fa-arrow-up"></i> +$1,284.50 (5.5%)</span>
+                <span class="up"><i class="fas fa-arrow-up"></i> {{request.user.bank_account.get_currency_symbol}}{{monthly_incoming|floatformat:2|intcomma}} (5.5%)</span>
                 <span class="muted">vs last month</span>
             </div>
             <div class="hero-actions">
-                <button class="hero-btn primary"><i class="fas fa-paper-plane"></i> <span>Send</span></button>
-                <button class="hero-btn"><i class="fas fa-plus"></i> <span>Top up</span></button>
-                <button class="hero-btn"><i class="fas fa-exchange-alt"></i> <span>Exchange</span></button>
-                <button class="hero-btn"><i class="fas fa-download"></i> <span>Request</span></button>
+                <a href="{% url 'transaction:local_transfer' %}" class="hero-btn primary"><i class="fas fa-paper-plane"></i> <span>Local transfer</span></a>
+                <a href="{% url 'transaction:create_deposit' %}" class="hero-btn"><i class="fas fa-plus"></i> <span>Top up</span></a>
+                <a href="{% url 'transaction:wire_transfer' %}" class="hero-btn"><i class="fas fa-exchange-alt"></i> <span>Wire Transfer</span></a>
+                <a href="{% url 'customer:cards' %}" class="hero-btn"><i class="fas fa-download"></i> <span>Request Card</span></a>
             </div>
         </div>
         <div class="hero-card-num">•••• •••• •••• 4829</div>
@@ -43,27 +58,27 @@
             </div>
         </div>
         <div class="quick-grid">
-            <a href="#" class="quick-btn">
+            <a href="{% url 'transaction:local_transfer' %}" class="quick-btn">
                 <div class="qi purple"><i class="fas fa-paper-plane"></i></div>
                 <span>Send money</span>
             </a>
-            <a href="#" class="quick-btn">
+            <a href="{% url 'loan:apply_loan' %}" class="quick-btn">
                 <div class="qi green"><i class="fas fa-qrcode"></i></div>
-                <span>Scan & pay</span>
+                <span>Quick Loan</span>
             </a>
-            <a href="#" class="quick-btn">
+            <a href="{% url 'customer:cards' %}" class="quick-btn">
                 <div class="qi orange"><i class="fas fa-bolt"></i></div>
-                <span>Pay bills</span>
+                <span>Cards</span>
             </a>
-            <a href="#" class="quick-btn">
+            <a href="{% url 'customer:download_app' %}" class="quick-btn">
                 <div class="qi pink"><i class="fas fa-piggy-bank"></i></div>
-                <span>Savings</span>
+                <span>Download app</span>
             </a>
-            <a href="#" class="quick-btn">
+            <a href="{% url 'transaction:wire_transfer' %}" class="quick-btn">
                 <div class="qi blue"><i class="fas fa-globe"></i></div>
                 <span>Wire transfer</span>
             </a>
-            <a href="#" class="quick-btn">
+            <a href="{% url 'customer:transactions' %}" class="quick-btn">
                 <div class="qi teal"><i class="fas fa-receipt"></i></div>
                 <span>Statements</span>
             </a>
@@ -86,16 +101,16 @@
         </div>
         <div class="chart-stats">
             <div class="stat">
-                <div class="v">$8,420</div>
-                <div class="l">Income</div>
+                <div class="v">{{request.user.bank_account.get_currency_symbol}}{{monthly_incoming|floatformat:2|intcomma}}</div>
+                <div class="l">Monthly Income</div>
             </div>
             <div class="stat">
-                <div class="v">$3,180</div>
-                <div class="l">Expenses</div>
+                <div class="v">{{request.user.bank_account.get_currency_symbol}}{{monthly_outgoing|floatformat:2|intcomma}}</div>
+                <div class="l">Monthly Expenses</div>
             </div>
             <div class="stat">
-                <div class="v" style="color: #059669;">+$5,240</div>
-                <div class="l">Net</div>
+                <div class="v" style="color: #059669;">{{request.user.bank_account.get_currency_symbol}}{{transaction_volume|floatformat:2|intcomma}}</div>
+                <div class="l">Transaction Volume</div>
             </div>
         </div>
         <div class="chart-container">
@@ -113,61 +128,61 @@
             <a href="#" style="font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none;">View all →</a>
         </div>
         <div class="tx-list">
-            <div class="tx-item">
-                <div class="tx-icon in"><i class="fas fa-arrow-down"></i></div>
-                <div class="tx-info">
-                    <p class="tx-name">Salary · Acme Corp</p>
-                    <p class="tx-cat">Income · Today, 09:12</p>
+            {% if recent_transactions %}
+                {% for transaction in recent_transactions %}
+                <div class="tx-item">
+                    {% if transaction.direction == 'credit' %}
+                    <div class="tx-icon in"><i class="fas fa-arrow-down"></i></div>
+                    {% else %}
+                    <div class="tx-icon in"><i class="fas fa-user-friends"></i></div>
+                    {% endif %}
+                    <div class="tx-info">
+                        <p class="tx-name">{{ transaction.get_transaction_type_display }}</p>
+                        {% if transaction.direction == 'credit' %}
+                        <p class="tx-cat">Income · <span class="local-time" data-utc="{{ transaction.created_at|date:'c' }}">{{ transaction.created_at|date:"M d, Y" }}</span></p>
+                        {% else %}
+                        <p class="tx-cat">Expenses · <span class="local-time" data-utc="{{ transaction.created_at|date:'c' }}">{{ transaction.created_at|date:"M d, Y" }}</span></p>
+                        {% endif %}
+                    </div>
+                    <div class="tx-amount">
+                        {% if transaction.direction == 'credit' %}
+                        <div class="v in">
+                            +{{request.user.bank_account.get_currency_symbol}}4,200.00
+                        </div>
+                        {% else %}
+                        <div class="v out text-danger">
+                            -{{request.user.bank_account.get_currency_symbol}}4,200.00
+                        </div>
+                        {% endif %}
+
+                        {% if transaction.status == 'success' %}
+                        <div class="t">Completed</div>
+                        {% elif transaction.status == 'pending' %}
+                        <div class="t">Pending</div>
+                        {% else %}
+                        <div class="t text-danger">Failed</div>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="tx-amount">
-                    <div class="v in">+$4,200.00</div>
-                    <div class="t">Completed</div>
-                </div>
+                {% endfor %}
+            {% else %}
+            <div class="p-4 text-center">
+                <i class="bi bi-inbox text-muted fs-1 mb-3"></i>
+
+                <p class="mb-1 fw-medium">
+                    No transactions yet
+                </p>
+
+                <p class="text-muted mb-3">
+                    Your transaction history will appear here
+                </p>
+
+                <a href="#"
+                    class="btn btn-primary btn-sm">
+                    Make your first deposit
+                </a>
             </div>
-            <div class="tx-item">
-                <div class="tx-icon out" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fab fa-spotify"></i></div>
-                <div class="tx-info">
-                    <p class="tx-name">Spotify Premium</p>
-                    <p class="tx-cat">Subscription · Yesterday</p>
-                </div>
-                <div class="tx-amount">
-                    <div class="v">-$9.99</div>
-                    <div class="t">Card •4829</div>
-                </div>
-            </div>
-            <div class="tx-item">
-                <div class="tx-icon out"><i class="fas fa-shopping-bag"></i></div>
-                <div class="tx-info">
-                    <p class="tx-name">Apple Store</p>
-                    <p class="tx-cat">Shopping · Sep 22</p>
-                </div>
-                <div class="tx-amount">
-                    <div class="v">-$1,299.00</div>
-                    <div class="t">Card •4829</div>
-                </div>
-            </div>
-            <div class="tx-item">
-                <div class="tx-icon out" style="background: rgba(245,158,11,0.12); color: #D97706;"><i class="fas fa-utensils"></i></div>
-                <div class="tx-info">
-                    <p class="tx-name">Blue Bottle Coffee</p>
-                    <p class="tx-cat">Food & Drink · Sep 22</p>
-                </div>
-                <div class="tx-amount">
-                    <div class="v">-$14.50</div>
-                    <div class="t">Card •4829</div>
-                </div>
-            </div>
-            <div class="tx-item">
-                <div class="tx-icon in"><i class="fas fa-user-friends"></i></div>
-                <div class="tx-info">
-                    <p class="tx-name">Sarah Miller</p>
-                    <p class="tx-cat">Transfer · Sep 21</p>
-                </div>
-                <div class="tx-amount">
-                    <div class="v in">+$120.00</div>
-                    <div class="t">Completed</div>
-                </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 
@@ -178,25 +193,43 @@
                 <div class="card-title">My cards</div>
                 <div class="card-sub">2 active cards</div>
             </div>
-            <button style="background: var(--surface-2); border: 1px solid var(--line); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;"><i class="fas fa-plus" style="font-size: 10px;"></i> New</button>
+            <a href="{% url 'customer:cards' %}" style="background: var(--surface-2); border: 1px solid var(--line); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;"><i class="fas fa-plus" style="font-size: 10px;"></i> View All</a>
         </div>
         <div class="card-3d-wrap">
-            <div class="card-3d" id="card3d">
-                <div class="brand">HAMPDENS</div>
-                <div class="chip"></div>
-                <div class="num">4829 •••• •••• 4829</div>
-                <div class="bottom">
-                    <div>
-                        <div class="holder-label">Card holder</div>
-                        <div class="holder-val">ALEX KIM</div>
+            {% if cards %}
+                {% for card in cards %}
+                <div class="card-3d" id="card3d">
+                    <div class="brand">{{ card.get_card_type_display }}</div>
+                    <div class="chip"></div>
+                    <div class="num">•••• •••• •••• {{ card.card_number|slice:"-4:"|default:"0000" }}</div>
+                    <div class="bottom">
+                        <div>
+                            <div class="holder-label">Card holder</div>
+                            <div class="holder-val">{{card.card_holder_name}}</div>
+                        </div>
+                        <div>
+                            <div class="exp-label">Expires</div>
+                            <div class="exp-val">{{ card.expiry_date|date:"m/y"|default:"12/25" }}</div>
+                        </div>
+                        <div class="mc-logo"><span></span><span></span></div>
                     </div>
-                    <div>
-                        <div class="exp-label">Expires</div>
-                        <div class="exp-val">09/29</div>
-                    </div>
-                    <div class="mc-logo"><span></span><span></span></div>
                 </div>
-            </div>
+                {% endfor %}
+            {% else %}
+                <div class="p-4 text-center">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                        style="width: 3rem; height: 3rem;">
+                        <i class="bi bi-credit-card text-muted fs-4"></i>
+                    </div>
+
+                    <h6 class="mb-2 fw-medium">No cards yet</h6>
+                    <p class="text-muted mb-3">You haven't applied for any debit cards yet.</p>
+
+                    <a href="{% url 'customer:apply_card' %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus me-1"></i> Apply for Card
+                    </a>
+                </div>
+            {% endif %}
         </div>
         <div class="card-dots">
             <div class="d active"></div>
@@ -313,41 +346,42 @@
                 <div class="card-title">Recent transactions</div>
                 <div class="card-sub">Latest activity</div>
             </div>
-            <a href="#" style="font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none;">View all →</a>
+            <a href="{% url 'customer:transactions' %}" style="font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none;">View all →</a>
         </div>
         <div>
-            <div class="recent-tx-item">
-                <div class="recent-tx-date"><div class="d">24</div><div class="m">Sep</div></div>
-                <div class="recent-tx-info">
-                    <p class="n">Salary deposit</p>
-                    <p class="c">Acme Corp · Income</p>
+            {% if recent_transactions %}
+                {% for transaction in recent_transactions %}
+                <div class="recent-tx-item">
+                    <div class="recent-tx-date"><div class="d">{{ transaction.created_at|date:"d" }}</div><div class="m">{{ transaction.created_at|date:"M" }}</div></div>
+                    <div class="recent-tx-info">
+                        <p class="n">{{ transaction.get_transaction_type_display }}</p>
+                        <p class="c">{{transaction.beneficiary_name}} · {{transaction.direction}}</p>
+                    </div>
+                    {% if transaction.direction == 'credit' %}
+                    <div class="recent-tx-amt in">+{{request.user.bank_account.get_currency_symbol}}{{ transaction.amount|floatformat:2|intcomma }}</div>
+                    {% else %}
+                    <div class="recent-tx-amt">-{{request.user.bank_account.get_currency_symbol}}{{ transaction.amount|floatformat:2|intcomma }}</div>
+                    {% endif %}
                 </div>
-                <div class="recent-tx-amt in">+$4,200.00</div>
-            </div>
-            <div class="recent-tx-item">
-                <div class="recent-tx-date"><div class="d">23</div><div class="m">Sep</div></div>
-                <div class="recent-tx-info">
-                    <p class="n">Spotify Premium</p>
-                    <p class="c">Subscription · Card •4829</p>
+                {% endfor %}
+            {% else %}
+                <div class="p-4 text-center">
+                    <i class="bi bi-inbox text-muted fs-1 mb-3"></i>
+
+                    <p class="mb-1 fw-medium">
+                        No transactions yet
+                    </p>
+
+                    <p class="text-muted mb-3">
+                        Your transaction history will appear here
+                    </p>
+
+                    <a href="#"
+                        class="btn btn-primary btn-sm">
+                        Make your first deposit
+                    </a>
                 </div>
-                <div class="recent-tx-amt">-$9.99</div>
-            </div>
-            <div class="recent-tx-item">
-                <div class="recent-tx-date"><div class="d">22</div><div class="m">Sep</div></div>
-                <div class="recent-tx-info">
-                    <p class="n">Apple Store</p>
-                    <p class="c">Shopping · Card •4829</p>
-                </div>
-                <div class="recent-tx-amt">-$1,299.00</div>
-            </div>
-            <div class="recent-tx-item">
-                <div class="recent-tx-date"><div class="d">21</div><div class="m">Sep</div></div>
-                <div class="recent-tx-info">
-                    <p class="n">Transfer from Sarah</p>
-                    <p class="c">P2P Transfer</p>
-                </div>
-                <div class="recent-tx-amt in">+$120.00</div>
-            </div>
+            {% endif %}
         </div>
     </div>
 

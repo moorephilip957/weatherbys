@@ -229,7 +229,7 @@
         <div class="security-actions-card">
             <h3><i class="fas fa-shield-alt"></i> Security</h3>
 
-            <a href="#" class="security-action-item">
+            <a href="{% url 'customer:change_transaction_pin' %}" class="security-action-item">
                 <div class="sai-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
                     <i class="fas fa-key"></i>
                 </div>
@@ -240,7 +240,7 @@
                 <i class="fas fa-chevron-right sai-arrow"></i>
             </a>
 
-            <a href="#" class="security-action-item">
+            <a href="{% url 'customer:change_password' %}" class="security-action-item">
                 <div class="sai-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
                     <i class="fas fa-lock"></i>
                 </div>

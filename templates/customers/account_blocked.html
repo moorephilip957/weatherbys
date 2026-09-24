@@ -1,0 +1,263 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}Account Restricted | Hampdens Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/account_blocked.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="restricted-page">
+
+    <!-- Warning Banner -->
+    <div class="restricted-warning-banner">
+        <div class="rwb-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h1>Account Restricted</h1>
+        <p class="rwb-subtitle">Your account has been temporarily restricted for security purposes. Please review the information below and follow the steps to restore full access.</p>
+        <div class="rwb-timestamp">
+            <i class="far fa-clock"></i>
+            <span>Restricted on September 24, 2026 at 09:15 AM</span>
+        </div>
+    </div>
+
+    <!-- Restriction Details -->
+    <div class="restriction-details-card">
+        <h2><i class="fas fa-info-circle"></i> Restriction details</h2>
+
+        <div class="restriction-info-grid">
+            <div class="restriction-info-item">
+                <p class="rii-label">Account number</p>
+                <p class="rii-value mono">•••• •••• 4829</p>
+            </div>
+            <div class="restriction-info-item">
+                <p class="rii-label">Account holder</p>
+                <p class="rii-value">Alex Kim</p>
+            </div>
+            <div class="restriction-info-item">
+                <p class="rii-label">Restriction type</p>
+                <p class="rii-value warning">Security review</p>
+            </div>
+            <div class="restriction-info-item">
+                <p class="rii-label">Status</p>
+                <p class="rii-value danger">Restricted</p>
+            </div>
+        </div>
+
+        <div class="restriction-reason-box">
+            <h3><i class="fas fa-shield-alt"></i> Reason for restriction</h3>
+            <p>We detected unusual activity on your account that doesn't match your typical usage patterns. To protect your funds and personal information, we've temporarily restricted certain account features while we verify your identity and recent transactions.</p>
+        </div>
+
+        <div class="restrictions-list">
+            <h4>What you cannot do right now:</h4>
+            <div class="restriction-item">
+                <i class="fas fa-times-circle"></i>
+                <span>Send money or make transfers</span>
+            </div>
+            <div class="restriction-item">
+                <i class="fas fa-times-circle"></i>
+                <span>Make purchases with your cards</span>
+            </div>
+            <div class="restriction-item">
+                <i class="fas fa-times-circle"></i>
+                <span>Withdraw cash from ATMs</span>
+            </div>
+            <div class="restriction-item">
+                <i class="fas fa-times-circle"></i>
+                <span>Request new loans or credit</span>
+            </div>
+            <div class="restriction-item">
+                <i class="fas fa-check-circle" style="color: #059669;"></i>
+                <span style="color: #059669;">You can still view your balance and transaction history</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resolution Steps -->
+    <div class="resolution-card">
+        <h2><i class="fas fa-check-circle"></i> How to restore your account</h2>
+        <p class="rc-subtitle">Follow these steps to verify your identity and restore full access to your account</p>
+
+        <div class="resolution-steps">
+            <div class="resolution-step">
+                <div class="rs-number">1</div>
+                <div class="rs-content">
+                    <p class="rs-title">Verify your identity</p>
+                    <p class="rs-desc">Upload a clear photo of your government-issued ID (passport, driver's license, or national ID card) and a recent selfie for verification.</p>
+                    <button class="rs-action">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload documents</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="resolution-step">
+                <div class="rs-number">2</div>
+                <div class="rs-content">
+                    <p class="rs-title">Confirm recent transactions</p>
+                    <p class="rs-desc">Review and confirm the recent transactions flagged as unusual. This helps us understand if the activity was authorized by you.</p>
+                    <button class="rs-action">
+                        <i class="fas fa-list-check"></i>
+                        <span>Review transactions</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="resolution-step">
+                <div class="rs-number">3</div>
+                <div class="rs-content">
+                    <p class="rs-title">Update security settings</p>
+                    <p class="rs-desc">For your protection, we recommend updating your password and enabling two-factor authentication if you haven't already.</p>
+                    <button class="rs-action">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Update security</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="resolution-step">
+                <div class="rs-number">4</div>
+                <div class="rs-content">
+                    <p class="rs-title">Wait for verification</p>
+                    <p class="rs-desc">Once you've completed the steps above, our security team will review your information. This typically takes 1-2 business hours. You'll receive an email notification when your account is restored.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Support -->
+    <div class="contact-support-card">
+        <h2>Need help?</h2>
+        <p class="csc-subtitle">Our support team is here to help you resolve this quickly</p>
+
+        <div class="contact-methods">
+            <a href="#" class="contact-method">
+                <div class="cm-icon"><i class="fas fa-comments"></i></div>
+                <p class="cm-title">Live chat</p>
+                <p class="cm-desc">Chat with an agent now</p>
+                <p class="cm-value">Start chat →</p>
+            </a>
+            <a href="mailto:support@hampdensbank.com" class="contact-method">
+                <div class="cm-icon"><i class="fas fa-envelope"></i></div>
+                <p class="cm-title">Email support</p>
+                <p class="cm-desc">Get a response within 2 hours</p>
+                <p class="cm-value">support@hampdensbank.com</p>
+            </a>
+            <a href="tel:+18001234567" class="contact-method">
+                <div class="cm-icon"><i class="fas fa-phone"></i></div>
+                <p class="cm-title">Call us</p>
+                <p class="cm-desc">Speak with a specialist</p>
+                <p class="cm-value">+1 (800) 123-4567</p>
+            </a>
+        </div>
+
+        <div class="support-hours">
+            <div class="sh-icon"><i class="fas fa-clock"></i></div>
+            <div class="sh-text">
+                <p class="sh-label">Support hours</p>
+                <p class="sh-value">24/7 · Average response time: 15 minutes</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-card">
+        <h2><i class="fas fa-question-circle"></i> Frequently asked questions</h2>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>Why was my account restricted?</span>
+                <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+            </div>
+            <div class="faq-answer">
+                Accounts are typically restricted when we detect unusual activity that doesn't match your typical usage patterns. This could include large transactions, logins from new locations, or multiple failed login attempts. This is a security measure to protect your funds and personal information.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>How long will my account be restricted?</span>
+                <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+            </div>
+            <div class="faq-answer">
+                Most account restrictions are resolved within 1-2 business hours after you complete the verification steps. In some cases, additional review may be required, which could take up to 24-48 hours. We'll notify you via email as soon as your account is restored.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>Can I still receive money?</span>
+                <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+            </div>
+            <div class="faq-answer">
+                Yes, you can still receive money into your account while it's restricted. However, you won't be able to send money, make purchases, or withdraw funds until the restriction is lifted.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>Is my money safe?</span>
+                <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+            </div>
+            <div class="faq-answer">
+                Absolutely. Your funds are completely safe and secure. The restriction is a precautionary measure to protect your account. All your money remains in your account and is FDIC insured up to $250,000.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>What documents do I need to verify my identity?</span>
+                <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+            </div>
+            <div class="faq-answer">
+                You'll need a valid government-issued photo ID (passport, driver's license, or national ID card) and a recent selfie. Make sure the photos are clear and well-lit. The name on your ID must match the name on your account.
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Notice -->
+    <div class="security-notice">
+        <div class="sn-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="sn-content">
+            <p class="sn-title">Security reminder</p>
+            <p class="sn-text">Hampdens Bank will never ask for your password, PIN, or verification codes via email, phone, or text. If you receive suspicious communications claiming to be from us, please report them to our security team immediately.</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// FAQ Accordion
+document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const wasOpen = item.classList.contains('open');
+        
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        
+        // Toggle clicked
+        if (!wasOpen) {
+            item.classList.add('open');
+        }
+    });
+});
+
+// Resolution step actions
+document.querySelectorAll('.rs-action').forEach(btn => {
+    btn.addEventListener('click', () => {
+        // These would navigate to respective pages
+        // For now, show a placeholder alert
+        const action = btn.querySelector('span').textContent;
+        console.log('Action clicked:', action);
+        
+    });
+});
+</script>
+{% endblock %}
+// In Django, these would be: {% url 'verify_identity' %}, {% url 'review_transactions' %}, {% url 'update_security' %}

@@ -1,3 +1,4 @@
+{% load static %}
 <div class="topbar">
     <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
     <div class="search-box">
@@ -8,28 +9,47 @@
     <div class="topbar-icon" title="Messages"><i class="far fa-envelope"></i></div>
     <div class="topbar-icon" title="Notifications" id="notifBtn">
         <i class="far fa-bell"></i>
-        <span class="notif-badge">3</span>
+        {% if navbar_unread_count > 0 %}
+        <span class="notif-badge">
+            {{ navbar_unread_count }}
+        </span>
+        {% endif %}
     </div>
     <div class="profile-dropdown">
         <div class="profile-chip" id="profileChip">
-            <div class="avatar">AK</div>
+            <div class="avatar">
+                {% if request.user.kycverification.passport_photograph %}
+                <img src="{{request.user.kycverification.passport_photograph.url}}" alt="User"
+                    class="rounded-circle border border-2" style="width: 2rem; height: 2rem; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'frontend/custom/default-img.jpg' %}" alt="User"
+                    class="rounded-circle border border-2" style="width: 2rem; height: 2rem; object-fit: cover;">
+                {% endif %}
+            </div>
+            <!-- <div class="avatar">AK</div> -->
             <div>
-                <div class="name">Alex Kim</div>
-                <div class="plan">Premium</div>
+                <div class="name">{{request.user.full_name}}</div>
+                {% with kyc=request.user.kycverification %}
+                    {% if kyc.status == "approved" %}
+                    <div class="plan text-success">KYC Verified</div>
+                    {% else %}
+                    <div class="plan">KYC Not Verified</div>
+                    {% endif %}         
+                {% endwith %}
             </div>
             <i class="fas fa-chevron-down" style="color: var(--muted); font-size: 11px; margin-left: 6px;"></i>
         </div>
         <div class="profile-menu" id="profileMenu">
-            <a href="#" class="profile-menu-item">
+            <a href="{% url 'customer:settings' %}" class="profile-menu-item">
                 <i class="fas fa-user"></i>
                 <span>Profile</span>
             </a>
-            <a href="#" class="profile-menu-item">
+            <a href="{% url 'support:create_ticket' %}" class="profile-menu-item">
                 <i class="fas fa-cog"></i>
-                <span>Settings</span>
+                <span>Support Ticket</span>
             </a>
             <div class="profile-menu-divider"></div>
-            <a href="#" class="profile-menu-item logout">
+            <a href="{% url 'account:logout' %}" class="profile-menu-item logout">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>
