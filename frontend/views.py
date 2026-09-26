@@ -1,12 +1,13 @@
 from django.shortcuts import render,redirect
 import time
+
 def home_view(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
             return redirect('staff:staff_dashboard')
         else:
             return redirect('customer:dashboard')
-    return render(request, 'frontend/index.html')
+    return render(request, 'frontend2/index.html')
 
 def personal_view(request):
     if request.user.is_authenticated:

@@ -1,0 +1,372 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}Weatherbys Racing Bank | Premium Banking for the Modern Era{% endblock %}
+
+{% block meta_description %}Experience premium financial services tailored for modern lifestyles. Open your account in minutes.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'frontends/components/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="hero">
+    <div class="container hero-content">
+        <div class="hero-text">
+            <h1>Banking Built for <span>Ambition</span></h1>
+            <p>Experience a higher standard of financial services, thoughtfully designed for modern lifestyles. From seamless everyday banking to sophisticated wealth management, Weatherbys Racing Bank delivers trusted solutions tailored to your goals—helping you build, protect, and grow your financial future.</p>
+            <div class="hero-btns">
+                <a href="{% url 'account:register' %}" class="btn btn-primary">Open an Account <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'frontend:about' %}" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="{% static 'frontends/images/hero-1.jpg' %}" alt="Modern Banking App">
+            <div class="hero-float-card card-1">
+                <div class="hfc-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="hfc-text"><h4>Bank-Grade Security</h4><p>256-bit encryption</p></div>
+            </div>
+            <div class="hero-float-card card-2">
+                <div class="hfc-icon" style="background: rgba(91,91,247,0.2); color: #5B5BF7;"><i class="fas fa-chart-line"></i></div>
+                <div class="hfc-text"><h4>High-Yield Savings</h4><p>Up to 4.5% APY</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Partners -->
+<section class="partners-section">
+    <div class="container">
+        <div class="partners-wrapper">
+            <div class="partner-logo"><i class="fab fa-cc-visa"></i> VISA</div>
+            <div class="partner-logo"><i class="fab fa-cc-mastercard"></i> Mastercard</div>
+            <div class="partner-logo"><i class="fas fa-university"></i> FDIC Insured</div>
+            <div class="partner-logo"><i class="fas fa-lock"></i> 256-bit SSL</div>
+            <div class="partner-logo"><i class="fab fa-apple"></i> Apple Pay</div>
+        </div>
+    </div>
+</section>
+
+<!-- About / Why Us Section -->
+    <section class="section about-section">
+        <div class="container about-grid">
+            <div class="about-image">
+                <img src="{% static 'frontends/images/about-us2.jpg' %}" alt="Professional Team">
+                <div class="experience-badge">
+                    <h3>25+</h3>
+                    <p>Years of Excellence</p>
+                </div>
+            </div>
+            <div class="about-content">
+                <h2>Why Choose Weatherbys Racing Bank?</h2>
+                <p>We combine cutting-edge technology with personalized service to deliver a banking experience that truly puts you first. Our commitment to transparency and security is unmatched.</p>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="fi-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="fi-text">
+                            <h4>Lightning Fast Transfers</h4>
+                            <p>Send money locally or internationally in seconds with zero hidden fees.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="fi-text">
+                            <h4>Award-Winning Mobile App</h4>
+                            <p>Manage your entire financial life from the palm of your hand, 24/7.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-icon" style="background: rgba(245,158,11,0.1); color: #D97706;"><i class="fas fa-headset"></i></div>
+                        <div class="fi-text">
+                            <h4>Dedicated Support</h4>
+                            <p>Our expert team is available around the clock to assist you with any query.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="{% url 'frontend:about' %}" class="btn btn-dark">Discover Our Story <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+<!-- How It Works -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Start Banking in 3 Simple Steps</h2>
+            <p>Opening an account with Weatherbys Racing Bank is fast, secure, and completely digital. Get started in minutes.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Apply Online</h3>
+                <p>Fill out our simple, secure online application in just a few minutes. No branch visits required.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Verify Identity</h3>
+                <p>Complete our quick KYC verification by uploading a valid ID and a quick selfie photo.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Start Banking</h3>
+                <p>Once approved, fund your account and get instant access to your debit card and mobile app.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Solutions -->
+<section class="section" style="background: var(--surface-2);">
+    <div class="container">
+        <div class="section-header">
+            <h2>Tailored Financial Solutions</h2>
+            <p>Whether you are growing a business, planning for retirement, or managing daily expenses, we have a premium solution for you.</p>
+        </div>
+        <div class="solutions-grid">
+            <div class="image-card">
+                <div class="image-card-img">
+                    <img src="{% static 'frontends/images/breadcrumb.jpg' %}" alt="Wealth Management">
+                </div>
+                <div class="image-card-body">
+                    <h3>Wealth Management</h3>
+                    <p>Expert advisory services to help you grow, protect, and transfer your wealth across generations with confidence.</p>
+                    <a href="{% url 'frontend:personal' %}" class="btn-text">Explore Wealth <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="image-card">
+                <div class="image-card-img">
+                    <img src="{% static 'frontends/images/about-us.jpg' %}" alt="Corporate Banking">
+                </div>
+                <div class="image-card-body">
+                    <h3>Corporate Banking</h3>
+                    <p>Scalable treasury management, commercial lending, and dedicated relationship managers for your business.</p>
+                    <a href="{% url 'frontend:corperate' %}" class="btn-text">Explore Corporate <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="image-card">
+                <div class="image-card-img">
+                    <img src="{% static 'frontends/images/image-6.jpg' %}" alt="Premium Cards">
+                </div>
+                <div class="image-card-body">
+                    <h3>Premium Credit Cards</h3>
+                    <p>Unlock exclusive rewards, airport lounge access, and comprehensive travel insurance with our elite cards.</p>
+                    <a href="{% url 'frontend:cards' %}" class="btn-text">View Cards <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- App Showcase -->
+<section class="section app-section">
+    <div class="container app-grid">
+        <div class="app-content">
+            <h2>Banking at Your Fingertips</h2>
+            <p>Download the Weatherbys Racing Bank mobile app and manage your finances anytime, anywhere.</p>
+            <div class="app-features">
+                <div class="app-feature">
+                    <div class="af-icon"><i class="fas fa-bolt"></i></div>
+                    <div><h4>Instant Transfers</h4><p>Send and receive money in real-time, locally and globally.</p></div>
+                </div>
+                <div class="app-feature">
+                    <div class="af-icon"><i class="fas fa-fingerprint"></i></div>
+                    <div><h4>Biometric Login</h4><p>Secure access with Face ID or fingerprint authentication.</p></div>
+                </div>
+                <div class="app-feature">
+                    <div class="af-icon"><i class="fas fa-bell"></i></div>
+                    <div><h4>Real-Time Alerts</h4><p>Get instant push notifications for every transaction.</p></div>
+                </div>
+            </div>
+            <div class="store-badges">
+                <a href="#" class="store-badge"><i class="fab fa-apple"></i><div><span class="small">Download on the</span><span class="big">App Store</span></div></a>
+                <a href="#" class="store-badge"><i class="fab fa-google-play"></i><div><span class="small">Get it on</span><span class="big">Google Play</span></div></a>
+            </div>
+        </div>
+        <div class="app-image">
+            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=600" alt="Mobile App">
+        </div>
+    </div>
+</section>
+
+<!-- Digital Tools -->
+<section class="section">
+    <div class="container tools-grid">
+        <div class="tools-image">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" alt="Financial Dashboard">
+        </div>
+        <div>
+            <h2 style="font-size: 40px; font-weight: 800; margin-bottom: 16px;">Smart Tools for Smarter Decisions</h2>
+            <p style="font-size: 16px; color: var(--muted); margin-bottom: 32px; line-height: 1.7;">Take control of your financial future with our suite of interactive digital tools.</p>
+            <div class="tool-list">
+                <div class="tool-item">
+                    <div class="tool-icon"><i class="fas fa-calculator"></i></div>
+                    <div class="tool-text"><h4>Mortgage Calculator</h4><p>Estimate your monthly payments and explore different loan scenarios instantly.</p></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon" style="background: rgba(0,212,168,0.1); color: var(--accent);"><i class="fas fa-chart-pie"></i></div>
+                    <div class="tool-text"><h4>Savings Goal Planner</h4><p>Set a target, and we'll show you exactly how much to save each month to reach it.</p></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon" style="background: rgba(245,158,11,0.1); color: #D97706;"><i class="fas fa-exchange-alt"></i></div>
+                    <div class="tool-text"><h4>Live FX Rate Checker</h4><p>Get real-time exchange rates and calculate international transfer costs with zero hidden fees.</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Services Section -->
+    <section class="section" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Comprehensive Financial Solutions</h2>
+                <p>Whatever your financial goals, we have the tools, expertise, and dedication to help you achieve them.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="sc-icon"><i class="fas fa-user"></i></div>
+                    <h3>Personal Banking</h3>
+                    <p>Everyday accounts, debit cards, and personal loans designed for your lifestyle.</p>
+                    <a href="{% url 'frontend:personal' %}" class="service-link">Explore Personal <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="sc-icon" style="background: rgba(0,212,168,0.1); color: var(--accent);"><i class="fas fa-briefcase"></i></div>
+                    <h3>Corporate Banking</h3>
+                    <p>Scalable business accounts, treasury management, and commercial lending.</p>
+                    <a href="{% url 'frontend:corperate' %}" class="service-link">Explore Corporate <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="sc-icon" style="background: rgba(245,158,11,0.1); color: #D97706;"><i class="fas fa-umbrella"></i></div>
+                    <h3>Insurance</h3>
+                    <p>Protect what matters most with our comprehensive life, auto, and property insurance.</p>
+                    <a href="{% url 'frontend:insurance' %}" class="service-link">Explore Insurance <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="sc-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);"><i class="fas fa-home"></i></div>
+                    <h3>Mortgages</h3>
+                    <p>Competitive rates and flexible terms to help you secure your dream home.</p>
+                    <a href="{% url 'frontend:mortgages' %}" class="service-link">Explore Mortgages <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Financial Insights -->
+<section class="section" style="background: var(--surface-2);">
+    <div class="container">
+        <div class="section-header">
+            <h2>Financial Insights & News</h2>
+            <p>Stay ahead of the curve with expert advice, market updates, and tips from the Weatherbys Racing Bank team.</p>
+        </div>
+        <div class="insights-grid">
+            <div class="insight-card">
+                <div class="insight-img"><img src="{% static 'frontends/images/image-5.jpg' %}" alt="Savings Tips"></div>
+                <div class="insight-body">
+                    <div class="insight-meta"><span class="insight-tag">Savings</span><span class="insight-date">Oct 12, 2024</span></div>
+                    <h3><a href="#">5 Proven Strategies to Maximize Your High-Yield Savings</a></h3>
+                    <a href="#" class="btn-text">Read Article <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-img"><img src="{% static 'frontends/images/image-7.jpg' %}" alt="Business Growth"></div>
+                <div class="insight-body">
+                    <div class="insight-meta"><span class="insight-tag">Business</span><span class="insight-date">Oct 08, 2024</span></div>
+                    <h3><a href="#">How to Secure the Right Business Loan for Your Startup</a></h3>
+                    <a href="#" class="btn-text">Read Article <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-img"><img src="{% static 'frontends/images/image-7.jpg' %}" alt="Cyber Security"></div>
+                <div class="insight-body">
+                    <div class="insight-meta"><span class="insight-tag">Security</span><span class="insight-date">Sep 28, 2024</span></div>
+                    <h3><a href="#">Protecting Your Finances: A Guide to Modern Cyber Security</a></h3>
+                    <a href="#" class="btn-text">Read Article <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Trusted by Thousands</h2>
+            <p>See what our customers have to say about their experience with Weatherbys Racing Bank.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p class="tc-text">"Switching to Weatherbys was the best financial decision I've made. The app is incredibly intuitive, and the customer support is genuinely helpful."</p>
+                <div class="tc-author"><div class="tc-avatar">JD</div><div class="tc-info"><h4>James Davidson</h4><p>Small Business Owner</p></div></div>
+            </div>
+            <div class="testimonial-card">
+                <div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p class="tc-text">"The mortgage process was seamless. Their rates were competitive, and my dedicated advisor guided me through every step of the way."</p>
+                <div class="tc-author"><div class="tc-avatar" style="background: linear-gradient(135deg, #F59E0B, #F43F5E);">SM</div><div class="tc-info"><h4>Sarah Mitchell</h4><p>First-Time Homebuyer</p></div></div>
+            </div>
+            <div class="testimonial-card">
+                <div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                <p class="tc-text">"I love the high-yield savings account. Watching my money grow with zero hidden fees gives me total peace of mind."</p>
+                <div class="tc-author"><div class="tc-avatar" style="background: linear-gradient(135deg, #00D4A8, #059669);">AK</div><div class="tc-info"><h4>Alex Kim</h4><p>Software Engineer</p></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Security -->
+<section class="section security-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Your Security is Our Priority</h2>
+            <p>We employ state-of-the-art technology to ensure your money and data are always protected.</p>
+        </div>
+        <div class="security-grid">
+            <div class="security-item"><i class="fas fa-shield-alt"></i><h4>256-bit Encryption</h4><p>Military-grade encryption protects all data in transit and at rest.</p></div>
+            <div class="security-item"><i class="fas fa-user-shield"></i><h4>Fraud Monitoring</h4><p>24/7 AI-powered systems detect and block suspicious activity instantly.</p></div>
+            <div class="security-item"><i class="fas fa-fingerprint"></i><h4>Biometric Auth</h4><p>Secure your account with Face ID, Touch ID, or fingerprint scanning.</p></div>
+            <div class="security-item"><i class="fas fa-university"></i><h4>Fully Regulated</h4><p>We are fully licensed and comply with all international banking regulations.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>2M+</h3>
+                    <p>Active Customers</p>
+                </div>
+                <div class="stat-item">
+                    <h3>$50B+</h3>
+                    <p>Assets Under Management</p>
+                </div>
+                <div class="stat-item">
+                    <h3>150+</h3>
+                    <p>Countries Supported</p>
+                </div>
+                <div class="stat-item">
+                    <h3>99.9%</h3>
+                    <p>Uptime Guarantee</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="container cta-content">
+        <h2>Ready to Elevate Your Banking?</h2>
+        <p>Join over 2 million customers who trust Weatherbys Racing Bank for their financial journey. Open your account in minutes.</p>
+        <div class="cta-btns">
+            <a href="{% url 'account:register' %}" class="btn btn-white">Open An Account <i class="fas fa-arrow-right"></i></a>
+            <a href="{% url 'frontend:contact' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.5);">Contact Sales</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

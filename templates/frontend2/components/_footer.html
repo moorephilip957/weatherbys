@@ -1,0 +1,74 @@
+{% load static %}
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="{% url 'frontend:home' %}" class="logo" style="margin-bottom: 16px;">
+                    <!-- <div class="logo-mark">W</div>
+                    <span class="logo-text">Weatherbys</span> -->
+                    <img
+                        src="{% static 'frontends/images/logo-1.png' %}"
+                        alt="Weatherbys Racing Bank"
+                        class="logo-img logo-default"
+                    >
+                </a>
+                <p>Empowering you to achieve your financial goals with innovative, secure, and personalized banking solutions you can trust, serving our customers with excellence since 1999.</p>
+                <!-- <div class="social-links">
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div> -->
+            </div>
+
+            <div class="footer-col">
+                <h4>Banking</h4>
+                <ul>
+                    <li><a href="{% url 'frontend:personal' %}">Personal</a></li>
+                    <li><a href="{% url 'frontend:corperate' %}">Corporate</a></li>
+                    <li><a href="{% url 'frontend:savings' %}">Savings</a></li>
+                    <li><a href="{% url 'frontend:loans' %}">Business Loans</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="{% url 'frontend:about' %}">About Us</a></li>
+                    <li><a href="{% url 'frontend:contact' %}">Contact Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="{% url 'frontend:terms' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'frontend:terms' %}">Terms of Use</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Stay Updated</h4>
+                <p style="font-size: 14px; margin-bottom: 12px;">Subscribe to our newsletter for financial tips and updates.</p>
+                <form class="newsletter-form">
+                    {% csrf_token %}
+                    <input type="email" name="email" placeholder="Your email address" required>
+                    <button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; {% now "Y" %} Weatherbys Racing Bank. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="{% url 'frontend:terms' %}">Privacy</a>
+                <a href="{% url 'frontend:terms' %}">Terms</a>
+                <a href="#">Sitemap</a>
+            </div>
+        </div>
+    </div>
+</footer>

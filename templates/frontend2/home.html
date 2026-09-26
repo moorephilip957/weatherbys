@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weatherbys Racing Bank | Premium Banking for the Modern Era</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ===== DESIGN SYSTEM (Matches Dashboard) ===== */
+        :root {
+            --bg: #F6F7FB;
+            --surface: #FFFFFF;
+            --surface-2: #FAFBFD;
+            --ink: #0A0E1A;
+            --ink-2: #1A1F2E;
+            --muted: #6B7280;
+            --muted-2: #9CA3AF;
+            --line: #ECEEF3;
+            --primary: #5B5BF7;
+            --primary-2: #7C3AED;
+            --accent: #00D4A8;
+            --danger: #F43F5E;
+            --shadow-sm: 0 1px 2px rgba(10,14,26,0.04);
+            --shadow-md: 0 4px 16px -4px rgba(10,14,26,0.08);
+            --shadow-lg: 0 20px 40px -20px rgba(10,14,26,0.18);
+            --shadow-xl: 0 25px 50px -12px rgba(10,14,26,0.25);
+            --radius: 18px;
+            --radius-sm: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        a { text-decoration: none; color: inherit; transition: all 0.2s; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            color: #fff;
+            box-shadow: 0 8px 20px -6px rgba(91,91,247,0.5);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(91,91,247,0.6);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            backdrop-filter: blur(10px);
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #fff;
+        }
+        .btn-dark {
+            background: var(--ink);
+            color: #fff;
+        }
+        .btn-dark:hover {
+            background: var(--ink-2);
+            transform: translateY(-2px);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 0;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-sm);
+            padding: 12px 0;
+        }
+        .navbar.scrolled .nav-link { color: var(--ink); }
+        .navbar.scrolled .nav-link:hover { color: var(--primary); }
+        .navbar.scrolled .logo-text { color: var(--ink); }
+        .navbar.scrolled .logo-mark { background: linear-gradient(135deg, var(--primary), var(--primary-2)); }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1001;
+        }
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--primary);
+            transition: all 0.3s;
+        }
+        .logo-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: #fff;
+            transition: color 0.3s;
+        }
+
+        .nav-menu-wrapper { display: flex; align-items: center; }
+        .navbar-nav { display: flex; align-items: center; gap: 8px; }
+        
+        .nav-item { position: relative; }
+        .nav-link {
+            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-link:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .navbar.scrolled .nav-link:hover { background: rgba(91,91,247,0.08); color: var(--primary); }
+
+        /* Dropdown */
+        .submenu > ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-xl);
+            padding: 8px;
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.2s ease;
+        }
+        .submenu:hover > ul {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .submenu ul .nav-link {
+            color: var(--ink-2);
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+        .submenu ul .nav-link:hover {
+            background: var(--surface-2);
+            color: var(--primary);
+        }
+
+        .header-btn { display: flex; align-items: center; gap: 12px; margin-left: 24px; }
+        .btn-login {
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+        .navbar.scrolled .btn-login { color: var(--ink); }
+        .btn-signup {
+            background: #fff;
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .navbar.scrolled .btn-signup {
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            color: #fff;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .navbar.scrolled .mobile-toggle { color: var(--ink); }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #0A0E1A 0%, #1A1F2E 50%, #2D1B4E 100%);
+            overflow: hidden;
+            padding-top: 80px;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(91,91,247,0.3), transparent 70%);
+            border-radius: 50%;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0,212,168,0.15), transparent 70%);
+            border-radius: 50%;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .hero-text h1 {
+            font-size: 56px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+        .hero-text h1 span {
+            background: linear-gradient(135deg, var(--accent), #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-text p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 32px;
+            max-width: 500px;
+            line-height: 1.7;
+        }
+        .hero-btns { display: flex; gap: 16px; }
+        
+        .hero-image {
+            position: relative;
+        }
+        .hero-image img {
+            border-radius: 24px;
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .hero-float-card {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 16px 20px;
+            border-radius: 16px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: float 6s ease-in-out infinite;
+        }
+        .hero-float-card.card-1 { top: 10%; left: -40px; }
+        .hero-float-card.card-2 { bottom: 15%; right: -30px; animation-delay: 2s; }
+        .hfc-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: rgba(0,212,168,0.2); color: var(--accent);
+            display: grid; place-items: center; font-size: 18px;
+        }
+        .hfc-text h4 { font-size: 14px; margin-bottom: 2px; }
+        .hfc-text p { font-size: 12px; color: rgba(255,255,255,0.7); margin: 0; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* ===== SERVICES SECTION ===== */
+        .section { padding: 100px 0; }
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 60px; }
+        .section-header h2 { font-size: 40px; font-weight: 800; margin-bottom: 16px; color: var(--ink); }
+        .section-header p { font-size: 16px; color: var(--muted); }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        .service-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary);
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .service-card:hover::before { opacity: 1; }
+        .sc-icon {
+            width: 64px; height: 64px; border-radius: 16px;
+            background: rgba(91,91,247,0.08); color: var(--primary);
+            display: grid; place-items: center; font-size: 24px;
+            margin: 0 auto 20px;
+            transition: all 0.3s;
+        }
+        .service-card:hover .sc-icon { background: var(--primary); color: #fff; transform: scale(1.1); }
+        .service-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+        .service-card p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+        .service-link {
+            font-size: 13px; font-weight: 700; color: var(--primary);
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .service-link i { transition: transform 0.2s; }
+        .service-card:hover .service-link i { transform: translateX(4px); }
+
+        /* ===== ABOUT / WHY US SECTION ===== */
+        .about-section { background: var(--surface); }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .about-image { position: relative; }
+        .about-image img { border-radius: 24px; box-shadow: var(--shadow-lg); }
+        .about-image .experience-badge {
+            position: absolute;
+            bottom: -20px; right: -20px;
+            background: var(--primary);
+            color: #fff;
+            padding: 24px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+        }
+        .experience-badge h3 { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
+        .experience-badge p { font-size: 14px; opacity: 0.9; margin: 0; }
+
+        .about-content h2 { font-size: 40px; font-weight: 800; margin-bottom: 20px; }
+        .about-content > p { font-size: 16px; color: var(--muted); margin-bottom: 32px; line-height: 1.7; }
+        .feature-list { display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px; }
+        .feature-item { display: flex; gap: 16px; align-items: flex-start; }
+        .fi-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            background: rgba(0,212,168,0.1); color: var(--accent);
+            display: grid; place-items: center; font-size: 18px; flex-shrink: 0;
+        }
+        .fi-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .fi-text p { font-size: 14px; color: var(--muted); margin: 0; }
+
+        /* ===== STATS SECTION ===== */
+        .stats-section {
+            background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+            color: #fff;
+            padding: 80px 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+        .stat-item h3 { font-size: 48px; font-weight: 800; margin-bottom: 8px; color: var(--accent); }
+        .stat-item p { font-size: 15px; color: rgba(255,255,255,0.7); margin: 0; }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        }
+        .cta-content { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
+        .cta-content h2 { font-size: 44px; font-weight: 800; color: #fff; margin-bottom: 20px; }
+        .cta-content p { font-size: 18px; color: rgba(255,255,255,0.85); margin-bottom: 32px; }
+        .cta-btns { display: flex; gap: 16px; justify-content: center; }
+        .btn-white { background: #fff; color: var(--primary); }
+        .btn-white:hover { background: var(--bg); transform: translateY(-2px); }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--ink);
+            color: rgba(255,255,255,0.7);
+            padding: 80px 0 0;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer-brand .logo-text { color: #fff; margin-bottom: 16px; display: block; }
+        .footer-brand p { font-size: 14px; line-height: 1.7; margin-bottom: 24px; max-width: 300px; }
+        .social-links { display: flex; gap: 12px; }
+        .social-links a {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); color: #fff;
+            display: grid; place-items: center; font-size: 14px;
+            transition: all 0.2s;
+        }
+        .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
+
+        .footer-col h4 {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .footer-col ul li { margin-bottom: 12px; }
+        .footer-col ul li a {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.2s;
+        }
+        .footer-col ul li a:hover { color: var(--accent); padding-left: 4px; }
+
+        .newsletter-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        .newsletter-form input {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .newsletter-form input::placeholder { color: rgba(255,255,255,0.5); }
+        .newsletter-form button {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .newsletter-form button:hover { background: var(--primary-2); }
+
+        .footer-bottom {
+            padding: 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+        }
+        .footer-bottom-links { display: flex; gap: 24px; }
+        .footer-bottom-links a:hover { color: #fff; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 991px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero-text p { margin: 0 auto 32px; }
+            .hero-btns { justify-content: center; }
+            .hero-image { display: none; } /* Hide heavy image on tablet for simplicity, or adjust */
+            .about-grid { grid-template-columns: 1fr; gap: 40px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            
+            .mobile-toggle { display: block; }
+            .nav-menu-wrapper {
+                position: fixed;
+                top: 0; right: -100%;
+                width: 300px; height: 100vh;
+                background: var(--surface);
+                flex-direction: column;
+                padding: 100px 24px 24px;
+                transition: right 0.3s ease;
+                box-shadow: var(--shadow-xl);
+                z-index: 1000;
+            }
+            .nav-menu-wrapper.active { right: 0; }
+            .navbar-nav { flex-direction: column; align-items: flex-start; width: 100%; }
+            .nav-link { color: var(--ink); width: 100%; padding: 12px 0; }
+            .submenu > ul {
+                position: static;
+                opacity: 1; visibility: visible; transform: none;
+                box-shadow: none; border: none; padding-left: 16px;
+                display: none;
+            }
+            .submenu.active > ul { display: block; }
+            .header-btn { flex-direction: column; width: 100%; margin-left: 0; margin-top: 24px; }
+            .btn-login, .btn-signup { width: 100%; text-align: center; }
+            .btn-login { color: var(--ink); }
+        }
+        @media (max-width: 768px) {
+            .hero-text h1 { font-size: 36px; }
+            .section-header h2 { font-size: 32px; }
+            .services-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; gap: 32px; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+            .cta-content h2 { font-size: 32px; }
+            .cta-btns { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="{% url 'frontend:home' %}" class="logo">
+                <div class="logo-mark">W</div>
+                <span class="logo-text">Weatherbys</span>
+            </a>
+
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="nav-menu-wrapper" id="navMenu">
+                <ul class="navbar-nav" id="menu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'frontend:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'frontend:personal' %}">Personal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'frontend:corporate' %}">Corporate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'frontend:insurance' %}">Insurance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'frontend:mortgages' %}">Mortgages</a>
+                    </li>
+                    <li class="nav-item submenu" id="seftonDropdown">
+                        <a class="nav-link" href="#" style="display: flex; align-items: center; gap: 6px;">
+                            Sefton Savings <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+                        </a>
+                        <ul>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'frontend:savings' %}">Savings</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'frontend:loans' %}">Business Loans</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'frontend:cards' %}">Credit Cards</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'frontend:about' %}">About Us</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'frontend:contact' %}">Contact Us</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'frontend:privacy' %}">Privacy Policy</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'frontend:terms' %}">Terms Of Use</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="header-btn">
+                    <a href="{% url 'account:login' %}" class="btn-login">Login</a>
+                    <a href="{% url 'account:register' %}" class="btn-signup">Open An Account</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1>Banking Built for <span>Ambition</span></h1>
+                <p>Experience premium financial services tailored for modern lifestyles. From seamless daily banking to wealth management, Weatherbys Racing Bank empowers your financial future.</p>
+                <div class="hero-btns">
+                    <a href="{% url 'account:register' %}" class="btn btn-primary">Open an Account <i class="fas fa-arrow-right"></i></a>
+                    <a href="{% url 'frontend:about' %}" class="btn btn-outline">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1565514020179-026b92b84bb6?auto=format&fit=crop&q=80&w=800" alt="Modern Banking App">
+                <div class="hero-float-card card-1">
+                    <div class="hfc-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="hfc-text">
+                        <h4>Bank-Grade Security</h4>
+                        <p>256-bit encryption</p>
+                    </div>
+                </div>
+                <div class="hero-float-card card-2">
+                    <div class="hfc-icon" style="background: rgba(91,91,247,0.2); color: #5B5BF7;"><i class="fas fa-chart-line"></i></div>
+                    <div class="hfc-text">
+                        <h4>High-Yield Savings</h4>
+                        <p>Up to 4.5% APY</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Comprehensive Financial Solutions</h2>
+                <p>Whatever your financial goals, we have the tools, expertise, and dedication to help you achieve them.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="sc-icon"><i class="fas fa-user"></i></div>
+                    <h3>Personal Banking</h3>
+                    <p>Everyday accounts, debit cards, and personal loans designed for your lifestyle.</p>
+                    <a href="{% url 'frontend:personal' %}" class="service-link">Explore Personal <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="sc-icon" style="background: rgba(0,212,168,0.1); color: var(--accent);"><i class="fas fa-briefcase"></i></div>
+                    <h3>Corporate Banking</h3>
+                    <p>Scalable business accounts, treasury management, and commercial lending.</p>
+                    <a href="{% url 'frontend:corporate' %}" class="service-link">Explore Corporate <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="sc-icon" style="background: rgba(245,158,11,0.1); color: #D97706;"><i class="fas fa-umbrella"></i></div>
+                    <h3>Insurance</h3>
+                    <p>Protect what matters most with our comprehensive life, auto, and property insurance.</p>
+                    <a href="{% url 'frontend:insurance' %}" class="service-link">Explore Insurance <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="sc-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);"><i class="fas fa-home"></i></div>
+                    <h3>Mortgages</h3>
+                    <p>Competitive rates and flexible terms to help you secure your dream home.</p>
+                    <a href="{% url 'frontend:mortgages' %}" class="service-link">Explore Mortgages <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About / Why Us Section -->
+    <section class="section about-section">
+        <div class="container about-grid">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800" alt="Professional Team">
+                <div class="experience-badge">
+                    <h3>25+</h3>
+                    <p>Years of Excellence</p>
+                </div>
+            </div>
+            <div class="about-content">
+                <h2>Why Choose Weatherbys Racing Bank?</h2>
+                <p>We combine cutting-edge technology with personalized service to deliver a banking experience that truly puts you first. Our commitment to transparency and security is unmatched.</p>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="fi-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="fi-text">
+                            <h4>Lightning Fast Transfers</h4>
+                            <p>Send money locally or internationally in seconds with zero hidden fees.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="fi-text">
+                            <h4>Award-Winning Mobile App</h4>
+                            <p>Manage your entire financial life from the palm of your hand, 24/7.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-icon" style="background: rgba(245,158,11,0.1); color: #D97706;"><i class="fas fa-headset"></i></div>
+                        <div class="fi-text">
+                            <h4>Dedicated Support</h4>
+                            <p>Our expert team is available around the clock to assist you with any query.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="{% url 'frontend:about' %}" class="btn btn-dark">Discover Our Story <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>2M+</h3>
+                    <p>Active Customers</p>
+                </div>
+                <div class="stat-item">
+                    <h3>$50B+</h3>
+                    <p>Assets Under Management</p>
+                </div>
+                <div class="stat-item">
+                    <h3>150+</h3>
+                    <p>Countries Supported</p>
+                </div>
+                <div class="stat-item">
+                    <h3>99.9%</h3>
+                    <p>Uptime Guarantee</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container cta-content">
+            <h2>Ready to Elevate Your Banking?</h2>
+            <p>Join over 2 million customers who trust Weatherbys Racing Bank for their financial journey. Open your account in minutes.</p>
+            <div class="cta-btns">
+                <a href="{% url 'account:register' %}" class="btn btn-white">Open An Account <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'frontend:contact' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.5);">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="{% url 'frontend:home' %}" class="logo" style="margin-bottom: 16px;">
+                        <div class="logo-mark">W</div>
+                        <span class="logo-text">Weatherbys</span>
+                    </a>
+                    <p>Empowering your financial future with innovative, secure, and personalized banking solutions since 1999.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Banking</h4>
+                    <ul>
+                        <li><a href="{% url 'frontend:personal' %}">Personal</a></li>
+                        <li><a href="{% url 'frontend:corporate' %}">Corporate</a></li>
+                        <li><a href="{% url 'frontend:savings' %}">Savings</a></li>
+                        <li><a href="{% url 'frontend:loans' %}">Business Loans</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="{% url 'frontend:about' %}">About Us</a></li>
+                        <li><a href="{% url 'frontend:contact' %}">Contact Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="{% url 'frontend:privacy' %}">Privacy Policy</a></li>
+                        <li><a href="{% url 'frontend:terms' %}">Terms of Use</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Stay Updated</h4>
+                    <p style="font-size: 14px; margin-bottom: 12px;">Subscribe to our newsletter for financial tips and updates.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Weatherbys Racing Bank. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="{% url 'frontend:privacy' %}">Privacy</a>
+                    <a href="{% url 'frontend:terms' %}">Terms</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+        const seftonDropdown = document.getElementById('seftonDropdown');
+
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = mobileToggle.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.className = 'fas fa-times';
+            } else {
+                icon.className = 'fas fa-bars';
+            }
+        });
+
+        // Mobile dropdown toggle
+        seftonDropdown.addEventListener('click', (e) => {
+            if (window.innerWidth <= 991) {
+                e.preventDefault();
+                seftonDropdown.classList.toggle('active');
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+                mobileToggle.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+    </script>
+</body>
+</html>
