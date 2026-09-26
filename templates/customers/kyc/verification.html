@@ -1,0 +1,623 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}KYC Verification | Weatherbys Racing Bank{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Map Django default classes to our design system */
+.form-control, .form-select {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: var(--ink);
+    font-family: inherit;
+    transition: all 0.2s;
+    outline: none;
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.1);
+}
+.form-control::placeholder {
+    color: var(--muted-2);
+}
+textarea.form-control {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* KYC Page Layout */
+.kyc-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 24px;
+    align-items: start;
+}
+
+.kyc-section {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 24px;
+}
+.kyc-section-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line-2);
+}
+.kyc-section-head .ksh-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(91,91,247,0.1);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+}
+.kyc-section-head h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+}
+.kyc-section-head p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 4px 0 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+.form-grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+.form-grid.cols-1 {
+    grid-template-columns: 1fr;
+}
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.form-field.full {
+    grid-column: 1 / -1;
+}
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+}
+.form-label .req {
+    color: var(--danger);
+}
+
+/* File Upload UI */
+.file-upload-box {
+    border: 2px dashed var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface-2);
+}
+.file-upload-box:hover, .file-upload-box.dragover {
+    border-color: var(--primary);
+    background: rgba(91,91,247,0.04);
+}
+.file-upload-box .fub-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(91,91,247,0.1);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    margin: 0 auto 12px;
+}
+.file-upload-box .fub-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+.file-upload-box .fub-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+}
+.file-upload-box .fub-preview {
+    display: none;
+    margin-top: 12px;
+}
+.file-upload-box .fub-preview img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--line);
+}
+.file-upload-box .fub-preview .file-name {
+    font-size: 12px;
+    color: var(--ink-2);
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+/* Sidebar */
+.kyc-sidebar {
+    position: sticky;
+    top: 24px;
+}
+.kyc-progress-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+.kyc-progress-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 16px;
+}
+.progress-step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.progress-step:last-child {
+    margin-bottom: 0;
+}
+.progress-step .ps-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--line);
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.progress-step.active .ps-dot {
+    background: var(--primary);
+    color: #fff;
+}
+.progress-step .ps-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+    margin: 2px 0 0;
+}
+.progress-step .ps-desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 2px 0 0;
+}
+
+.kyc-info-card {
+    background: linear-gradient(135deg, rgba(91,91,247,0.06), rgba(124,58,237,0.06));
+    border: 1px solid rgba(91,91,247,0.15);
+    border-radius: 14px;
+    padding: 20px;
+}
+.kyc-info-card .kic-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(91,91,247,0.12);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+.kyc-info-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+.kyc-info-card p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 12px;
+    line-height: 1.5;
+}
+
+.kyc-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+.btn-kyc {
+    flex: 1;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    text-decoration: none;
+    border: none;
+}
+.btn-kyc.cancel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+}
+.btn-kyc.cancel:hover {
+    border-color: var(--ink-2);
+    background: var(--surface-2);
+}
+.btn-kyc.submit {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: #fff;
+    box-shadow: 0 8px 20px -6px rgba(91,91,247,0.5);
+}
+.btn-kyc.submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px -6px rgba(91,91,247,0.6);
+}
+
+@media (max-width: 1200px) {
+    .kyc-layout {
+        grid-template-columns: 1fr;
+    }
+    .kyc-sidebar {
+        position: static;
+        order: -1;
+    }
+}
+@media (max-width: 768px) {
+    .form-grid, .form-grid.cols-3 {
+        grid-template-columns: 1fr;
+    }
+    .kyc-actions {
+        flex-direction: column-reverse;
+    }
+    .btn-kyc {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>{% if is_edit %}Update{% else %}Complete{% endif %} KYC Verification</h1>
+        <p>Provide your details to verify your identity and unlock full account features.</p>
+    </div>
+</div>
+
+<!-- Django Messages -->
+{% include "../../components/messages.html" %}
+
+<form method="POST" enctype="multipart/form-data" id="kycForm">
+    {% csrf_token %}
+
+    <div class="kyc-layout">
+        <!-- Main Form -->
+        <div>
+
+            <!-- Section 1: Personal Details -->
+            <div class="kyc-section" id="section-personal">
+                <div class="kyc-section-head">
+                    <div class="ksh-icon"><i class="fas fa-user"></i></div>
+                    <div>
+                        <h3>Personal Information</h3>
+                        <p>Your legal identity details as they appear on your ID.</p>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label class="form-label">Title <span class="req">*</span></label>
+                        {{ form.title }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Gender <span class="req">*</span></label>
+                        {{ form.gender }}
+                    </div>
+                    <div class="form-field full">
+                        <label class="form-label">Full Legal Name <span class="req">*</span></label>
+                        {{ form.full_name }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Date of Birth <span class="req">*</span></label>
+                        {{ form.date_of_birth }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Nationality <span class="req">*</span></label>
+                        {{ form.nationality }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">State Security Number (SSN) <span class="req">*</span></label>
+                        {{ form.ssn }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Zipcode <span class="req">*</span></label>
+                        {{ form.zipcode }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Contact & Address -->
+            <div class="kyc-section" id="section-address">
+                <div class="kyc-section-head">
+                    <div class="ksh-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <h3>Contact & Address</h3>
+                        <p>Where we can reach you and your current residence.</p>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label class="form-label">Email Address <span class="req">*</span></label>
+                        {{ form.email }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Phone Number <span class="req">*</span></label>
+                        {{ form.phone }}
+                    </div>
+                    <div class="form-field full">
+                        <label class="form-label">Residential Address <span class="req">*</span></label>
+                        {{ form.address_line }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">City <span class="req">*</span></label>
+                        {{ form.city }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">State / Province <span class="req">*</span></label>
+                        {{ form.state }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Financial & Employment -->
+            <div class="kyc-section" id="section-financial">
+                <div class="kyc-section-head">
+                    <div class="ksh-icon"><i class="fas fa-briefcase"></i></div>
+                    <div>
+                        <h3>Employment & Financial</h3>
+                        <p>Helps us understand your banking needs and ensure compliance.</p>
+                    </div>
+                </div>
+                <div class="form-grid cols-3">
+                    <div class="form-field">
+                        <label class="form-label">Account Type <span class="req">*</span></label>
+                        {{ form.account_type }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Employment Status <span class="req">*</span></label>
+                        {{ form.employment_type }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Annual Income Range <span class="req">*</span></label>
+                        {{ form.annual_income_range }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Next of Kin -->
+            <div class="kyc-section" id="section-kin">
+                <div class="kyc-section-head">
+                    <div class="ksh-icon"><i class="fas fa-users"></i></div>
+                    <div>
+                        <h3>Next of Kin / Beneficiary</h3>
+                        <p>Emergency contact and primary beneficiary details.</p>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-field full">
+                        <label class="form-label">Beneficiary Legal Name <span class="req">*</span></label>
+                        {{ form.beneficiary_legal_name }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Relationship <span class="req">*</span></label>
+                        {{ form.relationship }}
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Age <span class="req">*</span></label>
+                        {{ form.age }}
+                    </div>
+                    <div class="form-field full">
+                        <label class="form-label">Beneficiary Address <span class="req">*</span></label>
+                        {{ form.next_of_kin_address }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Document Upload -->
+            <div class="kyc-section" id="section-docs">
+                <div class="kyc-section-head">
+                    <div class="ksh-icon"><i class="fas fa-id-card"></i></div>
+                    <div>
+                        <h3>Identity Verification</h3>
+                        <p>Upload clear photos of your government-issued ID and a selfie.</p>
+                    </div>
+                </div>
+                
+                <div class="form-grid cols-1" style="margin-bottom: 20px;">
+                    <div class="form-field">
+                        <label class="form-label">Document Type <span class="req">*</span></label>
+                        {{ form.document_type }}
+                    </div>
+                </div>
+
+                <div class="form-grid cols-3">
+                    <!-- Front Side -->
+                    <div class="form-field">
+                        <label class="form-label">ID Front Side <span class="req">*</span></label>
+                        <div class="file-upload-box" id="frontBox">
+                            <div class="fub-icon"><i class="fas fa-image"></i></div>
+                            <p class="fub-title">Click to upload</p>
+                            <p class="fub-sub">JPG, PNG (Max 5MB)</p>
+                        </div>
+                        {{ form.upload_front_side }}
+                    </div>
+
+                    <!-- Back Side -->
+                    <div class="form-field">
+                        <label class="form-label">ID Back Side <span class="req">*</span></label>
+                        <div class="file-upload-box" id="backBox">
+                            <div class="fub-icon"><i class="fas fa-image"></i></div>
+                            <p class="fub-title">Click to upload</p>
+                            <p class="fub-sub">JPG, PNG (Max 5MB)</p>
+                        </div>
+                        {{ form.upload_back_side }}
+                    </div>
+
+                    <!-- Passport Photo -->
+                    <div class="form-field">
+                        <label class="form-label">Passport Photo <span class="req">*</span></label>
+                        <div class="file-upload-box" id="photoBox">
+                            <div class="fub-icon"><i class="fas fa-user-circle"></i></div>
+                            <p class="fub-title">Click to upload</p>
+                            <p class="fub-sub">Clear face photo (Max 5MB)</p>
+                        </div>
+                        {{ form.passport_photograph }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="kyc-actions">
+                <a href="{% url 'customer:dashboard' %}" class="btn-kyc cancel">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Cancel</span>
+                </a>
+                <button type="submit" class="btn-kyc submit" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>{% if is_edit %}Update{% else %}Submit{% endif %} Verification</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <div class="kyc-sidebar">
+            <div class="kyc-progress-card">
+                <h3>Verification Steps</h3>
+                <div class="progress-step active">
+                    <div class="ps-dot">1</div>
+                    <div>
+                        <p class="ps-text">Personal Details</p>
+                        <p class="ps-desc">Legal name, DOB, SSN</p>
+                    </div>
+                </div>
+                <div class="progress-step active">
+                    <div class="ps-dot">2</div>
+                    <div>
+                        <p class="ps-text">Contact & Address</p>
+                        <p class="ps-desc">Current residence</p>
+                    </div>
+                </div>
+                <div class="progress-step active">
+                    <div class="ps-dot">3</div>
+                    <div>
+                        <p class="ps-text">Financial Info</p>
+                        <p class="ps-desc">Employment & income</p>
+                    </div>
+                </div>
+                <div class="progress-step active">
+                    <div class="ps-dot">4</div>
+                    <div>
+                        <p class="ps-text">Next of Kin</p>
+                        <p class="ps-desc">Emergency beneficiary</p>
+                    </div>
+                </div>
+                <div class="progress-step active">
+                    <div class="ps-dot">5</div>
+                    <div>
+                        <p class="ps-text">Document Upload</p>
+                        <p class="ps-desc">ID and selfie photo</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kyc-info-card">
+                <div class="kic-icon"><i class="fas fa-shield-alt"></i></div>
+                <h4>Secure & Encrypted</h4>
+                <p>Your documents are encrypted using bank-grade 256-bit SSL and are only used for identity verification. We never share your data with unauthorized third parties.</p>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== FILE UPLOAD UI LOGIC =====
+function setupFileUpload(inputId, boxId) {
+    const input = document.getElementById(inputId);
+    const box = document.getElementById(boxId);
+    if (!input || !box) return;
+
+    // Hide default Django input
+    input.style.display = 'none';
+
+    // Click box to trigger input
+    box.addEventListener('click', () => input.click());
+
+    // Handle file selection
+    input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File is too large. Maximum size is 5MB.');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                box.innerHTML = `
+                    <div class="fub-preview" style="display: block;">
+                        <img src="${e.target.result}" alt="Preview">
+                        <div class="file-name">${file.name}</div>
+                        <div style="font-size: 11px; color: var(--primary); margin-top: 4px; font-weight: 600;">
+                            <i class="fas fa-check-circle"></i> Uploaded · Click to change
+                        </div>
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+// Initialize all three upload boxes
+setupFileUpload('frontimg', 'frontBox');
+setupFileUpload('backimg', 'backBox');
+setupFileUpload('photo', 'photoBox');
+
+// ===== FORM SUBMIT =====
+document.getElementById('kycForm')?.addEventListener('submit', (e) => {
+    const btn = document.getElementById('submitBtn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Submitting...</span>';
+    btn.disabled = true;
+    // Let Django handle the rest
+});
+</script>
+{% endblock %}

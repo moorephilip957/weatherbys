@@ -14,12 +14,12 @@ def kyc_terms(request):
 
     return render(
         request,
-        'kyc/terms.html',
+        'customers/kyc/kyc_terms.html',
     )
 
 
-@kyc_block_if_approved
-@block_blocked_users
+# @kyc_block_if_approved
+# @block_blocked_users
 def kyc_verification(request):
 
     # try to get existing KYC (edit mode)
@@ -79,7 +79,7 @@ def kyc_verification(request):
     else:
         form = KYCVerificationForm(instance=kyc_instance)
 
-    return render(request, 'kyc/verification.html', {
+    return render(request, 'customers/kyc/verification.html', {
         'form': form,
         'is_edit': is_edit
     })

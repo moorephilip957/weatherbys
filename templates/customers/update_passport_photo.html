@@ -1,0 +1,361 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}Update Profile Picture | Weatherbys Racing Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers/partials/profile_photo.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1>Update Profile Picture</h1>
+        <p>Upload a clear photo of yourself for identity verification</p>
+    </div>
+</div>
+
+<!-- Django Messages -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="loan-alert" style="margin-bottom: 24px; {% if message.tags == 'error' %}border-left-color: var(--danger);{% endif %}">
+            <div class="la-icon" style="{% if message.tags == 'error' %}background: rgba(244,63,94,0.12); color: var(--danger);{% else %}background: rgba(0,212,168,0.12); color: #059669;{% endif %}">
+                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %}"></i>
+            </div>
+            <div class="la-content">
+                <p class="la-title">{{ message }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data" id="photoForm">
+    {% csrf_token %}
+
+    <div class="photo-update-layout">
+
+        <!-- Main Upload Area -->
+        <div>
+
+            <!-- Current Photo Display -->
+            <div class="photo-card">
+                <div class="photo-card-head">
+                    <h3><i class="fas fa-user-circle"></i> Your profile picture</h3>
+                    <span class="photo-status {% if kyc.passport_photograph %}uploaded{% else %}pending{% endif %}">
+                        <i class="fas fa-{% if kyc.passport_photograph %}check-circle{% else %}clock{% endif %}"></i>
+                        <span>{% if kyc.passport_photograph %}Photo uploaded{% else %}No photo yet{% endif %}</span>
+                    </span>
+                </div>
+
+                <!-- Preview Container -->
+                <div class="photo-preview-container">
+                    <div class="photo-preview" id="photoPreview">
+                        {% if kyc.passport_photograph %}
+                            <img src="{{ kyc.passport_photograph.url }}" alt="Current photo" id="previewImage">
+                        {% else %}
+                            <div class="photo-placeholder" id="photoPlaceholder">
+                                <i class="fas fa-user"></i>
+                                <p>No photo uploaded</p>
+                            </div>
+                            <img src="" alt="New photo" id="previewImage" style="display: none;">
+                        {% endif %}
+                    </div>
+
+                    <!-- Overlay Actions (shown on hover when photo exists) -->
+                    {% if kyc.passport_photograph %}
+                    <div class="photo-overlay" id="photoOverlay">
+                        <button type="button" class="photo-overlay-btn" id="changePhotoBtn">
+                            <i class="fas fa-camera"></i>
+                            <span>Change photo</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Upload Area -->
+                <div class="photo-upload-area" id="uploadArea">
+                    <div class="pua-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <p class="pua-title">Drag & drop your photo here</p>
+                    <p class="pua-sub">or click to browse your files</p>
+                    <button type="button" class="pua-btn" id="browseBtn">
+                        <i class="fas fa-folder-open"></i>
+                        <span>Choose file</span>
+                    </button>
+                    <!-- Hidden Django file input -->
+                    {{ form.passport_photograph }}
+                </div>
+
+                <!-- Selected File Info -->
+                <div class="photo-file-info" id="fileInfo" style="display: none;">
+                    <div class="pfi-left">
+                        <div class="pfi-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="pfi-details">
+                            <p class="pfi-name" id="fileName">photo.jpg</p>
+                            <p class="pfi-size" id="fileSize">2.4 MB</p>
+                        </div>
+                    </div>
+                    <button type="button" class="pfi-remove" id="removeFileBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Validation Error -->
+                <div class="photo-error" id="photoError" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Invalid file</span>
+                </div>
+
+                <!-- Requirements -->
+                <div class="photo-requirements">
+                    <h4><i class="fas fa-info-circle"></i> Photo requirements</h4>
+                    <div class="requirements-grid">
+                        <div class="req-item">
+                            <i class="fas fa-check"></i>
+                            <span>Clear, well-lit face photo</span>
+                        </div>
+                        <div class="req-item">
+                            <i class="fas fa-check"></i>
+                            <span>JPG, PNG, or JPEG format</span>
+                        </div>
+                        <div class="req-item">
+                            <i class="fas fa-check"></i>
+                            <span>Maximum 5MB file size</span>
+                        </div>
+                        <div class="req-item">
+                            <i class="fas fa-check"></i>
+                            <span>Front-facing, neutral expression</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="photo-actions">
+                <a href="{% url 'customer:settings' %}" class="btn-security cancel">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Cancel</span>
+                </a>
+                <button type="submit" class="btn-security submit" id="uploadBtn" disabled>
+                    <i class="fas fa-upload"></i>
+                    <span>Upload photo</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <div class="photo-sidebar">
+
+            <!-- Tips Card -->
+            <div class="photo-tips-card">
+                <h3><i class="fas fa-lightbulb"></i> Tips for a great photo</h3>
+                <div class="tip-item">
+                    <div class="ti-icon"><i class="fas fa-check"></i></div>
+                    <p class="ti-text">
+                        <strong>Good lighting</strong>
+                        Face a window or use even, natural lighting
+                    </p>
+                </div>
+                <div class="tip-item">
+                    <div class="ti-icon"><i class="fas fa-check"></i></div>
+                    <p class="ti-text">
+                        <strong>Plain background</strong>
+                        Use a plain white or light-colored wall
+                    </p>
+                </div>
+                <div class="tip-item">
+                    <div class="ti-icon"><i class="fas fa-check"></i></div>
+                    <p class="ti-text">
+                        <strong>Centered face</strong>
+                        Position your face in the center of the frame
+                    </p>
+                </div>
+                <div class="tip-item">
+                    <div class="ti-icon"><i class="fas fa-check"></i></div>
+                    <p class="ti-text">
+                        <strong>No accessories</strong>
+                        Remove sunglasses, hats, or masks
+                    </p>
+                </div>
+                <div class="tip-item">
+                    <div class="ti-icon"><i class="fas fa-times" style="color: var(--danger);"></i></div>
+                    <p class="ti-text">
+                        <strong>Avoid these</strong>
+                        Blurry photos, group photos, or selfies with filters
+                    </p>
+                </div>
+            </div>
+
+            <!-- Privacy Card -->
+            <div class="photo-privacy-card">
+                <div class="ppc-icon"><i class="fas fa-shield-alt"></i></div>
+                <h4>Your privacy matters</h4>
+                <p>Your photo is encrypted and stored securely. It's only used for identity verification and is never shared with third parties.</p>
+                <a href="#" class="ppc-link">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Learn more about our privacy policy</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('id_passport_photograph');
+    const browseBtn = document.getElementById('browseBtn');
+    const changePhotoBtn = document.getElementById('changePhotoBtn');
+    const previewImage = document.getElementById('previewImage');
+    const photoPlaceholder = document.getElementById('photoPlaceholder');
+    const photoOverlay = document.getElementById('photoOverlay');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const removeFileBtn = document.getElementById('removeFileBtn');
+    const photoError = document.getElementById('photoError');
+    const errorText = document.getElementById('errorText');
+    const uploadBtn = document.getElementById('uploadBtn');
+
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+
+    // Hide the default Django file input
+    if (fileInput) fileInput.style.display = 'none';
+
+    // ===== CLICK HANDLERS =====
+    browseBtn?.addEventListener('click', () => fileInput?.click());
+    changePhotoBtn?.addEventListener('click', () => fileInput?.click());
+    uploadArea?.addEventListener('click', (e) => {
+        if (e.target === uploadArea || e.target.closest('.pua-icon') || e.target.closest('.pua-title') || e.target.closest('.pua-sub')) {
+            fileInput?.click();
+        }
+    });
+
+    // ===== DRAG & DROP =====
+    ['dragenter', 'dragover'].forEach(evt => {
+        uploadArea?.addEventListener(evt, (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(evt => {
+        uploadArea?.addEventListener(evt, (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+        });
+    });
+
+    uploadArea?.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFile(files[0]);
+        }
+    });
+
+    // ===== FILE INPUT CHANGE =====
+    fileInput?.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFile(e.target.files[0]);
+        }
+    });
+
+    // ===== HANDLE FILE =====
+    function handleFile(file) {
+        // Reset error state
+        photoError.style.display = 'none';
+
+        // Validate type
+        if (!ALLOWED_TYPES.includes(file.type)) {
+            showError('Invalid file type. Please upload a JPG, JPEG, or PNG image.');
+            return;
+        }
+
+        // Validate size
+        if (file.size > MAX_SIZE) {
+            showError(`File too large. Maximum size is 5MB. Your file is ${formatSize(file.size)}.`);
+            return;
+        }
+
+        // Validate it's actually an image
+        if (!file.type.startsWith('image/')) {
+            showError('Please upload a valid image file.');
+            return;
+        }
+
+        // Show file info
+        fileName.textContent = file.name;
+        fileSize.textContent = formatSize(file.size);
+        fileInfo.style.display = 'flex';
+
+        // Preview the image
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            previewImage.style.display = 'block';
+            if (photoPlaceholder) photoPlaceholder.style.display = 'none';
+            if (photoOverlay) photoOverlay.style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
+
+        // Enable upload button
+        uploadBtn.disabled = false;
+    }
+
+    // ===== REMOVE FILE =====
+    removeFileBtn?.addEventListener('click', () => {
+        fileInput.value = '';
+        fileInfo.style.display = 'none';
+        photoError.style.display = 'none';
+
+        // If there was no original photo, show placeholder
+        {% if not kyc.passport_photograph %}
+            previewImage.style.display = 'none';
+            previewImage.src = '';
+            if (photoPlaceholder) photoPlaceholder.style.display = 'grid';
+            if (photoOverlay) photoOverlay.style.display = 'none';
+        {% else %}
+            // Restore original photo
+            previewImage.src = '{{ kyc.passport_photograph.url }}';
+        {% endif %}
+
+        uploadBtn.disabled = true;
+    });
+
+    // ===== HELPERS =====
+    function showError(message) {
+        errorText.textContent = message;
+        photoError.style.display = 'flex';
+        fileInfo.style.display = 'none';
+        uploadBtn.disabled = true;
+        if (fileInput) fileInput.value = '';
+    }
+
+    function formatSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+
+    // ===== FORM SUBMIT =====
+    document.getElementById('photoForm')?.addEventListener('submit', (e) => {
+        if (!fileInput || !fileInput.files.length) {
+            e.preventDefault();
+            showError('Please select a photo to upload.');
+            return;
+        }
+        uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Uploading...</span>';
+        uploadBtn.disabled = true;
+    });
+});
+</script>
+{% endblock %}

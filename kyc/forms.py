@@ -150,6 +150,37 @@ class KYCVerificationForm(forms.ModelForm):
 
 
 class PassportPhotoForm(forms.ModelForm):
+
     class Meta:
         model = KYCVerification
         fields = ["passport_photograph"]
+
+        widgets = {
+            "passport_photograph": forms.ClearableFileInput(
+                attrs={
+                    "id": "id_passport_photograph",
+                    "accept": "image/jpeg,image/jpg,image/png",
+                    "style": "display: none;",
+                }
+            )
+        }
+
+    def clean_passport_photograph(self):
+
+        photo = self.cleaned_data.get("passport_photograph")
+
+        if photo:
+            # Validate file size (5MB max)
+            if photo.size > 5 * 1024 * 1024:
+                raise forms.ValidationError(
+                    "File size must be under 5MB."
+                )
+
+            # Validate file type
+            allowed_types = ["image/jpeg", "image/jpg", "image/png"]
+            if photo.content_type not in allowed_types:
+                raise forms.ValidationError(
+                    "Only JPG, JPEG, and PNG files are allowed."
+                )
+
+        return photo

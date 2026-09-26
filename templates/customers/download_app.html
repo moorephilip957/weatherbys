@@ -1,6 +1,6 @@
 {% extends './base.html' %}
 {% load static %}
-{% block title %}Download App | Hampdens Bank{% endblock %}
+{% block title %}Download App | Weatherbys Racing Bank{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'customers/partials/download_app.css' %}">
@@ -11,7 +11,7 @@
 <div class="page-header">
     <div>
         <h1>Download the App</h1>
-        <p>Bank anywhere, anytime with the Hampdens Bank app</p>
+        <p>Bank anywhere, anytime with the Weatherbys Racing Bank app</p>
     </div>
 </div>
 
@@ -23,7 +23,7 @@
                 <span class="dot-live"></span>
                 <span id="detectedText">Detecting your device...</span>
             </div>
-            <h1>Install <span class="gradient-text">Hampdens Bank</span> on your device</h1>
+            <h1>Install <span class="gradient-text">Weatherbys Racing Bank</span> on your device</h1>
             <p>Get the full banking experience with our Progressive Web App. No app store needed — install directly from your browser in seconds.</p>
 
             <button class="download-btn-primary" id="main-install-button">
@@ -59,8 +59,8 @@
         <div class="device-mockup">
             <div class="device-phone">
                 <div class="device-screen">
-                    <div class="app-logo">H</div>
-                    <div class="app-name">Hampdens</div>
+                    <div class="app-logo">WRB</div>
+                    <div class="app-name">Weatherbys</div>
                     <div class="app-tag">Banking · Reimagined</div>
                     <div class="mini-balance">
                         Available balance
@@ -80,7 +80,7 @@
 <div class="qr-section">
     <div class="qr-wrap">
         <!-- Replace with your actual app URL -->
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://app.hampdensbank.com" alt="Install QR Code">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://weatherbysonline.com" alt="Install QR Code">
         <div class="qr-logo">H</div>
     </div>
     <div class="qr-section-text">
@@ -88,7 +88,7 @@
         <p>Open your phone's camera app and point it at the QR code. You'll be taken directly to the install page. Works on both iOS and Android.</p>
         <div class="qr-url-box">
             <i class="fas fa-link" style="color: var(--muted);"></i>
-            <span>https://app.hampdensbank.com</span>
+            <span>https://Weatherbysonline.com</span>
             <button class="copy-url-btn" id="copyUrlBtn">
                 <i class="far fa-copy"></i>
                 <span>Copy</span>
@@ -147,7 +147,7 @@
                 <div class="step-number">2</div>
                 <div class="step-content">
                     <p class="step-title">Navigate to our website</p>
-                    <p class="step-desc">Go to <code>app.hampdensbank.com</code> in the Safari address bar and wait for the page to fully load.</p>
+                    <p class="step-desc">Go to <code>weatherbysonline.com</code> in the Safari address bar and wait for the page to fully load.</p>
                 </div>
             </div>
             <div class="step-item">
@@ -197,7 +197,7 @@
                 <div class="step-number">2</div>
                 <div class="step-content">
                     <p class="step-title">Visit our website</p>
-                    <p class="step-desc">Navigate to <code>app.hampdensbank.com</code> and wait for the page to fully load.</p>
+                    <p class="step-desc">Navigate to <code>weatherbysonline.com</code> and wait for the page to fully load.</p>
                 </div>
             </div>
             <div class="step-item">
@@ -254,7 +254,7 @@
                 <div class="step-number">2</div>
                 <div class="step-content">
                     <p class="step-title">Visit our website</p>
-                    <p class="step-desc">Go to <code>app.hampdensbank.com</code> and wait for the page to fully load.</p>
+                    <p class="step-desc">Go to <code>weatherbysonline.com</code> and wait for the page to fully load.</p>
                 </div>
             </div>
             <div class="step-item">
@@ -311,7 +311,7 @@
                 <div class="step-number">2</div>
                 <div class="step-content">
                     <p class="step-title">Visit our website</p>
-                    <p class="step-desc">Navigate to <code>app.hampdensbank.com</code> and wait for the page to fully load.</p>
+                    <p class="step-desc">Navigate to <code>weatherbysonline.com</code> and wait for the page to fully load.</p>
                 </div>
             </div>
             <div class="step-item">
@@ -403,7 +403,7 @@
             <span class="faq-toggle"><i class="fas fa-plus"></i></span>
         </div>
         <div class="faq-answer">
-            Very little! The Hampdens Bank app uses less than 5MB of storage — compared to 100-300MB for traditional banking apps. It intelligently caches only what you need.
+            Very little! The Weatherbys Racing Bank app uses less than 5MB of storage — compared to 100-300MB for traditional banking apps. It intelligently caches only what you need.
         </div>
     </div>
 
@@ -565,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 8. Copy URL functionality
     document.getElementById('copyUrlBtn')?.addEventListener('click', function() {
-        const url = 'https://app.hampdensbank.com'; // Replace with your actual URL
+        const url = 'https://weatherbysonline.com'; // Replace with your actual URL
         navigator.clipboard.writeText(url).then(() => {
             const original = this.innerHTML;
             this.innerHTML = '<i class="fas fa-check"></i> <span>Copied!</span>';

@@ -1,0 +1,230 @@
+{% extends '../base.html' %}
+
+{% block title %}KYC Verification Terms | Weatherbys Racing Bank{% endblock %}
+
+{% block content %}
+<div class="kyc-terms-page">
+
+    <!-- Header -->
+    <div class="kyc-header">
+        <div class="kyc-header-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <h1>KYC Verification Terms</h1>
+        <p>Welcome to Weatherbys Racing Bank. To comply with international financial regulations and ensure the security of your account, we require all users to complete a Know Your Customer (KYC) verification process.</p>
+    </div>
+
+    <!-- Terms Content Card -->
+    <div class="kyc-terms-card">
+        <div class="terms-section">
+            <h3><i class="fas fa-database"></i> 1. Information We Collect</h3>
+            <p>By proceeding with the KYC process, you agree to provide accurate and up-to-date personal information, including but not limited to your full legal name, date of birth, residential address, contact details, and a valid government-issued identification document (e.g., Passport, National ID, or Driver's License).</p>
+        </div>
+
+        <div class="terms-section">
+            <h3><i class="fas fa-search"></i> 2. Purpose of Verification</h3>
+            <p>The information collected is used strictly for identity verification, fraud prevention, and compliance with Anti-Money Laundering (AML) and Counter-Terrorist Financing (CTF) regulations. Weatherbys Racing Bank is committed to maintaining the highest standards of financial security.</p>
+        </div>
+
+        <div class="terms-section">
+            <h3><i class="fas fa-lock"></i> 3. Data Privacy & Security</h3>
+            <p>Your personal data is encrypted, stored securely, and handled in strict accordance with our Privacy Policy and applicable data protection laws (such as GDPR). We do not sell, share, or distribute your personal information to unauthorized third parties.</p>
+        </div>
+
+        <div class="terms-section">
+            <h3><i class="fas fa-exclamation-circle"></i> 4. Accuracy of Information</h3>
+            <p>You confirm that all information provided during this process is true, accurate, and complete. Providing false, misleading, or forged documents may result in the immediate suspension or termination of your account, and may be reported to relevant authorities.</p>
+        </div>
+
+        <div class="terms-section">
+            <h3><i class="fas fa-check-double"></i> 5. Your Consent</h3>
+            <p>By clicking "I Agree & Continue", you acknowledge that you have read, understood, and agree to these KYC Terms and Conditions, and you consent to Weatherbys Racing Bank processing your personal data for verification purposes.</p>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="kyc-actions">
+        <a href="{% url 'account:logout' %}" class="kyc-btn secondary">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Log Out</span>
+        </a>
+        <a href="{% url 'kyc:kyc_verification' %}" class="kyc-btn primary">
+            <span>I Agree & Continue</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="kyc-footer-note">
+        <i class="fas fa-info-circle"></i>
+        <span>Need help? <a href="{% url 'support:create_ticket' %}">Contact our support team</a> for assistance.</span>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== KYC TERMS PAGE ===== */
+.kyc-terms-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.kyc-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+.kyc-header-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(91,91,247,0.1), rgba(124,58,237,0.1));
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    margin: 0 auto 16px;
+    border: 1px solid rgba(91,91,247,0.2);
+}
+.kyc-header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 12px;
+    color: var(--ink);
+}
+.kyc-header p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.kyc-terms-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 32px;
+    margin-bottom: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Custom scrollbar for terms card */
+.kyc-terms-card::-webkit-scrollbar {
+    width: 6px;
+}
+.kyc-terms-card::-webkit-scrollbar-track {
+    background: transparent;
+}
+.kyc-terms-card::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 100px;
+}
+
+.terms-section {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line-2);
+}
+.terms-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.terms-section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.terms-section h3 i {
+    color: var(--primary);
+    font-size: 14px;
+}
+.terms-section p {
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.kyc-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.kyc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+.kyc-btn.primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: #fff;
+    box-shadow: 0 8px 20px -6px rgba(91,91,247,0.5);
+}
+.kyc-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -6px rgba(91,91,247,0.6);
+    color: #fff;
+}
+.kyc-btn.secondary {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+}
+.kyc-btn.secondary:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(244,63,94,0.04);
+}
+
+.kyc-footer-note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.kyc-footer-note a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+.kyc-footer-note a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .kyc-terms-card {
+        padding: 20px;
+        max-height: 50vh;
+    }
+    .kyc-actions {
+        flex-direction: column-reverse;
+    }
+    .kyc-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}

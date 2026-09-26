@@ -79,7 +79,7 @@ def dashboard(request):
         DebitCard.objects.filter(
             account=bank_account
         )
-        .order_by('-created_at')[:3]
+        .order_by('-created_at')[:1]
     )
 
     # --- NEW ADDITIONS ---
@@ -525,6 +525,7 @@ def update_passport_photo(request):
     kyc = get_object_or_404(KYCVerification, user=request.user)
 
     if request.method == "POST":
+
         form = PassportPhotoForm(
             request.POST,
             request.FILES,
@@ -532,6 +533,7 @@ def update_passport_photo(request):
         )
 
         if form.is_valid():
+
             form.save()
 
             messages.success(
@@ -539,8 +541,22 @@ def update_passport_photo(request):
                 "Profile picture updated successfully."
             )
 
-            return redirect("customer:settings")  # change to your profile view
+            return redirect("customer:settings")
 
-        messages.error(request, "Failed to update profile picture.")
+        else:
+            messages.error(
+                request,
+                "Failed to update profile picture. Please check the file and try again."
+            )
 
-    return redirect("customer:settings")
+    else:
+        form = PassportPhotoForm(instance=kyc)
+
+    return render(
+        request,
+        "customers/update_passport_photo.html",
+        {
+            "form": form,
+            "kyc": kyc,
+        }
+    )

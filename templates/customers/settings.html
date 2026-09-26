@@ -1,10 +1,94 @@
 {% extends './base.html' %}
 {% load static %}
 
-{% block title %}My Profile | Hampdens Bank{% endblock %}
+{% block title %}My Profile | Weatherbys Racing Bank{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'customers/partials/profile.css' %}">
+
+<style>
+/* Avatar Link Wrapper */
+.profile-avatar-link {
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+}
+
+/* Main Avatar Circle */
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F59E0B, #F43F5E);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 44px;
+    font-weight: 800;
+    position: relative;
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.1), 0 20px 40px -10px rgba(0,0,0,0.3);
+    overflow: hidden; /* CRITICAL: Keeps the image perfectly inside the circle */
+    transition: box-shadow 0.3s ease;
+}
+
+/* Profile Image Styling */
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image covers the circle without stretching */
+    display: block;
+}
+
+/* Hover Effect on Avatar */
+.profile-avatar-wrap:hover .profile-avatar {
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.4), 0 20px 40px -10px rgba(0,0,0,0.4);
+}
+
+/* Edit Camera Button */
+.profile-avatar-edit {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    border: 3px solid #fff; /* White border for better contrast */
+    opacity: 0;
+    transition: all 0.25s ease;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Show Edit Button on Hover */
+.profile-avatar-wrap:hover .profile-avatar-edit {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Verified Status Badge */
+.profile-avatar-status {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #059669;
+    border: 3px solid #0A0E1A;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 11px;
+    z-index: 3;
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -19,10 +103,22 @@
 <!-- Profile Header -->
 <div class="profile-header">
     <div class="profile-header-content">
+        <!-- Replace the profile-avatar-wrap div with this -->
         <div class="profile-avatar-wrap">
-            <div class="profile-avatar">
-                {{ user.first_name|default:user.username|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
-            </div>
+            <a href="{% url 'customer:update_passport_photo' %}" class="profile-avatar-link">
+                <div class="profile-avatar">
+                    {% with kyc=user.kycverification %}
+                        {% if kyc and kyc.passport_photograph %}
+                            <img src="{{ kyc.passport_photograph.url }}" alt="Profile Picture">
+                        {% else %}
+                            {{ user.first_name|default:user.username|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                <div class="profile-avatar-edit">
+                    <i class="fas fa-camera"></i>
+                </div>
+            </a>
             <div class="profile-avatar-status">
                 <i class="fas fa-check"></i>
             </div>
