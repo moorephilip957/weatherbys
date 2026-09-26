@@ -1,7 +1,7 @@
 {% extends '../base.html' %}
 {% load static %}
 
-{% block title %}Ticket #TKT-847291 | Hampdens Bank{% endblock %}
+{% block title %}Ticket #{{ ticket.reference_id }} | Hampdens Bank{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'customers/partials/local_transfer.css' %}">
@@ -9,6 +9,20 @@
 {% endblock %}
 
 {% block content %}
+<!-- Django Flash Messages -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="loan-alert" style="margin-bottom: 16px; {% if message.tags == 'error' %}border-left-color: var(--danger);{% endif %}">
+            <div class="la-icon" style="{% if message.tags == 'error' %}background: rgba(244,63,94,0.12); color: var(--danger);{% else %}background: rgba(0,212,168,0.12); color: #059669;{% endif %}">
+                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %}"></i>
+            </div>
+            <div class="la-content">
+                <p class="la-title">{{ message }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <!-- Chat Layout -->
 <div class="ticket-detail-layout">
 
@@ -17,21 +31,32 @@
 
         <!-- Chat Header -->
         <div class="chat-header">
-            <a href="#" class="ch-back" title="Back to tickets">
+            <a href="{% url 'support:tickets' %}" class="ch-back" title="Back to tickets">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div class="ch-info">
-                <h3 class="ch-subject">Unable to complete international wire transfer</h3>
+                <h3 class="ch-subject">{{ ticket.subject }}</h3>
                 <p class="ch-meta">
-                    <span>#TKT-847291</span>
+                    <span>#{{ ticket.reference_id }}</span>
                     <span class="separator"></span>
-                    <span class="tli-status open" style="padding: 2px 8px; font-size: 10px;"><span class="ts-dot"></span> Open</span>
+                    <span class="tli-status {{ ticket.status }}" style="padding: 2px 8px; font-size: 10px;">
+                        <span class="ts-dot"></span> {{ ticket.get_status_display }}
+                    </span>
                     <span class="separator"></span>
-                    <span>High priority</span>
+                    <span class="priority-badge {{ ticket.priority }}" style="padding: 2px 8px; font-size: 10px;">
+                        {% if ticket.priority == 'high' %}
+                            <i class="fas fa-bolt"></i>
+                        {% elif ticket.priority == 'medium' %}
+                            <i class="fas fa-exclamation"></i>
+                        {% else %}
+                            <i class="fas fa-flag"></i>
+                        {% endif %}
+                        {{ ticket.get_priority_display }}
+                    </span>
                 </p>
             </div>
             <div class="ch-actions">
-                <button class="ch-action-btn" title="Mark as resolved">
+                <button class="ch-action-btn" title="Mark as resolved" onclick="alert('Contact support to resolve this ticket')">
                     <i class="fas fa-check"></i>
                 </button>
                 <button class="ch-action-btn" title="More options">
@@ -43,173 +68,125 @@
         <!-- Chat Messages -->
         <div class="chat-messages" id="chatMessages">
 
-            <!-- System Message -->
+            <!-- System Message: Ticket Created -->
             <div class="chat-system">
                 <i class="fas fa-ticket-alt"></i>
-                <span>Ticket <strong>#TKT-847291</strong> created · Sep 24, 2026 at 09:12 AM</span>
+                <span>Ticket <strong>#{{ ticket.reference_id }}</strong> created · {{ ticket.created_at|date:"M d, Y \a\t h:i A" }}</span>
             </div>
 
-            <!-- Date Divider -->
-            <div class="chat-date-divider">
-                <span>Today</span>
-            </div>
+            {% for msg in ticket_messages %}
 
-            <!-- User Message 1 -->
-            <div class="chat-message user">
-                <div class="chat-avatar user">AK</div>
-                <div class="chat-bubble">
-                    <div class="cb-sender">Alex Kim</div>
-                    <p class="cb-text">Hi, I've been trying to send an international wire transfer to my supplier in Germany for the past 2 hours but I keep getting an error message saying "Transaction could not be processed".
-
-I've double-checked all the details (IBAN, SWIFT code, recipient name) and everything seems correct. My account has sufficient funds.
-
-Can you please help me figure out what's going wrong?</p>
-                    <div class="cb-time">
-                        09:12 AM
-                        <i class="fas fa-check-double read-receipt read"></i>
+                {% comment %} Date divider when date changes {% endcomment %}
+                {% ifchanged msg.created_at|date:"Y-m-d" %}
+                    <div class="chat-date-divider">
+                        <span>
+                            {% if msg.created_at|date:"Y-m-d" == today_date %}
+                                Today
+                            {% elif msg.created_at|date:"Y-m-d" == yesterday_date %}
+                                Yesterday
+                            {% else %}
+                                {{ msg.created_at|date:"l, M d, Y" }}
+                            {% endif %}
+                        </span>
                     </div>
-                </div>
-            </div>
+                {% endifchanged %}
 
-            <!-- User Message 2 (Attachment) -->
-            <div class="chat-message user">
-                <div class="chat-avatar user">AK</div>
-                <div class="chat-bubble">
-                    <p class="cb-text">Here's a screenshot of the error I'm seeing:</p>
-                    <div class="chat-attachment">
-                        <div class="ca-icon"><i class="fas fa-image"></i></div>
-                        <div class="ca-info">
-                            <p class="ca-name">error-screenshot.png</p>
-                            <p class="ca-size">245 KB</p>
+                <!-- Message Bubble -->
+                <div class="chat-message {% if msg.sender == 'user' %}user{% else %}support{% endif %}">
+                    <div class="chat-avatar {% if msg.sender == 'user' %}user{% else %}support{% endif %}">
+                        {% if msg.sender == 'user' %}
+                            {{ request.user.first_name|default:ticket.name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
+                        {% else %}
+                            <i class="fas fa-headset" style="font-size: 14px;"></i>
+                        {% endif %}
+                    </div>
+                    <div class="chat-bubble">
+                        {% if msg.sender != 'user' %}
+                            <div class="cb-sender">Support Team</div>
+                        {% endif %}
+                        <p class="cb-text">{{ msg.content|linebreaksbr }}</p>
+
+                        {% if msg.attachment %}
+                        <a href="{{ msg.attachment.url }}" target="_blank" class="chat-attachment">
+                            <div class="ca-icon">
+                                <i class="fas fa-{% if '.pdf' in msg.attachment.name %}file-pdf{% elif '.png' in msg.attachment.name or '.jpg' in msg.attachment.name %}image{% else %}file{% endif %}"></i>
+                            </div>
+                            <div class="ca-info">
+                                <p class="ca-name">{{ msg.attachment.name|cut:"ticket_messages/" }}</p>
+                                <p class="ca-size">{{ msg.attachment.size|filesizeformat }}</p>
+                            </div>
+                            <i class="fas fa-download ca-download"></i>
+                        </a>
+                        {% endif %}
+
+                        <div class="cb-time">
+                            {{ msg.created_at|date:"h:i A" }}
+                            {% if msg.sender == 'user' %}
+                                <i class="fas fa-check-double read-receipt read"></i>
+                            {% endif %}
                         </div>
-                        <i class="fas fa-download ca-download"></i>
-                    </div>
-                    <div class="cb-time">
-                        09:14 AM
-                        <i class="fas fa-check-double read-receipt read"></i>
                     </div>
                 </div>
-            </div>
 
-            <!-- System: Agent assigned -->
-            <div class="chat-system">
-                <i class="fas fa-user-check"></i>
-                <span><strong>Sarah Johnson</strong> from Support joined the conversation</span>
-            </div>
-
-            <!-- Support Message 1 -->
-            <div class="chat-message support">
-                <div class="chat-avatar support">SJ</div>
-                <div class="chat-bubble">
-                    <div class="cb-sender">Sarah Johnson · Support</div>
-                    <p class="cb-text">Hi Alex! Thank you for reaching out, and I'm sorry you're experiencing this issue. I can see the failed attempts on your account.
-
-Looking at the screenshot, it appears the issue is related to the recipient bank's compliance requirements. For transfers to Germany over €10,000, additional verification is required.
-
-Could you please confirm:
-1. The purpose of this transfer (business, personal, etc.)
-2. Your relationship with the recipient
-3. The source of funds for this transfer
-
-Once I have this information, I can help get this resolved for you.</p>
-                    <div class="cb-time">09:18 AM</div>
-                </div>
-            </div>
-
-            <!-- User Message 3 -->
-            <div class="chat-message user">
-                <div class="chat-avatar user">AK</div>
-                <div class="chat-bubble">
-                    <p class="cb-text">Thanks for the quick response, Sarah!
-
-1. This is a business payment for consulting services
-2. The recipient is my business partner at TechConsult GmbH
-3. The funds are from my business account balance
-
-Is there any additional documentation you need from me?</p>
-                    <div class="cb-time">
-                        09:22 AM
-                        <i class="fas fa-check-double read-receipt read"></i>
+            {% empty %}
+                <!-- Fallback: show ticket's initial message if no TicketMessage records -->
+                <div class="chat-message user">
+                    <div class="chat-avatar user">
+                        {{ request.user.first_name|default:ticket.name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
                     </div>
-                </div>
-            </div>
-
-            <!-- Support Message 2 -->
-            <div class="chat-message support">
-                <div class="chat-avatar support">SJ</div>
-                <div class="chat-bubble">
-                    <p class="cb-text">Perfect, thank you for that information! 
-
-For business transfers of this amount, we'll need a copy of the invoice or contract with your business partner. I've sent you a secure document upload link via email — you can upload the document there.
-
-Once I receive it, I'll manually approve the transfer and it should go through within 1-2 business hours.
-
-In the meantime, I've also flagged your account so future transfers to this recipient will be smoother.</p>
-                    <div class="cb-time">09:26 AM</div>
-                </div>
-            </div>
-
-            <!-- Support Message 3 (Attachment) -->
-            <div class="chat-message support">
-                <div class="chat-avatar support">SJ</div>
-                <div class="chat-bubble">
-                    <p class="cb-text">Here's a guide on our international wire transfer requirements for your reference:</p>
-                    <div class="chat-attachment">
-                        <div class="ca-icon"><i class="fas fa-file-pdf"></i></div>
-                        <div class="ca-info">
-                            <p class="ca-name">wire-transfer-guide.pdf</p>
-                            <p class="ca-size">1.2 MB</p>
+                    <div class="chat-bubble">
+                        <div class="cb-sender">{{ request.user.get_full_name|default:ticket.name }}</div>
+                        <p class="cb-text">{{ ticket.message|linebreaksbr }}</p>
+                        <div class="cb-time">
+                            {{ ticket.created_at|date:"h:i A" }}
+                            <i class="fas fa-check-double read-receipt read"></i>
                         </div>
-                        <i class="fas fa-download ca-download"></i>
-                    </div>
-                    <div class="cb-time">09:27 AM</div>
-                </div>
-            </div>
-
-            <!-- User Message 4 -->
-            <div class="chat-message user">
-                <div class="chat-avatar user">AK</div>
-                <div class="chat-bubble">
-                    <p class="cb-text">Got it, I'll upload the invoice right away. Thanks for your help, Sarah! Really appreciate the quick response.</p>
-                    <div class="cb-time">
-                        09:30 AM
-                        <i class="fas fa-check-double read-receipt"></i>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
 
-            <!-- Typing Indicator -->
+            <!-- Typing Indicator (hidden by default) -->
             <div class="typing-indicator" id="typingIndicator">
                 <div class="typing-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span></span><span></span><span></span>
                 </div>
-                <span class="ti-text">Sarah is typing...</span>
+                <span class="ti-text">Support is typing...</span>
             </div>
 
         </div>
 
-        <!-- Chat Input -->
+        <!-- Chat Input Form -->
         <div class="chat-input-area">
-            <div class="chat-input-wrap">
-                <div class="chat-input-actions">
-                    <button class="chat-input-action" title="Attach file">
-                        <i class="fas fa-paperclip"></i>
-                    </button>
-                    <button class="chat-input-action" title="Add emoji">
-                        <i class="far fa-smile"></i>
+            <form method="POST" enctype="multipart/form-data" id="chatForm" action="{% url 'support:ticket_detail' ticket.reference_id %}">
+                {% csrf_token %}
+                <div class="chat-input-wrap">
+                    <div class="chat-input-actions">
+                        <label class="chat-input-action" title="Attach file" style="cursor: pointer;">
+                            <i class="fas fa-paperclip"></i>
+                            <input type="file" name="attachment" id="chatAttachment" style="display: none;" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx">
+                        </label>
+                        <button type="button" class="chat-input-action" title="Add emoji">
+                            <i class="far fa-smile"></i>
+                        </button>
+                    </div>
+                    <textarea class="chat-input" name="message" id="chatInput" placeholder="Type your message..." rows="1" required></textarea>
+                    <button type="submit" class="chat-send-btn" id="sendBtn" disabled>
+                        <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
-                <textarea class="chat-input" id="chatInput" placeholder="Type your message..." rows="1"></textarea>
-                <button class="chat-send-btn" id="sendBtn" disabled>
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-            <div class="chat-input-hint">
-                <i class="fas fa-info-circle"></i>
-                <span>Press <kbd>Enter</kbd> to send · <kbd>Shift + Enter</kbd> for new line</span>
-            </div>
+                <!-- File preview -->
+                <div id="attachmentPreview" style="display: none; margin-top: 8px; padding: 8px 12px; background: var(--surface-2); border-radius: 8px; font-size: 12px; display: none; align-items: center; gap: 8px;">
+                    <i class="fas fa-paperclip" style="color: var(--primary);"></i>
+                    <span id="attachmentName" style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                    <button type="button" id="removeAttachment" style="background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 11px;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="chat-input-hint">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Press <kbd>Enter</kbd> to send · <kbd>Shift + Enter</kbd> for new line</span>
+                </div>
+            </form>
         </div>
 
     </div>
@@ -219,77 +196,86 @@ In the meantime, I've also flagged your account so future transfers to this reci
 
         <h3><i class="fas fa-info-circle"></i> Ticket details</h3>
 
+        <!-- Status -->
         <div class="tis-section">
             <p class="tis-section-title">Status</p>
-            <span class="tli-status open" style="padding: 6px 12px;"><span class="ts-dot"></span> Open</span>
+            <span class="tli-status {{ ticket.status }}" style="padding: 6px 12px;">
+                <span class="ts-dot"></span> {{ ticket.get_status_display }}
+            </span>
         </div>
 
+        <!-- Information -->
         <div class="tis-section">
             <p class="tis-section-title">Information</p>
             <div class="tis-row">
                 <span class="tis-label">Ticket ID</span>
-                <span class="tis-value" style="font-family: 'Courier New', monospace; font-size: 11px;">TKT-847291</span>
+                <span class="tis-value" style="font-family: 'Courier New', monospace; font-size: 11px;">{{ ticket.reference_id }}</span>
             </div>
             <div class="tis-row">
                 <span class="tis-label">Priority</span>
-                <span class="tis-value" style="color: var(--danger);">High</span>
+                <span class="tis-value" style="color: {% if ticket.priority == 'high' %}var(--danger){% elif ticket.priority == 'medium' %}#D97706{% else %}#059669{% endif %};">
+                    {{ ticket.get_priority_display }}
+                </span>
             </div>
+            {% if ticket.category %}
             <div class="tis-row">
                 <span class="tis-label">Category</span>
-                <span class="tis-value">Transfer</span>
+                <span class="tis-value">{{ ticket.category|title }}</span>
             </div>
+            {% endif %}
             <div class="tis-row">
                 <span class="tis-label">Created</span>
-                <span class="tis-value">Sep 24, 09:12 AM</span>
+                <span class="tis-value">{{ ticket.created_at|date:"M d, h:i A" }}</span>
             </div>
             <div class="tis-row">
                 <span class="tis-label">Last updated</span>
-                <span class="tis-value">2 min ago</span>
+                <span class="tis-value">{{ ticket.updated_at|timesince }} ago</span>
+            </div>
+            <div class="tis-row">
+                <span class="tis-label">Messages</span>
+                <span class="tis-value">{{ ticket_messages|length }}</span>
             </div>
         </div>
 
+        <!-- Assigned Agent (placeholder - replace with real data when available) -->
         <div class="tis-section">
             <p class="tis-section-title">Assigned to</p>
             <div class="assigned-agent">
-                <div class="aa-avatar">SJ</div>
+                <div class="aa-avatar">
+                    <i class="fas fa-headset" style="font-size: 14px;"></i>
+                </div>
                 <div class="aa-info">
-                    <p class="aa-name">Sarah Johnson</p>
-                    <p class="aa-role">Senior Support Agent</p>
+                    <p class="aa-name">Support Team</p>
+                    <p class="aa-role">Hampdens Bank Support</p>
                 </div>
             </div>
         </div>
 
+        <!-- Contact Info -->
         <div class="tis-section">
-            <p class="tis-section-title">Activity</p>
-            <div class="activity-log">
-                <div class="activity-item">
-                    <span class="ai-dot"></span>
-                    <div>
-                        <p class="ai-text"><strong>Sarah</strong> replied to your message</p>
-                        <p class="ai-time">2 minutes ago</p>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <span class="ai-dot" style="background: #059669;"></span>
-                    <div>
-                        <p class="ai-text"><strong>Sarah</strong> was assigned to this ticket</p>
-                        <p class="ai-time">6 minutes ago</p>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <span class="ai-dot" style="background: #D97706;"></span>
-                    <div>
-                        <p class="ai-text">Priority changed to <strong>High</strong></p>
-                        <p class="ai-time">8 minutes ago</p>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <span class="ai-dot" style="background: var(--primary);"></span>
-                    <div>
-                        <p class="ai-text">Ticket created by <strong>You</strong></p>
-                        <p class="ai-time">Today, 09:12 AM</p>
-                    </div>
-                </div>
+            <p class="tis-section-title">Your contact</p>
+            <div class="tis-row">
+                <span class="tis-label">Name</span>
+                <span class="tis-value">{{ ticket.name }}</span>
+            </div>
+            <div class="tis-row">
+                <span class="tis-label">Email</span>
+                <span class="tis-value" style="font-size: 11px;">{{ ticket.email }}</span>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="tis-section">
+            <p class="tis-section-title">Quick actions</p>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <a href="{% url 'support:tickets' %}" class="loan-action-btn" style="text-decoration: none;">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to tickets</span>
+                </a>
+                <a href="mailto:support@hampdensbank.com?subject=Re: {{ ticket.reference_id }}" class="loan-action-btn" style="text-decoration: none;">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email support</span>
+                </a>
             </div>
         </div>
 
@@ -300,84 +286,62 @@ In the meantime, I've also flagged your account so future transfers to this reci
 
 {% block extra_js %}
 <script>
-// Chat functionality
+// ===== ELEMENTS =====
 const chatMessages = document.getElementById('chatMessages');
 const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
-const typingIndicator = document.getElementById('typingIndicator');
+const chatAttachment = document.getElementById('chatAttachment');
+const attachmentPreview = document.getElementById('attachmentPreview');
+const attachmentName = document.getElementById('attachmentName');
+const removeAttachment = document.getElementById('removeAttachment');
+const chatForm = document.getElementById('chatForm');
 
-// Auto-resize textarea
+// ===== AUTO-RESIZE TEXTAREA =====
 chatInput.addEventListener('input', function() {
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-    sendBtn.disabled = !this.value.trim();
+    sendBtn.disabled = !this.value.trim() && !chatAttachment.files.length;
 });
 
-// Send message on Enter
+// ===== SEND ON ENTER =====
 chatInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        sendMessage();
+        if (!sendBtn.disabled) {
+            chatForm.submit();
+        }
     }
 });
 
-sendBtn.addEventListener('click', sendMessage);
+// ===== FILE ATTACHMENT =====
+chatAttachment.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File too large. Maximum size is 10MB.');
+            chatAttachment.value = '';
+            return;
+        }
+        attachmentName.textContent = file.name;
+        attachmentPreview.style.display = 'flex';
+        sendBtn.disabled = false;
+    }
+});
 
-function sendMessage() {
-    const text = chatInput.value.trim();
-    if (!text) return;
+removeAttachment.addEventListener('click', () => {
+    chatAttachment.value = '';
+    attachmentPreview.style.display = 'none';
+    sendBtn.disabled = !chatInput.value.trim();
+});
 
-    // Create user message
-    const msgEl = document.createElement('div');
-    msgEl.className = 'chat-message user';
-    msgEl.innerHTML = `
-        <div class="chat-avatar user">AK</div>
-        <div class="chat-bubble">
-            <p class="cb-text">${text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
-            <div class="cb-time">
-                Just now
-                <i class="fas fa-check read-receipt"></i>
-            </div>
-        </div>
-    `;
-    
-    // Insert before typing indicator
-    chatMessages.insertBefore(msgEl, typingIndicator);
-    
-    // Clear input
-    chatInput.value = '';
-    chatInput.style.height = 'auto';
+// ===== FORM SUBMIT =====
+chatForm.addEventListener('submit', (e) => {
+    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     sendBtn.disabled = true;
-    
-    // Scroll to bottom
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    // Simulate typing indicator
-    setTimeout(() => {
-        typingIndicator.classList.add('active');
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 1000);
-    
-    // Simulate support reply
-    setTimeout(() => {
-        typingIndicator.classList.remove('active');
-        
-        const replyEl = document.createElement('div');
-        replyEl.className = 'chat-message support';
-        replyEl.innerHTML = `
-            <div class="chat-avatar support">SJ</div>
-            <div class="chat-bubble">
-                <div class="cb-sender">Sarah Johnson · Support</div>
-                <p class="cb-text">Thanks for your message! I'm looking into this right now and will get back to you shortly.</p>
-                <div class="cb-time">Just now</div>
-            </div>
-        `;
-        chatMessages.insertBefore(replyEl, typingIndicator);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 3500);
-}
+    // Let Django handle the submission
+});
 
-// Scroll to bottom on load
+// ===== SCROLL TO BOTTOM ON LOAD =====
 chatMessages.scrollTop = chatMessages.scrollHeight;
 </script>
 {% endblock %}

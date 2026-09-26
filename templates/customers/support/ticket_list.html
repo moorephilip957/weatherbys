@@ -5,6 +5,205 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'customers/partials/transaction_list.css' %}">
 <link rel="stylesheet" href="{% static 'customers/partials/support.css' %}">
+
+<style>
+    /* ===== TICKET LIST PAGE ===== */
+
+.ticket-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.ticket-filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 14px 18px;
+}
+.ticket-search {
+    flex: 1;
+    min-width: 240px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ticket-search input {
+    border: none;
+    outline: none;
+    background: transparent;
+    flex: 1;
+    font-size: 13px;
+    min-width: 0;
+    color: var(--ink);
+}
+.ticket-filter-chip {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .15s;
+    text-decoration: none;
+}
+.ticket-filter-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.ticket-filter-chip.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+.ticket-filter-chip .tfc-count {
+    background: rgba(255,255,255,0.2);
+    padding: 2px 7px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+}
+.ticket-filter-chip:not(.active) .tfc-count {
+    background: var(--surface);
+    color: var(--muted);
+    border: 1px solid var(--line);
+}
+
+.ticket-list {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+}
+.ticket-list-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto auto;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--line-2);
+    cursor: pointer;
+    transition: all .15s;
+    text-decoration: none;
+    color: inherit;
+}
+.ticket-list-item:last-child { border-bottom: none; }
+.ticket-list-item:hover {
+    background: var(--surface-2);
+}
+
+.tli-priority {
+    width: 6px;
+    height: 40px;
+    border-radius: 100px;
+    flex-shrink: 0;
+}
+.tli-priority.low { background: #059669; }
+.tli-priority.medium { background: #D97706; }
+.tli-priority.high { background: var(--danger); }
+
+.tli-content {
+    min-width: 0;
+}
+.tli-subject {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--ink);
+}
+.tli-preview {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.tli-preview strong {
+    color: var(--ink-2);
+    font-weight: 600;
+}
+
+.tli-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--surface-2);
+    color: var(--ink-2);
+    white-space: nowrap;
+}
+
+.tli-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+.tli-status .ts-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+.tli-status.open { background: rgba(59,130,246,0.1); color: #3B82F6; }
+.tli-status.in_progress { background: rgba(245,158,11,0.12); color: #D97706; }
+.tli-status.resolved { background: rgba(0,212,168,0.12); color: #00D4A8; }
+.tli-status.closed { background: rgba(107,114,128,0.1); color: #6B7280; }
+
+.tli-time {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    text-align: right;
+    min-width: 80px;
+}
+
+@media (max-width: 1200px) {
+    .ticket-summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .ticket-list-item { grid-template-columns: auto 1fr auto; }
+    .tli-category, .tli-time { display: none; }
+}
+
+@media (max-width: 768px) {
+    .ticket-summary-grid { grid-template-columns: 1fr 1fr; }
+    .ticket-filter-bar { flex-direction: column; align-items: stretch; }
+    .ticket-search { min-width: 100%; }
+    .ticket-list-item { padding: 14px 16px; gap: 12px; }
+}
+
+@media (max-width: 480px) {
+    .ticket-summary-grid { grid-template-columns: 1fr; }
+    .tli-status { display: none; }
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -14,7 +213,7 @@
         <h1>Support Tickets</h1>
         <p>Track and manage your support requests</p>
     </div>
-    <a href="#" class="btn-export" style="background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #fff; border: none;">
+    <a href="{% url 'support:create_ticket' %}" class="btn-export" style="background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #fff; border: none;">
         <i class="fas fa-plus"></i>
         <span>New ticket</span>
     </a>
@@ -29,185 +228,202 @@
                 <i class="fas fa-ticket-alt"></i>
             </div>
         </div>
-        <div class="sc-value">12</div>
+        <div class="sc-value">{{ total_count }}</div>
         <span class="sc-change up"><i class="fas fa-info-circle"></i> All time</span>
     </div>
 
     <div class="summary-card">
         <div class="sc-head">
             <span class="sc-label">Open</span>
-            <div class="sc-icon" style="background: rgba(59,130,246,0.1); color: var(--ticket-open);">
+            <div class="sc-icon" style="background: rgba(59,130,246,0.1); color: var(--ticket-open, #3B82F6);">
                 <i class="fas fa-envelope-open"></i>
             </div>
         </div>
-        <div class="sc-value">2</div>
+        <div class="sc-value">{{ open_count }}</div>
         <span class="sc-change up"><i class="fas fa-clock"></i> Awaiting response</span>
     </div>
 
     <div class="summary-card">
         <div class="sc-head">
             <span class="sc-label">In progress</span>
-            <div class="sc-icon" style="background: rgba(245,158,11,0.12); color: var(--ticket-progress);">
+            <div class="sc-icon" style="background: rgba(245,158,11,0.12); color: var(--ticket-progress, #F59E0B);">
                 <i class="fas fa-spinner"></i>
             </div>
         </div>
-        <div class="sc-value">1</div>
+        <div class="sc-value">{{ in_progress_count }}</div>
         <span class="sc-change up"><i class="fas fa-user"></i> Being handled</span>
     </div>
 
     <div class="summary-card">
         <div class="sc-head">
             <span class="sc-label">Resolved</span>
-            <div class="sc-icon" style="background: rgba(0,212,168,0.12); color: var(--ticket-resolved);">
+            <div class="sc-icon" style="background: rgba(0,212,168,0.12); color: var(--ticket-resolved, #00D4A8);">
                 <i class="fas fa-check-circle"></i>
             </div>
         </div>
-        <div class="sc-value">9</div>
+        <div class="sc-value">{{ resolved_count }}</div>
         <span class="sc-change up"><i class="fas fa-thumbs-up"></i> Successfully closed</span>
     </div>
 </div>
 
 <!-- Filter Bar -->
-<div class="ticket-filter-bar">
-    <div class="ticket-search">
-        <i class="fas fa-search" style="color: var(--muted); font-size: 13px;"></i>
-        <input type="text" placeholder="Search tickets by subject, ID, or keyword...">
+<form method="GET" action="{% url 'support:tickets' %}" id="ticketFilterForm">
+    <div class="ticket-filter-bar">
+        <div class="ticket-search">
+            <i class="fas fa-search" style="color: var(--muted); font-size: 13px;"></i>
+            <input type="text" name="search" value="{{ search }}" placeholder="Search tickets by subject, ID, or keyword..." id="ticketSearchInput">
+        </div>
+        <input type="hidden" name="status" id="hiddenStatus" value="{{ status|default:'all' }}">
+        
+        <a href="{% url 'support:tickets' %}" class="ticket-filter-chip {% if not status or status == 'all' %}active{% endif %}">
+            <span>All</span>
+            <span class="tfc-count">{{ total_count }}</span>
+        </a>
+        <a href="{% url 'support:tickets' %}?status=open" class="ticket-filter-chip {% if status == 'open' %}active{% endif %}">
+            <span>Open</span>
+            <span class="tfc-count">{{ open_count }}</span>
+        </a>
+        <a href="{% url 'support:tickets' %}?status=in_progress" class="ticket-filter-chip {% if status == 'in_progress' %}active{% endif %}">
+            <span>In progress</span>
+            <span class="tfc-count">{{ in_progress_count }}</span>
+        </a>
+        <a href="{% url 'support:tickets' %}?status=resolved" class="ticket-filter-chip {% if status == 'resolved' %}active{% endif %}">
+            <span>Resolved</span>
+            <span class="tfc-count">{{ resolved_count }}</span>
+        </a>
+        <a href="{% url 'support:tickets' %}?status=closed" class="ticket-filter-chip {% if status == 'closed' %}active{% endif %}">
+            <span>Closed</span>
+            <span class="tfc-count">{{ closed_count }}</span>
+        </a>
     </div>
-    <button class="ticket-filter-chip active">
-        <span>All</span>
-        <span class="tfc-count">12</span>
-    </button>
-    <button class="ticket-filter-chip">
-        <span>Open</span>
-        <span class="tfc-count">2</span>
-    </button>
-    <button class="ticket-filter-chip">
-        <span>In progress</span>
-        <span class="tfc-count">1</span>
-    </button>
-    <button class="ticket-filter-chip">
-        <span>Resolved</span>
-        <span class="tfc-count">7</span>
-    </button>
-    <button class="ticket-filter-chip">
-        <span>Closed</span>
-        <span class="tfc-count">2</span>
-    </button>
-</div>
+</form>
 
 <!-- Ticket List -->
 <div class="ticket-list">
 
-    <a href="#" class="ticket-list-item">
-        <div class="tli-priority high"></div>
-        <div class="tli-content">
-            <p class="tli-subject">Unable to complete international wire transfer</p>
-            <p class="tli-preview"><strong>You:</strong> I've been trying to send money to my supplier in Germany but keep getting...</p>
-        </div>
-        <span class="tli-category"><i class="fas fa-exchange-alt"></i> Transfer</span>
-        <span class="tli-status open"><span class="ts-dot"></span> Open</span>
-        <span class="tli-time">2 hours ago</span>
-    </a>
+    {% if tickets %}
+        {% for ticket in tickets %}
+        <a href="{% url 'support:ticket_detail' ticket.reference_id %}" class="ticket-list-item">
+            
+            <!-- Priority Bar -->
+            <div class="tli-priority {{ ticket.priority }}"></div>
 
-    <a href="#" class="ticket-list-item">
-        <div class="tli-priority high"></div>
-        <div class="tli-content">
-            <p class="tli-subject">Card blocked after suspicious activity alert</p>
-            <p class="tli-preview"><strong>Sarah (Support):</strong> I've unblocked your card. Please try your transaction again and let me know...</p>
-        </div>
-        <span class="tli-category"><i class="fas fa-credit-card"></i> Card</span>
-        <span class="tli-status progress"><span class="ts-dot"></span> In progress</span>
-        <span class="tli-time">Yesterday</span>
-    </a>
+            <!-- Content -->
+            <div class="tli-content">
+                <p class="tli-subject">{{ ticket.subject }}</p>
+                <p class="tli-preview">
+                    {% if ticket.last_message_list %}
+                        {% with last_msg=ticket.last_message_list.0 %}
+                            <strong>
+                                {% if last_msg.sender == 'user' %}You{% else %}{{ last_msg.sender|title }}{% endif %}:
+                            </strong>
+                            {{ last_msg.content|truncatechars:100 }}
+                        {% endwith %}
+                    {% else %}
+                        <strong>You:</strong> {{ ticket.message|truncatechars:100 }}
+                    {% endif %}
+                </p>
+            </div>
 
-    <a href="#" class="ticket-list-item">
-        <div class="tli-priority medium"></div>
-        <div class="tli-content">
-            <p class="tli-subject">Unable to complete international wire transfer</p>
-            <p class="tli-preview"><strong>You:</strong> I need to update my phone number on file. Can you help me with this?</p>
-        </div>
-        <span class="tli-category"><i class="fas fa-user"></i> Account</span>
-        <span class="tli-status open"><span class="ts-dot"></span> Open</span>
-        <span class="tli-time">2 days ago</span>
-    </a>
+            <!-- Category -->
+            {% if ticket.category %}
+            <span class="tli-category">
+                <i class="fas fa-folder"></i>
+                {{ ticket.category|title }}
+            </span>
+            {% else %}
+            <span class="tli-category">
+                <i class="fas fa-tag"></i>
+                General
+            </span>
+            {% endif %}
 
-    <a href="#" class="ticket-list-item">
-        <div class="tli-priority low"></div>
-        <div class="tli-content">
-            <p class="tli-subject">Request for account statement (PDF)</p>
-            <p class="tli-preview"><strong>Mike (Support):</strong> Your statement has been sent to your email. Please check your inbox.</p>
-        </div>
-        <span class="tli-category"><i class="fas fa-file-alt"></i> Account</span>
-        <span class="tli-status resolved"><span class="ts-dot"></span> Resolved</span>
-        <span class="tli-time">3 days ago</span>
-    </a>
+            <!-- Status Badge -->
+            <span class="tli-status {{ ticket.status }}">
+                <span class="ts-dot"></span>
+                {{ ticket.get_status_display }}
+            </span>
 
-    <a href="#" class="ticket-list-item">
-        <div class="tli-priority medium"></div>
-        <div class="tli-content">
-            <p class="tli-subject">Loan payment not reflecting in account</p>
-            <p class="tli-preview"><strong>You:</strong> I made a payment 3 days ago but it's still showing as pending in my loan history.</p>
-        </div>
-        <span class="tli-category"><i class="fas fa-file-invoice-dollar"></i> Loan</span>
-        <span class="tli-status resolved"><span class="ts-dot"></span> Resolved</span>
-        <span class="tli-time">5 days ago</span>
-    </a>
+            <!-- Time -->
+            <span class="tli-time">{{ ticket.updated_at|timesince }} ago</span>
 
-    <a href="#" class="ticket-list-item">
-        <div class="tli-priority low"></div>
-        <div class="tli-content">
-            <p class="tli-subject">How to enable biometric login</p>
-            <p class="tli-preview"><strong>Emma (Support):</strong> You can enable Face ID in Settings → Security → Biometric Login.</p>
+        </a>
+        {% endfor %}
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state" style="padding: 60px 24px;">
+            <div class="empty-icon" style="width: 72px; height: 72px; border-radius: 20px; background: var(--surface-2); display: grid; place-items: center; margin: 0 auto 16px; font-size: 28px; color: var(--muted);">
+                <i class="fas fa-ticket-alt"></i>
+            </div>
+            <h3 style="font-size: 16px; font-weight: 700; margin: 0 0 6px;">
+                {% if status and status != 'all' %}
+                    No {{ status|cut:"_" }} tickets found
+                {% elif search %}
+                    No tickets match your search
+                {% else %}
+                    No tickets yet
+                {% endif %}
+            </h3>
+            <p style="color: var(--muted); font-size: 13px; margin: 0 0 16px;">
+                {% if status and status != 'all' %}
+                    You don't have any tickets with this status.
+                {% elif search %}
+                    Try a different search term.
+                {% else %}
+                    Create your first support ticket to get help from our team.
+                {% endif %}
+            </p>
+            <a href="{% url 'support:create_ticket' %}" class="status-btn primary" style="display: inline-flex;">
+                <i class="fas fa-plus"></i>
+                <span>Create ticket</span>
+            </a>
         </div>
-        <span class="tli-category"><i class="fas fa-mobile-alt"></i> Technical</span>
-        <span class="tli-status resolved"><span class="ts-dot"></span> Resolved</span>
-        <span class="tli-time">1 week ago</span>
-    </a>
-
-    <a href="#" class="ticket-list-item">
-        <div class="tli-priority medium"></div>
-        <div class="tli-content">
-            <p class="tli-subject">Deposit not credited after 24 hours</p>
-            <p class="tli-preview"><strong>Mike (Support):</strong> We've escalated this to our payments team. You should see the funds shortly.</p>
-        </div>
-        <span class="tli-category"><i class="fas fa-arrow-down"></i> Deposit</span>
-        <span class="tli-status resolved"><span class="ts-dot"></span> Resolved</span>
-        <span class="tli-time">1 week ago</span>
-    </a>
-
-    <a href="#" class="ticket-list-item">
-        <div class="tli-priority low"></div>
-        <div class="tli-content">
-            <p class="tli-subject">Update email address on file</p>
-            <p class="tli-preview"><strong>Sarah (Support):</strong> Your email has been updated successfully. You'll receive a confirmation shortly.</p>
-        </div>
-        <span class="tli-category"><i class="fas fa-user"></i> Account</span>
-        <span class="tli-status closed"><span class="ts-dot"></span> Closed</span>
-        <span class="tli-time">2 weeks ago</span>
-    </a>
-
-    <a href="#" class="ticket-list-item">
-        <div class="tli-priority low"></div>
-        <div class="tli-content">
-            <p class="tli-subject">Question about loan interest rates</p>
-            <p class="tli-preview"><strong>Emma (Support):</strong> Our current rates start at 7.5% APR for personal loans. You can see full details...</p>
-        </div>
-        <span class="tli-category"><i class="fas fa-file-invoice-dollar"></i> Loan</span>
-        <span class="tli-status closed"><span class="ts-dot"></span> Closed</span>
-        <span class="tli-time">3 weeks ago</span>
-    </a>
+    {% endif %}
 
 </div>
+
+<!-- Pagination Info -->
+{% if tickets %}
+<div class="pagination-bar" style="background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 22px; margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+    <div style="font-size: 13px; color: var(--muted);">
+        Showing <strong style="color: var(--ink);">{{ tickets|length }}</strong> of <strong style="color: var(--ink);">{{ total_count }}</strong> tickets
+    </div>
+    <div style="font-size: 12px; color: var(--muted);">
+        <i class="fas fa-sort-amount-down"></i>
+        Sorted by most recent activity
+    </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// Filter chip toggle
-document.querySelectorAll('.ticket-filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-        document.querySelectorAll('.ticket-filter-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
+// ===== LIVE SEARCH =====
+const searchInput = document.getElementById('ticketSearchInput');
+const ticketItems = document.querySelectorAll('.ticket-list-item');
+
+if (searchInput) {
+    let searchTimeout;
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        const term = e.target.value.toLowerCase().trim();
+
+        // Client-side instant filtering
+        searchTimeout = setTimeout(() => {
+            ticketItems.forEach(item => {
+                const subject = item.querySelector('.tli-subject')?.textContent.toLowerCase() || '';
+                const preview = item.querySelector('.tli-preview')?.textContent.toLowerCase() || '';
+                const category = item.querySelector('.tli-category')?.textContent.toLowerCase() || '';
+                
+                const matches = !term || 
+                    subject.includes(term) || 
+                    preview.includes(term) || 
+                    category.includes(term);
+                
+                item.style.display = matches ? '' : 'none';
+            });
+        }, 200);
     });
-});
+}
 </script>
 {% endblock %}

@@ -6,6 +6,135 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'customers/partials/local_transfer.css' %}">
 <link rel="stylesheet" href="{% static 'customers/partials/support.css' %}">
+
+<style>
+    /* ===== CREATE TICKET SIDEBAR CARDS ===== */
+
+.user-info-sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+.user-info-sidebar-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.user-info-sidebar-card h3 i {
+    color: var(--primary);
+}
+.uis-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line-2);
+}
+.uis-row:last-of-type {
+    border-bottom: none;
+}
+.uis-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+.uis-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+}
+.uis-note {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: rgba(91,91,247,0.05);
+    border-radius: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.uis-note i {
+    color: var(--primary);
+    font-size: 10px;
+}
+
+.recent-tickets-inner {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+.recent-tickets-inner h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.recent-tickets-inner h3 a {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.response-time-info {
+    background: linear-gradient(135deg, rgba(0,212,168,0.06), rgba(91,91,247,0.06));
+    border: 1px solid rgba(0,212,168,0.2);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.response-time-info .rti-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #00D4A8, #059669);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.response-time-info .rti-content {
+    flex: 1;
+}
+.response-time-info .rti-title {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0 0 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+.response-time-info .rti-value {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 20px;
+    font-weight: 800;
+    color: #059669;
+    margin: 0 0 2px;
+}
+.response-time-info .rti-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* Status dot colors for recent tickets */
+.recent-ticket-item .rti-status.open { background: #3B82F6; }
+.recent-ticket-item .rti-status.in_progress { background: #F59E0B; }
+.recent-ticket-item .rti-status.resolved { background: #00D4A8; }
+.recent-ticket-item .rti-status.closed { background: #6B7280; }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -17,71 +146,105 @@
     </div>
 </div>
 
-<div class="create-ticket-layout">
+<!-- Django Messages -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="loan-alert" style="margin-bottom: 24px; {% if message.tags == 'error' %}border-left-color: var(--danger);{% endif %}">
+            <div class="la-icon" style="{% if message.tags == 'error' %}background: rgba(244,63,94,0.12); color: var(--danger);{% endif %}">
+                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+            </div>
+            <div class="la-content">
+                <p class="la-title">{{ message }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
 
-    <!-- Main Form -->
-    <div class="create-ticket-card">
-        <h3>Ticket details</h3>
-        <p class="ctc-sub">Fill out the form below and we'll get back to you as soon as possible</p>
+<form method="POST" enctype="multipart/form-data" id="ticketForm">
+    {% csrf_token %}
 
-        <form id="ticketForm">
+    <!-- Hidden priority field (synced with visual selector) -->
+    <div style="display: none;">
+        {{ form.priority }}
+    </div>
+
+    <div class="create-ticket-layout">
+
+        <!-- Main Form -->
+        <div class="create-ticket-card">
+            <h3>Ticket details</h3>
+            <p class="ctc-sub">Fill out the form below and we'll get back to you as soon as possible</p>
 
             <!-- Subject -->
             <div class="form-field" style="margin-bottom: 18px;">
                 <label class="form-label">Subject <span class="req">*</span></label>
                 <div class="input-with-icon">
                     <i class="fas fa-heading input-icon"></i>
-                    <input type="text" class="form-input" placeholder="Brief summary of your issue" required>
+                    {{ form.subject }}
                 </div>
+                {% if form.subject.errors %}
+                    <div class="form-hint" style="color: var(--danger);">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.subject.errors.0 }}</span>
+                    </div>
+                {% endif %}
             </div>
 
             <!-- Category -->
             <div class="form-field" style="margin-bottom: 18px;">
                 <label class="form-label">Category <span class="req">*</span></label>
-                <select class="form-select" required>
-                    <option value="">Select a category</option>
-                    <option value="account">Account issues</option>
-                    <option value="transaction">Transaction problems</option>
-                    <option value="card">Card issues</option>
-                    <option value="transfer">Transfer issues</option>
-                    <option value="loan">Loan inquiries</option>
-                    <option value="deposit">Deposit issues</option>
-                    <option value="security">Security concerns</option>
-                    <option value="technical">Technical issues</option>
-                    <option value="other">Other</option>
-                </select>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <div class="form-hint" style="color: var(--danger);">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.category.errors.0 }}</span>
+                    </div>
+                {% endif %}
             </div>
 
-            <!-- Priority -->
+            <!-- Priority Visual Selector -->
             <div style="margin-bottom: 20px;">
                 <label class="form-label">Priority <span class="req">*</span></label>
                 <div class="priority-selector">
-                    <div class="priority-option low" data-priority="low">
+                    <div class="priority-option low {% if form.priority.value == 'low' %}active{% endif %}" data-priority="low">
                         <div class="po-icon"><i class="fas fa-flag"></i></div>
                         <p class="po-label">Low</p>
                         <p class="po-desc">General inquiry</p>
                     </div>
-                    <div class="priority-option medium active" data-priority="medium">
+                    <div class="priority-option medium {% if form.priority.value == 'medium' or not form.priority.value %}active{% endif %}" data-priority="medium">
                         <div class="po-icon"><i class="fas fa-exclamation"></i></div>
                         <p class="po-label">Medium</p>
                         <p class="po-desc">Needs attention</p>
                     </div>
-                    <div class="priority-option high" data-priority="high">
+                    <div class="priority-option high {% if form.priority.value == 'high' %}active{% endif %}" data-priority="high">
                         <div class="po-icon"><i class="fas fa-bolt"></i></div>
                         <p class="po-label">High</p>
                         <p class="po-desc">Urgent issue</p>
                     </div>
                 </div>
+                {% if form.priority.errors %}
+                    <div class="form-hint" style="color: var(--danger);">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.priority.errors.0 }}</span>
+                    </div>
+                {% endif %}
             </div>
 
             <!-- Description -->
             <div class="form-field" style="margin-bottom: 18px;">
                 <label class="form-label">Description <span class="req">*</span></label>
-                <textarea class="form-textarea" rows="6" placeholder="Please describe your issue in detail. Include any error messages, steps to reproduce, and what you were trying to do..." required></textarea>
-                <div class="form-hint">
-                    <i class="fas fa-info-circle"></i>
-                    <span>Be as detailed as possible to help us resolve your issue faster</span>
-                </div>
+                {{ form.message }}
+                {% if form.message.errors %}
+                    <div class="form-hint" style="color: var(--danger);">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.message.errors.0 }}</span>
+                    </div>
+                {% else %}
+                    <div class="form-hint">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="charCount">0</span>/2000 characters
+                    </div>
+                {% endif %}
             </div>
 
             <!-- File Upload -->
@@ -90,10 +253,16 @@
                 <div class="file-upload-area" id="fileUploadArea">
                     <div class="fua-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                     <p class="fua-title">Drop files here or click to browse</p>
-                    <p class="fua-sub">PNG, JPG, PDF up to 10MB each · Max 5 files</p>
-                    <input type="file" id="fileInput" multiple accept=".png,.jpg,.jpeg,.pdf" style="display: none;">
+                    <p class="fua-sub">PNG, JPG, PDF, DOC up to 10MB each</p>
+                    {{ form.attachment }}
                 </div>
                 <div class="uploaded-files" id="uploadedFiles"></div>
+                {% if form.attachment.errors %}
+                    <div class="form-hint" style="color: var(--danger); margin-top: 8px;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.attachment.errors.0 }}</span>
+                    </div>
+                {% endif %}
             </div>
 
             <!-- Actions -->
@@ -102,142 +271,196 @@
                     <i class="fas fa-arrow-left"></i>
                     <span>Cancel</span>
                 </button>
-                <button type="submit" class="btn-submit-ticket">
+                <button type="submit" class="btn-submit-ticket" id="submitBtn">
                     <i class="fas fa-paper-plane"></i>
                     <span>Submit ticket</span>
                 </button>
             </div>
 
-        </form>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="recent-tickets-sidebar">
+
+            <!-- User Info Card -->
+            <div class="user-info-sidebar-card">
+                <h3><i class="fas fa-user-circle"></i> Your information</h3>
+                <div class="uis-row">
+                    <span class="uis-label">Name</span>
+                    <span class="uis-value">{{ request.user.get_full_name|default:request.user.username }}</span>
+                </div>
+                <div class="uis-row">
+                    <span class="uis-label">Email</span>
+                    <span class="uis-value">{{ request.user.email }}</span>
+                </div>
+                <div class="uis-note">
+                    <i class="fas fa-info-circle"></i>
+                    <span>We'll respond to this email address</span>
+                </div>
+            </div>
+
+            <!-- Recent Tickets -->
+            <div class="recent-tickets-inner">
+                <h3>
+                    <span>Recent tickets</span>
+                    <a href="{% url 'support:tickets' %}">View all</a>
+                </h3>
+
+                {% if recent_tickets %}
+                    {% for ticket in recent_tickets %}
+                    <a href="{% url 'support:ticket_detail' ticket.reference_id %}" class="recent-ticket-item">
+                        <span class="rti-status {{ ticket.status }}"></span>
+                        <div class="rti-content">
+                            <p class="rti-subject">{{ ticket.subject }}</p>
+                            <p class="rti-meta">
+                                <span>#{{ ticket.reference_id }}</span>
+                                <span>·</span>
+                                <span>{{ ticket.created_at|timesince }} ago</span>
+                            </p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 20px; color: var(--muted); font-size: 12px;">
+                        <i class="fas fa-inbox" style="font-size: 24px; margin-bottom: 8px; opacity: 0.5;"></i>
+                        <p>No previous tickets</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Response Time Info -->
+            <div class="response-time-info">
+                <div class="rti-icon"><i class="fas fa-clock"></i></div>
+                <div class="rti-content">
+                    <p class="rti-title">Average response time</p>
+                    <p class="rti-value">~2 hours</p>
+                    <p class="rti-sub">Based on your priority level</p>
+                </div>
+            </div>
+
+        </div>
     </div>
-
-    <!-- Sidebar -->
-    <div class="recent-tickets-sidebar">
-        <h3>
-            <span>Recent tickets</span>
-            <a href="{% url 'support:tickets' %}">View all</a>
-        </h3>
-
-        <a href="#" class="recent-ticket-item">
-            <span class="rti-status open"></span>
-            <div class="rti-content">
-                <p class="rti-subject">Unable to complete international wire</p>
-                <p class="rti-meta">
-                    <span>#TKT-847291</span>
-                    <span>·</span>
-                    <span>2 hours ago</span>
-                </p>
-            </div>
-        </a>
-
-        <a href="#" class="recent-ticket-item">
-            <span class="rti-status progress"></span>
-            <div class="rti-content">
-                <p class="rti-subject">Card blocked after suspicious activity</p>
-                <p class="rti-meta">
-                    <span>#TKT-847180</span>
-                    <span>·</span>
-                    <span>Yesterday</span>
-                </p>
-            </div>
-        </a>
-
-        <a href="#" class="recent-ticket-item">
-            <span class="rti-status resolved"></span>
-            <div class="rti-content">
-                <p class="rti-subject">Request for account statement</p>
-                <p class="rti-meta">
-                    <span>#TKT-846920</span>
-                    <span>·</span>
-                    <span>3 days ago</span>
-                </p>
-            </div>
-        </a>
-
-        <a href="#" class="recent-ticket-item">
-            <span class="rti-status closed"></span>
-            <div class="rti-content">
-                <p class="rti-subject">Update email address</p>
-                <p class="rti-meta">
-                    <span>#TKT-845102</span>
-                    <span>·</span>
-                    <span>1 week ago</span>
-                </p>
-            </div>
-        </a>
-    </div>
-
-</div>
+</form>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// Priority selector
-document.querySelectorAll('.priority-option').forEach(opt => {
+// ===== PRIORITY SELECTOR =====
+const priorityOptions = document.querySelectorAll('.priority-option');
+const hiddenPriority = document.getElementById('id_priority');
+
+priorityOptions.forEach(opt => {
     opt.addEventListener('click', () => {
-        document.querySelectorAll('.priority-option').forEach(o => o.classList.remove('active'));
+        priorityOptions.forEach(o => o.classList.remove('active'));
         opt.classList.add('active');
+        hiddenPriority.value = opt.dataset.priority;
     });
 });
 
-// File upload
+// Initialize from Django form value
+if (hiddenPriority && hiddenPriority.value) {
+    priorityOptions.forEach(opt => {
+        if (opt.dataset.priority === hiddenPriority.value) {
+            priorityOptions.forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+        }
+    });
+}
+
+// ===== MESSAGE CHARACTER COUNT =====
+const messageTextarea = document.getElementById('id_message');
+const charCount = document.getElementById('charCount');
+
+if (messageTextarea && charCount) {
+    messageTextarea.addEventListener('input', () => {
+        charCount.textContent = messageTextarea.value.length;
+    });
+    charCount.textContent = messageTextarea.value.length;
+}
+
+// ===== FILE UPLOAD =====
 const fileUploadArea = document.getElementById('fileUploadArea');
-const fileInput = document.getElementById('fileInput');
+const fileInput = document.getElementById('id_attachment');
 const uploadedFiles = document.getElementById('uploadedFiles');
 
-fileUploadArea.addEventListener('click', () => fileInput.click());
+if (fileUploadArea && fileInput) {
+    // Hide the default Django file input
+    fileInput.style.display = 'none';
 
-fileUploadArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    fileUploadArea.classList.add('dragover');
-});
+    fileUploadArea.addEventListener('click', () => fileInput.click());
 
-fileUploadArea.addEventListener('dragleave', () => {
-    fileUploadArea.classList.remove('dragover');
-});
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.add('dragover');
+    });
 
-fileUploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    fileUploadArea.classList.remove('dragover');
-    handleFiles(e.dataTransfer.files);
-});
+    fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.classList.remove('dragover');
+    });
 
-fileInput.addEventListener('change', (e) => {
-    handleFiles(e.target.files);
-});
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+    });
+}
 
 function handleFiles(files) {
     Array.from(files).forEach(file => {
-        if (uploadedFiles.children.length >= 5) {
-            alert('Maximum 5 files allowed');
+        // Validate size (10MB max)
+        if (file.size > 10 * 1024 * 1024) {
+            alert(`File "${file.name}" is too large. Maximum size is 10MB.`);
             return;
         }
+
         const fileEl = document.createElement('div');
         fileEl.className = 'uploaded-file';
+        
+        const iconClass = getFileIcon(file.name);
+        
         fileEl.innerHTML = `
-            <div class="uf-icon"><i class="fas fa-file"></i></div>
+            <div class="uf-icon"><i class="${iconClass}"></i></div>
             <div class="uf-info">
                 <p class="uf-name">${file.name}</p>
-                <p class="uf-size">${(file.size / 1024).toFixed(1)} KB</p>
+                <p class="uf-size">${formatFileSize(file.size)}</p>
             </div>
             <button type="button" class="uf-remove"><i class="fas fa-times"></i></button>
         `;
-        fileEl.querySelector('.uf-remove').addEventListener('click', () => fileEl.remove());
+        
+        fileEl.querySelector('.uf-remove').addEventListener('click', () => {
+            fileEl.remove();
+            // Clear the file input
+            if (fileInput) fileInput.value = '';
+        });
+        
         uploadedFiles.appendChild(fileEl);
     });
 }
 
-// Form submit
+function getFileIcon(filename) {
+    const ext = filename.split('.').pop().toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) return 'fas fa-image';
+    if (ext === 'pdf') return 'fas fa-file-pdf';
+    if (['doc', 'docx'].includes(ext)) return 'fas fa-file-word';
+    return 'fas fa-file';
+}
+
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+// ===== FORM SUBMIT =====
 document.getElementById('ticketForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const btn = document.querySelector('.btn-submit-ticket');
+    const btn = document.getElementById('submitBtn');
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Submitting...</span>';
     btn.disabled = true;
-    
-    setTimeout(() => {
-        btn.innerHTML = '<i class="fas fa-check"></i> <span>Ticket created!</span>';
-        btn.style.background = 'linear-gradient(135deg, #00D4A8, #059669)';
-    }, 1500);
+    // Let Django handle validation and redirect
 });
 </script>
 {% endblock %}

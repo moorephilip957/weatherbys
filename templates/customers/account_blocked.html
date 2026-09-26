@@ -16,10 +16,10 @@
             <i class="fas fa-exclamation-triangle"></i>
         </div>
         <h1>Account Restricted</h1>
-        <p class="rwb-subtitle">Your account has been temporarily restricted for security purposes. Please review the information below and follow the steps to restore full access.</p>
+        <p class="rwb-subtitle">Your account has been temporarily restricted. Please review the information below and follow the steps to restore full access to your account.</p>
         <div class="rwb-timestamp">
             <i class="far fa-clock"></i>
-            <span>Restricted on September 24, 2026 at 09:15 AM</span>
+            <span>Restricted on {{ request.user.date_joined|date:"F d, Y" }} · Reference: HB-{{ request.user.id|stringformat:"08d" }}</span>
         </div>
     </div>
 
@@ -30,15 +30,21 @@
         <div class="restriction-info-grid">
             <div class="restriction-info-item">
                 <p class="rii-label">Account number</p>
-                <p class="rii-value mono">•••• •••• 4829</p>
+                <p class="rii-value mono">
+                    {% if request.user.bank_account %}
+                        {{ request.user.bank_account.account_number }}
+                    {% else %}
+                        Not available
+                    {% endif %}
+                </p>
             </div>
             <div class="restriction-info-item">
                 <p class="rii-label">Account holder</p>
-                <p class="rii-value">Alex Kim</p>
+                <p class="rii-value">{{ request.user.get_full_name|default:request.user.username }}</p>
             </div>
             <div class="restriction-info-item">
                 <p class="rii-label">Restriction type</p>
-                <p class="rii-value warning">Security review</p>
+                <p class="rii-value warning">Account blocked</p>
             </div>
             <div class="restriction-info-item">
                 <p class="rii-label">Status</p>
@@ -48,7 +54,7 @@
 
         <div class="restriction-reason-box">
             <h3><i class="fas fa-shield-alt"></i> Reason for restriction</h3>
-            <p>We detected unusual activity on your account that doesn't match your typical usage patterns. To protect your funds and personal information, we've temporarily restricted certain account features while we verify your identity and recent transactions.</p>
+            <p>Your account has been flagged for security review. This may be due to unusual activity, verification requirements, or compliance checks. To protect your funds and personal information, we've temporarily restricted access to your account while our team completes the review process.</p>
         </div>
 
         <div class="restrictions-list">
@@ -70,8 +76,12 @@
                 <span>Request new loans or credit</span>
             </div>
             <div class="restriction-item">
+                <i class="fas fa-times-circle"></i>
+                <span>Apply for new cards</span>
+            </div>
+            <div class="restriction-item">
                 <i class="fas fa-check-circle" style="color: #059669;"></i>
-                <span style="color: #059669;">You can still view your balance and transaction history</span>
+                <span style="color: #059669;">You can still view your balance and contact support</span>
             </div>
         </div>
     </div>
@@ -85,9 +95,21 @@
             <div class="resolution-step">
                 <div class="rs-number">1</div>
                 <div class="rs-content">
+                    <p class="rs-title">Contact our support team</p>
+                    <p class="rs-desc">Reach out to our support team via live chat, email, or phone. A specialist will review your account and explain the reason for the restriction.</p>
+                    <a href="{% url 'support:create_ticket' %}" class="rs-action">
+                        <i class="fas fa-comments"></i>
+                        <span>Contact support</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="resolution-step">
+                <div class="rs-number">2</div>
+                <div class="rs-content">
                     <p class="rs-title">Verify your identity</p>
                     <p class="rs-desc">Upload a clear photo of your government-issued ID (passport, driver's license, or national ID card) and a recent selfie for verification.</p>
-                    <button class="rs-action">
+                    <button type="button" class="rs-action" onclick="alert('Please contact support to submit verification documents')">
                         <i class="fas fa-upload"></i>
                         <span>Upload documents</span>
                     </button>
@@ -95,25 +117,13 @@
             </div>
 
             <div class="resolution-step">
-                <div class="rs-number">2</div>
-                <div class="rs-content">
-                    <p class="rs-title">Confirm recent transactions</p>
-                    <p class="rs-desc">Review and confirm the recent transactions flagged as unusual. This helps us understand if the activity was authorized by you.</p>
-                    <button class="rs-action">
-                        <i class="fas fa-list-check"></i>
-                        <span>Review transactions</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="resolution-step">
                 <div class="rs-number">3</div>
                 <div class="rs-content">
-                    <p class="rs-title">Update security settings</p>
-                    <p class="rs-desc">For your protection, we recommend updating your password and enabling two-factor authentication if you haven't already.</p>
-                    <button class="rs-action">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Update security</span>
+                    <p class="rs-title">Confirm recent activity</p>
+                    <p class="rs-desc">Review and confirm any recent transactions flagged as unusual. This helps us understand if the activity was authorized by you.</p>
+                    <button type="button" class="rs-action" onclick="alert('Please contact support to review your recent activity')">
+                        <i class="fas fa-list-check"></i>
+                        <span>Review activity</span>
                     </button>
                 </div>
             </div>
@@ -134,10 +144,10 @@
         <p class="csc-subtitle">Our support team is here to help you resolve this quickly</p>
 
         <div class="contact-methods">
-            <a href="#" class="contact-method">
+            <a href="{% url 'support:create_ticket' %}" class="contact-method">
                 <div class="cm-icon"><i class="fas fa-comments"></i></div>
                 <p class="cm-title">Live chat</p>
-                <p class="cm-desc">Chat with an agent now</p>
+                <p class="cm-desc">Create a support ticket</p>
                 <p class="cm-value">Start chat →</p>
             </a>
             <a href="mailto:support@hampdensbank.com" class="contact-method">
@@ -173,7 +183,7 @@
                 <span class="faq-toggle"><i class="fas fa-plus"></i></span>
             </div>
             <div class="faq-answer">
-                Accounts are typically restricted when we detect unusual activity that doesn't match your typical usage patterns. This could include large transactions, logins from new locations, or multiple failed login attempts. This is a security measure to protect your funds and personal information.
+                Accounts are typically restricted when we detect unusual activity that doesn't match your typical usage patterns, when verification is required for compliance, or when there are security concerns. This is a precautionary measure to protect your funds and personal information.
             </div>
         </div>
 
@@ -184,16 +194,6 @@
             </div>
             <div class="faq-answer">
                 Most account restrictions are resolved within 1-2 business hours after you complete the verification steps. In some cases, additional review may be required, which could take up to 24-48 hours. We'll notify you via email as soon as your account is restored.
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>Can I still receive money?</span>
-                <span class="faq-toggle"><i class="fas fa-plus"></i></span>
-            </div>
-            <div class="faq-answer">
-                Yes, you can still receive money into your account while it's restricted. However, you won't be able to send money, make purchases, or withdraw funds until the restriction is lifted.
             </div>
         </div>
 
@@ -216,6 +216,16 @@
                 You'll need a valid government-issued photo ID (passport, driver's license, or national ID card) and a recent selfie. Make sure the photos are clear and well-lit. The name on your ID must match the name on your account.
             </div>
         </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>Can I log out of my account?</span>
+                <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+            </div>
+            <div class="faq-answer">
+                Yes, you can log out at any time using the logout option in the top-right corner of the page. However, you'll still need to contact support to restore full access to your account before you can use it again.
+            </div>
+        </div>
     </div>
 
     <!-- Security Notice -->
@@ -225,6 +235,14 @@
             <p class="sn-title">Security reminder</p>
             <p class="sn-text">Hampdens Bank will never ask for your password, PIN, or verification codes via email, phone, or text. If you receive suspicious communications claiming to be from us, please report them to our security team immediately.</p>
         </div>
+    </div>
+
+    <!-- Logout Button (important for blocked users) -->
+    <div style="text-align: center; margin-top: 32px;">
+        <a href="{% url 'account:logout' %}" class="status-btn secondary" style="display: inline-flex;">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Log out of account</span>
+        </a>
     </div>
 
 </div>
@@ -245,17 +263,6 @@ document.querySelectorAll('.faq-question').forEach(q => {
         if (!wasOpen) {
             item.classList.add('open');
         }
-    });
-});
-
-// Resolution step actions
-document.querySelectorAll('.rs-action').forEach(btn => {
-    btn.addEventListener('click', () => {
-        // These would navigate to respective pages
-        // For now, show a placeholder alert
-        const action = btn.querySelector('span').textContent;
-        console.log('Action clicked:', action);
-        
     });
 });
 </script>

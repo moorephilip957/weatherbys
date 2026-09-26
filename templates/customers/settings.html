@@ -20,17 +20,19 @@
 <div class="profile-header">
     <div class="profile-header-content">
         <div class="profile-avatar-wrap">
-            <div class="profile-avatar">AK</div>
+            <div class="profile-avatar">
+                {{ user.first_name|default:user.username|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
+            </div>
             <div class="profile-avatar-status">
                 <i class="fas fa-check"></i>
             </div>
         </div>
 
         <div class="profile-header-info">
-            <h1 class="ph-name">Alex Kim</h1>
+            <h1 class="ph-name">{{ user.get_full_name|default:user.username }}</h1>
             <p class="ph-email">
                 <i class="fas fa-envelope"></i>
-                alex.kim@example.com
+                {{ user.email }}
             </p>
             <div class="profile-badges">
                 <span class="profile-badge premium">
@@ -43,27 +45,29 @@
                 </span>
                 <span class="profile-badge member">
                     <i class="fas fa-calendar"></i>
-                    <span>Member since Jan 2024</span>
+                    <span>Member since {{ user.date_joined|date:"M Y" }}</span>
                 </span>
             </div>
         </div>
 
         <div class="profile-header-stats">
             <div class="profile-stat">
-                <p class="ps-value">148</p>
+                <p class="ps-value">{{ user.transactions.count|default:"0" }}</p>
                 <p class="ps-label">Transactions</p>
             </div>
             <div class="profile-stat">
-                <p class="ps-value">4</p>
+                <p class="ps-value">{{ bank_account.cards.count|default:"0" }}</p>
                 <p class="ps-label">Cards</p>
             </div>
             <div class="profile-stat">
-                <p class="ps-value">2</p>
-                <p class="ps-label">Active Loans</p>
+                <p class="ps-value">{{ user.loan_applications.count|default:"0" }}</p>
+                <p class="ps-label">Total Loans</p>
             </div>
         </div>
     </div>
 </div>
+
+{% include "../components/messages.html" %}
 
 <!-- Profile Layout -->
 <div class="profile-layout">
@@ -81,15 +85,16 @@
                 </span>
             </div>
 
+            {% with kyc=user.kycverification %}
             <div class="info-row">
                 <div class="ir-left">
                     <div class="ir-icon"><i class="fas fa-user"></i></div>
                     <div>
                         <p class="ir-label">Full name</p>
-                        <p class="ir-value">Alex Kim</p>
+                        <p class="ir-value">{{ user.get_full_name|default:"Not provided" }}</p>
                     </div>
                 </div>
-                <button class="ir-edit edit-trigger">
+                <button type="button" class="ir-edit edit-trigger">
                     <i class="fas fa-pen"></i>
                     <span class="edit-tooltip">Contact support to update</span>
                 </button>
@@ -100,10 +105,10 @@
                     <div class="ir-icon"><i class="fas fa-birthday-cake"></i></div>
                     <div>
                         <p class="ir-label">Date of birth</p>
-                        <p class="ir-value">March 15, 1990</p>
+                        <p class="ir-value">{% if kyc %}{{ kyc.date_of_birth|date:"F d, Y" }}{% else %}Not provided{% endif %}</p>
                     </div>
                 </div>
-                <button class="ir-edit edit-trigger">
+                <button type="button" class="ir-edit edit-trigger">
                     <i class="fas fa-pen"></i>
                     <span class="edit-tooltip">Contact support to update</span>
                 </button>
@@ -114,10 +119,10 @@
                     <div class="ir-icon"><i class="fas fa-venus-mars"></i></div>
                     <div>
                         <p class="ir-label">Gender</p>
-                        <p class="ir-value">Male</p>
+                        <p class="ir-value">{% if kyc %}{{ kyc.get_gender_display }}{% else %}Not provided{% endif %}</p>
                     </div>
                 </div>
-                <button class="ir-edit edit-trigger">
+                <button type="button" class="ir-edit edit-trigger">
                     <i class="fas fa-pen"></i>
                     <span class="edit-tooltip">Contact support to update</span>
                 </button>
@@ -128,21 +133,22 @@
                     <div class="ir-icon"><i class="fas fa-flag"></i></div>
                     <div>
                         <p class="ir-label">Nationality</p>
-                        <p class="ir-value">🇺🇸 United States</p>
+                        <p class="ir-value">{% if kyc %}{{ kyc.nationality }}{% else %}Not provided{% endif %}</p>
                     </div>
                 </div>
-                <button class="ir-edit edit-trigger">
+                <button type="button" class="ir-edit edit-trigger">
                     <i class="fas fa-pen"></i>
                     <span class="edit-tooltip">Contact support to update</span>
                 </button>
             </div>
+            {% endwith %}
 
             <div class="info-row">
                 <div class="ir-left">
                     <div class="ir-icon"><i class="fas fa-id-card"></i></div>
                     <div>
                         <p class="ir-label">Customer ID</p>
-                        <p class="ir-value" style="font-family: 'Courier New', monospace;">HB-2024-0847291</p>
+                        <p class="ir-value" style="font-family: 'Courier New', monospace;">HB-{{ user.id|stringformat:"08d" }}</p>
                     </div>
                 </div>
             </div>
@@ -158,15 +164,16 @@
                 </span>
             </div>
 
+            {% with kyc=user.kycverification %}
             <div class="info-row">
                 <div class="ir-left">
                     <div class="ir-icon"><i class="fas fa-envelope"></i></div>
                     <div>
                         <p class="ir-label">Email address</p>
-                        <p class="ir-value">alex.kim@example.com</p>
+                        <p class="ir-value">{{ user.email|default:"Not provided" }}</p>
                     </div>
                 </div>
-                <button class="ir-edit edit-trigger">
+                <button type="button" class="ir-edit edit-trigger">
                     <i class="fas fa-pen"></i>
                     <span class="edit-tooltip">Contact support to update</span>
                 </button>
@@ -177,10 +184,10 @@
                     <div class="ir-icon"><i class="fas fa-phone"></i></div>
                     <div>
                         <p class="ir-label">Phone number</p>
-                        <p class="ir-value">+1 (555) 123-4567</p>
+                        <p class="ir-value">{% if kyc %}{{ kyc.phone }}{% else %}Not provided{% endif %}</p>
                     </div>
                 </div>
-                <button class="ir-edit edit-trigger">
+                <button type="button" class="ir-edit edit-trigger">
                     <i class="fas fa-pen"></i>
                     <span class="edit-tooltip">Contact support to update</span>
                 </button>
@@ -191,21 +198,34 @@
                     <div class="ir-icon"><i class="fas fa-map-marker-alt"></i></div>
                     <div>
                         <p class="ir-label">Residential address</p>
-                        <p class="ir-value">123 Park Avenue, Apt 4B, New York, NY 10017, USA</p>
+                        <p class="ir-value">
+                            {% if kyc %}
+                                {{ kyc.address_line }}, {{ kyc.city }}, {{ kyc.state }} {{ kyc.zipcode }}
+                            {% else %}
+                                Not provided
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
-                <button class="ir-edit edit-trigger">
+                <button type="button" class="ir-edit edit-trigger">
                     <i class="fas fa-pen"></i>
                     <span class="edit-tooltip">Contact support to update</span>
                 </button>
             </div>
+            {% endwith %}
 
             <div class="info-row">
                 <div class="ir-left">
                     <div class="ir-icon"><i class="fas fa-clock"></i></div>
                     <div>
                         <p class="ir-label">Last login</p>
-                        <p class="ir-value">Today, 09:12 AM · Chrome on Windows</p>
+                        <p class="ir-value">
+                            {% if user.last_login %}
+                                {{ user.last_login|timesince }} ago · {{ user.last_login|date:"M d, Y" }}
+                            {% else %}
+                                First time login
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -229,24 +249,25 @@
         <div class="security-actions-card">
             <h3><i class="fas fa-shield-alt"></i> Security</h3>
 
-            <a href="{% url 'customer:change_transaction_pin' %}" class="security-action-item">
+            <!-- FIXED: Swapped URLs to match the correct action -->
+            <a href="{% url 'customer:change_password' %}" class="security-action-item">
                 <div class="sai-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
                     <i class="fas fa-key"></i>
                 </div>
                 <div class="sai-content">
                     <p class="sai-title">Change password</p>
-                    <p class="sai-desc">Last changed 45 days ago</p>
+                    <p class="sai-desc">Update your account password</p>
                 </div>
                 <i class="fas fa-chevron-right sai-arrow"></i>
             </a>
 
-            <a href="{% url 'customer:change_password' %}" class="security-action-item">
+            <a href="{% url 'customer:change_transaction_pin' %}" class="security-action-item">
                 <div class="sai-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
                     <i class="fas fa-lock"></i>
                 </div>
                 <div class="sai-content">
                     <p class="sai-title">Change transaction PIN</p>
-                    <p class="sai-desc">Last changed 12 days ago</p>
+                    <p class="sai-desc">Update your 6-digit security PIN</p>
                 </div>
                 <i class="fas fa-chevron-right sai-arrow"></i>
             </a>
@@ -294,9 +315,13 @@
                 <span class="si-value good">Verified</span>
             </div>
             <div class="status-item">
-                <span class="si-dot active"></span>
+                {% with kyc=user.kycverification %}
+                <span class="si-dot {% if kyc and kyc.is_kyc_verified %}active{% else %}warning{% endif %}"></span>
                 <p class="si-label">KYC verification</p>
-                <span class="si-value good">Completed</span>
+                <span class="si-value {% if kyc and kyc.is_kyc_verified %}good{% else %}warn{% endif %}">
+                    {% if kyc and kyc.is_kyc_verified %}Completed{% else %}Pending{% endif %}
+                </span>
+                {% endwith %}
             </div>
             <div class="status-item">
                 <span class="si-dot warning"></span>
@@ -312,7 +337,7 @@
             </div>
             <h3>Need Help?</h3>
             <p>Contact our support team if you need assistance with your account settings or have any questions.</p>
-            <a href="#" class="nhc-btn">
+            <a href="{% url 'support:create_ticket' %}" class="nhc-btn">
                 <i class="fas fa-comments"></i>
                 <span>Contact Support</span>
             </a>

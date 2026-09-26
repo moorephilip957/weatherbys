@@ -26,7 +26,7 @@
             <h1>Install <span class="gradient-text">Hampdens Bank</span> on your device</h1>
             <p>Get the full banking experience with our Progressive Web App. No app store needed — install directly from your browser in seconds.</p>
 
-            <button class="download-btn-primary" id="main-install-button">
+            <button class="download-btn-primary" id="mainDownloadBtn">
                 <div class="dbp-icon" id="downloadBtnIcon">
                     <i class="fas fa-download"></i>
                 </div>
@@ -79,7 +79,6 @@
 <!-- QR Code Section -->
 <div class="qr-section">
     <div class="qr-wrap">
-        <!-- Replace with your actual app URL -->
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://app.hampdensbank.com" alt="Install QR Code">
         <div class="qr-logo">H</div>
     </div>
@@ -98,7 +97,7 @@
 </div>
 
 <!-- Manual Instructions -->
-<div class="manual-section" id="manual-instructions">
+<div class="manual-section">
     <div class="manual-section-head">
         <h2>Manual installation guide</h2>
         <p>Choose your device below for step-by-step instructions</p>
@@ -426,165 +425,119 @@
             Updates happen automatically! Whenever you open the app, it checks for updates in the background. You'll always have the latest features and security patches without lifting a finger.
         </div>
     </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Can I uninstall the app?</span>
+            <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+        </div>
+        <div class="faq-answer">
+            Yes, anytime. On mobile, long-press the app icon and select "Remove" or "Uninstall." On desktop, click the three-dot menu in the app window and select "Uninstall." Your account data remains safe on our servers.
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const installBtn = document.getElementById('main-install-button');
-    const manualInstructions = document.getElementById('manual-instructions');
-    const platformTabs = document.querySelectorAll('.platform-tab');
-    const platformContents = document.querySelectorAll('.platform-content');
-    
-    const detectedText = document.getElementById('detectedText');
-    const downloadBtnIcon = document.getElementById('downloadBtnIcon');
-    const downloadBtnSmall = document.getElementById('downloadBtnSmall');
-    const downloadBtnBig = document.getElementById('downloadBtnBig');
-    
-    let deferredPrompt = null;
+// ===== DEVICE DETECTION =====
+function detectDevice() {
+    const ua = navigator.userAgent;
+    const platform = navigator.platform || '';
 
-    // 1. Detect device reliably
-    const ua = navigator.userAgent.toLowerCase();
-    const isIOS = /iphone|ipad|ipod/.test(ua);
-    const isAndroid = /android/.test(ua);
-    const isWindows = /win/.test(ua);
-    const isMac = /mac/.test(ua) && !isIOS;
-
-    // 2. Set default text based on detected device
-    let deviceName = "Your Device";
-    let smallText = "One-click install for";
-    let iconClass = "fas fa-download";
-
-    if (isIOS) {
-        deviceName = "iPhone / iPad";
-        smallText = "Safari installation for";
-        iconClass = "fab fa-apple";
-    } else if (isAndroid) {
-        deviceName = "Android";
-        smallText = "One-click install for";
-        iconClass = "fab fa-android";
-    } else if (isWindows) {
-        deviceName = "Windows";
-        smallText = "One-click install for";
-        iconClass = "fab fa-windows";
-    } else if (isMac) {
-        deviceName = "macOS";
-        smallText = "Safari installation for";
-        iconClass = "fab fa-apple";
+    if (/iPad|iPhone|iPod/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+        return { type: 'ios', name: 'iPhone / iPad', icon: 'fab fa-apple', iconClass: 'ios' };
     }
-
-    // Apply the detected text to the DOM immediately
-    if (detectedText) detectedText.textContent = `Detected: ${deviceName}`;
-    if (downloadBtnIcon) downloadBtnIcon.innerHTML = `<i class="${iconClass}"></i>`;
-    if (downloadBtnSmall) downloadBtnSmall.textContent = smallText;
-    if (downloadBtnBig) downloadBtnBig.textContent = deviceName;
-
-    // 3. Capture PWA install event
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        
-        // Update button text gracefully, KEEPING the device name so it doesn't feel like it disappeared
-        if (downloadBtnSmall) downloadBtnSmall.textContent = "Tap to";
-        if (downloadBtnBig) downloadBtnBig.textContent = `Install ${deviceName} App`;
-        
-        // Add a subtle visual cue that it's ready
-        if (installBtn) {
-            installBtn.style.boxShadow = "0 0 20px rgba(0, 212, 168, 0.4)";
-        }
-    });
-
-    // 4. Helper to switch tabs and scroll
-    function switchTab(platform) {
-        platformTabs.forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.dataset.platform === platform) {
-                tab.classList.add('active');
-            }
-        });
-        platformContents.forEach(content => {
-            content.classList.remove('active');
-            if (content.id === `platform-${platform}`) {
-                content.classList.add('active');
-            }
-        });
-        if (manualInstructions) {
-            manualInstructions.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+    if (/Android/.test(ua)) {
+        return { type: 'android', name: 'Android', icon: 'fab fa-android', iconClass: 'android' };
     }
+    if (/Win/.test(ua)) {
+        return { type: 'windows', name: 'Windows', icon: 'fab fa-windows', iconClass: 'windows' };
+    }
+    if (/Mac/.test(ua)) {
+        return { type: 'macos', name: 'macOS', icon: 'fab fa-apple', iconClass: 'macos' };
+    }
+    return { type: 'unknown', name: 'your device', icon: 'fas fa-laptop', iconClass: '' };
+}
 
-    // 5. Main install button logic
-    installBtn?.addEventListener('click', async () => {
-        // Supported browsers with native PWA prompt
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            try {
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                }
-                deferredPrompt = null;
-            } catch (err) {
-                console.log(err);
-            }
-            return;
-        }
+const device = detectDevice();
 
-        // If iOS, switch to iOS tab and scroll (iOS doesn't support beforeinstallprompt)
-        if (isIOS) {
-            switchTab('ios');
-            return;
-        }
-        
-        // If Android but no prompt (e.g., already installed or unsupported browser), show Android tab
-        if (isAndroid) {
-            switchTab('android');
-            return;
-        }
+// Update hero badge
+document.getElementById('detectedText').textContent = `Detected: ${device.name}`;
 
-        // Fallback: scroll to manual instructions
-        if (manualInstructions) {
-            manualInstructions.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// Update main download button
+const btnIcon = document.getElementById('downloadBtnIcon');
+btnIcon.innerHTML = `<i class="${device.icon}"></i>`;
+if (device.iconClass) btnIcon.classList.add(device.iconClass);
+document.getElementById('downloadBtnSmall').textContent = 'One-click install for';
+document.getElementById('downloadBtnBig').textContent = device.name;
+
+// Main download button click
+document.getElementById('mainDownloadBtn').addEventListener('click', () => {
+    // Switch to the detected platform tab
+    const tab = document.querySelector(`.platform-tab[data-platform="${device.type}"]`);
+    if (tab) {
+        document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.platform-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(`platform-${device.type}`).classList.add('active');
+        // Scroll to manual section
+        document.querySelector('.manual-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        // Fallback: show all tabs
+        alert('Please scroll down to choose your device for installation instructions.');
+    }
+});
+
+// Alt option buttons
+document.querySelectorAll('.download-alt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const platform = btn.dataset.platform;
+        const tab = document.querySelector(`.platform-tab[data-platform="${platform}"]`);
+        if (tab) {
+            document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.platform-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`platform-${platform}`).classList.add('active');
+            document.querySelector('.manual-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     });
+});
 
-    // 6. Alt option buttons
-    document.querySelectorAll('.download-alt-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            switchTab(btn.dataset.platform);
-        });
+// ===== PLATFORM TABS =====
+document.querySelectorAll('.platform-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        const platform = tab.dataset.platform;
+        document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.platform-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(`platform-${platform}`).classList.add('active');
     });
+});
 
-    // 7. Platform tabs clicking logic
-    platformTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            switchTab(tab.dataset.platform);
-        });
+// ===== COPY URL =====
+document.getElementById('copyUrlBtn')?.addEventListener('click', function() {
+    const url = 'https://app.hampdensbank.com';
+    navigator.clipboard.writeText(url).then(() => {
+        const original = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-check"></i> <span>Copied!</span>';
+        this.style.background = '#059669';
+        setTimeout(() => {
+            this.innerHTML = original;
+            this.style.background = '';
+        }, 2000);
     });
+});
 
-    // 8. Copy URL functionality
-    document.getElementById('copyUrlBtn')?.addEventListener('click', function() {
-        const url = 'https://app.hampdensbank.com'; // Replace with your actual URL
-        navigator.clipboard.writeText(url).then(() => {
-            const original = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-check"></i> <span>Copied!</span>';
-            this.style.background = '#059669';
-            setTimeout(() => {
-                this.innerHTML = original;
-                this.style.background = '';
-            }, 2000);
-        });
-    });
-
-    // 9. FAQ Accordion
-    document.querySelectorAll('.faq-question').forEach(q => {
-        q.addEventListener('click', () => {
-            const item = q.parentElement;
-            const wasOpen = item.classList.contains('open');
-            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-            if (!wasOpen) item.classList.add('open');
-        });
+// ===== FAQ ACCORDION =====
+document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const wasOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        // Toggle clicked
+        if (!wasOpen) item.classList.add('open');
     });
 });
 </script>

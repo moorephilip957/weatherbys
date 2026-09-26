@@ -408,110 +408,39 @@ def payment(request):
 @kyc_required
 @block_blocked_users
 def change_transaction_pin(request):
+    user = request.user
+    bank_account = getattr(user, 'bank_account', None)
 
     if request.method == "POST":
-
         new_pin = request.POST.get("pin")
         current_password = request.POST.get("current_password")
 
         # Verify login password
-        if not request.user.check_password(current_password):
-
-            messages.error(
-                request,
-                "Incorrect account password."
-            )
-
-            return redirect(request.META.get('HTTP_REFERER'))
+        if not user.check_password(current_password):
+            messages.error(request, "Incorrect account password.")
+            return redirect(request.META.get('HTTP_REFERER', 'customer:change_transaction_pin'))
 
         try:
-            bank_account = request.user.bank_account
-
+            if not bank_account:
+                raise UserBankAccount.DoesNotExist
+            
             # Save hashed PIN
             bank_account.set_transaction_pin(new_pin)
-
-            messages.success(
-                request,
-                "Transaction PIN updated successfully."
-            )
+            messages.success(request, "Transaction PIN updated successfully.")
 
         except UserBankAccount.DoesNotExist:
-
-            messages.error(
-                request,
-                "Bank account not found."
-            )
-
+            messages.error(request, "Bank account not found.")
         except ValidationError as e:
-
-            messages.error(
-                request,
-                str(e)
-            )
-
+            messages.error(request, str(e))
         except Exception:
-
-            messages.error(
-                request,
-                "Something went wrong."
-            )
+            messages.error(request, "Something went wrong. Please try again.")
 
         return redirect('customer:change_transaction_pin')
-    else:
-        return render(request, 'customers/change_pin.html')
-# @login_required
-# @kyc_required
-# @block_blocked_users
-# def change_transaction_pin(request):
-
-#     if request.method == "POST":
-
-#         new_pin = request.POST.get("pin")
-#         current_password = request.POST.get("current_password")
-
-#         # Verify login password
-#         if not request.user.check_password(current_password):
-
-#             messages.error(
-#                 request,
-#                 "Incorrect account password."
-#             )
-
-#             return redirect(request.META.get('HTTP_REFERER'))
-
-#         try:
-#             bank_account = request.user.bank_account
-
-#             # Save hashed PIN
-#             bank_account.set_transaction_pin(new_pin)
-
-#             messages.success(
-#                 request,
-#                 "Transaction PIN updated successfully."
-#             )
-
-#         except UserBankAccount.DoesNotExist:
-
-#             messages.error(
-#                 request,
-#                 "Bank account not found."
-#             )
-
-#         except ValidationError as e:
-
-#             messages.error(
-#                 request,
-#                 str(e)
-#             )
-
-#         except Exception:
-
-#             messages.error(
-#                 request,
-#                 "Something went wrong."
-#             )
-
-#     return redirect(request.META.get('HTTP_REFERER'))
+    
+    return render(request, 'customers/change_pin.html', {
+        'user': user,
+        'bank_account': bank_account,
+    })
 
 
 @login_required
@@ -580,8 +509,8 @@ def change_password(request):
 def account_blocked(request):
 
     # If user is not actually blocked, redirect them away
-    # if request.user.status != "blocked":
-    #     return redirect("customer:dashboard")
+    if request.user.status != "blocked":
+        return redirect("customer:dashboard")
 
     return render(
         request,

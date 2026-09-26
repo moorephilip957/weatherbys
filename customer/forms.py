@@ -150,15 +150,13 @@ class DebitCardApplicationForm(forms.ModelForm):
 
 
 class ChangePasswordForm(forms.Form):
-
     current_password = forms.CharField(
         label='Current Password',
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                'id': 'current_password',
-                'name': 'current_password',
-                'class': 'form-control-custom',
+                'id': 'id_current_password',
+                'class': 'form-input',
                 'placeholder': 'Enter your current password',
                 'autocomplete': 'current-password',
             }
@@ -171,19 +169,13 @@ class ChangePasswordForm(forms.Form):
         min_length=8,
         widget=forms.PasswordInput(
             attrs={
-                'id': 'password',
-                'name': 'password',
-                'class': 'form-control-custom',
+                'id': 'id_password',
+                'class': 'form-input',
                 'placeholder': 'Enter your new password',
                 'autocomplete': 'new-password',
-                'minlength': '8',
-                'pattern': '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}',
             }
         ),
-        help_text=(
-            'Password must contain at least one uppercase letter, '
-            'one lowercase letter, and one number.'
-        )
+        help_text='Password must contain at least 8 characters, one uppercase, one lowercase, and one number.'
     )
 
     password_confirmation = forms.CharField(
@@ -191,9 +183,8 @@ class ChangePasswordForm(forms.Form):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                'id': 'password_confirmation',
-                'name': 'password_confirmation',
-                'class': 'form-control-custom',
+                'id': 'id_password_confirmation',
+                'class': 'form-input',
                 'placeholder': 'Confirm your new password',
                 'autocomplete': 'new-password',
             }
@@ -201,50 +192,25 @@ class ChangePasswordForm(forms.Form):
     )
 
     def __init__(self, user, *args, **kwargs):
-
         self.user = user
-
         super().__init__(*args, **kwargs)
 
     def clean_current_password(self):
-
-        current_password = self.cleaned_data.get(
-            'current_password'
-        )
-
-        if not self.user.check_password(
-            current_password
-        ):
-
-            raise forms.ValidationError(
-                'Current password is incorrect.'
-            )
-
+        current_password = self.cleaned_data.get('current_password')
+        if not self.user.check_password(current_password):
+            raise forms.ValidationError('Current password is incorrect.')
         return current_password
 
     def clean(self):
-
         cleaned_data = super().clean()
-
         password = cleaned_data.get('password')
+        password_confirmation = cleaned_data.get('password_confirmation')
 
-        password_confirmation = cleaned_data.get(
-            'password_confirmation'
-        )
-
-        # Check passwords match
         if password and password_confirmation:
-
             if password != password_confirmation:
-
-                raise forms.ValidationError(
-                    'Passwords do not match.'
-                )
-
-            # Django password validation
-            validate_password(
-                password,
-                self.user
-            )
+                raise forms.ValidationError('Passwords do not match.')
+            
+            # Django's built-in password validation
+            validate_password(password, self.user)
 
         return cleaned_data

@@ -26,7 +26,7 @@
                 <i class="fas fa-bell"></i>
             </div>
         </div>
-        <div class="sc-value" id="totalCount">24</div>
+        <div class="sc-value" id="totalCount">{{ notifications|length }}</div>
         <span class="sc-change up"><i class="fas fa-info-circle"></i> All notifications</span>
     </div>
 
@@ -37,30 +37,30 @@
                 <i class="fas fa-envelope"></i>
             </div>
         </div>
-        <div class="sc-value" id="unreadCount">8</div>
+        <div class="sc-value" id="unreadCount">{{ unread_count }}</div>
         <span class="sc-change down"><i class="fas fa-circle" style="font-size: 6px;"></i> Needs attention</span>
     </div>
 
     <div class="summary-card">
         <div class="sc-head">
-            <span class="sc-label">Today</span>
+            <span class="sc-label">Read</span>
             <div class="sc-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
-                <i class="fas fa-calendar-day"></i>
+                <i class="fas fa-envelope-open"></i>
             </div>
         </div>
-        <div class="sc-value">6</div>
-        <span class="sc-change up"><i class="fas fa-arrow-up"></i> New today</span>
+        <div class="sc-value" id="readCount">{{ notifications|length|add:"-0" }}</div>
+        <span class="sc-change up"><i class="fas fa-check"></i> Already viewed</span>
     </div>
 
     <div class="summary-card">
         <div class="sc-head">
-            <span class="sc-label">This week</span>
+            <span class="sc-label">Categories</span>
             <div class="sc-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
-                <i class="fas fa-calendar-week"></i>
+                <i class="fas fa-tags"></i>
             </div>
         </div>
-        <div class="sc-value">18</div>
-        <span class="sc-change up"><i class="fas fa-arrow-up"></i> +3 vs last week</span>
+        <div class="sc-value">4</div>
+        <span class="sc-change up"><i class="fas fa-layer-group"></i> Info, Success, Warning, Error</span>
     </div>
 </div>
 
@@ -70,643 +70,203 @@
         <i class="fas fa-search" style="color: var(--muted); font-size: 12px;"></i>
         <input type="text" id="notifSearch" placeholder="Search notifications...">
     </div>
-    <button class="notif-filter-chip active" data-filter="all">
+    <button type="button" class="notif-filter-chip active" data-filter="all">
         <span>All</span>
-        <span class="nfc-count">24</span>
+        <span class="nfc-count" id="filterAllCount">{{ notifications|length }}</span>
     </button>
-    <button class="notif-filter-chip" data-filter="unread">
+    <button type="button" class="notif-filter-chip" data-filter="unread">
         <span>Unread</span>
-        <span class="nfc-count">8</span>
+        <span class="nfc-count" id="filterUnreadCount">{{ unread_count }}</span>
     </button>
-    <button class="notif-filter-chip" data-filter="read">
+    <button type="button" class="notif-filter-chip" data-filter="read">
         <span>Read</span>
-        <span class="nfc-count">16</span>
+        <span class="nfc-count" id="filterReadCount">0</span>
     </button>
+
     <div class="notif-actions-group">
-        <a href="{% url 'notification:mark_all_notifications_read' %}" class="notif-action-btn" id="markAllReadBtn">
-            <i class="fas fa-check-double"></i>
-            <span>Mark all read</span>
-        </a>
-        <button class="notif-action-btn danger" id="deleteAllBtn">
-            <i class="fas fa-trash"></i>
-            <span>Delete all</span>
-        </button>
+        <!-- Mark All Read Form -->
+        {% if unread_count > 0 %}
+        <form method="POST" action="{% url 'notification:mark_all_notifications_read' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="notif-action-btn">
+                <i class="fas fa-check-double"></i>
+                <span>Mark all read</span>
+            </button>
+        </form>
+        {% endif %}
+
+        <!-- Delete All Form -->
+        {% if notifications %}
+        <form method="POST" action="{% url 'notification:delete_all_notifications' %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete ALL notifications? This cannot be undone.');">
+            {% csrf_token %}
+            <button type="submit" class="notif-action-btn danger">
+                <i class="fas fa-trash"></i>
+                <span>Delete all</span>
+            </button>
+        </form>
+        {% endif %}
     </div>
 </div>
 
 <!-- Notification List -->
 <div class="notif-list" id="notifList">
 
-    <!-- Today -->
-    <div class="notif-date-group">
-        <div class="ndg-label">
-            <span class="dot"></span>
-            Today
-        </div>
-        <span class="ndg-count">6 notifications</span>
-    </div>
+    {% if notifications %}
+        {% for notif in notifications %}
 
-    <div class="notif-item-list unread" data-id="1" data-type="transaction" data-read="false">
-        <div class="nil-icon transaction">
-            <i class="fas fa-arrow-down"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Payment received from Acme Corp</p>
-            <p class="nil-desc">You received $4,200.00 from Acme Corp. The funds are now available in your primary account.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> 2 minutes ago</span>
-                <span class="nil-tag transaction">Transaction</span>
+            {% comment %} Date Group Headers using ifchanged {% endcomment %}
+            {% ifchanged notif.created_at|date:"Y-m-d" %}
+                {% if not forloop.first %}
+                    {# Close previous group if needed #}
+                {% endif %}
+                <div class="notif-date-group">
+                    <div class="ndg-label">
+                        <span class="dot" {% if not forloop.first %}style="background: var(--muted);"{% endif %}></span>
+                        {% if notif.created_at|date:"Y-m-d" == today_date %}
+                            Today
+                        {% elif notif.created_at|date:"Y-m-d" == yesterday_date %}
+                            Yesterday
+                        {% else %}
+                            {{ notif.created_at|date:"l, M d, Y" }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endifchanged %}
+
+            <!-- Notification Item -->
+            <div class="notif-item-list {% if notif.read %}read{% else %}unread{% endif %}"
+                 data-id="{{ notif.id }}"
+                 data-read="{{ notif.read|yesno:'true,false' }}"
+                 data-type="{{ notif.notif_type }}"
+                 data-search="{{ notif.message|lower }} {{ notif.title|lower }}">
+
+                <!-- Icon -->
+                <div class="nil-icon {{ notif.notif_type }}">
+                    {% if notif.notif_type == 'success' %}
+                        <i class="fas fa-check-circle"></i>
+                    {% elif notif.notif_type == 'warning' %}
+                        <i class="fas fa-exclamation-triangle"></i>
+                    {% elif notif.notif_type == 'error' %}
+                        <i class="fas fa-shield-alt"></i>
+                    {% else %}
+                        <i class="fas fa-info-circle"></i>
+                    {% endif %}
+                </div>
+
+                <!-- Content -->
+                <div class="nil-content">
+                    <p class="nil-title">{{ notif.title|default:"Notification" }}</p>
+                    <p class="nil-desc">{{ notif.message }}</p>
+                    <div class="nil-meta">
+                        <span class="nil-time">
+                            <i class="far fa-clock"></i>
+                            {{ notif.created_at|timesince }} ago
+                        </span>
+                        <span class="nil-tag {{ notif.notif_type }}">{{ notif.get_notif_type_display }}</span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="nil-actions">
+                    {% if not notif.read %}
+                    <!-- Mark as Read Form -->
+                    <form method="POST" action="{% url 'notification:mark_read' notif.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="nil-action mark-read" title="Mark as read">
+                            <i class="fas fa-check"></i>
+                            <span class="nil-tooltip">Mark as read</span>
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    <!-- Delete Form -->
+                    <form method="POST" action="{% url 'notification:delete_notification' notif.id %}" style="display: inline;" onsubmit="return confirm('Delete this notification?');">
+                        {% csrf_token %}
+                        <button type="submit" class="nil-action delete" title="Delete">
+                            <i class="fas fa-trash"></i>
+                            <span class="nil-tooltip">Delete</span>
+                        </button>
+                    </form>
+                </div>
+
             </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action mark-read" title="Mark as read">
-                <i class="fas fa-check"></i>
-                <span class="nil-tooltip">Mark as read</span>
-            </button>
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
 
-    <div class="notif-item-list unread" data-id="2" data-type="security" data-read="false">
-        <div class="nil-icon security">
-            <i class="fas fa-shield-alt"></i>
+        {% endfor %}
+    {% else %}
+        <!-- Empty State -->
+        <div class="notif-empty">
+            <div class="ne-icon"><i class="far fa-bell-slash"></i></div>
+            <h3>All caught up!</h3>
+            <p>You have no notifications. We'll let you know when something new arrives.</p>
         </div>
-        <div class="nil-content">
-            <p class="nil-title">New sign-in from Chrome on Windows</p>
-            <p class="nil-desc">A new sign-in was detected from New York, US at 09:12 AM. If this wasn't you, please secure your account immediately.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> 15 minutes ago</span>
-                <span class="nil-tag security">Security</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action mark-read" title="Mark as read">
-                <i class="fas fa-check"></i>
-                <span class="nil-tooltip">Mark as read</span>
-            </button>
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
+    {% endif %}
 
-    <div class="notif-item-list unread" data-id="3" data-type="card" data-read="false">
-        <div class="nil-icon card">
-            <i class="fas fa-credit-card"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Your Platinum Mastercard is ready</p>
-            <p class="nil-desc">Your new card has been issued and will be delivered via express shipping. Expected delivery: 2-3 business days.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> 1 hour ago</span>
-                <span class="nil-tag card">Card</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action mark-read" title="Mark as read">
-                <i class="fas fa-check"></i>
-                <span class="nil-tooltip">Mark as read</span>
-            </button>
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <div class="notif-item-list read" data-id="4" data-type="transaction" data-read="true">
-        <div class="nil-icon transaction">
-            <i class="fas fa-arrow-up"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Transfer to Sarah Miller completed</p>
-            <p class="nil-desc">Your transfer of $120.00 to Sarah Miller has been successfully completed.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> 3 hours ago</span>
-                <span class="nil-tag transaction">Transaction</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <div class="notif-item-list unread" data-id="5" data-type="loan" data-read="false">
-        <div class="nil-icon loan">
-            <i class="fas fa-file-invoice-dollar"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Loan payment reminder</p>
-            <p class="nil-desc">Your monthly loan payment of $435.92 is due in 3 days (Sep 27). Make sure your account has sufficient funds.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> 5 hours ago</span>
-                <span class="nil-tag loan">Loan</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action mark-read" title="Mark as read">
-                <i class="fas fa-check"></i>
-                <span class="nil-tooltip">Mark as read</span>
-            </button>
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <div class="notif-item-list read" data-id="6" data-type="system" data-read="true">
-        <div class="nil-icon system">
-            <i class="fas fa-info-circle"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Monthly statement available</p>
-            <p class="nil-desc">Your August 2026 statement is now available. Download it from your account dashboard.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> 8 hours ago</span>
-                <span class="nil-tag system">System</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Yesterday -->
-    <div class="notif-date-group">
-        <div class="ndg-label">
-            <span class="dot" style="background: var(--muted);"></span>
-            Yesterday
-        </div>
-        <span class="ndg-count">5 notifications</span>
-    </div>
-
-    <div class="notif-item-list unread" data-id="7" data-type="promo" data-read="false">
-        <div class="nil-icon promo">
-            <i class="fas fa-gift"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Earn 5% cashback this weekend!</p>
-            <p class="nil-desc">Use your Hampdens card for all purchases this weekend and earn 5% cashback. No cap, no limits!</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> Yesterday, 06:00 PM</span>
-                <span class="nil-tag promo">Promotion</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action mark-read" title="Mark as read">
-                <i class="fas fa-check"></i>
-                <span class="nil-tooltip">Mark as read</span>
-            </button>
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <div class="notif-item-list read" data-id="8" data-type="transaction" data-read="true">
-        <div class="nil-icon transaction">
-            <i class="fas fa-exchange-alt"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Currency exchange completed</p>
-            <p class="nil-desc">You exchanged $500.00 to €460.00 at a rate of 0.92. Transaction reference: FX-2026-847180.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> Yesterday, 02:30 PM</span>
-                <span class="nil-tag transaction">Transaction</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <div class="notif-item-list read" data-id="9" data-type="security" data-read="true">
-        <div class="nil-icon security">
-            <i class="fas fa-key"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Password changed successfully</p>
-            <p class="nil-desc">Your account password was changed. If you didn't make this change, contact support immediately.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> Yesterday, 11:15 AM</span>
-                <span class="nil-tag security">Security</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <div class="notif-item-list unread" data-id="10" data-type="system" data-read="false">
-        <div class="nil-icon system">
-            <i class="fas fa-mobile-alt"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">New feature: Budget tracking</p>
-            <p class="nil-desc">We've launched a new budget tracking feature! Set monthly limits by category and get alerts when you're close.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> Yesterday, 09:00 AM</span>
-                <span class="nil-tag system">System</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action mark-read" title="Mark as read">
-                <i class="fas fa-check"></i>
-                <span class="nil-tooltip">Mark as read</span>
-            </button>
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <div class="notif-item-list read" data-id="11" data-type="transaction" data-read="true">
-        <div class="nil-icon transaction">
-            <i class="fas fa-arrow-down"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Deposit confirmed: $1,000 USDT</p>
-            <p class="nil-desc">Your USDT deposit of $1,000.00 has been confirmed and credited to your account.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> Yesterday, 08:22 AM</span>
-                <span class="nil-tag transaction">Transaction</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- This Week -->
-    <div class="notif-date-group">
-        <div class="ndg-label">
-            <span class="dot" style="background: var(--muted);"></span>
-            Earlier this week
-        </div>
-        <span class="ndg-count">13 notifications</span>
-    </div>
-
-    <div class="notif-item-list read" data-id="12" data-type="loan" data-read="true">
-        <div class="nil-icon loan">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Loan application approved</p>
-            <p class="nil-desc">Great news! Your personal loan application for $5,000 has been approved. Funds will be disbursed within 24 hours.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> Sep 22, 2026</span>
-                <span class="nil-tag loan">Loan</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <div class="notif-item-list read" data-id="13" data-type="card" data-read="true">
-        <div class="nil-icon card">
-            <i class="fas fa-credit-card"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Card added to Apple Pay</p>
-            <p class="nil-desc">Your Platinum Mastercard ending in 4829 has been successfully added to Apple Pay.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> Sep 21, 2026</span>
-                <span class="nil-tag card">Card</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-    <div class="notif-item-list read" data-id="14" data-type="security" data-read="true">
-        <div class="nil-icon security">
-            <i class="fas fa-exclamation-triangle"></i>
-        </div>
-        <div class="nil-content">
-            <p class="nil-title">Suspicious activity blocked</p>
-            <p class="nil-desc">We blocked a suspicious transaction attempt of $2,500 from an unrecognized device. Your account is safe.</p>
-            <div class="nil-meta">
-                <span class="nil-time"><i class="far fa-clock"></i> Sep 20, 2026</span>
-                <span class="nil-tag security">Security</span>
-            </div>
-        </div>
-        <div class="nil-actions">
-            <button class="nil-action delete" title="Delete">
-                <i class="fas fa-trash"></i>
-                <span class="nil-tooltip">Delete</span>
-            </button>
-        </div>
-    </div>
-
-</div>
-
-<!-- Pagination -->
-<div class="notif-pagination">
-    <div class="np-info">
-        Showing <strong>1-14</strong> of <strong>24</strong> notifications
-    </div>
-    <div class="np-controls">
-        <button class="page-btn" disabled><i class="fas fa-chevron-left"></i></button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
-    </div>
-</div>
-
-<!-- Confirm Delete All Modal -->
-<div class="confirm-modal" id="confirmModal">
-    <div class="confirm-modal-content">
-        <div class="cmc-icon">
-            <i class="fas fa-trash-alt"></i>
-        </div>
-        <h3 id="confirmTitle">Delete all notifications?</h3>
-        <p id="confirmText">This action cannot be undone. All 24 notifications will be permanently deleted from your account.</p>
-        <div class="confirm-modal-actions">
-            <button class="btn-cancel" id="confirmCancel">Cancel</button>
-            <button class="btn-confirm" id="confirmOk">Delete all</button>
-        </div>
-    </div>
-</div>
-
-<!-- Toast -->
-<div class="notif-toast" id="notifToast">
-    <div class="nt-icon"><i class="fas fa-check"></i></div>
-    <span id="toastMessage">Action completed</span>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// ===== STATE =====
-let currentFilter = 'all';
-let searchTerm = '';
+// ===== COMPUTE READ COUNT =====
+const totalNotifs = document.querySelectorAll('.notif-item-list').length;
+const unreadNotifs = document.querySelectorAll('.notif-item-list.unread').length;
+const readNotifs = totalNotifs - unreadNotifs;
 
-// ===== TOAST =====
-const toast = document.getElementById('notifToast');
-const toastMessage = document.getElementById('toastMessage');
-let toastTimeout;
+// Update summary cards
+document.getElementById('readCount').textContent = readNotifs;
+document.getElementById('filterReadCount').textContent = readNotifs;
+document.getElementById('filterUnreadCount').textContent = unreadNotifs;
+document.getElementById('filterAllCount').textContent = totalNotifs;
 
-function showToast(message, type = 'success') {
-    toast.className = 'notif-toast show ' + type;
-    toastMessage.textContent = message;
-    
-    const icon = toast.querySelector('.nt-icon i');
-    if (type === 'success') icon.className = 'fas fa-check';
-    else if (type === 'info') icon.className = 'fas fa-info-circle';
-    else if (type === 'warning') icon.className = 'fas fa-exclamation-triangle';
-    
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3000);
-}
+// ===== FILTER CHIPS =====
+const filterChips = document.querySelectorAll('.notif-filter-chip');
+const notifItems = document.querySelectorAll('.notif-item-list');
 
-// ===== UPDATE COUNTS =====
-function updateCounts() {
-    const items = document.querySelectorAll('.notif-item-list');
-    const total = items.length;
-    const unread = document.querySelectorAll('.notif-item-list.unread').length;
-    const read = total - unread;
-    
-    document.getElementById('totalCount').textContent = total;
-    document.getElementById('unreadCount').textContent = unread;
-    
-    // Update filter chip counts
-    document.querySelector('[data-filter="all"] .nfc-count').textContent = total;
-    document.querySelector('[data-filter="unread"] .nfc-count').textContent = unread;
-    document.querySelector('[data-filter="read"] .nfc-count').textContent = read;
-}
-
-// ===== MARK AS READ =====
-document.querySelectorAll('.mark-read').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const item = btn.closest('.notif-item-list');
-        if (item.classList.contains('unread')) {
-            item.classList.remove('unread');
-            item.classList.add('read', 'marking-read');
-            item.dataset.read = 'true';
-            
-            // Remove mark-read button
-            btn.remove();
-            
-            setTimeout(() => {
-                item.classList.remove('marking-read');
-            }, 600);
-            
-            updateCounts();
-            showToast('Notification marked as read', 'success');
-            
-            // Apply current filter
-            applyFilter();
-        }
-    });
-});
-
-// ===== DELETE SINGLE =====
-document.querySelectorAll('.nil-action.delete').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const item = btn.closest('.notif-item-list');
-        
-        item.classList.add('removing');
-        setTimeout(() => {
-            // Check if this is the last item in its date group
-            const dateGroup = item.previousElementSibling;
-            item.remove();
-            
-            // Check if date group is now empty
-            if (dateGroup && dateGroup.classList.contains('notif-date-group')) {
-                const nextEl = dateGroup.nextElementSibling;
-                if (!nextEl || nextEl.classList.contains('notif-date-group')) {
-                    dateGroup.remove();
-                } else {
-                    // Update count
-                    const countInGroup = Array.from(dateGroup.parentElement.children)
-                        .filter(el => el.classList.contains('notif-item-list'))
-                        .filter(el => {
-                            let prev = el.previousElementSibling;
-                            while (prev && !prev.classList.contains('notif-date-group')) {
-                                prev = prev.previousElementSibling;
-                            }
-                            return prev === dateGroup;
-                        }).length;
-                    const countEl = dateGroup.querySelector('.ndg-count');
-                    if (countEl) {
-                        countEl.textContent = countInGroup + ' notification' + (countInGroup !== 1 ? 's' : '');
-                    }
-                }
-            }
-            
-            updateCounts();
-            showToast('Notification deleted', 'info');
-            applyFilter();
-        }, 300);
-    });
-});
-
-// ===== MARK ALL READ =====
-document.getElementById('markAllReadBtn').addEventListener('click', () => {
-    const unreadItems = document.querySelectorAll('.notif-item-list.unread');
-    if (unreadItems.length === 0) {
-        showToast('All notifications are already read', 'info');
-        return;
-    }
-    
-    unreadItems.forEach((item, idx) => {
-        setTimeout(() => {
-            item.classList.remove('unread');
-            item.classList.add('read', 'marking-read');
-            item.dataset.read = 'true';
-            
-            // Remove mark-read button
-            const markBtn = item.querySelector('.mark-read');
-            if (markBtn) markBtn.remove();
-            
-            setTimeout(() => {
-                item.classList.remove('marking-read');
-            }, 600);
-        }, idx * 50);
-    });
-    
-    setTimeout(() => {
-        updateCounts();
-        showToast(`${unreadItems.length} notifications marked as read`, 'success');
-        applyFilter();
-    }, unreadItems.length * 50 + 100);
-});
-
-// ===== DELETE ALL (with confirmation) =====
-const confirmModal = document.getElementById('confirmModal');
-const confirmTitle = document.getElementById('confirmTitle');
-const confirmText = document.getElementById('confirmText');
-const confirmOk = document.getElementById('confirmOk');
-const confirmCancel = document.getElementById('confirmCancel');
-
-let pendingAction = null;
-
-document.getElementById('deleteAllBtn').addEventListener('click', () => {
-    const total = document.querySelectorAll('.notif-item-list').length;
-    if (total === 0) {
-        showToast('No notifications to delete', 'info');
-        return;
-    }
-    
-    confirmTitle.textContent = 'Delete all notifications?';
-    confirmText.textContent = `This action cannot be undone. All ${total} notifications will be permanently deleted from your account.`;
-    confirmOk.textContent = 'Delete all';
-    pendingAction = 'deleteAll';
-    confirmModal.classList.add('active');
-});
-
-confirmCancel.addEventListener('click', () => {
-    confirmModal.classList.remove('active');
-    pendingAction = null;
-});
-
-confirmModal.addEventListener('click', (e) => {
-    if (e.target === confirmModal) {
-        confirmModal.classList.remove('active');
-        pendingAction = null;
-    }
-});
-
-confirmOk.addEventListener('click', () => {
-    if (pendingAction === 'deleteAll') {
-        const items = document.querySelectorAll('.notif-item-list');
-        items.forEach((item, idx) => {
-            setTimeout(() => {
-                item.classList.add('removing');
-            }, idx * 30);
-        });
-        
-        setTimeout(() => {
-            items.forEach(item => item.remove());
-            document.querySelectorAll('.notif-date-group').forEach(g => g.remove());
-            
-            // Show empty state
-            const list = document.getElementById('notifList');
-            list.innerHTML = `
-                <div class="notif-empty">
-                    <div class="ne-icon"><i class="far fa-bell-slash"></i></div>
-                    <h3>All caught up!</h3>
-                    <p>You have no notifications. We'll let you know when something new arrives.</p>
-                </div>
-            `;
-            
-            updateCounts();
-            confirmModal.classList.remove('active');
-            showToast('All notifications deleted', 'warning');
-        }, items.length * 30 + 300);
-    }
-    pendingAction = null;
-});
-
-// ===== FILTER =====
-document.querySelectorAll('.notif-filter-chip').forEach(chip => {
+filterChips.forEach(chip => {
     chip.addEventListener('click', () => {
-        document.querySelectorAll('.notif-filter-chip').forEach(c => c.classList.remove('active'));
+        filterChips.forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
-        currentFilter = chip.dataset.filter;
-        applyFilter();
+
+        const filter = chip.dataset.filter;
+
+        notifItems.forEach(item => {
+            const isRead = item.dataset.read === 'true';
+            let show = true;
+
+            if (filter === 'unread' && isRead) show = false;
+            if (filter === 'read' && !isRead) show = false;
+
+            item.style.display = show ? '' : 'none';
+        });
+
+        // Hide empty date groups
+        document.querySelectorAll('.notif-date-group').forEach(group => {
+            let next = group.nextElementSibling;
+            let hasVisible = false;
+            while (next && !next.classList.contains('notif-date-group')) {
+                if (next.classList.contains('notif-item-list') && next.style.display !== 'none') {
+                    hasVisible = true;
+                    break;
+                }
+                next = next.nextElementSibling;
+            }
+            group.style.display = hasVisible ? '' : 'none';
+        });
     });
 });
 
-function applyFilter() {
-    const items = document.querySelectorAll('.notif-item-list');
-    const dateGroups = document.querySelectorAll('.notif-date-group');
-    
-    items.forEach(item => {
-        const isRead = item.dataset.read === 'true';
-        let show = true;
-        
-        if (currentFilter === 'unread' && isRead) show = false;
-        if (currentFilter === 'read' && !isRead) show = false;
-        
-        // Search filter
-        if (searchTerm) {
-            const title = item.querySelector('.nil-title').textContent.toLowerCase();
-            const desc = item.querySelector('.nil-desc').textContent.toLowerCase();
-            if (!title.includes(searchTerm) && !desc.includes(searchTerm)) {
-                show = false;
-            }
-        }
-        
-        item.style.display = show ? '' : 'none';
+// ===== SEARCH =====
+const searchInput = document.getElementById('notifSearch');
+searchInput.addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase().trim();
+
+    notifItems.forEach(item => {
+        const searchData = item.dataset.search;
+        const matches = !term || searchData.includes(term);
+        item.style.display = matches ? '' : 'none';
     });
-    
-    // Hide empty date groups
-    dateGroups.forEach(group => {
+
+    // Hide empty date groups after search
+    document.querySelectorAll('.notif-date-group').forEach(group => {
         let next = group.nextElementSibling;
         let hasVisible = false;
         while (next && !next.classList.contains('notif-date-group')) {
@@ -718,45 +278,22 @@ function applyFilter() {
         }
         group.style.display = hasVisible ? '' : 'none';
     });
-}
-
-// ===== SEARCH =====
-document.getElementById('notifSearch').addEventListener('input', (e) => {
-    searchTerm = e.target.value.toLowerCase().trim();
-    applyFilter();
 });
 
-// ===== CLICK NOTIFICATION =====
-document.querySelectorAll('.notif-item-list').forEach(item => {
+// ===== CLICK NOTIFICATION TO MARK AS READ =====
+notifItems.forEach(item => {
     item.addEventListener('click', (e) => {
-        if (e.target.closest('.nil-action')) return;
-        
-        // Mark as read on click if unread
+        // Don't trigger if clicking on action buttons or forms
+        if (e.target.closest('.nil-action') || e.target.closest('form')) return;
+
+        // If unread, redirect to mark as read
         if (item.classList.contains('unread')) {
-            item.classList.remove('unread');
-            item.classList.add('read');
-            item.dataset.read = 'true';
-            const markBtn = item.querySelector('.mark-read');
-            if (markBtn) markBtn.remove();
-            updateCounts();
-        }
-        
-        // Would navigate to related page
-        // window.location.href = '#';
-    });
-});
-
-// ===== PAGINATION =====
-document.querySelectorAll('.np-controls .page-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        if (!btn.disabled && !btn.querySelector('i')) {
-            document.querySelectorAll('.np-controls .page-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            const markForm = item.querySelector('form');
+            if (markForm) {
+                markForm.submit();
+            }
         }
     });
 });
-
-// Initial count
-updateCounts();
 </script>
 {% endblock %}

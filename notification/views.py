@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils import timezone
 
 from .models import Notification
 from kyc.decorator import kyc_required
@@ -12,9 +13,16 @@ from account.decorator import block_blocked_users
 def notification_list(request):
     notifications = request.user.notifications.all()
     unread_count = notifications.filter(read=False).count()
+
+    now = timezone.now()
+    today_date = now.date().isoformat()
+    yesterday_date = (now.date() - timezone.timedelta(days=1)).isoformat()
+
     return render(request, "customers/notification/notification_list.html", {
         "notifications": notifications,
-        "unread_count": unread_count
+        "unread_count": unread_count,
+        "today_date": today_date,
+        "yesterday_date": yesterday_date,
     })
 
 

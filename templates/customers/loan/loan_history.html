@@ -83,7 +83,7 @@
         <span class="sc-change up"><i class="fas fa-thumbs-up"></i> Successfully closed</span>
     </div>
 </div>
-
+{% include "../../components/messages.html" %}
 <!-- Filter Tabs -->
 <div class="loan-filter-tabs">
     <a href="{% url 'loan:loan_history' %}" class="loan-filter-tab {% if not status %}active{% endif %}">
