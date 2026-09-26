@@ -1,0 +1,338 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Create an Account | Weatherbys Racing Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'frontends/components/register.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="register-page">
+
+    <!-- Left Panel: Branding -->
+    <div class="register-brand-panel">
+        <div class="register-brand-top">
+            <img src="{% static 'frontends/images/logo-1.png' %}" alt="" style="max-width: 300px;">
+        </div>
+
+        <div class="register-brand-middle">
+            <h1>Join the future of <span>banking</span></h1>
+            <p>Create your account in minutes and unlock premium financial tools designed for the modern era.</p>
+
+            <div class="register-features">
+                <div class="register-feature">
+                    <div class="register-feature-icon"><i class="fas fa-bolt"></i></div>
+                    <span>Open an account in under 3 minutes</span>
+                </div>
+                <div class="register-feature">
+                    <div class="register-feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <span>Bank-grade 256-bit encryption</span>
+                </div>
+                <div class="register-feature">
+                    <div class="register-feature-icon"><i class="fas fa-percentage"></i></div>
+                    <span>Zero hidden fees, ever</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel: Form -->
+    <div class="register-form-panel">
+        <div class="register-card">
+            
+            <div class="register-card-header">
+                <h2>Create your account</h2>
+                <p>Already have an account? <a href="{% url 'account:login' %}">Sign in here</a></p>
+            </div>
+
+            <!-- Error Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="register-alert">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <!-- Multi-Step Form -->
+            <form method="POST" id="registerForm" action="{% url 'account:register' %}" novalidate>
+                {% csrf_token %}
+
+                <!-- Progress Bar -->
+                <div class="register-progress">
+                    <div class="progress-step active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <span class="step-label">Personal</span>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <div class="step-circle">2</div>
+                        <span class="step-label">Contact</span>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <div class="step-circle">3</div>
+                        <span class="step-label">Security</span>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <div class="step-circle">4</div>
+                        <span class="step-label">Account</span>
+                    </div>
+                </div>
+
+                <!-- STEP 1: Personal Information -->
+                <div class="form-step active" id="step-1">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>First Name <span class="req">*</span></label>
+                            {{ user_form.first_name }}
+                        </div>
+                        <div class="form-field">
+                            <label>Middle Name <span class="opt">(Optional)</span></label>
+                            {{ user_form.middle_name }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Last Name <span class="req">*</span></label>
+                            {{ user_form.last_name }}
+                        </div>
+                        <div class="form-field">
+                            <label>Username <span class="req">*</span></label>
+                            {{ user_form.username }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Contact Information -->
+                <div class="form-step" id="step-2">
+                    <div class="form-field">
+                        <label>Email Address <span class="req">*</span></label>
+                        {{ user_form.email }}
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Phone Number</label>
+                            {{ user_form.phone_number }}
+                        </div>
+                        <div class="form-field">
+                            <label>Country <span class="req">*</span></label>
+                            {{ user_form.country }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Security -->
+                <div class="form-step" id="step-3">
+                    <div class="form-field">
+                        <label>Password <span class="req">*</span></label>
+                        {{ user_form.password1 }}
+                    </div>
+                    
+                    <!-- Password Strength Meter -->
+                    <div class="password-strength" id="passwordStrength" data-strength="0">
+                        <div class="strength-bar">
+                            <div class="strength-segment"></div>
+                            <div class="strength-segment"></div>
+                            <div class="strength-segment"></div>
+                            <div class="strength-segment"></div>
+                        </div>
+                        <div class="strength-text">
+                            <span class="strength-label" id="strengthLabel">Password strength</span>
+                            <span class="strength-hint" id="strengthHint">Enter a password</span>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label>Confirm Password <span class="req">*</span></label>
+                        {{ user_form.password2 }}
+                    </div>
+                </div>
+
+                <!-- STEP 4: Account Setup -->
+                <div class="form-step" id="step-4">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Account Type <span class="req">*</span></label>
+                            {{ bank_form.account_type }}
+                        </div>
+                        <div class="form-field">
+                            <label>Currency <span class="req">*</span></label>
+                            {{ bank_form.currency }}
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label>Transaction PIN <span class="req">*</span></label>
+                        {{ bank_form.transaction_pin }}
+                        <div style="font-size: 12px; color: var(--muted); margin-top: 6px;">
+                            <i class="fas fa-info-circle"></i> {{ bank_form.transaction_pin.help_text }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-prev" id="prevBtn" style="display: none;">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <button type="button" class="btn-next" id="nextBtn">
+                        <span>Next Step</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button type="submit" class="btn-submit" id="submitBtn" style="display: none;" disabled>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Create Account</span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const registerForm = document.getElementById('registerForm');
+
+    // ===== STEP NAVIGATION =====
+    function showStep(step) {
+        // Hide all steps
+        document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+        // Show current step
+        document.getElementById(`step-${step}`).classList.add('active');
+        
+        // Update progress bar
+        document.querySelectorAll('.progress-step').forEach((el, idx) => {
+            const stepNum = idx + 1;
+            el.classList.remove('active', 'completed');
+            if (stepNum < step) {
+                el.classList.add('completed');
+                el.querySelector('.step-circle').innerHTML = '<i class="fas fa-check"></i>';
+            } else if (stepNum === step) {
+                el.classList.add('active');
+                el.querySelector('.step-circle').textContent = stepNum;
+            } else {
+                el.querySelector('.step-circle').textContent = stepNum;
+            }
+        });
+        
+        // Update buttons
+        prevBtn.style.display = step === 1 ? 'none' : 'inline-flex';
+        nextBtn.style.display = step === totalSteps ? 'none' : 'inline-flex';
+        submitBtn.style.display = step === totalSteps ? 'inline-flex' : 'none';
+    }
+
+    function validateStep(step) {
+        const currentStepEl = document.getElementById(`step-${step}`);
+        const inputs = currentStepEl.querySelectorAll('input[required], select[required]');
+        let isValid = true;
+        
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                input.reportValidity();
+                isValid = false;
+            }
+        });
+        
+        // Special validation for password match on step 3
+        if (step === 3) {
+            const p1 = document.getElementById('id_password1').value;
+            const p2 = document.getElementById('id_password2').value;
+            if (p1 !== p2 || p1.length < 8) {
+                if (p1 !== p2) {
+                    alert('Passwords do not match!');
+                } else if (p1.length < 8) {
+                    alert('Password must be at least 8 characters long.');
+                }
+                isValid = false;
+            }
+        }
+        
+        return isValid;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (validateStep(currentStep)) {
+            currentStep++;
+            showStep(currentStep);
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
+        }
+    });
+
+    // ===== PASSWORD STRENGTH METER =====
+    const passwordInput = document.getElementById('id_password1');
+    const strengthMeter = document.getElementById('passwordStrength');
+    const strengthLabel = document.getElementById('strengthLabel');
+    const strengthHint = document.getElementById('strengthHint');
+    const segments = document.querySelectorAll('.strength-segment');
+
+    if (passwordInput) {
+        passwordInput.addEventListener('input', () => {
+            const val = passwordInput.value;
+            let score = 0;
+            
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+
+            strengthMeter.dataset.strength = score;
+            
+            const labels = ['Password strength', 'Weak', 'Fair', 'Good', 'Strong'];
+            const hints = ['Enter a password', 'Add more variety', 'Getting better', 'Almost there', 'Excellent password!'];
+            const colors = ['var(--line)', 'var(--danger)', '#F59E0B', '#3B82F6', 'var(--accent)'];
+
+            strengthLabel.textContent = labels[score];
+            strengthHint.textContent = val.length === 0 ? hints[0] : hints[score];
+
+            segments.forEach((seg, idx) => {
+                seg.style.background = idx < score ? colors[score] : 'var(--line)';
+            });
+
+            // Update submit button state on step 4
+            checkFinalStep();
+        });
+    }
+
+    // ===== FINAL STEP VALIDATION =====
+    function checkFinalStep() {
+        const p1 = document.getElementById('id_password1').value;
+        const p2 = document.getElementById('id_password2').value;
+        const pin = document.getElementById('id_transaction_pin').value;
+        
+        const passwordsMatch = p1 === p2 && p1.length >= 8;
+        const pinValid = pin.length === 6 && /^\d+$/.test(pin);
+        
+        submitBtn.disabled = !(passwordsMatch && pinValid);
+    }
+
+    // Listen to changes on step 4 to enable/disable submit
+    document.getElementById('id_transaction_pin')?.addEventListener('input', checkFinalStep);
+    document.getElementById('id_password2')?.addEventListener('input', checkFinalStep);
+
+    // ===== FORM SUBMIT =====
+    registerForm?.addEventListener('submit', () => {
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Creating Account...</span>';
+        submitBtn.disabled = true;
+    });
+});
+</script>
+{% endblock %}

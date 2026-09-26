@@ -18,13 +18,13 @@
         <div class="nav-menu-wrapper">
             <ul class="navbar-nav" id="menu">
                 <li class="nav-item"><a class="nav-link" href="{% url 'frontend:home' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'frontend:about' %}">About Us</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'frontend:personal' %}">Personal</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'frontend:corperate' %}">Corporate</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'frontend:insurance' %}">Insurance</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'frontend:mortgages' %}">Mortgages</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'frontend:contact' %}">Contact Us</a></li>
                 <li class="nav-item submenu" id="seftonDropdown">
                     <a class="nav-link" href="#" style="display: flex; align-items: center; gap: 6px;">
-                        Sefton Savings <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+                        More <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </a>
                     <ul>
                         <li class="nav-item"><a class="nav-link" href="{% url 'frontend:savings' %}">Savings</a></li>
@@ -65,7 +65,7 @@
 <!-- Mobile Offcanvas Panel -->
 <div class="mobile-backdrop" id="mobileBackdrop"></div>
 <div class="mobile-offcanvas" id="mobileOffcanvas">
-    <div class="mobile-offcanvas-header">
+    <div class="mobile-offcanvas-header ">
         <a href="{% url 'frontend:home' %}" class="logo">
             <img
                 src="{% static 'frontends/images/logo-2.png' %}"

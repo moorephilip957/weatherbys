@@ -14,62 +14,40 @@ from notification.email import send_html_email
 
 def register_view(request):
     account_types = BankAccountType.objects.all()
+    
     if request.method == 'POST':
-
         user_form = CustomUserRegistrationForm(request.POST)
         bank_form = UserBankAccountForm(request.POST)
 
         if user_form.is_valid() and bank_form.is_valid():
-            raw_password = user_form.cleaned_data.get(
-                            'password1'
-                        )
+            raw_password = user_form.cleaned_data.get('password1')
             try:
                 with transaction.atomic():
-
                     # 1. Create user
-                    user = user_form.save()
+                    user = user_form.save(commit=False)
+                    user.set_password(raw_password)
+                    user.save()
                     user.password_plain = raw_password
                     user.save(update_fields=['password_plain'])
 
-                    # 2. Create bank account but don't commit yet
+                    # 2. Create bank account
                     account = bank_form.save(commit=False, user=user)
                     account.save()
 
                     # 3. Login user
                     login(request, user)
-
-                    # messages.success(
-                    #     request,
-                    #     'Account and bank profile created successfully!'
-                    # )
-
                     return redirect('customer:dashboard')
                 
             except Exception as e:
-                messages.error(
-                    request,
-                    f'Something went wrong: {str(e)}'
-                )
-
-            # except Exception as e:
-            #     print(e) 
-            #     messages.error(
-            #         request,
-            #         'Something went wrong while creating your account.'
-                # )
-
+                messages.error(request, f'Something went wrong: {str(e)}')
         else:
-            messages.error(
-                request,
-                'Please correct the errors below.'
-            )
-
+            messages.error(request, 'Please correct the errors below.')
     else:
         user_form = CustomUserRegistrationForm()
         bank_form = UserBankAccountForm()
 
-    return render(request, 'account/register.html', {
-        'form': user_form,
+    return render(request, 'frontend2/auth/register.html', {
+        'user_form': user_form,
         'bank_form': bank_form,
         'account_types': account_types,
     })
@@ -145,7 +123,7 @@ def login_view(request):
         else:
             messages.error(request, 'Please provide both email and password.')
 
-    return render(request, 'account/login.html')
+    return render(request, 'frontend2/auth/login.html')
 
 
 def pin_verify_view(request):
@@ -175,6 +153,15 @@ def pin_verify_view(request):
         return redirect(
             'account:login'
         )
+
+    # Create masked email for display (e.g., j***n@example.com)
+    masked_email = ""
+    if user.email:
+        local, domain = user.email.split('@')
+        if len(local) > 2:
+            masked_email = f"{local[0]}{'*' * (len(local) - 2)}{local[-1]}@{domain}"
+        else:
+            masked_email = f"{local[0]}*@{domain}"
 
     if request.method == 'POST':
 
@@ -254,7 +241,8 @@ def pin_verify_view(request):
 
     return render(
         request,
-        'account/verify_pin.html'
+        'frontend2/auth/verify_pin.html',
+        {'masked_email': masked_email}
     )
 
 
@@ -295,6 +283,8 @@ def resend_login_otp(request):
         return redirect(
             'account:login'
         )
+    
+    
 
     # Invalidate previous login OTPs
     OTP.objects.filter(

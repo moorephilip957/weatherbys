@@ -1,0 +1,156 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}About Us | Weatherbys Racing Bank{% endblock %}
+
+{% block meta_description %}Learn about the history, mission, and core values of Weatherbys Racing Bank. We are committed to empowering your financial future with innovative and secure banking solutions.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'frontends/components/home.css' %}">
+<link rel="stylesheet" href="{% static 'frontends/components/about.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="about-hero">
+    <div class="about-hero-content">
+        <h1>Building the Future of <span>Banking</span></h1>
+        <p>For over two decades, Weatherbys Racing Bank has been at the forefront of financial innovation, empowering individuals and businesses to achieve their greatest ambitions.</p>
+    </div>
+</section>
+
+<!-- Our Story -->
+<section class="story-section">
+    <div class="container story-grid">
+        <div class="story-image">
+            <img src="{% static 'frontends/images/about-us2.jpg' %}">
+        </div>
+        <div class="story-content">
+            <h2>Our Story & Mission</h2>
+            <p>Founded in 1989, Weatherbys Racing Bank began with a simple yet powerful vision: to make premium banking accessible, transparent, and deeply personal. What started as a small community-focused institution has grown into a leading financial partner for over 2 million customers worldwide.</p>
+            <p>Today, our mission remains unchanged. We strive to combine cutting-edge financial technology with unmatched human expertise. We don't just manage your money; we partner with you to build a secure, prosperous future for you, your family, and your business.</p>
+            <p>Every decision we make, every product we build, and every interaction we have is guided by our commitment to your financial well-being and long-term success.</p>
+            <a href="{% url 'frontend:contact' %}" class="btn btn-primary" style="margin-top: 16px;">Get in Touch <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- Core Values -->
+<section class="values-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Core Values</h2>
+            <p>The principles that guide everything we do, from the products we build to the way we treat our customers.</p>
+        </div>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="vc-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Uncompromising Security</h3>
+                <p>We invest heavily in state-of-the-art encryption and fraud detection to ensure your assets and data are always protected.</p>
+            </div>
+            <div class="value-card">
+                <div class="vc-icon"><i class="fas fa-handshake"></i></div>
+                <h3>Customer First</h3>
+                <p>We listen, we adapt, and we go above and beyond to deliver financial solutions that truly meet your unique needs.</p>
+            </div>
+            <div class="value-card">
+                <div class="vc-icon"><i class="fas fa-lightbulb"></i></div>
+                <h3>Relentless Innovation</h3>
+                <p>We continuously evolve our technology and services to stay ahead of the curve and provide you with the best tools available.</p>
+            </div>
+            <div class="value-card">
+                <div class="vc-icon"><i class="fas fa-balance-scale"></i></div>
+                <h3>Integrity & Transparency</h3>
+                <p>No hidden fees, no fine print surprises. We believe in honest, clear, and ethical banking practices at all times.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Solutions -->
+<section class="section" style="background: var(--surface-2);">
+    <div class="container">
+        <div class="section-header">
+            <h2>Tailored Financial Solutions</h2>
+            <p>Whether you are growing a business, planning for retirement, or managing daily expenses, we have a premium solution for you.</p>
+        </div>
+        <div class="solutions-grid">
+            <div class="image-card">
+                <div class="image-card-img">
+                    <img src="{% static 'frontends/images/breadcrumb.jpg' %}" alt="Wealth Management">
+                </div>
+                <div class="image-card-body">
+                    <h3>Wealth Management</h3>
+                    <p>Expert advisory services to help you grow, protect, and transfer your wealth across generations with confidence.</p>
+                    <a href="{% url 'frontend:personal' %}" class="btn-text">Explore Wealth <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="image-card">
+                <div class="image-card-img">
+                    <img src="{% static 'frontends/images/about-us.jpg' %}" alt="Corporate Banking">
+                </div>
+                <div class="image-card-body">
+                    <h3>Corporate Banking</h3>
+                    <p>Scalable treasury management, commercial lending, and dedicated relationship managers for your business.</p>
+                    <a href="{% url 'frontend:corperate' %}" class="btn-text">Explore Corporate <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="image-card">
+                <div class="image-card-img">
+                    <img src="{% static 'frontends/images/image-6.jpg' %}" alt="Premium Cards">
+                </div>
+                <div class="image-card-body">
+                    <h3>Premium Credit Cards</h3>
+                    <p>Unlock exclusive rewards, airport lounge access, and comprehensive travel insurance with our elite cards.</p>
+                    <a href="{% url 'frontend:cards' %}" class="btn-text">View Cards <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- App Showcase -->
+<section class="section app-section">
+    <div class="container app-grid">
+        <div class="app-content">
+            <h2>Banking at Your Fingertips</h2>
+            <p>Download the Weatherbys Racing Bank mobile app and manage your finances anytime, anywhere.</p>
+            <div class="app-features">
+                <div class="app-feature">
+                    <div class="af-icon"><i class="fas fa-bolt"></i></div>
+                    <div><h4>Instant Transfers</h4><p>Send and receive money in real-time, locally and globally.</p></div>
+                </div>
+                <div class="app-feature">
+                    <div class="af-icon"><i class="fas fa-fingerprint"></i></div>
+                    <div><h4>Biometric Login</h4><p>Secure access with Face ID or fingerprint authentication.</p></div>
+                </div>
+                <div class="app-feature">
+                    <div class="af-icon"><i class="fas fa-bell"></i></div>
+                    <div><h4>Real-Time Alerts</h4><p>Get instant push notifications for every transaction.</p></div>
+                </div>
+            </div>
+            <div class="store-badges">
+                <a href="#" class="store-badge"><i class="fab fa-apple"></i><div><span class="small">Download on the</span><span class="big">App Store</span></div></a>
+                <a href="#" class="store-badge"><i class="fab fa-google-play"></i><div><span class="small">Get it on</span><span class="big">Google Play</span></div></a>
+            </div>
+        </div>
+        <div class="app-image">
+            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=600" alt="Mobile App">
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="about-cta">
+    <div class="container">
+        <div class="about-cta-content">
+            <h2>Ready to Experience the Difference?</h2>
+            <p>Join a bank that truly cares about your financial journey. Open your account today and discover premium banking redefined.</p>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="{% url 'account:register' %}" class="btn btn-white">Open an Account <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'frontend:contact' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.5);">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

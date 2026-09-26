@@ -1,0 +1,198 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Sign In | Weatherbys Racing Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'frontends/components/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="login-hero">
+    <div class="container login-hero-content">
+        <h1>Welcome back to <span>smarter banking</span></h1>
+        <p>Access your accounts, manage your finances, and experience premium banking designed for the modern era.</p>
+
+        <div class="login-hero-features">
+            <div class="login-hero-feature">
+                <i class="fas fa-shield-alt"></i>
+                <span>256-bit encryption</span>
+            </div>
+            <div class="login-hero-feature">
+                <i class="fas fa-bolt"></i>
+                <span>Instant account access</span>
+            </div>
+            <div class="login-hero-feature">
+                <i class="fas fa-mobile-alt"></i>
+                <span>All devices supported</span>
+            </div>
+        </div>
+
+        <div class="login-hero-badges">
+            <div class="trust-badge">
+                <i class="fas fa-lock"></i>
+                <span>256-bit SSL</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-university"></i>
+                <span>FSCS Insured</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>PCI DSS Compliant</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-certificate"></i>
+                <span>SOC 2 Certified</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Login Form Section -->
+<section class="login-section">
+    <div class="container">
+
+        <!-- Login Card -->
+        <div class="login-card">
+            <div class="login-card-header">
+                <h2>Sign in to your account</h2>
+                <p>Don't have an account? <a href="{% url 'account:register' %}">Open one in minutes</a></p>
+            </div>
+
+            <!-- Error Messages -->
+            {% include "../../components/messages.html" %}
+
+            <!-- Login Form -->
+            <form method="POST" id="loginForm" action="{% url 'account:login' %}">
+                {% csrf_token %}
+
+                <!-- Email Field -->
+                <div class="login-field">
+                    <label for="login-email">Email address</label>
+                    <div class="login-input-wrap">
+                        <input type="email" 
+                               name="email" 
+                               id="login-email" 
+                               class="login-input" 
+                               placeholder="you@example.com" 
+                               autocomplete="email" 
+                               required>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="login-field">
+                    <label for="login-password">Password</label>
+                    <div class="login-input-wrap">
+                        <input type="password" 
+                               name="password" 
+                               id="login-password" 
+                               class="login-input" 
+                               placeholder="Enter your password" 
+                               autocomplete="current-password" 
+                               required>
+                        <i class="fas fa-lock input-icon"></i>
+                        <button type="button" class="password-toggle" id="passwordToggle">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="login-options">
+                    <label class="login-remember">
+                        <input type="checkbox" name="remember" id="remember-me" class="login-checkbox">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="login-forgot">Forgot password?</a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="login-submit" id="loginSubmit">
+                    <span>Sign in securely</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="login-divider">or continue with</div>
+
+            <!-- Social Login -->
+            <div class="login-social">
+                <button type="button" class="login-social-btn">
+                    <i class="fab fa-google" style="color: #DB4437;"></i>
+                    <span>Google</span>
+                </button>
+                <button type="button" class="login-social-btn">
+                    <i class="fab fa-apple" style="color: var(--ink);"></i>
+                    <span>Apple</span>
+                </button>
+                <button type="button" class="login-social-btn">
+                    <i class="fab fa-microsoft" style="color: #00A4EF;"></i>
+                    <span>Microsoft</span>
+                </button>
+            </div>
+
+            <!-- Security Footer -->
+            <div class="login-security-footer">
+                <i class="fas fa-shield-alt"></i>
+                <span>Your connection is secure and encrypted</span>
+            </div>
+        </div>
+
+        <!-- Testimonial -->
+        <div class="login-testimonial-section">
+            <div class="login-testimonial">
+                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                <p>"Switching to Weatherbys was the best financial decision I've made. The platform is incredibly intuitive and the support is world-class."</p>
+                <div class="login-testimonial-author">
+                    <div class="login-testimonial-avatar">JD</div>
+                    <div class="login-testimonial-info">
+                        <h5>James Davidson</h5>
+                        <span>Small Business Owner</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Password visibility toggle
+const passwordToggle = document.getElementById('passwordToggle');
+const passwordInput = document.getElementById('login-password');
+
+if (passwordToggle && passwordInput) {
+    passwordToggle.addEventListener('click', () => {
+        const icon = passwordToggle.querySelector('i');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.className = 'far fa-eye-slash';
+        } else {
+            passwordInput.type = 'password';
+            icon.className = 'far fa-eye';
+        }
+    });
+}
+
+// Form submit with loading state
+const loginForm = document.getElementById('loginForm');
+const loginSubmit = document.getElementById('loginSubmit');
+
+if (loginForm) {
+    loginForm.addEventListener('submit', () => {
+        loginSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Verifying...</span>';
+        loginSubmit.disabled = true;
+    });
+}
+
+// Auto-focus email field on load
+document.getElementById('login-email')?.focus();
+</script>
+{% endblock %}

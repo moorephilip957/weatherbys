@@ -378,6 +378,10 @@ img {
     transform: none;
 }
 
+.mobile-offcanvas-header .logo-scrolled{
+    opacity: 1;
+}
+
 .mobile-navbar .logo-default {
     opacity: 0;
     position: absolute; /* Keep hidden logo absolute */

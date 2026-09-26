@@ -5,71 +5,53 @@ from .models import UserBankAccount, DebitCardApplication
 
 
 class UserBankAccountForm(forms.ModelForm):
-
     transaction_pin = forms.CharField(
         label='Transaction PIN',
         max_length=6,
-        min_length=4,
+        min_length=6,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control form-control-custom',
+            'id': 'id_transaction_pin',
             'placeholder': '••••••',
-            'pattern': '[0-9]{5-6}',
-            "maxlength":"6",
-            'title': 'Enter 6 digit numeric PIN',
+            'pattern': '[0-9]{6}',
+            'maxlength': '6',
+            'title': 'Enter exactly 6 numeric digits',
             'inputmode': 'numeric',
-            'autocomplete': 'new-password'
+            'autocomplete': 'new-password',
+            'required': 'required'
         }),
-        help_text='6 digit numeric PIN for authorizing transactions',
+        help_text='Exactly 6 numeric digits for authorizing transactions',
         required=True
     )
 
     class Meta:
         model = UserBankAccount
         fields = ['account_type', 'currency', 'transaction_pin']
-
         widgets = {
-            'account_type': forms.Select(),
-            'currency': forms.Select(),
+            'account_type': forms.Select(attrs={'class': 'form-control form-control-custom', 'required': 'required'}),
+            'currency': forms.Select(attrs={'class': 'form-control form-control-custom', 'required': 'required'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # ✅ Apply same classes to ALL fields automatically
         for field_name, field in self.fields.items():
-
-            field.widget.attrs.update({
-                'class': 'form-control form-control-custom'
-            })
-
-            # Optional UX improvements per field
-            if field_name == 'transaction_pin':
-                field.widget.attrs.update({
-                    'placeholder': '••••••',
-                })
+            field.widget.attrs.update({'class': 'form-control form-control-custom'})
 
     def clean_transaction_pin(self):
         pin = self.cleaned_data.get('transaction_pin')
         if pin and not (pin.isdigit() and len(pin) == 6):
             raise ValidationError('PIN must be exactly 6 numeric digits.')
-        # if pin and not (pin.isdigit() and 4 <= len(pin) <= 6):
-        #     raise ValidationError('PIN must be 4-6 numeric digits only.')
-
         return pin
 
     def save(self, commit=True, user=None):
         instance = super().save(commit=False)
-
         if user and not instance.pk:
             instance.user = user
-
         raw_pin = self.cleaned_data.get('transaction_pin')
         if raw_pin:
             instance.set_transaction_pin(raw_pin)
-
         if commit:
             instance.save()
-
         return instance
     
 
