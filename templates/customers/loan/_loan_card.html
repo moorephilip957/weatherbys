@@ -1,0 +1,117 @@
+<div class="loan-card {{ card_class }}">
+    <div class="loan-card-head">
+        <div class="loan-card-info">
+            <p class="lci-purpose">
+                <i class="fas fa-{% if loan.loan_type == 'personal' %}user{% elif loan.loan_type == 'business' %}briefcase{% elif loan.loan_type == 'education' %}graduation-cap{% elif loan.loan_type == 'mortgage' %}home{% elif loan.loan_type == 'car' %}car{% else %}file-invoice-dollar{% endif %}"></i>
+                {{ loan.get_loan_type_display }}
+            </p>
+            <h2 class="lci-amount">{{ request.user.bank_account.get_currency_symbol }}{{ loan.amount|floatformat:2 }}</h2>
+            <p class="lci-ref">Applied {{ loan.date_applied|date:"M d, Y" }}</p>
+        </div>
+        <span class="loan-status-badge {{ badge_class }}">
+            <span class="lsb-dot"></span>
+            {{ badge_text }}
+        </span>
+    </div>
+
+    {% if loan.status == 'disbursed' or loan.status == 'repaid' or loan.status == 'approved' %}
+    <!-- Repayment Progress -->
+    <div class="loan-progress">
+        <div class="loan-progress-head">
+            <span class="lph-label">Repayment progress</span>
+            <span class="lph-value">
+                {% widthratio loan.amount_paid loan.total_repayment 100 as progress_pct %}
+                {{ progress_pct }}%
+            </span>
+        </div>
+        <div class="loan-progress-bar">
+            <div class="lpb-fill" style="width: {% widthratio loan.amount_paid loan.total_repayment 100 %}%;"></div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Loan Details Grid -->
+    <div class="loan-details-grid">
+        <div class="loan-detail-item">
+            <div class="ldi-label">Monthly payment</div>
+            <div class="ldi-value">
+                {% if loan.monthly_payment %}
+                    {{ request.user.bank_account.get_currency_symbol }}{{ loan.monthly_payment|floatformat:2 }}
+                {% else %}
+                    —
+                {% endif %}
+            </div>
+        </div>
+        <div class="loan-detail-item">
+            <div class="ldi-label">Remaining</div>
+            <div class="ldi-value" {% if loan.remaining_balance <= 0 %}style="color: #059669;"{% endif %}>
+                {% if loan.remaining_balance is not None %}
+                    {{ request.user.bank_account.get_currency_symbol }}{{ loan.remaining_balance|floatformat:2 }}
+                {% else %}
+                    —
+                {% endif %}
+            </div>
+        </div>
+        <div class="loan-detail-item">
+            <div class="ldi-label">Interest rate</div>
+            <div class="ldi-value">
+                {% if loan.annual_interest_rate %}
+                    {{ loan.annual_interest_rate|floatformat:1 }}% APR
+                {% else %}
+                    —
+                {% endif %}
+            </div>
+        </div>
+        <div class="loan-detail-item">
+            <div class="ldi-label">Term</div>
+            <div class="ldi-value">{{ loan.duration_months }} months</div>
+        </div>
+        <div class="loan-detail-item">
+            <div class="ldi-label">Disbursed</div>
+            <div class="ldi-value">{{ loan.date_applied|date:"M d, Y" }}</div>
+        </div>
+        <div class="loan-detail-item">
+            <div class="ldi-label">
+                {% if loan.status == 'repaid' %}Paid off{% elif loan.due_date %}Due date{% else %}Status{% endif %}
+            </div>
+            <div class="ldi-value" {% if loan.status == 'repaid' %}style="color: #059669;"{% endif %}>
+                {% if loan.status == 'repaid' %}
+                    Completed
+                {% elif loan.due_date %}
+                    {{ loan.due_date|date:"M d, Y" }}
+                {% else %}
+                    {{ loan.get_status_display }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="loan-card-actions">
+        {% if loan.status == 'disbursed' %}
+            <a href="#" class="loan-action-btn primary">
+                <i class="fas fa-credit-card"></i>
+                <span>Make payment</span>
+            </a>
+        {% elif loan.status == 'approved' %}
+            <a href="#" class="loan-action-btn primary">
+                <i class="fas fa-check"></i>
+                <span>Accept loan</span>
+            </a>
+        {% elif loan.status == 'pending' or loan.status == 'processing' %}
+            <a href="#" class="loan-action-btn">
+                <i class="fas fa-clock"></i>
+                <span>Processing...</span>
+            </a>
+        {% elif loan.status == 'repaid' %}
+            <a href="#" class="loan-action-btn">
+                <i class="fas fa-download"></i>
+                <span>Download receipt</span>
+            </a>
+        {% endif %}
+        <a href="#" class="loan-action-btn">
+            <i class="fas fa-file-alt"></i>
+            <span>View details</span>
+        </a>
+    </div>
+</div>

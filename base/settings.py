@@ -247,7 +247,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Session expires after 30 minutes of inactivity
-SESSION_COOKIE_AGE = 60 * 20  # 30 minutes
+SESSION_COOKIE_AGE = 60 * 40  # 30 minutes
 
 # IMPORTANT: resets session timer on every request
 SESSION_SAVE_EVERY_REQUEST = True

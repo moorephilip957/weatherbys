@@ -17,324 +17,389 @@
     </div>
 </div>
 
-<!-- Loan Limit Alert (Static - Django will control visibility) -->
-<!-- 
-    In Django: {% if active_loans_count >= 2 %}
-    This alert will only show when user has 2+ active loans{% endif %}
--->
+<!-- Loan Limit Alert (shown when user has 2+ active loans) -->
+{% if active_loans >= 2 %}
 <div class="loan-alert">
     <div class="la-icon"><i class="fas fa-exclamation-triangle"></i></div>
     <div class="la-content">
         <p class="la-title">Loan limit reached</p>
         <p class="la-text">You have already requested 2 loans and cannot request another at this time. Please pay off one of your existing loans before applying for a new one.</p>
-        <button class="la-action">
+        <a href="{% url 'loan:loan_history' %}" class="la-action">
             <i class="fas fa-list"></i>
             <span>View my loans</span>
-        </button>
+        </a>
     </div>
 </div>
+{% endif %}
 
-<div class="loan-layout">
-
-    <!-- Main Form -->
-    <div>
-
-        <!-- Loan Amount -->
-        <div class="loan-amount-section">
-            <div class="loan-amount-content">
-                <div class="loan-amount-label">
-                    <i class="fas fa-dollar-sign"></i>
-                    Loan amount
-                </div>
-                <div class="loan-amount-display">
-                    <span class="currency">$</span>
-                    <span id="loanAmountDisplay">5,000</span>
-                </div>
-                <div class="loan-slider-wrap">
-                    <input type="range" class="loan-slider" id="loanSlider" min="500" max="50000" step="100" value="5000">
-                </div>
-                <div class="loan-slider-range">
-                    <span>Min: <strong>$500</strong></span>
-                    <span>Max: <strong>$50,000</strong></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Term Selector -->
-        <div class="term-selector">
-            <h4><i class="fas fa-calendar-alt"></i> Loan term</h4>
-            <div class="term-options">
-                <div class="term-option" data-months="3">
-                    <div class="to-value">3</div>
-                    <div class="to-label">Months</div>
-                </div>
-                <div class="term-option" data-months="6">
-                    <div class="to-value">6</div>
-                    <div class="to-label">Months</div>
-                </div>
-                <div class="term-option active" data-months="12">
-                    <div class="to-value">12</div>
-                    <div class="to-label">Months</div>
-                </div>
-                <div class="term-option" data-months="24">
-                    <div class="to-value">24</div>
-                    <div class="to-label">Months</div>
-                </div>
-                <div class="term-option" data-months="36">
-                    <div class="to-value">36</div>
-                    <div class="to-label">Months</div>
-                </div>
-                <div class="term-option" data-months="48">
-                    <div class="to-value">48</div>
-                    <div class="to-label">Months</div>
-                </div>
-                <div class="term-option" data-months="60">
-                    <div class="to-value">60</div>
-                    <div class="to-label">Months</div>
-                </div>
-                <div class="term-option" data-months="84">
-                    <div class="to-value">84</div>
-                    <div class="to-label">Months</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Purpose Selector -->
-        <div class="purpose-selector">
-            <h4><i class="fas fa-bullseye"></i> Loan purpose</h4>
-            <div class="purpose-options">
-                <div class="purpose-option active" data-purpose="personal">
-                    <div class="po-icon"><i class="fas fa-user"></i></div>
-                    <div class="po-label">Personal</div>
-                </div>
-                <div class="purpose-option" data-purpose="business">
-                    <div class="po-icon"><i class="fas fa-briefcase"></i></div>
-                    <div class="po-label">Business</div>
-                </div>
-                <div class="purpose-option" data-purpose="education">
-                    <div class="po-icon"><i class="fas fa-graduation-cap"></i></div>
-                    <div class="po-label">Education</div>
-                </div>
-                <div class="purpose-option" data-purpose="medical">
-                    <div class="po-icon"><i class="fas fa-heartbeat"></i></div>
-                    <div class="po-label">Medical</div>
-                </div>
-                <div class="purpose-option" data-purpose="home">
-                    <div class="po-icon"><i class="fas fa-home"></i></div>
-                    <div class="po-label">Home</div>
-                </div>
-                <div class="purpose-option" data-purpose="other">
-                    <div class="po-icon"><i class="fas fa-ellipsis-h"></i></div>
-                    <div class="po-label">Other</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PIN Section -->
-        <div class="pin-section">
-            <div class="form-section-head" style="margin-bottom: 0;">
-                <div class="form-section-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <div>
-                    <h3 class="form-section-title">Transaction PIN</h3>
-                    <p class="form-section-sub">Enter your 6-digit PIN to authorize this loan request</p>
-                </div>
-            </div>
-
-            <div class="pin-input-wrap">
-                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="0">
-                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="1">
-                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="2">
-                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="3">
-                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="4">
-                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" data-pin-index="5">
-            </div>
-
-            <div class="pin-helper">
-                <i class="fas fa-shield-alt"></i>
-                <span>Your PIN is encrypted and never stored in plain text</span>
-            </div>
-        </div>
-
+<!-- Non-field Errors (PIN, balance, etc.) -->
+{% if form.non_field_errors %}
+<div class="loan-alert" style="margin-bottom: 24px;">
+    <div class="la-icon"><i class="fas fa-exclamation-circle"></i></div>
+    <div class="la-content">
+        <p class="la-title">Unable to process your request</p>
+        <p class="la-text">
+            {% for error in form.non_field_errors %}
+                {{ error }}<br>
+            {% endfor %}
+        </p>
     </div>
-
-    <!-- Sidebar Summary -->
-    <div class="loan-summary-card">
-        <h3><i class="fas fa-calculator"></i> Loan summary</h3>
-
-        <div class="loan-summary-row">
-            <span class="lsr-label">Loan amount</span>
-            <span class="lsr-value" id="summaryAmount">$5,000.00</span>
-        </div>
-        <div class="loan-summary-row">
-            <span class="lsr-label">Loan term</span>
-            <span class="lsr-value" id="summaryTerm">12 months</span>
-        </div>
-        <div class="loan-summary-row">
-            <span class="lsr-label">
-                Interest rate (APR)
-                <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="Annual Percentage Rate"></i>
-            </span>
-            <span class="lsr-value" id="summaryRate">8.5%</span>
-        </div>
-        <div class="loan-summary-row">
-            <span class="lsr-label">Processing fee</span>
-            <span class="lsr-value" id="summaryFee">$50.00</span>
-        </div>
-        <div class="loan-summary-row">
-            <span class="lsr-label">Total interest</span>
-            <span class="lsr-value" id="summaryInterest">$231.00</span>
-        </div>
-
-        <div class="loan-summary-total">
-            <div class="lst-label">Monthly payment</div>
-            <div class="lst-value" id="summaryMonthly">$435.92</div>
-            <div class="lst-sub">for <span id="summaryTermSub">12</span> months</div>
-        </div>
-
-        <div class="loan-summary-row">
-            <span class="lsr-label">Total repayment</span>
-            <span class="lsr-value highlight" id="summaryTotal">$5,281.00</span>
-        </div>
-
-        <button class="btn-request-loan" id="requestLoanBtn">
-            <i class="fas fa-paper-plane"></i>
-            <span>Request loan</span>
-        </button>
-
-        <div class="eligibility-info">
-            <div class="ei-head">
-                <i class="fas fa-check-circle"></i>
-                <span>You're eligible</span>
-            </div>
-            <div class="eligibility-item">
-                <i class="fas fa-check"></i>
-                <span>Credit score: 720 (Good)</span>
-            </div>
-            <div class="eligibility-item">
-                <i class="fas fa-check"></i>
-                <span>Account age: 2+ years</span>
-            </div>
-            <div class="eligibility-item">
-                <i class="fas fa-check"></i>
-                <span>Stable income verified</span>
-            </div>
-        </div>
-    </div>
-
 </div>
+{% endif %}
+
+{% if active_loans < 2 %}
+<form method="POST" id="loanForm">
+    {% csrf_token %}
+
+    <div class="loan-layout">
+
+        <!-- Main Form -->
+        <div>
+
+            <!-- Loan Amount -->
+            <div class="loan-amount-section">
+                <div class="loan-amount-content">
+                    <div class="loan-amount-label">
+                        <i class="fas fa-dollar-sign"></i>
+                        Loan amount
+                    </div>
+                    <div class="loan-amount-display">
+                        <span class="currency">{{ bank_account.get_currency_symbol }}</span>
+                        <span id="loanAmountDisplay">5,000</span>
+                    </div>
+                    <div class="loan-slider-wrap">
+                        <input type="range" class="loan-slider" id="loanSlider" min="500" max="50000" step="100" value="{{ form.amount.value|default:'5000' }}">
+                    </div>
+                    <div class="loan-slider-range">
+                        <span>Min: <strong>{{ bank_account.get_currency_symbol }}500</strong></span>
+                        <span>Max: <strong>{{ bank_account.get_currency_symbol }}50,000</strong></span>
+                    </div>
+                    <!-- Hidden Django field synced with slider -->
+                    <div style="display: none;">
+                        {{ form.amount }}
+                    </div>
+                    {% if form.amount.errors %}
+                        <div style="color: #FFD700; font-size: 12px; margin-top: 10px;">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.amount.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Term Selector -->
+            <div class="term-selector">
+                <h4><i class="fas fa-calendar-alt"></i> Loan term</h4>
+                <div class="term-options">
+                    <div class="term-option" data-months="3">
+                        <div class="to-value">3</div>
+                        <div class="to-label">Months</div>
+                    </div>
+                    <div class="term-option" data-months="6">
+                        <div class="to-value">6</div>
+                        <div class="to-label">Months</div>
+                    </div>
+                    <div class="term-option active" data-months="12">
+                        <div class="to-value">12</div>
+                        <div class="to-label">Months</div>
+                    </div>
+                    <div class="term-option" data-months="24">
+                        <div class="to-value">24</div>
+                        <div class="to-label">Months</div>
+                    </div>
+                    <div class="term-option" data-months="36">
+                        <div class="to-value">36</div>
+                        <div class="to-label">Months</div>
+                    </div>
+                    <div class="term-option" data-months="48">
+                        <div class="to-value">48</div>
+                        <div class="to-label">Months</div>
+                    </div>
+                    <div class="term-option" data-months="60">
+                        <div class="to-value">60</div>
+                        <div class="to-label">Months</div>
+                    </div>
+                    <div class="term-option" data-months="84">
+                        <div class="to-value">84</div>
+                        <div class="to-label">Months</div>
+                    </div>
+                </div>
+                <!-- Hidden Django field synced with visual selector -->
+                <div style="display: none;">
+                    {{ form.duration_months }}
+                </div>
+                {% if form.duration_months.errors %}
+                    <div class="form-hint" style="color: var(--danger);">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.duration_months.errors.0 }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Loan Type / Purpose Selector -->
+            <div class="purpose-selector">
+                <h4><i class="fas fa-bullseye"></i> Loan purpose</h4>
+                <div class="purpose-options">
+                    <div class="purpose-option active" data-purpose="personal">
+                        <div class="po-icon"><i class="fas fa-user"></i></div>
+                        <div class="po-label">Personal</div>
+                    </div>
+                    <div class="purpose-option" data-purpose="business">
+                        <div class="po-icon"><i class="fas fa-briefcase"></i></div>
+                        <div class="po-label">Business</div>
+                    </div>
+                    <div class="purpose-option" data-purpose="education">
+                        <div class="po-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="po-label">Education</div>
+                    </div>
+                    <div class="purpose-option" data-purpose="mortgage">
+                        <div class="po-icon"><i class="fas fa-home"></i></div>
+                        <div class="po-label">Mortgage</div>
+                    </div>
+                    <div class="purpose-option" data-purpose="car">
+                        <div class="po-icon"><i class="fas fa-car"></i></div>
+                        <div class="po-label">Car</div>
+                    </div>
+                </div>
+                <!-- Hidden Django field synced with visual selector -->
+                <div style="display: none;">
+                    {{ form.loan_type }}
+                </div>
+                {% if form.loan_type.errors %}
+                    <div class="form-hint" style="color: var(--danger);">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.loan_type.errors.0 }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Monthly Income -->
+            <div class="settings-section">
+                <h4><i class="fas fa-wallet"></i> Financial information</h4>
+                <div class="form-field" style="margin-bottom: 18px;">
+                    <label class="form-label">Monthly net income <span class="req">*</span></label>
+                    {{ form.monthly_net_income }}
+                    {% if form.monthly_net_income.errors %}
+                        <div class="form-hint" style="color: var(--danger);">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>{{ form.monthly_net_income.errors.0 }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-field">
+                    <label class="form-label">Purpose description <span class="req">*</span></label>
+                    {{ form.purpose }}
+                    {% if form.purpose.errors %}
+                        <div class="form-hint" style="color: var(--danger);">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>{{ form.purpose.errors.0 }}</span>
+                        </div>
+                    {% else %}
+                        <div class="form-hint">
+                            <i class="fas fa-info-circle"></i>
+                            <span id="purposeCharCount">0</span>/500 characters
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Transaction PIN -->
+            <div class="pin-section">
+                <div class="form-section-head" style="margin-bottom: 0;">
+                    <div class="form-section-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div>
+                        <h3 class="form-section-title">Transaction PIN</h3>
+                        <p class="form-section-sub">Enter your 6-digit PIN to authorize this loan request</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <label class="form-label">Transaction PIN <span class="req">*</span></label>
+                    {{ form.transaction_pin }}
+                    {% if form.transaction_pin.errors %}
+                        <div class="form-hint" style="color: var(--danger);">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>{{ form.transaction_pin.errors.0 }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="pin-helper" style="margin-top: 12px;">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Your PIN is encrypted and never stored in plain text</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sidebar Summary -->
+        <div class="loan-summary-card">
+            <h3><i class="fas fa-calculator"></i> Loan summary</h3>
+
+            <div class="loan-summary-row">
+                <span class="lsr-label">Loan amount</span>
+                <span class="lsr-value" id="summaryAmount">{{ bank_account.get_currency_symbol }}5,000.00</span>
+            </div>
+            <div class="loan-summary-row">
+                <span class="lsr-label">Loan term</span>
+                <span class="lsr-value" id="summaryTerm">12 months</span>
+            </div>
+            <div class="loan-summary-row">
+                <span class="lsr-label">
+                    Interest rate (APR)
+                    <i class="fas fa-info-circle" style="font-size: 10px; color: var(--muted); cursor: help;" title="Annual Percentage Rate"></i>
+                </span>
+                <span class="lsr-value" id="summaryRate">12.0%</span>
+            </div>
+            <div class="loan-summary-row">
+                <span class="lsr-label">Total interest</span>
+                <span class="lsr-value" id="summaryInterest">{{ bank_account.get_currency_symbol }}600.00</span>
+            </div>
+
+            <div class="loan-summary-total">
+                <div class="lst-label">Monthly payment</div>
+                <div class="lst-value" id="summaryMonthly">{{ bank_account.get_currency_symbol }}466.67</div>
+                <div class="lst-sub">for <span id="summaryTermSub">12</span> months</div>
+            </div>
+
+            <div class="loan-summary-row">
+                <span class="lsr-label">Total repayment</span>
+                <span class="lsr-value highlight" id="summaryTotal">{{ bank_account.get_currency_symbol }}5,600.00</span>
+            </div>
+
+            <button type="submit" class="btn-request-loan" id="requestLoanBtn" onclick="this.innerHTML='<i class=\'fas fa-spinner fa-spin\'></i> <span>Processing...</span>'; this.disabled=true; this.closest('form').submit();">
+                <i class="fas fa-paper-plane"></i>
+                <span>Request loan</span>
+            </button>
+
+            <div class="eligibility-info">
+                <div class="ei-head">
+                    <i class="fas fa-check-circle"></i>
+                    <span>You're eligible</span>
+                </div>
+                <div class="eligibility-item">
+                    <i class="fas fa-check"></i>
+                    <span>Active loans: <strong>{{ active_loans }}/2</strong></span>
+                </div>
+                <div class="eligibility-item">
+                    <i class="fas fa-check"></i>
+                    <span>Account in good standing</span>
+                </div>
+                <div class="eligibility-item">
+                    <i class="fas fa-check"></i>
+                    <span>KYC verification complete</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
+// ===== STATE =====
+let loanAmount = parseFloat('{{ form.amount.value|default:"5000" }}') || 5000;
+let loanTerm = parseInt('{{ form.duration_months.value|default:"12" }}') || 12;
+let loanType = '{{ form.loan_type.value|default:"personal" }}' || 'personal';
+const currencySymbol = '{{ bank_account.get_currency_symbol }}';
+
+// ===== SYNC HIDDEN DJANGO FIELDS =====
+const amountInput = document.getElementById('id_amount');
+const durationInput = document.getElementById('id_duration_months');
+const loanTypeInput = document.getElementById('id_loan_type');
+
 // ===== LOAN AMOUNT SLIDER =====
 const loanSlider = document.getElementById('loanSlider');
 const loanAmountDisplay = document.getElementById('loanAmountDisplay');
-let loanAmount = 5000;
-let loanTerm = 12;
-let interestRate = 8.5;
+
+// Sync slider with hidden input
+if (amountInput && amountInput.value) {
+    loanSlider.value = amountInput.value;
+    loanAmount = parseFloat(amountInput.value);
+    loanAmountDisplay.textContent = loanAmount.toLocaleString('en-US');
+}
 
 loanSlider.addEventListener('input', (e) => {
     loanAmount = parseFloat(e.target.value);
     loanAmountDisplay.textContent = loanAmount.toLocaleString('en-US');
+    if (amountInput) amountInput.value = loanAmount;
     updateLoanSummary();
 });
 
 // ===== TERM SELECTOR =====
 document.querySelectorAll('.term-option').forEach(option => {
+    if (parseInt(option.dataset.months) === loanTerm) {
+        document.querySelectorAll('.term-option').forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+    }
+
     option.addEventListener('click', () => {
         document.querySelectorAll('.term-option').forEach(o => o.classList.remove('active'));
         option.classList.add('active');
         loanTerm = parseInt(option.dataset.months);
-        
-        // Adjust interest rate based on term (longer = slightly higher)
-        if (loanTerm <= 6) interestRate = 7.5;
-        else if (loanTerm <= 12) interestRate = 8.5;
-        else if (loanTerm <= 24) interestRate = 9.5;
-        else if (loanTerm <= 36) interestRate = 10.5;
-        else if (loanTerm <= 60) interestRate = 11.5;
-        else interestRate = 12.5;
-        
+        if (durationInput) durationInput.value = loanTerm;
         updateLoanSummary();
     });
 });
 
 // ===== PURPOSE SELECTOR =====
 document.querySelectorAll('.purpose-option').forEach(option => {
+    if (option.dataset.purpose === loanType) {
+        document.querySelectorAll('.purpose-option').forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+    }
+
     option.addEventListener('click', () => {
         document.querySelectorAll('.purpose-option').forEach(o => o.classList.remove('active'));
         option.classList.add('active');
+        loanType = option.dataset.purpose;
+        if (loanTypeInput) loanTypeInput.value = loanType;
     });
 });
 
-// ===== UPDATE LOAN SUMMARY =====
-function updateLoanSummary() {
-    const monthlyRate = interestRate / 100 / 12;
-    const monthlyPayment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, loanTerm)) / 
-                           (Math.pow(1 + monthlyRate, loanTerm) - 1);
-    const totalRepayment = monthlyPayment * loanTerm;
-    const totalInterest = totalRepayment - loanAmount;
-    const processingFee = Math.min(loanAmount * 0.01, 500);
-    
-    document.getElementById('summaryAmount').textContent = '$' + loanAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    document.getElementById('summaryTerm').textContent = loanTerm + ' months';
-    document.getElementById('summaryRate').textContent = interestRate.toFixed(1) + '%';
-    document.getElementById('summaryFee').textContent = '$' + processingFee.toFixed(2);
-    document.getElementById('summaryInterest').textContent = '$' + totalInterest.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    document.getElementById('summaryMonthly').textContent = '$' + monthlyPayment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    document.getElementById('summaryTermSub').textContent = loanTerm;
-    document.getElementById('summaryTotal').textContent = '$' + totalRepayment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+// ===== PURPOSE CHARACTER COUNT =====
+const purposeTextarea = document.getElementById('id_purpose');
+const purposeCharCount = document.getElementById('purposeCharCount');
+if (purposeTextarea && purposeCharCount) {
+    purposeTextarea.addEventListener('input', () => {
+        purposeCharCount.textContent = purposeTextarea.value.length;
+    });
+    purposeCharCount.textContent = purposeTextarea.value.length;
 }
 
-// Initial calculation
+// ===== LOAN CALCULATION =====
+function getInterestRate(duration) {
+    if (duration <= 6) return 8.0;
+    if (duration <= 12) return 12.0;
+    if (duration <= 24) return 15.0;
+    return 18.0;
+}
+
+function updateLoanSummary() {
+    const rate = getInterestRate(loanTerm);
+    const timeInYears = loanTerm / 12;
+    const interest = (loanAmount * rate * timeInYears) / 100;
+    const total = loanAmount + interest;
+    const monthly = total / loanTerm;
+
+    document.getElementById('summaryAmount').textContent = 
+        currencySymbol + loanAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('summaryTerm').textContent = loanTerm + ' months';
+    document.getElementById('summaryRate').textContent = rate.toFixed(1) + '%';
+    document.getElementById('summaryInterest').textContent = 
+        currencySymbol + interest.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('summaryMonthly').textContent = 
+        currencySymbol + monthly.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('summaryTermSub').textContent = loanTerm;
+    document.getElementById('summaryTotal').textContent = 
+        currencySymbol + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 updateLoanSummary();
-
-// ===== PIN INPUTS =====
-const pinBoxes = document.querySelectorAll('.pin-box');
-pinBoxes.forEach((box, idx) => {
-    box.addEventListener('input', (e) => {
-        const val = e.target.value.replace(/[^0-9]/g, '');
-        e.target.value = val;
-        if (val && idx < pinBoxes.length - 1) {
-            pinBoxes[idx + 1].focus();
-        }
-        if (val) box.classList.add('filled');
-        else box.classList.remove('filled');
-    });
-
-    box.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !box.value && idx > 0) {
-            pinBoxes[idx - 1].focus();
-        }
-    });
-});
-
-// ===== REQUEST LOAN BUTTON =====
-document.getElementById('requestLoanBtn').addEventListener('click', () => {
-    let pin = '';
-    pinBoxes.forEach(b => pin += b.value);
-    
-    if (pin.length !== 6) {
-        alert('Please enter your 6-digit PIN');
-        pinBoxes[0].focus();
-        return;
-    }
-    
-    const btn = document.getElementById('requestLoanBtn');
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Processing...</span>';
-    btn.disabled = true;
-    
-    setTimeout(() => {
-        btn.innerHTML = '<i class="fas fa-check"></i> <span>Loan requested!</span>';
-        btn.style.background = 'linear-gradient(135deg, #00D4A8, #059669)';
-        
-        setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Request loan</span>';
-            btn.style.background = '';
-            btn.disabled = false;
-        }, 3000);
-    }, 2000);
-});
 </script>
 {% endblock %}
