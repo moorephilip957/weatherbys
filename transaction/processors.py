@@ -23,7 +23,7 @@ class TransactionProcessor:
         # 🟡 PENDING USER (HOLD FUNDS)
         if user_status == "pending":
 
-            if account.available_balance < amount:
+            if account.balance < amount:
 
                 return TransactionResult(
                     status="failed",
