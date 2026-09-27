@@ -1,6 +1,8 @@
 :root {
-    --primary-color: #0037CC;
-    --primary-color-dark: #0d4bb5;
+    --primary-color: #0A0E1A;
+    --primary-color-dark: #1A1F2E;
+    /* --primary-color: #0037CC;
+    --primary-color-dark: #0d4bb5; */
 
     --sidebar-width: 270px;
     --sidebar-collapsed-width: 90px;
