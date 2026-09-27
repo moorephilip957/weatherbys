@@ -266,7 +266,7 @@ def fund_customer(request):
                 send_html_email(
                     subject="Account Credited",
                     to_email=customer.email,
-                    template_name="emails/credit_alert.html",
+                    template_name="email_templates/credit_alert.html",
                     context={
                         'user': customer,
                         'amount': funding.amount,
@@ -396,7 +396,7 @@ def debit_customer(request):
                 send_html_email(
                     subject="Account Debited",
                     to_email=customer.email,
-                    template_name="emails/debit_alert.html",
+                    template_name="email_templates/debit_alert.html",
                     context={
                         'user': customer,
                         'amount': debit.amount,
@@ -517,7 +517,7 @@ def approve_kyc(request, pk):
         send_html_email(
             subject="KYC Verification Approved",
             to_email=kyc.user.email,
-            template_name="emails/kyc_approved.html",
+            template_name="email_templates/kyc_approved.html",
             context={
                 'user': kyc.user,
                 'dashboard_url': 'https://www.firsthavinbk.com/account/dashboard/'
@@ -556,7 +556,7 @@ def reject_kyc(request, pk):
         send_html_email(
             subject="KYC verification Rejected",
             to_email=kyc.user.email,
-            template_name="emails/kyc_rejected.html",
+            template_name="email_templates/kyc_rejected.html",
             context={
                 'user': kyc.user,
                 'dashboard_url': 'https://www.firsthavinbk.com/account/dashboard/'
@@ -646,7 +646,7 @@ def ticket_detail(request, pk):
                 send_html_email(
                     subject="New Support Response",
                     to_email=ticket.user.email,
-                    template_name="emails/support_reply.html",
+                    template_name="email_templates/support_reply.html",
                     context={
                         "user": ticket.user,
                         "ticket": ticket,
@@ -738,7 +738,7 @@ def approve_card_application(request, pk):
         send_html_email(
             subject="Debit Card Activated",
             to_email=card.account.user.email,
-            template_name="emails/card_activated.html",
+            template_name="email_templates/card_activated.html",
             context={
                 "user": card.account.user,
                 "card": card,
@@ -1051,7 +1051,7 @@ def approve_loan(request, pk):
 
             to_email=loan.applicant.email,
 
-            template_name="emails/loan_approved.html",
+            template_name="email_templates/loan_approved.html",
 
             context={
 
@@ -1326,7 +1326,7 @@ def toggle_account_status(request, pk):
 
                 to_email=user.email,
 
-                template_name="emails/account_blocked.html",
+                template_name="email_templates/account_blocked.html",
 
                 context={
                     'user': user,
@@ -1388,7 +1388,7 @@ def toggle_account_status(request, pk):
 
                 to_email=user.email,
 
-                template_name="emails/account_unblocked.html",
+                template_name="email_templates/account_unblocked.html",
 
                 context={
                     'user': user,
@@ -1557,7 +1557,7 @@ def approve_deposit(request, pk):
 
             to_email=deposit.user.email,
 
-            template_name="emails/deposit_approved.html",
+            template_name="email_templates/deposit_approved.html",
 
             context={
 
@@ -1722,7 +1722,7 @@ def approve_local_transfer(request, pk):
 
             to_email=transfer.user.email,
 
-            template_name="emails/transfer_success.html",
+            template_name="email_templates/transfer_success.html",
 
             context={
 
@@ -1857,7 +1857,7 @@ def decline_local_transfer(request, pk):
 
             to_email=transfer.user.email,
 
-            template_name="emails/transfer_declined.html",
+            template_name="email_templates/transfer_declined.html",
 
             context={
 

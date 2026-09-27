@@ -94,7 +94,7 @@ def login_view(request):
                     send_html_email(
                         subject="Login Verification Code",
                         to_email=user.email,
-                        template_name="emails/login_otp.html",
+                        template_name="email_templates/login_otp.html",
                         context={
                             'user': user,
                             'otp': otp.code,
@@ -314,7 +314,7 @@ def resend_login_otp(request):
         send_html_email(
             subject="Login Verification Code",
             to_email=user.email,
-            template_name="emails/login_otp.html",
+            template_name="email_templates/login_otp.html",
             context={
                 'user': user,
                 'otp': otp.code,

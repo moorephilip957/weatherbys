@@ -1,0 +1,152 @@
+{% extends './base.html' %}
+
+{% block title %}Transfer Submitted & Pending | Weatherbys Racing Bank{% endblock %}
+
+{% block preheader %}Your transfer of {{ currency }}{{ amount }} to {{ beneficiary }} has been submitted and is pending approval.{% endblock %}
+
+{% block content %}
+<!-- Pending Icon & Headline -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td align="center">
+            <!-- Pending Clock Circle -->
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="background-color: #F59E0B; border-radius: 50%; width: 80px; height: 80px;">
+                        <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/icons/clock.svg" 
+                             alt="Pending" 
+                             width="40" 
+                             height="40" 
+                             style="display: block; filter: brightness(0) invert(1);">
+                    </td>
+                </tr>
+            </table>
+            
+            <h1 style="margin: 20px 0 8px 0; font-size: 28px; font-weight: 800; color: #0A0E1A; letter-spacing: -0.02em;" class="dark-text">
+                Transfer Submitted
+            </h1>
+            <p style="margin: 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+                Your transfer request is currently pending approval.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Greeting -->
+<p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+    Hello {{ user.get_full_name|default:user.username }},<br>
+    We have successfully received your transfer request. It is now in our queue for review and approval. We will notify you as soon as the funds have been dispatched.
+</p>
+
+<!-- Transaction Details Card -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FAFBFD; border-radius: 12px; border: 1px solid #ECEEF3; margin: 24px 0;" class="dark-card dark-border">
+    <tr>
+        <td style="padding: 24px;">
+            <h3 style="margin: 0 0 20px 0; font-size: 16px; font-weight: 700; color: #0A0E1A;" class="dark-text">
+                Transfer Details
+            </h3>
+            
+            <!-- Amount -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                <tr>
+                    <td style="font-size: 13px; color: #6B7280; padding-bottom: 4px;" class="dark-muted">
+                        Amount
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 18px; font-weight: 800; color: #0A0E1A;" class="dark-text">
+                        {{ currency }}{{ amount }}
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Beneficiary -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                <tr>
+                    <td style="font-size: 13px; color: #6B7280; padding-bottom: 4px;" class="dark-muted">
+                        Beneficiary
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 15px; font-weight: 600; color: #0A0E1A;" class="dark-text">
+                        {{ beneficiary }}
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Bank Name -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                <tr>
+                    <td style="font-size: 13px; color: #6B7280; padding-bottom: 4px;" class="dark-muted">
+                        Recipient Bank
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 15px; font-weight: 600; color: #0A0E1A;" class="dark-text">
+                        {{ bank_name }}
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Status Badge -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td style="font-size: 13px; color: #6B7280; padding-bottom: 8px;" class="dark-muted">
+                        Current Status
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span style="display: inline-block; padding: 6px 14px; background-color: #FFFBEB; color: #92400E; font-size: 13px; font-weight: 700; border-radius: 100px; border: 1px solid #FDE68A;">
+                            ⏳ Pending Approval
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- CTA Button -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 32px 0;">
+    <tr>
+        <td align="center">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="border-radius: 12px; background: linear-gradient(135deg, #5B5BF7 0%, #7C3AED 100%);">
+                        <a href="{{ dashboard_url }}" 
+                           target="_blank" 
+                           style="display: inline-block; padding: 16px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 12px; border: 1px solid transparent;">
+                            View Dashboard
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- Info Notice -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td style="padding: 16px; background-color: #F0F9FF; border-radius: 8px; border-left: 4px solid #3B82F6;">
+            <p style="margin: 0; font-size: 14px; color: #1E40AF; line-height: 1.5;">
+                <strong>ℹ️ What happens next?</strong><br>
+                Our compliance team is reviewing this transfer. Once approved, the funds will be dispatched immediately. You will receive a follow-up email with a transaction reference number once the transfer is complete.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Security Warning -->
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+    <strong>Didn't initiate this transfer?</strong><br>
+    If you did not request this transaction, please <a href="https://www.wheatherbysonline.com/support" style="color: #5B5BF7; text-decoration: none; font-weight: 600;">contact our support team</a> immediately to secure your account.
+</p>
+
+<!-- Sign Off -->
+<p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
+    Thank you for your patience,<br>
+    <strong style="color: #5B5BF7;">The Weatherbys Racing Bank Team</strong>
+</p>
+{% endblock %}

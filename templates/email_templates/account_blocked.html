@@ -1,0 +1,108 @@
+{% extends './base.html' %}
+
+{% block title %}Important: Account Restricted | Weatherbys Racing Bank{% endblock %}
+
+{% block preheader %}Your account access has been temporarily restricted for your security. Please contact our support team immediately for assistance.{% endblock %}
+
+{% block content %}
+<!-- Warning Icon & Headline -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td align="center">
+            <!-- Amber/Red Warning Circle -->
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="background-color: #F59E0B; border-radius: 50%; width: 80px; height: 80px;">
+                        <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/icons/shield-exclamation.svg" 
+                             alt="Account Restricted" 
+                             width="40" 
+                             height="40" 
+                             style="display: block; filter: brightness(0) invert(1);">
+                    </td>
+                </tr>
+            </table>
+            
+            <h1 style="margin: 20px 0 8px 0; font-size: 28px; font-weight: 800; color: #0A0E1A; letter-spacing: -0.02em;" class="dark-text">
+                Important: Account Restricted
+            </h1>
+            <p style="margin: 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+                Your account access has been temporarily limited.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Greeting & Reassurance -->
+<p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+    Hello {{ user.get_full_name|default:user.username }},<br>
+    We are writing to inform you that access to your Weatherbys Racing Bank account has been temporarily restricted. 
+    <strong style="color: #0A0E1A;" class="dark-text">Please be assured that your funds remain safe and secure.</strong> 
+    This action is taken automatically to protect your account and comply with our security and regulatory policies.
+</p>
+
+<!-- Common Reasons Card -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFBEB; border-radius: 12px; border: 1px solid #FDE68A; margin: 24px 0;">
+    <tr>
+        <td style="padding: 20px 24px;">
+            <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: 700; color: #92400E;">
+                Common reasons for this restriction include:
+            </p>
+            <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #78350F; line-height: 1.6;">
+                <li style="margin-bottom: 8px;">Pending or incomplete Know Your Customer (KYC) verification.</li>
+                <li style="margin-bottom: 8px;">Unusual login activity or suspected unauthorized access.</li>
+                <li>Required updates to your account information or documentation.</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<!-- Action Steps -->
+<p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+    <strong>What you need to do next:</strong><br>
+    To restore full access to your account, please log in to your dashboard to view the specific reason for this restriction and any required actions. If you need immediate assistance, our support team is ready to help you resolve this quickly.
+</p>
+
+<!-- CTA Buttons -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 32px 0;">
+    <tr>
+        <td align="center" style="padding-bottom: 16px;">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="border-radius: 12px; background: linear-gradient(135deg, #5B5BF7 0%, #7C3AED 100%);">
+                        <a href="{{ dashboard_url }}" 
+                           target="_blank" 
+                           style="display: inline-block; padding: 16px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 12px; border: 1px solid transparent;">
+                            View Account Status
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <p style="margin: 0; font-size: 14px; color: #4B5563;">
+                Or contact us directly at 
+                <a href="mailto:support@firsthavinbk.com" style="color: #5B5BF7; text-decoration: none; font-weight: 600;">support@firsthavinbk.com</a>
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Security Notice -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td style="padding: 16px; background-color: #FFF1F2; border-radius: 8px; border-left: 4px solid #F43F5E;">
+            <p style="margin: 0; font-size: 14px; color: #9F1239; line-height: 1.5;">
+                <strong>🚨 Security Reminder:</strong> Weatherbys Racing Bank will <strong>never</strong> ask for your password, PIN, or full card number via email or phone. If you did not attempt to access your account recently, please contact our fraud team immediately.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Sign Off -->
+<p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
+    Thank you for your prompt attention to this matter,<br>
+    <strong style="color: #5B5BF7;">The Weatherbys Racing Bank Security Team</strong>
+</p>
+{% endblock %}

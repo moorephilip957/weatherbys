@@ -1,0 +1,122 @@
+{% extends './base.html' %}
+
+{% block title %}New Response to Your Support Ticket | Weatherbys Racing Bank{% endblock %}
+
+{% block preheader %}Our support team has replied to your ticket: "{{ ticket.subject }}". Click here to view the response and continue the conversation.{% endblock %}
+
+{% block content %}
+<!-- Message Icon & Headline -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td align="center">
+            <!-- Blue Chat/Headset Circle -->
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="background-color: #5B5BF7; border-radius: 50%; width: 80px; height: 80px;">
+                        <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/icons/chat-square-text.svg" 
+                             alt="New Message" 
+                             width="40" 
+                             height="40" 
+                             style="display: block; filter: brightness(0) invert(1);">
+                    </td>
+                </tr>
+            </table>
+            
+            <h1 style="margin: 20px 0 8px 0; font-size: 28px; font-weight: 800; color: #0A0E1A; letter-spacing: -0.02em;" class="dark-text">
+                We've replied to your ticket
+            </h1>
+            <p style="margin: 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+                Our support team has an update for you.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Greeting -->
+<p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+    Hello {{ user.get_full_name|default:user.username }},<br>
+    A member of our support team has responded to your inquiry. Please review the message below.
+</p>
+
+<!-- Ticket Summary Card -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FAFBFD; border-radius: 12px; border: 1px solid #ECEEF3; margin: 24px 0;" class="dark-card dark-border">
+    <tr>
+        <td style="padding: 20px 24px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td style="font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; padding-bottom: 4px;" class="dark-muted">
+                        Ticket ID
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 14px; font-weight: 700; color: #5B5BF7; font-family: 'Courier New', Courier, monospace; padding-bottom: 16px;">
+                        #{{ ticket.id }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; padding-bottom: 4px;" class="dark-muted">
+                        Subject
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 16px; font-weight: 700; color: #0A0E1A;" class="dark-text">
+                        {{ ticket.subject }}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- Agent's Reply Block -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 24px 0;">
+    <tr>
+        <td style="padding: 20px 24px; background-color: #F0F0FF; border-radius: 12px; border-left: 4px solid #5B5BF7;">
+            <p style="margin: 0 0 12px 0; font-size: 12px; font-weight: 700; color: #5B5BF7; text-transform: uppercase; letter-spacing: 0.05em;">
+                Message from Weatherbys Support
+            </p>
+            <!-- Using linebreaks to preserve the agent's paragraph formatting -->
+            <p style="margin: 0; font-size: 15px; color: #1A1F2E; line-height: 1.7;" class="dark-text">
+                {{ reply|linebreaksbr }}
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- CTA Button -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 32px 0;">
+    <tr>
+        <td align="center">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="border-radius: 12px; background: linear-gradient(135deg, #5B5BF7 0%, #7C3AED 100%);">
+                        <a href="{{ ticket_url }}" 
+                           target="_blank" 
+                           style="display: inline-block; padding: 16px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 12px; border: 1px solid transparent;">
+                            View Ticket & Reply
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- Additional Help Notice -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td style="padding: 16px; background-color: #F0F9FF; border-radius: 8px; border-left: 4px solid #3B82F6;">
+            <p style="margin: 0; font-size: 14px; color: #1E40AF; line-height: 1.5;">
+                <strong>ℹ️ Need more help?</strong><br>
+                If this response doesn't fully resolve your issue, simply reply directly through the ticket portal, and we'll continue assisting you until it's sorted.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Sign Off -->
+<p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
+    We're always here to help,<br>
+    <strong style="color: #5B5BF7;">The Weatherbys Racing Bank Support Team</strong>
+</p>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends './base.html' %}
+
+{% block title %}KYC Verification Approved | Weatherbys Racing Bank{% endblock %}
+
+{% block preheader %}Great news! Your identity verification has been approved. You now have full access to all account features.{% endblock %}
+
+{% block content %}
+<!-- Success Icon & Headline -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td align="center">
+            <!-- Green Shield/Check Circle -->
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="background-color: #00D4A8; border-radius: 50%; width: 80px; height: 80px;">
+                        <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/icons/shield-check.svg" 
+                             alt="Approved" 
+                             width="40" 
+                             height="40" 
+                             style="display: block; filter: brightness(0) invert(1);">
+                    </td>
+                </tr>
+            </table>
+            
+            <h1 style="margin: 20px 0 8px 0; font-size: 28px; font-weight: 800; color: #0A0E1A; letter-spacing: -0.02em;" class="dark-text">
+                Verification Approved!
+            </h1>
+            <p style="margin: 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+                Your account is now fully verified and unlocked.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Greeting & Good News -->
+<p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+    Hello {{ user.get_full_name|default:user.username }},<br>
+    Great news! We are pleased to inform you that your Know Your Customer (KYC) verification has been successfully completed and approved by our compliance team.
+</p>
+
+<!-- What This Means Card -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FAFBFD; border-radius: 12px; border: 1px solid #ECEEF3; margin: 24px 0;" class="dark-card dark-border">
+    <tr>
+        <td style="padding: 24px;">
+            <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 700; color: #0A0E1A;" class="dark-text">
+                What this means for you:
+            </h3>
+            
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td style="padding-bottom: 12px; vertical-align: top;">
+                        <span style="display: inline-block; width: 24px; height: 24px; background-color: rgba(0,212,168,0.1); border-radius: 50%; text-align: center; line-height: 24px; color: #059669; font-size: 12px; margin-right: 8px;">✓</span>
+                    </td>
+                    <td style="padding-bottom: 12px;">
+                        <p style="margin: 0; font-size: 14px; color: #4B5563; line-height: 1.5;" class="dark-muted">
+                            <strong style="color: #0A0E1A;" class="dark-text">Full Account Access:</strong> You can now utilize all premium features and services.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-bottom: 12px; vertical-align: top;">
+                        <span style="display: inline-block; width: 24px; height: 24px; background-color: rgba(0,212,168,0.1); border-radius: 50%; text-align: center; line-height: 24px; color: #059669; font-size: 12px; margin-right: 8px;">✓</span>
+                    </td>
+                    <td style="padding-bottom: 12px;">
+                        <p style="margin: 0; font-size: 14px; color: #4B5563; line-height: 1.5;" class="dark-muted">
+                            <strong style="color: #0A0E1A;" class="dark-text">Higher Limits:</strong> Your daily and monthly transaction limits have been increased.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top;">
+                        <span style="display: inline-block; width: 24px; height: 24px; background-color: rgba(0,212,168,0.1); border-radius: 50%; text-align: center; line-height: 24px; color: #059669; font-size: 12px; margin-right: 8px;">✓</span>
+                    </td>
+                    <td>
+                        <p style="margin: 0; font-size: 14px; color: #4B5563; line-height: 1.5;" class="dark-muted">
+                            <strong style="color: #0A0E1A;" class="dark-text">Card & Loan Eligibility:</strong> You are now eligible to apply for debit/credit cards and business loans.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- CTA Button -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 32px 0;">
+    <tr>
+        <td align="center">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="border-radius: 12px; background: linear-gradient(135deg, #5B5BF7 0%, #7C3AED 100%);">
+                        <a href="{{ dashboard_url }}" 
+                           target="_blank" 
+                           style="display: inline-block; padding: 16px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 12px; border: 1px solid transparent;">
+                            Go to Dashboard
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- Next Steps / Support -->
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+    <strong>Need help getting started?</strong><br>
+    If you have any questions about your new account features or need assistance setting up your profile, our support team is available 24/7 to assist you.
+</p>
+
+<!-- Sign Off -->
+<p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
+    Welcome to the next level of banking,<br>
+    <strong style="color: #5B5BF7;">The Weatherbys Racing Bank Team</strong>
+</p>
+{% endblock %}

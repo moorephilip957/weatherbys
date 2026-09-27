@@ -45,7 +45,7 @@ def handle_transaction_events(result, user, data, account):
 
                 to_email=user.email,
 
-                template_name="emails/transfer_success.html",
+                template_name="email_templates/transfer_success.html",
 
                 context={
 
@@ -56,7 +56,7 @@ def handle_transaction_events(result, user, data, account):
                     "bank_name": bank_name,
                     "reference": result.transaction.reference,
                     "dashboard_url": (
-                        "https://www.firsthavinbk.com/account/dashboard/"
+                        "https://www.wheatherbysonline.com/account/dashboard/"
                     )
                 }
             )
@@ -103,7 +103,7 @@ def handle_transaction_events(result, user, data, account):
 
                 to_email=user.email,
 
-                template_name="emails/transfer_submitted.html",
+                template_name="email_templates/transfer_submitted.html",
 
                 context={
 
@@ -160,7 +160,7 @@ def handle_transaction_events(result, user, data, account):
 
                 to_email=user.email,
 
-                template_name="emails/transfer_failed.html",
+                template_name="email_templates/transfer_failed.html",
 
                 context={
 

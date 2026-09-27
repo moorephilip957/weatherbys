@@ -1,0 +1,129 @@
+{% extends './base.html' %}
+
+{% block title %}Account Credited | Weatherbys Racing Bank{% endblock %}
+
+{% block preheader %}Great news! Your account has been credited with {{ currency }}{{ amount }}. Reference: {{ reference }}.{% endblock %}
+
+{% block content %}
+<!-- Success Icon & Headline -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td align="center">
+            <!-- Green Success Circle -->
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="background-color: #00D4A8; border-radius: 50%; width: 80px; height: 80px;">
+                        <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/icons/arrow-down-circle.svg" 
+                             alt="Credited" 
+                             width="40" 
+                             height="40" 
+                             style="display: block; filter: brightness(0) invert(1);">
+                    </td>
+                </tr>
+            </table>
+            
+            <h1 style="margin: 20px 0 8px 0; font-size: 28px; font-weight: 800; color: #0A0E1A; letter-spacing: -0.02em;" class="dark-text">
+                Account Credited!
+            </h1>
+            <p style="margin: 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+                Funds have been successfully added to your account.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Greeting -->
+<p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+    Hello {{ user.get_full_name|default:user.username }},<br>
+    Great news! We are writing to confirm that your Weatherbys Racing Bank account has been successfully credited. The funds are now available for you to use.
+</p>
+
+<!-- Credited Amount Highlight -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background: linear-gradient(135deg, rgba(0,212,168,0.08) 0%, rgba(5,150,105,0.08) 100%); border-radius: 16px; border: 1px solid rgba(0,212,168,0.2); margin: 24px 0;">
+    <tr>
+        <td align="center" style="padding: 32px 24px;">
+            <p style="margin: 0 0 8px 0; font-size: 13px; font-weight: 600; color: #059669; text-transform: uppercase; letter-spacing: 0.1em;">
+                Total Amount Credited
+            </p>
+            <p style="margin: 0; font-size: 42px; font-weight: 800; color: #059669; letter-spacing: -0.02em;">
+                {{ currency }}{{ amount }}
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Transaction Details Card -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FAFBFD; border-radius: 12px; border: 1px solid #ECEEF3; margin: 24px 0;" class="dark-card dark-border">
+    <tr>
+        <td style="padding: 24px;">
+            <h3 style="margin: 0 0 20px 0; font-size: 16px; font-weight: 700; color: #0A0E1A;" class="dark-text">
+                Transaction Details
+            </h3>
+            
+            <!-- Reference Number -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                <tr>
+                    <td style="font-size: 13px; color: #6B7280; padding-bottom: 4px;" class="dark-muted">
+                        Transaction Reference
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 15px; font-weight: 600; color: #5B5BF7; font-family: 'Courier New', Courier, monospace; letter-spacing: 0.05em;">
+                        {{ reference }}
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Date & Time -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td style="font-size: 13px; color: #6B7280; padding-bottom: 4px;" class="dark-muted">
+                        Date & Time
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 15px; font-weight: 600; color: #0A0E1A;" class="dark-text">
+                        {% now "F d, Y · h:i A" %}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- CTA Button -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 32px 0;">
+    <tr>
+        <td align="center">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="border-radius: 12px; background: linear-gradient(135deg, #5B5BF7 0%, #7C3AED 100%);">
+                        <a href="{{ dashboard_url }}" 
+                           target="_blank" 
+                           style="display: inline-block; padding: 16px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 12px; border: 1px solid transparent;">
+                            View Dashboard
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- Security Notice -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td style="padding: 16px; background-color: #F0F9FF; border-radius: 8px; border-left: 4px solid #3B82F6;">
+            <p style="margin: 0; font-size: 14px; color: #1E40AF; line-height: 1.5;">
+                <strong>ℹ️ Security Notice:</strong> If you were not expecting this credit, or if you suspect any unauthorized activity on your account, please <a href="https://www.firsthavinbk.com/support" style="color: #1E40AF; text-decoration: underline; font-weight: 600;">contact our support team</a> immediately.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Sign Off -->
+<p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
+    Thank you for choosing Weatherbys Racing Bank,<br>
+    <strong style="color: #5B5BF7;">The Weatherbys Racing Bank Team</strong>
+</p>
+{% endblock %}

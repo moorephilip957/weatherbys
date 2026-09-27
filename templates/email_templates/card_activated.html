@@ -1,0 +1,150 @@
+{% extends './/base.html' %}
+
+{% block title %}Debit Card Activated | Weatherbys Racing Bank{% endblock %}
+
+{% block preheader %}Your Weatherbys Racing Bank debit card ending in {{ last4 }} is now active and ready to use.{% endblock %}
+
+{% block content %}
+<!-- Success Icon & Headline -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td align="center">
+            <!-- Green Card/Check Circle -->
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="background-color: #00D4A8; border-radius: 50%; width: 80px; height: 80px;">
+                        <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/icons/credit-card-2-front.svg" 
+                             alt="Card Activated" 
+                             width="40" 
+                             height="40" 
+                             style="display: block; filter: brightness(0) invert(1);">
+                    </td>
+                </tr>
+            </table>
+            
+            <h1 style="margin: 20px 0 8px 0; font-size: 28px; font-weight: 800; color: #0A0E1A; letter-spacing: -0.02em;" class="dark-text">
+                Card Successfully Activated!
+            </h1>
+            <p style="margin: 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+                Your new card is ready for use.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Greeting -->
+<p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
+    Hello {{ user.get_full_name|default:user.username }},<br>
+    Great news! We are writing to confirm that your new Weatherbys Racing Bank debit card has been successfully activated and is now ready for purchases, withdrawals, and online transactions.
+</p>
+
+<!-- Card Details Card -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FAFBFD; border-radius: 12px; border: 1px solid #ECEEF3; margin: 24px 0;" class="dark-card dark-border">
+    <tr>
+        <td style="padding: 24px;">
+            <h3 style="margin: 0 0 20px 0; font-size: 16px; font-weight: 700; color: #0A0E1A;" class="dark-text">
+                Card Details
+            </h3>
+            
+            <!-- Card Number -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                <tr>
+                    <td style="font-size: 13px; color: #6B7280; padding-bottom: 4px;" class="dark-muted">
+                        Card Number
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 18px; font-weight: 700; color: #0A0E1A; font-family: 'Courier New', Courier, monospace; letter-spacing: 0.1em;" class="dark-text">
+                        •••• •••• •••• {{ last4 }}
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Card Type -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                <tr>
+                    <td style="font-size: 13px; color: #6B7280; padding-bottom: 4px;" class="dark-muted">
+                        Card Type
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 15px; font-weight: 600; color: #0A0E1A;" class="dark-text">
+                        {% if card.card_type %}{{ card.get_card_type_display }}{% else %}Weatherbys Debit Card{% endif %}
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Status -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td style="font-size: 13px; color: #6B7280; padding-bottom: 8px;" class="dark-muted">
+                        Current Status
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span style="display: inline-block; padding: 6px 14px; background-color: rgba(0,212,168,0.1); color: #059669; font-size: 13px; font-weight: 700; border-radius: 100px; border: 1px solid rgba(0,212,168,0.2);">
+                            ✓ Active
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- Next Steps / Tips -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F0F9FF; border-radius: 12px; border: 1px solid #BAE6FD; margin: 24px 0;">
+    <tr>
+        <td style="padding: 20px 24px;">
+            <h3 style="margin: 0 0 12px 0; font-size: 15px; font-weight: 700; color: #0369A1;">
+                💡 Quick Tips for Your New Card:
+            </h3>
+            <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #0C4A6E; line-height: 1.6;">
+                <li style="margin-bottom: 8px;"><strong>Keep your PIN secure:</strong> Never share your PIN with anyone, including bank staff.</li>
+                <li style="margin-bottom: 8px;"><strong>Go digital:</strong> Add your card to Apple Pay or Google Pay for secure, contactless payments.</li>
+                <li><strong>Set up alerts:</strong> Enable push notifications in your dashboard to track every transaction in real-time.</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<!-- CTA Button -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 32px 0;">
+    <tr>
+        <td align="center">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" style="border-radius: 12px; background: linear-gradient(135deg, #5B5BF7 0%, #7C3AED 100%);">
+                        <a href="https://www.firsthavinbk.com/account/dashboard/" 
+                           target="_blank" 
+                           style="display: inline-block; padding: 16px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 12px; border: 1px solid transparent;">
+                            Manage Your Card
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- Security Warning -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+    <tr>
+        <td style="padding: 16px; background-color: #FFF1F2; border-radius: 8px; border-left: 4px solid #F43F5E;">
+            <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 700; color: #9F1239;">
+                🚨 Did not activate this card?
+            </p>
+            <p style="margin: 0; font-size: 14px; color: #9F1239; line-height: 1.5;">
+                If you did not request this activation or suspect your card details have been compromised, please <a href="https://www.firsthavinbk.com/support" style="color: #9F1239; text-decoration: underline; font-weight: 700;">contact our fraud support team immediately</a> or freeze your card via the mobile app.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- Sign Off -->
+<p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
+    Enjoy your new card,<br>
+    <strong style="color: #5B5BF7;">The Weatherbys Racing Bank Team</strong>
+</p>
+{% endblock %}
