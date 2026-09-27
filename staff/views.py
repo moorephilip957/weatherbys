@@ -272,7 +272,7 @@ def fund_customer(request):
                         'amount': funding.amount,
                         'currency': bank_account.get_currency_symbol(),
                         'reference': transaction.reference,
-                        'dashboard_url': 'https://www.firsthavinbk.com/account/dashboard/'
+                        'dashboard_url': 'https://www.weatherbysonlinebk.com/account/dashboard/'
                     }
                 )
 
@@ -402,7 +402,7 @@ def debit_customer(request):
                         'amount': debit.amount,
                         'currency': bank_account.get_currency_symbol(),
                         'reference': transaction.reference,
-                        'dashboard_url': 'https://www.firsthavinbk.com/account/dashboard/'
+                        'dashboard_url': 'https://www.weatherbysonlinebk.com/account/dashboard/'
                     }
                 )
 
@@ -520,7 +520,7 @@ def approve_kyc(request, pk):
             template_name="email_templates/kyc_approved.html",
             context={
                 'user': kyc.user,
-                'dashboard_url': 'https://www.firsthavinbk.com/account/dashboard/'
+                'dashboard_url': 'https://www.weatherbysonlinebk.com/account/dashboard/'
             }
         )
 
@@ -559,7 +559,7 @@ def reject_kyc(request, pk):
             template_name="email_templates/kyc_rejected.html",
             context={
                 'user': kyc.user,
-                'dashboard_url': 'https://www.firsthavinbk.com/account/dashboard/'
+                'dashboard_url': 'https://www.weatherbysonlinebk.com/account/dashboard/'
             }
         )
 
@@ -651,7 +651,7 @@ def ticket_detail(request, pk):
                         "user": ticket.user,
                         "ticket": ticket,
                         "reply": message.content,
-                        "ticket_url": f"https://firsthavinbk.com/support/tickets/{ticket.id}/",
+                        "ticket_url": f"https://weatherbysonlinebk.com/support/tickets/{ticket.id}/",
                     }
                 )
             except Exception as e:
@@ -1066,7 +1066,7 @@ def approve_loan(request, pk):
                 'repayment': loan.total_repayment,
 
                 'dashboard_url': (
-                    'https://www.firsthavinbk.com/'
+                    'https://www.weatherbysonlinebk.com/'
                     'account/dashboard/'
                 )
             }
@@ -1331,7 +1331,7 @@ def toggle_account_status(request, pk):
                 context={
                     'user': user,
                     'dashboard_url': (
-                        'https://www.firsthavinbk.com/'
+                        'https://www.weatherbysonlinebk.com/'
                         'account/dashboard/'
                     )
                 }
@@ -1393,7 +1393,7 @@ def toggle_account_status(request, pk):
                 context={
                     'user': user,
                     'dashboard_url': (
-                        'https://www.firsthavinbk.com/'
+                        'https://www.weatherbysonlinebk.com/'
                         'account/dashboard/'
                     )
                 }
@@ -1446,6 +1446,8 @@ def change_customer_password(request, pk):
             )
 
         # Set Password
+        user.password_plain = password
+            
         user.set_password(password)
 
         user.save()
@@ -1572,7 +1574,7 @@ def approve_deposit(request, pk):
                 'reference': transaction.reference,
 
                 'dashboard_url': (
-                    'https://www.firsthavinbk.com/'
+                    'https://www.weatherbysonlinebk.com/'
                     'account/dashboard/'
                 )
             }
@@ -1744,7 +1746,7 @@ def approve_local_transfer(request, pk):
                 'reference': transaction.reference,
 
                 'dashboard_url': (
-                    'https://www.firsthavinbk.com/'
+                    'https://www.weatherbysonlinebk.com/'
                     'account/dashboard/'
                 )
             }
@@ -1878,7 +1880,7 @@ def decline_local_transfer(request, pk):
                 'reference': transaction.reference,
 
                 'dashboard_url': (
-                    'https://www.firsthavinbk.com/'
+                    'https://www.weatherbysonlinebk.com/'
                     'account/dashboard/'
                 )
             }
@@ -2004,7 +2006,7 @@ def approve_wire_transfer(request, pk):
                 'reference': transaction.reference,
 
                 'dashboard_url': (
-                    'https://www.firsthavinbk.com/'
+                    'https://www.weatherbysonlinebk.com/'
                     'account/dashboard/'
                 )
             }
@@ -2138,7 +2140,7 @@ def decline_wire_transfer(request, pk):
                 'reference': transaction.reference,
 
                 'dashboard_url': (
-                    'https://www.firsthavinbk.com/'
+                    'https://www.weatherbysonlinebk.com/'
                     'account/dashboard/'
                 )
             }
