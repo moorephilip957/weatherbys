@@ -34,7 +34,7 @@
 </div>
 {% endif %}
 
-<form method="POST" id="depositForm">
+<form method="POST" enctype="multipart/form-data" id="depositForm">
     {% csrf_token %}
 
     <!-- Hidden method field -->
@@ -297,6 +297,54 @@
         </div>
     </div>
 
+        <!-- ===================== PROOF OF PAYMENT ===================== -->
+    <div class="deposit-proof-card" style="background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; margin-bottom: 24px;">
+        <div class="deposit-amount-head" style="margin-bottom: 20px;">
+            <h3>Proof of Payment</h3>
+            <p>Upload a screenshot or PDF of your transaction receipt</p>
+        </div>
+        
+        <!-- Custom Upload Area -->
+        <div class="file-upload-area" id="proofUploadArea" style="border: 2px dashed var(--line); border-radius: 14px; padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--surface-2);">
+            <div class="pua-icon" style="width: 56px; height: 56px; border-radius: 14px; background: rgba(91,91,247,0.1); color: var(--primary); display: grid; place-items: center; font-size: 22px; margin: 0 auto 14px;">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p class="pua-title" style="font-size: 14px; font-weight: 700; margin: 0 0 4px; color: var(--ink);">Drag & drop your receipt here</p>
+            <p class="pua-sub" style="font-size: 12px; color: var(--muted); margin: 0 0 16px;">or click to browse (JPG, PNG, PDF up to 10MB)</p>
+            <button type="button" class="pua-btn" id="browseProofBtn" style="background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+                <i class="fas fa-folder-open"></i>
+                <span>Choose file</span>
+            </button>
+            
+            <!-- The actual Django form field (hidden) -->
+            {{ form.proof }}
+        </div>
+
+        <!-- Selected File Info -->
+        <div class="photo-file-info" id="proofFileInfo" style="display: none; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; margin-top: 16px;">
+            <div class="pfi-left" style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
+                <div class="pfi-icon" style="width: 36px; height: 36px; border-radius: 10px; background: rgba(91,91,247,0.1); color: var(--primary); display: grid; place-items: center; font-size: 14px; flex-shrink: 0;">
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <div class="pfi-details" style="min-width: 0; flex: 1;">
+                    <p class="pfi-name" id="proofFileName" style="font-size: 13px; font-weight: 600; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink);">receipt.pdf</p>
+                    <p class="pfi-size" id="proofFileSize" style="font-size: 11px; color: var(--muted); margin: 2px 0 0;">2.4 MB</p>
+                </div>
+            </div>
+            <button type="button" class="pfi-remove" id="removeProofBtn" style="width: 32px; height: 32px; border-radius: 8px; background: transparent; border: 1px solid var(--line); color: var(--muted); cursor: pointer; display: grid; place-items: center; font-size: 11px; transition: all 0.2s; flex-shrink: 0;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Form Errors for Proof -->
+        {% if form.proof.errors %}
+            <div style="color: var(--danger); font-size: 12px; margin-top: 8px; display: flex; align-items: center; gap: 6px;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>{{ form.proof.errors.0 }}</span>
+            </div>
+        {% endif %}
+    </div>
+
     <!-- Submit Button (only for crypto methods) -->
     <div class="form-actions" id="cryptoSubmitActions">
         <button type="button" class="btn-back" onclick="history.back()">
@@ -481,5 +529,83 @@ document.getElementById('depositForm').addEventListener('submit', (e) => {
     submitBtn.disabled = true;
     // Let Django handle the rest
 });
+
+
+// ===== PROOF OF PAYMENT UPLOAD =====
+const proofUploadArea = document.getElementById('proofUploadArea');
+const proofInput = document.getElementById('id_deposit_proof');
+const browseProofBtn = document.getElementById('browseProofBtn');
+const proofFileInfo = document.getElementById('proofFileInfo');
+const proofFileName = document.getElementById('proofFileName');
+const proofFileSize = document.getElementById('proofFileSize');
+const removeProofBtn = document.getElementById('removeProofBtn');
+
+if (proofUploadArea && proofInput) {
+    // Hide default Django input
+    proofInput.style.display = 'none';
+
+    // Click handlers
+    browseProofBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        proofInput.click();
+    });
+    proofUploadArea.addEventListener('click', () => proofInput.click());
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach(evt => {
+        proofUploadArea.addEventListener(evt, (e) => {
+            e.preventDefault();
+            proofUploadArea.style.borderColor = 'var(--primary)';
+            proofUploadArea.style.background = 'rgba(91,91,247,0.04)';
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(evt => {
+        proofUploadArea.addEventListener(evt, (e) => {
+            e.preventDefault();
+            proofUploadArea.style.borderColor = 'var(--line)';
+            proofUploadArea.style.background = 'var(--surface-2)';
+        });
+    });
+
+    proofUploadArea.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleProofFile(files[0]);
+        }
+    });
+
+    // File input change
+    proofInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleProofFile(e.target.files[0]);
+        }
+    });
+
+    function handleProofFile(file) {
+        // Validate size (10MB)
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File is too large. Maximum size is 10MB.');
+            proofInput.value = '';
+            return;
+        }
+
+        proofFileName.textContent = file.name;
+        proofFileSize.textContent = formatFileSize(file.size);
+        proofFileInfo.style.display = 'flex';
+    }
+
+    // Remove file
+    removeProofBtn.addEventListener('click', () => {
+        proofInput.value = '';
+        proofFileInfo.style.display = 'none';
+    });
+
+    function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+}
 </script>
 {% endblock %}

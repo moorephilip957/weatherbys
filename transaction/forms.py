@@ -5,25 +5,22 @@ from django.contrib.auth.hashers import check_password
 from .models import Deposit, LocalTransfer, InternationalTransfer, TransactionHistory
 from customer.models import UserBankAccount
 
-
 class DepositCreateForm(forms.ModelForm):
-
     class Meta:
         model = Deposit
-
         fields = [
             "method",
-            "amount"
+            "amount",
+            "proof", 
         ]
 
         widgets = {
-
             # HIDDEN FIELD - synced via JS when user picks a method tab
             "method": forms.HiddenInput(),
 
             "amount": forms.NumberInput(
                 attrs={
-                    "class": "form-input amount-input",  # Matches design system
+                    "class": "form-input amount-input",
                     "id": "id_deposit_amount",
                     "min": "100",
                     "max": "5000000",
@@ -31,18 +28,24 @@ class DepositCreateForm(forms.ModelForm):
                     "placeholder": "0.00",
                     "inputmode": "decimal",
                 }
+            ),
+
+            # PROOF FIELD WIDGET
+            "proof": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-input d-none", # Hidden, controlled by custom JS
+                    "id": "id_deposit_proof",
+                    "accept": "image/*,.pdf",
+                }
             )
         }
 
     def clean_amount(self):
         amount = self.cleaned_data["amount"]
-
         if amount < 100:
             raise forms.ValidationError("Minimum deposit is $100")
-
         if amount > 5000000:
             raise forms.ValidationError("Maximum deposit is $5,000,000")
-
         return amount
 
 

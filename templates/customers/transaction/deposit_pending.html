@@ -16,10 +16,17 @@
     </div>
 
     <!-- Status Text -->
-    <h1 class="status-title pending">Deposit in Progress</h1>
-    <p class="status-subtitle">Your deposit is being confirmed on the blockchain. We'll credit your account once it's fully confirmed.</p>
+    <h1 class="status-title pending">Deposit Pending</h1>
+    <p class="status-subtitle">
+        {% if deposit.method == 'WIRE' %}
+            Your wire transfer deposit request has been submitted. We will credit your account once the payment is received and confirmed by our banking partners.
+        {% else %}
+            Your {{ deposit.method }} deposit is being confirmed on the blockchain. We'll credit your account once it's fully verified.
+        {% endif %}
+    </p>
 
-    <!-- Network Confirmations Progress -->
+    {% if deposit.method != 'WIRE' %}
+    <!-- Network Confirmations Progress (Crypto Only) -->
     <div class="confirmations-wrap">
         <h3><i class="fas fa-link"></i> Network confirmations</h3>
 
@@ -27,10 +34,10 @@
             <div class="conf-step completed">
                 <div class="cs-dot"><i class="fas fa-check"></i></div>
                 <span class="cs-label">Broadcast</span>
-                <span class="cs-time">11:30 AM</span>
+                <span class="cs-time">{{ deposit.created_at|date:"h:i A" }}</span>
             </div>
             <div class="conf-step active">
-                <div class="cs-dot">2</div>
+                <div class="cs-dot">1</div>
                 <span class="cs-label">Confirming</span>
                 <span class="cs-time">~5 min left</span>
             </div>
@@ -48,7 +55,7 @@
 
         <div class="conf-summary">
             <div class="cs-left">
-                <strong>2 of 3</strong> confirmations received
+                <strong>1 of 3</strong> confirmations received
             </div>
             <div class="cs-right">
                 <span class="dot-live"></span>
@@ -56,10 +63,25 @@
             </div>
         </div>
     </div>
+    {% else %}
+    <!-- Wire Transfer Status -->
+    <div class="confirmations-wrap">
+        <h3><i class="fas fa-university"></i> Bank Processing Status</h3>
+        <div class="conf-summary" style="margin-top: 16px;">
+            <div class="cs-left">
+                <strong>Awaiting Bank Confirmation</strong>
+            </div>
+            <div class="cs-right">
+                <span class="dot-live"></span>
+                <span>Typically takes 1-3 business days</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Deposit Details -->
     <div class="deposit-details-card">
-        <h3><i class="fas fa-wallet"></i> Deposit details</h3>
+        <h3><i class="fas fa-receipt"></i> Deposit details</h3>
 
         <div class="status-detail-row">
             <span class="sdr-label">
@@ -67,40 +89,49 @@
                 Deposit method
             </span>
             <span class="sdr-value">
-                <span class="deposit-method-badge usdt">
-                    <span class="dbm-logo">₮</span>
-                    USDT · TRC20
+                <span class="deposit-method-badge {{ deposit.method|lower }}">
+                    {% if deposit.method == 'USDT' %}
+                        <span class="dbm-logo">₮</span> USDT
+                    {% elif deposit.method == 'BTC' %}
+                        <span class="dbm-logo">₿</span> BTC
+                    {% else %}
+                        <i class="fas fa-university"></i> Wire Transfer
+                    {% endif %}
                 </span>
             </span>
         </div>
 
+        {% if deposit.wallet_address %}
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-arrow-down"></i>
                 Deposit address
             </span>
-            <span class="sdr-value mono" style="font-size: 11px;">TR7NGq...UjHc</span>
+            <span class="sdr-value mono" style="font-size: 11px;">{{ deposit.wallet_address }}</span>
         </div>
+        {% endif %}
 
+        {% if deposit.tx_hash %}
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-hashtag"></i>
                 Transaction hash
             </span>
             <span class="sdr-value">
-                <a href="#" class="explorer-link">
-                    <span class="mono" style="font-size: 11px;">a8f3...c92d</span>
+                <a href="#" class="explorer-link" target="_blank">
+                    <span class="mono" style="font-size: 11px;">{{ deposit.tx_hash }}</span>
                     <i class="fas fa-external-link-alt" style="font-size: 9px;"></i>
                 </a>
             </span>
         </div>
+        {% endif %}
 
         <div class="status-detail-row">
             <span class="sdr-label">
                 <i class="fas fa-calendar"></i>
                 Initiated at
             </span>
-            <span class="sdr-value">Sep 24, 2026 · 11:30 AM</span>
+            <span class="sdr-value">{{ deposit.created_at|date:"M d, Y · h:i A" }}</span>
         </div>
 
         <div class="status-detail-row">
@@ -108,35 +139,29 @@
                 <i class="fas fa-hourglass-half"></i>
                 Estimated completion
             </span>
-            <span class="sdr-value" style="color: #D97706;">~5 minutes</span>
-        </div>
-
-        <div class="status-detail-row">
-            <span class="sdr-label">
-                <i class="fas fa-network-wired"></i>
-                Network
+            <span class="sdr-value" style="color: #D97706;">
+                {% if deposit.method == 'WIRE' %}1-3 business days{% else %}~5-15 minutes{% endif %}
             </span>
-            <span class="sdr-value">TRON (TRC20)</span>
         </div>
 
         <div class="status-amount-highlight" style="background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(217,119,6,0.06));">
             <div class="sah-label">Amount being deposited</div>
-            <div class="sah-value" style="color: #D97706;">1,000 USDT</div>
-            <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">≈ $1,000.00 USD</div>
+            <div class="sah-value" style="color: #D97706;">{{ deposit.amount }} {{ deposit.method }}</div>
+            <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">≈ ${{ deposit.amount }}.00 USD</div>
         </div>
     </div>
 
     <!-- Action Buttons -->
     <div class="status-actions">
-        <a href="#" class="status-btn primary">
+        <a href="{% url 'customer:dashboard' %}" class="status-btn primary">
             <i class="fas fa-home"></i>
             <span>Back to dashboard</span>
         </a>
-        <a href="#" class="status-btn secondary">
+        <a href="{% url 'customer:transactions' %}" class="status-btn secondary">
             <i class="fas fa-history"></i>
             <span>Deposit history</span>
         </a>
-        <a href="#" class="status-btn secondary">
+        <a href="{% url 'support:create_ticket' %}" class="status-btn secondary">
             <i class="fas fa-headset"></i>
             <span>Contact support</span>
         </a>
@@ -146,8 +171,14 @@
     <div class="deposit-warning-box">
         <div class="dwb-icon"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="dwb-content">
-            <p class="dwb-title">Please don't close this page</p>
-            <p class="dwb-text">Your deposit will be automatically credited once it receives 3 network confirmations. This typically takes 5-15 minutes. If your deposit doesn't appear within 30 minutes, please contact support with your transaction hash.</p>
+            <p class="dwb-title">Please note</p>
+            <p class="dwb-text">
+                {% if deposit.method == 'WIRE' %}
+                    Your deposit will be credited once the funds are received and verified by our banking partners. This typically takes 1-3 business days. If you have already sent the wire, please keep your receipt handy and contact support if you need to provide proof of payment.
+                {% else %}
+                    Your deposit will be automatically credited once it receives the required network confirmations. This typically takes 5-15 minutes. If your deposit doesn't appear within 30 minutes, please contact support with your transaction hash.
+                {% endif %}
+            </p>
         </div>
     </div>
 </div>

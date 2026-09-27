@@ -147,11 +147,11 @@
                     <div class="tx-amount">
                         {% if transaction.direction == 'credit' %}
                         <div class="v in">
-                            +{{request.user.bank_account.get_currency_symbol}}4,200.00
+                            +{{request.user.bank_account.get_currency_symbol}}{{ transaction.amount|floatformat:2|intcomma }}
                         </div>
                         {% else %}
                         <div class="v out text-danger">
-                            -{{request.user.bank_account.get_currency_symbol}}4,200.00
+                            -{{request.user.bank_account.get_currency_symbol}}{{ transaction.amount|floatformat:2|intcomma }}
                         </div>
                         {% endif %}
 
