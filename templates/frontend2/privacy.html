@@ -1,0 +1,1212 @@
+{% extends './base.html' %}
+
+{% block title %}Privacy Policy | Weatherbys Racing Bank{% endblock %}
+
+{% block meta_description %}Learn how Weatherbys Racing Bank collects, uses, protects, and shares your personal information. Your privacy is our priority.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== PRIVACY POLICY PAGE ===== */
+
+/* Hero Section */
+.privacy-hero {
+    position: relative;
+    padding: 140px 0 80px;
+    background: linear-gradient(135deg, #0A0E1A 0%, #1A1F2E 50%, #2D1B4E 100%);
+    overflow: hidden;
+}
+.privacy-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(91,91,247,0.2), transparent 70%);
+    border-radius: 50%;
+}
+.privacy-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.privacy-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.privacy-hero-badge i {
+    color: var(--accent);
+}
+.privacy-hero h1 {
+    font-size: 48px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+.privacy-hero p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+.privacy-meta {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+.privacy-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    font-weight: 500;
+}
+.privacy-meta-item i {
+    color: var(--accent);
+    font-size: 14px;
+}
+
+/* Main Layout */
+.privacy-layout {
+    padding: 60px 0 100px;
+    background: var(--bg);
+}
+.privacy-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 48px;
+    align-items: start;
+}
+
+/* Sticky Sidebar / TOC */
+.privacy-sidebar {
+    position: sticky;
+    top: 100px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+.privacy-sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+.privacy-sidebar::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 100px;
+}
+.toc-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.toc-title i {
+    color: var(--primary);
+}
+.toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.toc-list li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
+    transition: all 0.2s;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+}
+.toc-list li a:hover {
+    background: var(--surface-2);
+    color: var(--primary);
+}
+.toc-list li a.active {
+    background: rgba(91,91,247,0.08);
+    color: var(--primary);
+    font-weight: 600;
+    border-left-color: var(--primary);
+}
+.toc-list li a .toc-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    min-width: 20px;
+}
+.toc-list li a.active .toc-num {
+    color: var(--primary);
+}
+
+/* Sidebar Actions */
+.toc-actions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.toc-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-2);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.toc-action-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(91,91,247,0.04);
+}
+.toc-action-btn i {
+    font-size: 13px;
+}
+
+/* Main Content */
+.privacy-content {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 48px;
+}
+
+.privacy-section {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--line-2);
+    scroll-margin-top: 100px;
+}
+.privacy-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.privacy-section-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.ps-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(91,91,247,0.1), rgba(124,58,237,0.1));
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+.privacy-section h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+.privacy-section h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 24px 0 12px;
+}
+.privacy-section p {
+    font-size: 15px;
+    color: var(--ink-2);
+    line-height: 1.8;
+    margin-bottom: 14px;
+}
+.privacy-section ul, .privacy-section ol {
+    margin: 12px 0 16px 20px;
+    padding: 0;
+}
+.privacy-section li {
+    font-size: 15px;
+    color: var(--ink-2);
+    line-height: 1.8;
+    margin-bottom: 8px;
+}
+.privacy-section ul li {
+    list-style: none;
+    position: relative;
+    padding-left: 20px;
+}
+.privacy-section ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+}
+.privacy-section strong {
+    color: var(--ink);
+    font-weight: 700;
+}
+
+/* Privacy Notice Callouts */
+.privacy-notice {
+    display: flex;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.privacy-notice.info {
+    background: rgba(91,91,247,0.06);
+    border: 1px solid rgba(91,91,247,0.15);
+    color: var(--ink-2);
+}
+.privacy-notice.warning {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-left: 3px solid #D97706;
+    color: var(--ink-2);
+}
+.privacy-notice.danger {
+    background: rgba(244,63,94,0.06);
+    border: 1px solid rgba(244,63,94,0.2);
+    border-left: 3px solid var(--danger);
+    color: var(--ink-2);
+}
+.privacy-notice.success {
+    background: rgba(0,212,168,0.06);
+    border: 1px solid rgba(0,212,168,0.2);
+    border-left: 3px solid var(--accent);
+    color: var(--ink-2);
+}
+.privacy-notice-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+.privacy-notice.info .privacy-notice-icon { background: rgba(91,91,247,0.12); color: var(--primary); }
+.privacy-notice.warning .privacy-notice-icon { background: rgba(245,158,11,0.12); color: #D97706; }
+.privacy-notice.danger .privacy-notice-icon { background: rgba(244,63,94,0.12); color: var(--danger); }
+.privacy-notice.success .privacy-notice-icon { background: rgba(0,212,168,0.12); color: var(--accent); }
+
+.privacy-notice-content {
+    flex: 1;
+}
+.privacy-notice-content strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ink);
+}
+
+/* Data Table */
+.data-table-wrap {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.data-table thead {
+    background: var(--surface);
+}
+.data-table th {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--line);
+}
+.data-table td {
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--ink-2);
+    border-bottom: 1px solid var(--line);
+}
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    box-shadow: 0 8px 20px -6px rgba(91,91,247,0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.back-to-top:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -6px rgba(91,91,247,0.6);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .privacy-container {
+        grid-template-columns: 1fr;
+    }
+    .privacy-sidebar {
+        position: static;
+        max-height: none;
+    }
+    .privacy-content {
+        padding: 32px 24px;
+    }
+    .privacy-hero h1 {
+        font-size: 36px;
+    }
+}
+@media (max-width: 768px) {
+    .privacy-hero {
+        padding: 120px 0 60px;
+    }
+    .privacy-hero h1 {
+        font-size: 28px;
+    }
+    .privacy-hero p {
+        font-size: 15px;
+    }
+    .privacy-content {
+        padding: 24px 20px;
+    }
+    .privacy-section h2 {
+        font-size: 20px;
+    }
+    .privacy-section p,
+    .privacy-section li {
+        font-size: 14px;
+    }
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 42px;
+        height: 42px;
+    }
+    .data-table-wrap {
+        overflow-x: auto;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .desktop-navbar, .mobile-navbar, .footer,
+    .privacy-sidebar, .back-to-top, .toc-actions {
+        display: none !important;
+    }
+    .privacy-hero {
+        background: #fff !important;
+        color: #000 !important;
+        padding: 20px 0 !important;
+    }
+    .privacy-hero h1, .privacy-hero p, .privacy-meta-item {
+        color: #000 !important;
+    }
+    .privacy-content {
+        border: none !important;
+        padding: 0 !important;
+    }
+    .privacy-section {
+        page-break-inside: avoid;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="privacy-hero">
+    <div class="container privacy-hero-content">
+        <div class="privacy-hero-badge">
+            <i class="fas fa-shield-alt"></i>
+            <span>Privacy & Data Protection</span>
+        </div>
+        <h1>Privacy Policy</h1>
+        <p>At Weatherbys Racing Bank, your privacy is our priority. This policy explains how we collect, use, protect, and share your personal information.</p>
+        <div class="privacy-meta">
+            <div class="privacy-meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Last updated: September 27, 2026</span>
+            </div>
+            <div class="privacy-meta-item">
+                <i class="fas fa-clock"></i>
+                <span>~12 min read</span>
+            </div>
+            <div class="privacy-meta-item">
+                <i class="fas fa-language"></i>
+                <span>English</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="privacy-layout">
+    <div class="container">
+        <div class="privacy-container">
+
+            <!-- Sidebar / Table of Contents -->
+            <aside class="privacy-sidebar">
+                <div class="toc-title">
+                    <i class="fas fa-list"></i>
+                    <span>Table of Contents</span>
+                </div>
+                <ul class="toc-list" id="tocList">
+                    <li><a href="#section-1" class="active"><span class="toc-num">1</span>Introduction</a></li>
+                    <li><a href="#section-2"><span class="toc-num">2</span>Information We Collect</a></li>
+                    <li><a href="#section-3"><span class="toc-num">3</span>How We Use Your Data</a></li>
+                    <li><a href="#section-4"><span class="toc-num">4</span>Legal Basis for Processing</a></li>
+                    <li><a href="#section-5"><span class="toc-num">5</span>Data Sharing & Disclosure</a></li>
+                    <li><a href="#section-6"><span class="toc-num">6</span>Cookies & Tracking</a></li>
+                    <li><a href="#section-7"><span class="toc-num">7</span>Data Security</a></li>
+                    <li><a href="#section-8"><span class="toc-num">8</span>Data Retention</a></li>
+                    <li><a href="#section-9"><span class="toc-num">9</span>Your Privacy Rights</a></li>
+                    <li><a href="#section-10"><span class="toc-num">10</span>International Transfers</a></li>
+                    <li><a href="#section-11"><span class="toc-num">11</span>Children's Privacy</a></li>
+                    <li><a href="#section-12"><span class="toc-num">12</span>Third-Party Links</a></li>
+                    <li><a href="#section-13"><span class="toc-num">13</span>Changes to This Policy</a></li>
+                    <li><a href="#section-14"><span class="toc-num">14</span>Contact Us</a></li>
+                </ul>
+                <div class="toc-actions">
+                    <button type="button" class="toc-action-btn" onclick="window.print()">
+                        <i class="fas fa-print"></i>
+                        <span>Print Policy</span>
+                    </button>
+                    <a href="#" class="toc-action-btn">
+                        <i class="fas fa-download"></i>
+                        <span>Download PDF</span>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="privacy-content">
+
+                <!-- Section 1: Introduction -->
+                <section class="privacy-section" id="section-1">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">1</div>
+                        <h2>Introduction</h2>
+                    </div>
+                    <p>Weatherbys Racing Bank ("we," "us," or "our") is committed to protecting and respecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you use our banking services, website, mobile applications, and related platforms (collectively, the "Services").</p>
+                    
+                    <div class="privacy-notice info">
+                        <div class="privacy-notice-icon"><i class="fas fa-info-circle"></i></div>
+                        <div class="privacy-notice-content">
+                            <strong>Our Commitment:</strong>
+                            We believe that privacy is a fundamental right. We will never sell your personal information to third parties, and we will only use your data in ways that are transparent, secure, and in compliance with applicable privacy laws including GDPR, CCPA, and other relevant regulations.
+                        </div>
+                    </div>
+
+                    <h3>1.1 Scope of This Policy</h3>
+                    <p>This Privacy Policy applies to all personal information we collect through:</p>
+                    <ul>
+                        <li>Our website (www.weatherbys.com)</li>
+                        <li>Our mobile applications (iOS and Android)</li>
+                        <li>In-person interactions at our branches</li>
+                        <li>Phone conversations with our customer service team</li>
+                        <li>Email communications and marketing materials</li>
+                        <li>Social media interactions</li>
+                    </ul>
+
+                    <h3>1.2 Data Controller</h3>
+                    <p>Weatherbys Racing Bank is the data controller for the personal information collected through our Services. This means we determine the purposes and means of processing your personal data.</p>
+                </section>
+
+                <!-- Section 2: Information We Collect -->
+                <section class="privacy-section" id="section-2">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">2</div>
+                        <h2>Information We Collect</h2>
+                    </div>
+                    <p>We collect various types of personal information to provide our banking services effectively. The specific data we collect depends on your relationship with us and the services you use.</p>
+
+                    <h3>2.1 Personal Identification Information</h3>
+                    <ul>
+                        <li>Full name, date of birth, and gender</li>
+                        <li>Residential address and mailing address</li>
+                        <li>Email address and phone number(s)</li>
+                        <li>Government-issued identification numbers (SSN, passport number, driver's license)</li>
+                        <li>Tax identification numbers</li>
+                        <li>Photographs and signatures (for identity verification)</li>
+                    </ul>
+
+                    <h3>2.2 Financial Information</h3>
+                    <ul>
+                        <li>Account numbers and balances</li>
+                        <li>Transaction history and payment records</li>
+                        <li>Income and employment information</li>
+                        <li>Credit history and credit scores</li>
+                        <li>Investment holdings and portfolio information</li>
+                        <li>Loan applications and repayment history</li>
+                    </ul>
+
+                    <h3>2.3 Technical & Device Information</h3>
+                    <ul>
+                        <li>IP address and device identifiers</li>
+                        <li>Browser type and version</li>
+                        <li>Operating system and device type</li>
+                        <li>Mobile network information</li>
+                        <li>Location data (with your consent)</li>
+                        <li>Usage patterns and interaction data</li>
+                    </ul>
+
+                    <div class="data-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data Category</th>
+                                    <th>Examples</th>
+                                    <th>Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Identity Data</strong></td>
+                                    <td>Name, DOB, ID numbers</td>
+                                    <td>Account opening, KYC verification</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Contact Data</strong></td>
+                                    <td>Email, phone, address</td>
+                                    <td>Communication, service delivery</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Financial Data</strong></td>
+                                    <td>Account info, transactions</td>
+                                    <td>Banking services, compliance</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Technical Data</strong></td>
+                                    <td>IP address, device info</td>
+                                    <td>Security, fraud prevention</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Usage Data</strong></td>
+                                    <td>App interactions, features used</td>
+                                    <td>Service improvement</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2.4 Information from Third Parties</h3>
+                    <p>We may receive personal information about you from third parties, including:</p>
+                    <ul>
+                        <li><strong>Credit bureaus</strong> — Credit reports and scores</li>
+                        <li><strong>Employers</strong> — Income verification</li>
+                        <li><strong>Government agencies</strong> — Regulatory compliance information</li>
+                        <li><strong>Service providers</strong> — Information collected on our behalf</li>
+                        <li><strong>Public sources</strong> — Publicly available information</li>
+                    </ul>
+                </section>
+
+                <!-- Section 3: How We Use Your Data -->
+                <section class="privacy-section" id="section-3">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">3</div>
+                        <h2>How We Use Your Data</h2>
+                    </div>
+                    <p>We use your personal information for the following purposes:</p>
+
+                    <h3>3.1 Service Delivery</h3>
+                    <ul>
+                        <li>Opening and managing your accounts</li>
+                        <li>Processing transactions and payments</li>
+                        <li>Providing customer support</li>
+                        <li>Issuing cards, checks, and other banking products</li>
+                        <li>Calculating and applying interest</li>
+                    </ul>
+
+                    <h3>3.2 Security & Fraud Prevention</h3>
+                    <ul>
+                        <li>Verifying your identity</li>
+                        <li>Monitoring for suspicious activity</li>
+                        <li>Preventing fraud and money laundering</li>
+                        <li>Protecting against unauthorized access</li>
+                        <li>Investigating security incidents</li>
+                    </ul>
+
+                    <h3>3.3 Legal & Regulatory Compliance</h3>
+                    <ul>
+                        <li>Complying with Anti-Money Laundering (AML) laws</li>
+                        <li>Meeting Know Your Customer (KYC) requirements</li>
+                        <li>Responding to legal requests and court orders</li>
+                        <li>Reporting to tax authorities as required</li>
+                        <li>Maintaining required records</li>
+                    </ul>
+
+                    <h3>3.4 Product Improvement & Innovation</h3>
+                    <ul>
+                        <li>Analyzing usage patterns to improve our Services</li>
+                        <li>Developing new features and products</li>
+                        <li>Conducting research and analytics</li>
+                        <li>Personalizing your experience</li>
+                    </ul>
+
+                    <h3>3.5 Marketing & Communications</h3>
+                    <ul>
+                        <li>Sending account-related notifications</li>
+                        <li>Providing promotional offers (with your consent)</li>
+                        <li>Conducting customer satisfaction surveys</li>
+                        <li>Sharing relevant product information</li>
+                    </ul>
+
+                    <div class="privacy-notice warning">
+                        <div class="privacy-notice-icon"><i class="fas fa-bell"></i></div>
+                        <div class="privacy-notice-content">
+                            <strong>Marketing Opt-Out:</strong>
+                            You can opt out of marketing communications at any time by clicking the "unsubscribe" link in any email, adjusting your preferences in your account settings, or contacting our customer service team. Note that you will continue to receive essential service-related communications even after opting out of marketing.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 4: Legal Basis for Processing -->
+                <section class="privacy-section" id="section-4">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">4</div>
+                        <h2>Legal Basis for Processing</h2>
+                    </div>
+                    <p>Under the General Data Protection Regulation (GDPR) and similar privacy laws, we must have a legal basis for processing your personal data. We rely on the following legal bases:</p>
+
+                    <h3>4.1 Contractual Necessity</h3>
+                    <p>We process your data when necessary to perform our contract with you, such as providing banking services, processing transactions, and maintaining your accounts.</p>
+
+                    <h3>4.2 Legal Obligation</h3>
+                    <p>We process your data when required to comply with legal obligations, including Anti-Money Laundering (AML) laws, tax reporting requirements, and regulatory mandates.</p>
+
+                    <h3>4.3 Legitimate Interests</h3>
+                    <p>We process your data for our legitimate business interests, such as fraud prevention, service improvement, and marketing, provided these interests are not overridden by your rights and freedoms.</p>
+
+                    <h3>4.4 Consent</h3>
+                    <p>In some cases, we rely on your explicit consent to process your data, such as for certain marketing activities or processing special categories of data. You can withdraw your consent at any time.</p>
+
+                    <div class="privacy-notice info">
+                        <div class="privacy-notice-icon"><i class="fas fa-info-circle"></i></div>
+                        <div class="privacy-notice-content">
+                            <strong>Multiple Legal Bases:</strong>
+                            We may rely on more than one legal basis for processing your data, depending on the specific purpose and context. We will clearly indicate which legal basis applies in our communications with you.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 5: Data Sharing & Disclosure -->
+                <section class="privacy-section" id="section-5">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">5</div>
+                        <h2>Data Sharing & Disclosure</h2>
+                    </div>
+                    <p>We do not sell your personal information to third parties. However, we may share your data in the following circumstances:</p>
+
+                    <h3>5.1 Service Providers</h3>
+                    <p>We share data with third-party service providers who assist us in operating our business, such as:</p>
+                    <ul>
+                        <li>Cloud hosting and data storage providers</li>
+                        <li>Payment processors and card networks</li>
+                        <li>Customer support and call center services</li>
+                        <li>Marketing and analytics platforms</li>
+                        <li>Legal, accounting, and consulting firms</li>
+                    </ul>
+                    <p>All service providers are contractually obligated to protect your data and use it only for the purposes we specify.</p>
+
+                    <h3>5.2 Regulatory & Legal Requirements</h3>
+                    <p>We may disclose your information when required by law, regulation, or legal process, including:</p>
+                    <ul>
+                        <li>Government authorities and regulatory bodies</li>
+                        <li>Law enforcement agencies</li>
+                        <li>Court orders and subpoenas</li>
+                        <li>Tax authorities</li>
+                    </ul>
+
+                    <h3>5.3 Business Transfers</h3>
+                    <p>In the event of a merger, acquisition, reorganization, or sale of assets, your personal information may be transferred to the acquiring entity. We will notify you of any such change and any choices you may have regarding your data.</p>
+
+                    <h3>5.4 With Your Consent</h3>
+                    <p>We may share your data with third parties when you have given us explicit consent to do so. You can withdraw your consent at any time.</p>
+
+                    <div class="privacy-notice success">
+                        <div class="privacy-notice-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="privacy-notice-content">
+                            <strong>Our Promise:</strong>
+                            We will never sell your personal information to third parties for their own marketing purposes. Any sharing of your data is strictly for the purposes outlined in this policy and in compliance with applicable laws.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 6: Cookies & Tracking -->
+                <section class="privacy-section" id="section-6">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">6</div>
+                        <h2>Cookies & Tracking Technologies</h2>
+                    </div>
+                    <p>We use cookies and similar tracking technologies to enhance your experience, analyze usage patterns, and deliver personalized content.</p>
+
+                    <h3>6.1 What Are Cookies?</h3>
+                    <p>Cookies are small text files stored on your device when you visit our website. They help us remember your preferences, understand how you use our site, and improve our services.</p>
+
+                    <h3>6.2 Types of Cookies We Use</h3>
+                    <ul>
+                        <li><strong>Essential Cookies:</strong> Required for the website to function properly. Cannot be disabled.</li>
+                        <li><strong>Performance Cookies:</strong> Help us understand how visitors interact with our website by collecting anonymous data.</li>
+                        <li><strong>Functional Cookies:</strong> Enable personalized features and remember your preferences.</li>
+                        <li><strong>Marketing Cookies:</strong> Track your activity across websites to deliver relevant advertisements (only with your consent).</li>
+                    </ul>
+
+                    <h3>6.3 Managing Cookies</h3>
+                    <p>You can control cookies through your browser settings. Most browsers allow you to:</p>
+                    <ul>
+                        <li>View what cookies are stored and delete them individually</li>
+                        <li>Block third-party cookies</li>
+                        <li>Block all cookies</li>
+                        <li>Delete all cookies when you close your browser</li>
+                    </ul>
+
+                    <div class="privacy-notice warning">
+                        <div class="privacy-notice-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="privacy-notice-content">
+                            <strong>Important:</strong>
+                            If you disable essential cookies, some features of our website may not function properly. This may affect your ability to log in, make transactions, or access certain services.
+                        </div>
+                    </div>
+
+                    <h3>6.4 Do Not Track</h3>
+                    <p>Some browsers have a "Do Not Track" feature that signals to websites that you do not want to be tracked. We currently honor Do Not Track signals and do not track your activity across third-party websites.</p>
+                </section>
+
+                <!-- Section 7: Data Security -->
+                <section class="privacy-section" id="section-7">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">7</div>
+                        <h2>Data Security</h2>
+                    </div>
+                    <p>We take the security of your personal information seriously and implement comprehensive measures to protect your data from unauthorized access, disclosure, alteration, or destruction.</p>
+
+                    <h3>7.1 Technical Safeguards</h3>
+                    <ul>
+                        <li><strong>Encryption:</strong> All data is encrypted in transit (256-bit SSL/TLS) and at rest using industry-standard encryption protocols.</li>
+                        <li><strong>Access Controls:</strong> Strict access controls ensure only authorized personnel can access your data, with multi-factor authentication required.</li>
+                        <li><strong>Network Security:</strong> Firewalls, intrusion detection systems, and regular security audits protect our infrastructure.</li>
+                        <li><strong>Monitoring:</strong> 24/7 security monitoring detects and responds to potential threats in real-time.</li>
+                    </ul>
+
+                    <h3>7.2 Organizational Safeguards</h3>
+                    <ul>
+                        <li>Regular security training for all employees</li>
+                        <li>Strict confidentiality agreements</li>
+                        <li>Background checks for personnel with data access</li>
+                        <li>Clear data handling policies and procedures</li>
+                        <li>Regular security audits and penetration testing</li>
+                    </ul>
+
+                    <h3>7.3 Incident Response</h3>
+                    <p>In the event of a data breach that affects your personal information, we will:</p>
+                    <ul>
+                        <li>Investigate the incident immediately</li>
+                        <li>Take steps to secure your data and prevent further unauthorized access</li>
+                        <li>Notify you and relevant authorities as required by law</li>
+                        <li>Provide guidance on protecting your account</li>
+                    </ul>
+
+                    <div class="privacy-notice success">
+                        <div class="privacy-notice-icon"><i class="fas fa-lock"></i></div>
+                        <div class="privacy-notice-content">
+                            <strong>Bank-Grade Security:</strong>
+                            Our security measures meet or exceed industry standards and regulatory requirements. We undergo regular third-party security audits and maintain SOC 2 Type II certification.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 8: Data Retention -->
+                <section class="privacy-section" id="section-8">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">8</div>
+                        <h2>Data Retention</h2>
+                    </div>
+                    <p>We retain your personal information only for as long as necessary to fulfill the purposes for which it was collected, comply with legal obligations, resolve disputes, and enforce our agreements.</p>
+
+                    <h3>8.1 Retention Periods</h3>
+                    <div class="data-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data Type</th>
+                                    <th>Retention Period</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Account records</td>
+                                    <td>Life of account + 7 years</td>
+                                    <td>Regulatory compliance</td>
+                                </tr>
+                                <tr>
+                                    <td>Transaction records</td>
+                                    <td>7 years after closure</td>
+                                    <td>Tax and legal requirements</td>
+                                </tr>
+                                <tr>
+                                    <td>KYC documentation</td>
+                                    <td>5 years after relationship ends</td>
+                                    <td>AML regulations</td>
+                                </tr>
+                                <tr>
+                                    <td>Marketing preferences</td>
+                                    <td>Until consent withdrawn</td>
+                                    <td>Respecting your choices</td>
+                                </tr>
+                                <tr>
+                                    <td>Website analytics</td>
+                                    <td>24 months</td>
+                                    <td>Service improvement</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.2 Data Deletion</h3>
+                    <p>When data is no longer needed, we securely delete or anonymize it in accordance with our data retention policies. You can request deletion of your data as outlined in Section 9 (Your Privacy Rights).</p>
+                </section>
+
+                <!-- Section 9: Your Privacy Rights -->
+                <section class="privacy-section" id="section-9">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">9</div>
+                        <h2>Your Privacy Rights</h2>
+                    </div>
+                    <p>Depending on your location and applicable laws, you have certain rights regarding your personal information. We make it easy to exercise these rights through your account settings or by contacting us.</p>
+
+                    <h3>9.1 Right to Access</h3>
+                    <p>You have the right to request a copy of the personal information we hold about you. We will provide this information in a commonly used, machine-readable format within 30 days of your request.</p>
+
+                    <h3>9.2 Right to Rectification</h3>
+                    <p>You have the right to request correction of inaccurate or incomplete personal information. You can update most information directly through your account settings.</p>
+
+                    <h3>9.3 Right to Erasure (Right to be Forgotten)</h3>
+                    <p>You have the right to request deletion of your personal information in certain circumstances, such as when:</p>
+                    <ul>
+                        <li>The data is no longer necessary for the purpose it was collected</li>
+                        <li>You withdraw your consent (where consent was the legal basis)</li>
+                        <li>You object to the processing and there are no overriding legitimate grounds</li>
+                        <li>The data was processed unlawfully</li>
+                    </ul>
+
+                    <div class="privacy-notice warning">
+                        <div class="privacy-notice-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="privacy-notice-content">
+                            <strong>Limitations:</strong>
+                            We may be unable to delete certain information if we are required to retain it by law (such as transaction records for tax purposes) or if deletion would prevent us from providing our services to you.
+                        </div>
+                    </div>
+
+                    <h3>9.4 Right to Restrict Processing</h3>
+                    <p>You have the right to request that we restrict the processing of your personal information in certain circumstances, such as when you contest the accuracy of the data.</p>
+
+                    <h3>9.5 Right to Data Portability</h3>
+                    <p>You have the right to receive your personal information in a structured, commonly used, machine-readable format and to transmit it to another controller without hindrance.</p>
+
+                    <h3>9.6 Right to Object</h3>
+                    <p>You have the right to object to the processing of your personal information based on legitimate interests or for direct marketing purposes. We will stop processing your data for these purposes unless we demonstrate compelling legitimate grounds.</p>
+
+                    <h3>9.7 Right to Withdraw Consent</h3>
+                    <p>Where we rely on your consent to process your data, you can withdraw that consent at any time. This does not affect the lawfulness of processing before your withdrawal.</p>
+
+                    <h3>9.8 How to Exercise Your Rights</h3>
+                    <p>To exercise any of these rights, you can:</p>
+                    <ul>
+                        <li>Update your preferences directly in your account settings</li>
+                        <li>Email our Data Protection Officer at <strong>privacy@weatherbys.com</strong></li>
+                        <li>Call our dedicated privacy line at <strong>+1 (800) 123-4568</strong></li>
+                        <li>Write to us at: Weatherbys Racing Bank, Data Protection Officer, 123 Financial District, New York, NY 10005, USA</li>
+                    </ul>
+                    <p>We will respond to your request within 30 days. In complex cases, we may need up to 90 days, in which case we will inform you of the extension and the reasons for it.</p>
+                </section>
+
+                <!-- Section 10: International Transfers -->
+                <section class="privacy-section" id="section-10">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">10</div>
+                        <h2>International Data Transfers</h2>
+                    </div>
+                    <p>As a global bank, we may transfer your personal information to countries outside your home country, including to our affiliates, service providers, and partners located in various jurisdictions.</p>
+
+                    <h3>10.1 Adequacy Decisions</h3>
+                    <p>When transferring data to countries that the European Commission has determined provide an adequate level of data protection, we rely on that adequacy decision.</p>
+
+                    <h3>10.2 Appropriate Safeguards</h3>
+                    <p>For transfers to countries without an adequacy decision, we implement appropriate safeguards, such as:</p>
+                    <ul>
+                        <li>Standard Contractual Clauses (SCCs) approved by the European Commission</li>
+                        <li>Binding Corporate Rules (BCRs) for intra-group transfers</li>
+                        <li>Certification mechanisms or codes of conduct</li>
+                        <li>Explicit consent from you (where appropriate)</li>
+                    </ul>
+
+                    <h3>10.3 Your Rights Regarding Transfers</h3>
+                    <p>You have the right to be informed about the safeguards in place for international transfers of your data. You can request a copy of these safeguards by contacting us.</p>
+                </section>
+
+                <!-- Section 11: Children's Privacy -->
+                <section class="privacy-section" id="section-11">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">11</div>
+                        <h2>Children's Privacy</h2>
+                    </div>
+                    <p>Our Services are not directed to individuals under the age of 18 (or the age of majority in your jurisdiction). We do not knowingly collect personal information from children.</p>
+
+                    <h3>11.1 Custodial Accounts</h3>
+                    <p>We offer custodial accounts for minors, which are opened and managed by a parent or legal guardian. In these cases, we collect information from the guardian and limited information about the minor as required by law.</p>
+
+                    <h3>11.2 If We Learn of a Child's Data</h3>
+                    <p>If we learn that we have collected personal information from a child without proper parental consent, we will delete that information as quickly as possible.</p>
+
+                    <div class="privacy-notice danger">
+                        <div class="privacy-notice-icon"><i class="fas fa-exclamation-circle"></i></div>
+                        <div class="privacy-notice-content">
+                            <strong>Parental Responsibility:</strong>
+                            If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately so we can take appropriate action.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 12: Third-Party Links -->
+                <section class="privacy-section" id="section-12">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">12</div>
+                        <h2>Third-Party Links & Services</h2>
+                    </div>
+                    <p>Our website and mobile applications may contain links to third-party websites, services, or applications that are not operated by us. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.</p>
+
+                    <h3>12.1 Your Responsibility</h3>
+                    <p>We strongly encourage you to review the privacy policies of any third-party sites you visit. Your use of third-party services is subject to their terms and privacy policies, not ours.</p>
+
+                    <h3>12.2 Integrated Services</h3>
+                    <p>Our platform may integrate with third-party services (such as payment processors, financial aggregators, or investment platforms). When you use these integrated services, your data may be shared with those third parties in accordance with their privacy policies.</p>
+                </section>
+
+                <!-- Section 13: Changes to This Policy -->
+                <section class="privacy-section" id="section-13">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">13</div>
+                        <h2>Changes to This Policy</h2>
+                    </div>
+                    <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, legal requirements, or other factors.</p>
+
+                    <h3>13.1 Notification of Changes</h3>
+                    <p>For material changes that affect how we use your personal information, we will:</p>
+                    <ul>
+                        <li>Post the updated policy on our website with a revised "Last Updated" date</li>
+                        <li>Notify you via email or in-app notification at least 30 days before the changes take effect</li>
+                        <li>Request your explicit consent where required by law</li>
+                    </ul>
+
+                    <h3>13.2 Your Continued Use</h3>
+                    <p>Your continued use of our Services after the effective date of any changes constitutes your acceptance of the revised Privacy Policy. If you do not agree to the changes, you should close your account and cease using our Services.</p>
+
+                    <h3>13.3 Historical Versions</h3>
+                    <p>We maintain historical versions of our Privacy Policy. You can request a copy of the policy that was in effect at any given time by contacting us.</p>
+                </section>
+
+                <!-- Section 14: Contact Us -->
+                <section class="privacy-section" id="section-14">
+                    <div class="privacy-section-head">
+                        <div class="ps-num">14</div>
+                        <h2>Contact Us</h2>
+                    </div>
+                    <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
+
+                    <div style="background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 24px; margin: 20px 0;">
+                        <p style="margin-bottom: 12px;"><strong>Weatherbys Racing Bank — Data Protection Officer</strong></p>
+                        <p style="margin-bottom: 8px;"><i class="fas fa-envelope" style="color: var(--primary); width: 20px;"></i> privacy@weatherbys.com</p>
+                        <p style="margin-bottom: 8px;"><i class="fas fa-phone" style="color: var(--primary); width: 20px;"></i> +1 (800) 123-4568 (Privacy Hotline)</p>
+                        <p style="margin-bottom: 8px;"><i class="fas fa-map-marker-alt" style="color: var(--primary); width: 20px;"></i> 123 Financial District, New York, NY 10005, USA</p>
+                        <p style="margin-bottom: 0;"><i class="fas fa-clock" style="color: var(--primary); width: 20px;"></i> Response within 30 days</p>
+                    </div>
+
+                    <h3>14.1 Supervisory Authorities</h3>
+                    <p>If you are not satisfied with our response to your privacy concerns, you have the right to lodge a complaint with your local data protection authority. In the European Union, you can find your supervisory authority <a href="https://edpb.europa.eu/about-edpb/board/members_en" target="_blank" style="color: var(--primary); font-weight: 600;">here</a>.</p>
+
+                    <div class="privacy-notice info">
+                        <div class="privacy-notice-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="privacy-notice-content">
+                            <strong>We're Here to Help:</strong>
+                            We encourage you to contact us first with any privacy concerns. Our dedicated privacy team is committed to resolving issues quickly and transparently.
+                        </div>
+                    </div>
+
+                    <h3>14.2 Regulatory Information</h3>
+                    <p>Weatherbys Racing Bank is regulated by multiple financial authorities and complies with all applicable data protection laws, including:</p>
+                    <ul>
+                        <li>General Data Protection Regulation (GDPR) — European Union</li>
+                        <li>California Consumer Privacy Act (CCPA) — California, USA</li>
+                        <li>Gramm-Leach-Bliley Act (GLBA) — United States</li>
+                        <li>Personal Information Protection and Electronic Documents Act (PIPEDA) — Canada</li>
+                        <li>Other applicable local and international privacy laws</li>
+                    </ul>
+                </section>
+
+                <!-- End Notice -->
+                <div style="text-align: center; padding: 32px 0 0; border-top: 1px solid var(--line-2); margin-top: 32px;">
+                    <p style="font-size: 14px; color: var(--muted); margin-bottom: 16px;">
+                        <i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 6px;"></i>
+                        Your privacy matters to us. Thank you for trusting Weatherbys Racing Bank.
+                    </p>
+                    <p style="font-size: 13px; color: var(--muted); margin-bottom: 0;">
+                        © 2026 Weatherbys Racing Bank. All rights reserved.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back to Top Button -->
+<button type="button" class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tocLinks = document.querySelectorAll('.toc-list a');
+    const sections = document.querySelectorAll('.privacy-section');
+    const backToTopBtn = document.getElementById('backToTop');
+
+    // ===== SMOOTH SCROLL =====
+    tocLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // ===== ACTIVE SECTION HIGHLIGHTING =====
+    function updateActiveLink() {
+        let currentSection = '';
+        const scrollPosition = window.scrollY + 150;
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                currentSection = section.getAttribute('id');
+            }
+        });
+
+        tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${currentSection}`) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // ===== BACK TO TOP BUTTON =====
+    function toggleBackToTop() {
+        if (window.scrollY > 500) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ===== SCROLL EVENT LISTENER =====
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            updateActiveLink();
+            toggleBackToTop();
+        }, 10);
+    });
+
+    // Initial calls
+    updateActiveLink();
+    toggleBackToTop();
+});
+</script>
+{% endblock %}

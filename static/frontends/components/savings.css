@@ -1,0 +1,390 @@
+/* ===== SAVINGS PAGE SPECIFIC STYLES ===== */
+
+/* Hero Section */
+.savings-hero {
+    position: relative;
+    padding: 160px 0 100px;
+    background: linear-gradient(135deg, #0A0E1A 0%, #1A1F2E 50%, #2D1B4E 100%);
+    overflow: hidden;
+}
+.savings-hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(0,212,168,0.2), transparent 70%);
+    border-radius: 50%;
+}
+.savings-hero-content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+.savings-hero-text h1 {
+    font-size: 52px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+    line-height: 1.15;
+}
+.savings-hero-text h1 span {
+    color: var(--accent);
+}
+.savings-hero-text p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 32px;
+    line-height: 1.7;
+    max-width: 500px;
+}
+.savings-hero-image img {
+    border-radius: 24px;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Trust Stats Bar */
+.trust-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 32px 0;
+}
+.trust-bar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+}
+.trust-item h3 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+.trust-item p {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+/* Account Types */
+.accounts-section {
+    padding: 100px 0;
+    background: var(--bg);
+}
+.accounts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+.account-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.account-card.featured {
+    border-color: var(--primary);
+    box-shadow: 0 12px 32px -8px rgba(91,91,247,0.2);
+}
+.account-card.featured::before {
+    content: 'Most Popular';
+    position: absolute;
+    top: 16px;
+    right: -32px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 40px;
+    transform: rotate(45deg);
+}
+.account-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+.ac-header {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+}
+.ac-apy {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 8px;
+}
+.ac-apy span {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--muted);
+}
+.ac-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+}
+.ac-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+.ac-features {
+    list-style: none;
+    margin: 0 0 32px;
+    padding: 0;
+    flex: 1;
+}
+.ac-features li {
+    font-size: 14px;
+    color: var(--ink-2);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.ac-features li i {
+    color: var(--accent);
+    font-size: 14px;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+.ac-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.ac-btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: #fff;
+    box-shadow: 0 8px 20px -6px rgba(91,91,247,0.5);
+}
+.ac-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -6px rgba(91,91,247,0.6);
+    color: #fff;
+}
+.ac-btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--line);
+    color: var(--ink-2);
+}
+.ac-btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(91,91,247,0.04);
+}
+
+/* Savings Calculator */
+.calculator-section {
+    padding: 100px 0;
+    background: var(--surface);
+}
+.calculator-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+.calc-content h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+.calc-content > p {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.7;
+}
+.calc-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+}
+.calc-row {
+    margin-bottom: 24px;
+}
+.calc-row label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+    margin-bottom: 8px;
+}
+.calc-input-wrap {
+    position: relative;
+}
+.calc-input-wrap .currency-symbol {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-weight: 600;
+}
+.calc-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 14px 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s;
+}
+.calc-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(91,91,247,0.1);
+}
+.calc-results {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    border-radius: 16px;
+    padding: 24px;
+    color: #fff;
+    margin-top: 32px;
+}
+.calc-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.calc-result-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.calc-result-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+.calc-result-value {
+    font-size: 24px;
+    font-weight: 800;
+}
+.calc-result-value.highlight {
+    font-size: 32px;
+    color: var(--accent);
+}
+
+/* Features Grid */
+.features-section {
+    padding: 100px 0;
+    background: var(--bg);
+}
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+.feature-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.3s;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+.fc-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: rgba(0,212,168,0.1);
+    color: var(--accent);
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    margin: 0 auto 20px;
+}
+.feature-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.feature-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* Final CTA */
+.savings-cta {
+    padding: 100px 0;
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.savings-cta::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+}
+.savings-cta-content {
+    position: relative;
+    z-index: 2;
+    max-width: 650px;
+    margin: 0 auto;
+}
+.savings-cta-content h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+.savings-cta-content p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 32px;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .savings-hero-content, .calculator-grid { grid-template-columns: 1fr; text-align: center; }
+    .savings-hero-text p { margin: 0 auto 32px; }
+    .savings-hero-image { display: none; }
+    .trust-bar-grid { grid-template-columns: repeat(2, 1fr); }
+    .accounts-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .savings-hero-text h1 { font-size: 36px; }
+    .calc-content h2 { font-size: 32px; }
+    .trust-bar-grid { grid-template-columns: 1fr; gap: 32px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .savings-cta-content h2 { font-size: 32px; }
+}

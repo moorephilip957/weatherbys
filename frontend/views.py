@@ -47,7 +47,7 @@ def savings_view(request):
             return redirect('staff:staff_dashboard')
         else:
             return redirect('customer:dashboard')
-    return render(request, 'frontend/seftons/savings.html')
+    return render(request, 'frontend2/savings.html')
 
 def loans_view(request):
     if request.user.is_authenticated:
@@ -55,7 +55,7 @@ def loans_view(request):
             return redirect('staff:staff_dashboard')
         else:
             return redirect('customer:dashboard')
-    return render(request, 'frontend/seftons/loans.html')
+    return render(request, 'frontend2/loans.html')
 
 def cards_view(request):
     if request.user.is_authenticated:
@@ -63,7 +63,7 @@ def cards_view(request):
             return redirect('staff:staff_dashboard')
         else:
             return redirect('customer:dashboard')
-    return render(request, 'frontend/seftons/cards.html')
+    return render(request, 'frontend2/cards.html')
 
 def about_view(request):
     if request.user.is_authenticated:
@@ -87,4 +87,12 @@ def terms_view(request):
             return redirect('staff:staff_dashboard')
         else:
             return redirect('customer:dashboard')
-    return render(request, 'frontend/seftons/terms.html')
+    return render(request, 'frontend2/terms.html')
+
+def privacy_view(request):
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('staff:staff_dashboard')
+        else:
+            return redirect('customer:dashboard')
+    return render(request, 'frontend2/privacy.html')

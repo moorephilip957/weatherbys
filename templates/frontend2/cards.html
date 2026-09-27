@@ -1,0 +1,1512 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %}Credit Cards | Weatherbys Racing Bank{% endblock %}
+
+{% block meta_description %}Discover premium credit cards from Weatherbys Racing Bank. Earn up to 5% cashback, enjoy exclusive travel perks, and access world-class benefits with zero foreign transaction fees.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'frontends/components/home.css' %}">
+<style>
+/* ===== CREDIT CARDS PAGE ===== */
+
+/* Hero Section */
+.cards-hero {
+    position: relative;
+    padding: 160px 0 120px;
+    background: linear-gradient(135deg, #0A0E1A 0%, #1A1F2E 50%, #2D1B4E 100%);
+    overflow: hidden;
+}
+.cards-hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(244,63,94,0.2), transparent 70%);
+    border-radius: 50%;
+}
+.cards-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(245,158,11,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.cards-hero-content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+.cards-hero-text h1 {
+    font-size: 52px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+    line-height: 1.15;
+}
+.cards-hero-text h1 span {
+    background: linear-gradient(135deg, #F43F5E, #F59E0B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.cards-hero-text p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 32px;
+    line-height: 1.7;
+    max-width: 520px;
+}
+
+/* 3D Card Visual */
+.cards-hero-visual {
+    position: relative;
+    height: 420px;
+    perspective: 1200px;
+}
+.credit-card-3d {
+    position: absolute;
+    width: 340px;
+    height: 215px;
+    border-radius: 20px;
+    padding: 24px;
+    color: #fff;
+    box-shadow: 0 30px 60px -15px rgba(0,0,0,0.5);
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+}
+.credit-card-3d::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+.credit-card-3d.card-1 {
+    background: linear-gradient(135deg, #5B5BF7 0%, #7C3AED 100%);
+    top: 20px;
+    left: 10%;
+    transform: rotate(-8deg);
+    z-index: 1;
+}
+.credit-card-3d.card-2 {
+    background: linear-gradient(135deg, #0A0E1A 0%, #1A1F2E 100%);
+    top: 100px;
+    left: 30%;
+    transform: rotate(4deg);
+    z-index: 2;
+    border: 1px solid rgba(245,158,11,0.3);
+}
+.credit-card-3d.card-3 {
+    background: linear-gradient(135deg, #F43F5E 0%, #F59E0B 100%);
+    top: 180px;
+    left: 5%;
+    transform: rotate(-3deg);
+    z-index: 3;
+}
+.cards-hero-visual:hover .credit-card-3d.card-1 { transform: rotate(-12deg) translateX(-20px); }
+.cards-hero-visual:hover .credit-card-3d.card-2 { transform: rotate(0deg) translateY(-10px); }
+.cards-hero-visual:hover .credit-card-3d.card-3 { transform: rotate(-6deg) translateX(-10px); }
+
+.cc-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 2;
+}
+.cc-chip {
+    width: 36px;
+    height: 28px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 5px;
+    position: relative;
+}
+.cc-chip::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+.cc-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+}
+.cc-number {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 2;
+}
+.cc-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    z-index: 2;
+}
+.cc-holder, .cc-expiry {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+}
+.cc-holder span, .cc-expiry span {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 2px;
+    opacity: 1;
+    letter-spacing: 0.05em;
+}
+.cc-logo {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    font-style: italic;
+}
+
+/* Trust Stats Bar */
+.trust-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 32px 0;
+}
+.trust-bar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+}
+.trust-item h3 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+.trust-item p {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+/* Cards Selection */
+.cards-section {
+    padding: 100px 0;
+    background: var(--bg);
+}
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+.card-product {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.card-product.featured {
+    border-color: #F43F5E;
+    box-shadow: 0 12px 32px -8px rgba(244,63,94,0.2);
+}
+.card-product.featured::before {
+    content: 'Most Popular';
+    position: absolute;
+    top: 16px;
+    right: -32px;
+    background: linear-gradient(135deg, #F43F5E, #F59E0B);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 40px;
+    transform: rotate(45deg);
+}
+.card-product:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+.cp-visual {
+    width: 100%;
+    height: 160px;
+    border-radius: 14px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    color: #fff;
+}
+.cp-visual.essential { background: linear-gradient(135deg, #00D4A8, #059669); }
+.cp-visual.travel { background: linear-gradient(135deg, #5B5BF7, #7C3AED); }
+.cp-visual.platinum { background: linear-gradient(135deg, #0A0E1A, #1A1F2E); border: 1px solid rgba(245,158,11,0.3); }
+.cp-visual.business { background: linear-gradient(135deg, #F43F5E, #F59E0B); }
+
+.cp-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+}
+.cp-visual-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+.cp-visual-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.cp-visual-chip {
+    width: 30px;
+    height: 22px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 4px;
+}
+.cp-visual-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+}
+.cp-visual-number {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+}
+.cp-visual-bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.8;
+}
+
+.cp-header {
+    margin-bottom: 20px;
+}
+.cp-name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.cp-tagline {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+.cp-highlight {
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cp-highlight-item {
+    text-align: center;
+    flex: 1;
+}
+.cp-highlight-item:not(:last-child) {
+    border-right: 1px solid var(--line);
+}
+.cp-highlight-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.cp-highlight-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--ink);
+}
+.cp-highlight-value.accent { color: #F43F5E; }
+.cp-features {
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 0;
+}
+.cp-features li {
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.cp-features li i {
+    color: var(--accent);
+    font-size: 12px;
+}
+.cp-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.cp-btn-primary {
+    background: linear-gradient(135deg, #F43F5E, #F59E0B);
+    color: #fff;
+    box-shadow: 0 8px 20px -6px rgba(244,63,94,0.4);
+}
+.cp-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -6px rgba(244,63,94,0.5);
+    color: #fff;
+}
+.cp-btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--line);
+    color: var(--ink-2);
+}
+.cp-btn-outline:hover {
+    border-color: #F43F5E;
+    color: #F43F5E;
+    background: rgba(244,63,94,0.04);
+}
+
+/* Benefits Section */
+.benefits-section {
+    padding: 100px 0;
+    background: var(--surface);
+}
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+.benefit-card {
+    padding: 32px 24px;
+    text-align: center;
+    border-radius: var(--radius);
+    transition: all 0.3s;
+}
+.benefit-card:hover {
+    background: var(--surface-2);
+    transform: translateY(-5px);
+}
+.benefit-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(244,63,94,0.1);
+    color: #F43F5E;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    margin: 0 auto 20px;
+    transition: all 0.3s;
+}
+.benefit-card:nth-child(2) .benefit-icon { background: rgba(91,91,247,0.1); color: var(--primary); }
+.benefit-card:nth-child(3) .benefit-icon { background: rgba(0,212,168,0.1); color: var(--accent); }
+.benefit-card:nth-child(4) .benefit-icon { background: rgba(245,158,11,0.1); color: #D97706; }
+.benefit-card:nth-child(5) .benefit-icon { background: rgba(59,130,246,0.1); color: #3B82F6; }
+.benefit-card:nth-child(6) .benefit-icon { background: rgba(124,58,237,0.1); color: #7C3AED; }
+
+.benefit-card:hover .benefit-icon {
+    transform: scale(1.1);
+}
+.benefit-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.benefit-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* Rewards Calculator */
+.rewards-section {
+    padding: 100px 0;
+    background: linear-gradient(135deg, #0A0E1A 0%, #1A1F2E 100%);
+    color: #fff;
+}
+.rewards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+.rewards-content h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+.rewards-content > p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 32px;
+    line-height: 1.7;
+}
+.rewards-features {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.rf-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+.rf-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(244,63,94,0.15);
+    color: #F43F5E;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+.rf-item h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.rf-item p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin: 0;
+}
+
+/* Calculator Card */
+.calc-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    color: var(--ink);
+}
+.calc-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+/* Card Selector */
+.card-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+}
+.card-selector-btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+.card-selector-btn:hover {
+    border-color: #F43F5E;
+    color: #F43F5E;
+}
+.card-selector-btn.active {
+    background: rgba(244,63,94,0.08);
+    border-color: #F43F5E;
+    color: #F43F5E;
+}
+
+/* Category Spending */
+.spend-category {
+    margin-bottom: 20px;
+}
+.spend-category label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+    margin-bottom: 8px;
+}
+.spend-category label .value-display {
+    color: #F43F5E;
+    font-weight: 700;
+}
+.spend-range {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: var(--line);
+    border-radius: 100px;
+    outline: none;
+    cursor: pointer;
+}
+.spend-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F43F5E, #F59E0B);
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(244,63,94,0.4);
+    transition: transform 0.2s;
+}
+.spend-range::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+}
+.spend-range::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F43F5E, #F59E0B);
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(244,63,94,0.4);
+}
+
+/* Results */
+.rewards-results {
+    background: linear-gradient(135deg, #F43F5E, #F59E0B);
+    border-radius: 16px;
+    padding: 24px;
+    color: #fff;
+    margin-top: 24px;
+}
+.rr-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.rr-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.rr-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+.rr-value {
+    font-size: 22px;
+    font-weight: 800;
+}
+.rr-value.highlight {
+    font-size: 32px;
+    background: rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: 8px;
+}
+
+/* Comparison Table */
+.comparison-section {
+    padding: 100px 0;
+    background: var(--bg);
+}
+.comparison-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.comparison-table thead {
+    background: var(--surface-2);
+}
+.comparison-table th {
+    padding: 20px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--line);
+}
+.comparison-table td {
+    padding: 20px;
+    font-size: 14px;
+    color: var(--ink-2);
+    border-bottom: 1px solid var(--line);
+}
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+.comparison-table tr:hover {
+    background: var(--surface-2);
+}
+.comparison-table .card-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    color: var(--ink);
+}
+.card-mini-visual {
+    width: 48px;
+    height: 30px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+.check-yes { color: var(--accent); font-weight: 700; }
+.check-no { color: var(--muted-2); }
+
+/* FAQ */
+.faq-section {
+    padding: 100px 0;
+    background: var(--surface);
+}
+.faq-grid {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.faq-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+.faq-item:hover {
+    border-color: #F43F5E;
+}
+.faq-question {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    transition: all 0.2s;
+}
+.faq-question:hover {
+    color: #F43F5E;
+}
+.faq-question .faq-toggle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    color: var(--muted);
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+.faq-item.open .faq-question .faq-toggle {
+    background: #F43F5E;
+    color: #fff;
+    transform: rotate(180deg);
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+.faq-item.open .faq-answer {
+    max-height: 300px;
+}
+.faq-answer-content {
+    padding: 0 24px 20px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+/* Final CTA */
+.cards-cta {
+    padding: 100px 0;
+    text-align: center;
+    background: linear-gradient(135deg, #F43F5E 0%, #F59E0B 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.cards-cta::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+}
+.cards-cta-content {
+    position: relative;
+    z-index: 2;
+    max-width: 650px;
+    margin: 0 auto;
+}
+.cards-cta-content h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+.cards-cta-content p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 32px;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .cards-hero-content, .rewards-grid { grid-template-columns: 1fr; text-align: center; }
+    .cards-hero-text p { margin: 0 auto 32px; }
+    .cards-hero-visual { height: 320px; margin: 0 auto; max-width: 400px; }
+    .credit-card-3d { width: 260px; height: 165px; }
+    .trust-bar-grid { grid-template-columns: repeat(2, 1fr); }
+    .cards-grid { grid-template-columns: 1fr; }
+    .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+    .comparison-table-wrap { overflow-x: auto; }
+}
+@media (max-width: 768px) {
+    .cards-hero-text h1 { font-size: 36px; }
+    .rewards-content h2 { font-size: 32px; }
+    .trust-bar-grid { grid-template-columns: 1fr; gap: 32px; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    .card-selector { grid-template-columns: 1fr; }
+    .cards-cta-content h2 { font-size: 32px; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="cards-hero">
+    <div class="container cards-hero-content">
+        <div class="cards-hero-text">
+            <h1>Cards that <span>reward your lifestyle</span></h1>
+            <p>From everyday cashback to exclusive travel perks, our credit cards are designed to give you more of what you love. Enjoy up to 5% rewards, zero foreign transaction fees, and world-class benefits.</p>
+            <div class="hero-btns" style="display: flex; gap: 16px; justify-content: flex-start;">
+                <a href="#cards" class="btn btn-primary">Explore Cards <i class="fas fa-arrow-right"></i></a>
+                <a href="#rewards" class="btn btn-outline">Calculate Rewards</a>
+            </div>
+        </div>
+        <div class="cards-hero-visual">
+            <div class="credit-card-3d card-1">
+                <div class="cc-top">
+                    <div class="cc-chip"></div>
+                    <div class="cc-brand">VISA INFINITE</div>
+                </div>
+                <div class="cc-number">•••• •••• •••• 4829</div>
+                <div class="cc-bottom">
+                    <div class="cc-holder">
+                        Cardholder
+                        <span>J. SMITH</span>
+                    </div>
+                    <div class="cc-expiry">
+                        Expires
+                        <span>12/28</span>
+                    </div>
+                    <div class="cc-logo">WRB</div>
+                </div>
+            </div>
+            <div class="credit-card-3d card-2">
+                <div class="cc-top">
+                    <div class="cc-chip"></div>
+                    <div class="cc-brand">MASTERCARD PLATINUM</div>
+                </div>
+                <div class="cc-number">•••• •••• •••• 7156</div>
+                <div class="cc-bottom">
+                    <div class="cc-holder">
+                        Cardholder
+                        <span>J. SMITH</span>
+                    </div>
+                    <div class="cc-expiry">
+                        Expires
+                        <span>09/27</span>
+                    </div>
+                    <div class="cc-logo">WRB</div>
+                </div>
+            </div>
+            <div class="credit-card-3d card-3">
+                <div class="cc-top">
+                    <div class="cc-chip"></div>
+                    <div class="cc-brand">VISA SIGNATURE</div>
+                </div>
+                <div class="cc-number">•••• •••• •••• 3924</div>
+                <div class="cc-bottom">
+                    <div class="cc-holder">
+                        Cardholder
+                        <span>J. SMITH</span>
+                    </div>
+                    <div class="cc-expiry">
+                        Expires
+                        <span>03/29</span>
+                    </div>
+                    <div class="cc-logo">WRB</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Stats Bar -->
+<section class="trust-bar">
+    <div class="container">
+        <div class="trust-bar-grid">
+            <div class="trust-item">
+                <h3>5%</h3>
+                <p>Maximum Cashback</p>
+            </div>
+            <div class="trust-item">
+                <h3>$0</h3>
+                <p>Foreign Transaction Fees</p>
+            </div>
+            <div class="trust-item">
+                <h3>0%</h3>
+                <p>Intro APR for 15 months</p>
+            </div>
+            <div class="trust-item">
+                <h3>24/7</h3>
+                <p>Concierge Service</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cards Selection -->
+<section class="cards-section" id="cards">
+    <div class="container">
+        <div class="section-header">
+            <h2>Find Your Perfect Card</h2>
+            <p>Whether you're a frequent traveler, a savvy shopper, or a business owner, we have a card tailored to maximize your rewards.</p>
+        </div>
+        <div class="cards-grid">
+            <!-- Essential Card -->
+            <div class="card-product">
+                <div class="cp-visual essential">
+                    <div class="cp-visual-content">
+                        <div class="cp-visual-top">
+                            <div class="cp-visual-chip"></div>
+                            <div class="cp-visual-brand">VISA</div>
+                        </div>
+                        <div class="cp-visual-number">•••• •••• •••• 2847</div>
+                        <div class="cp-visual-bottom">
+                            <span>ESSENTIAL CARD</span>
+                            <span>WRB</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cp-header">
+                    <h3 class="cp-name">Essential Cashback</h3>
+                    <p class="cp-tagline">Simple, straightforward rewards for everyday spending. No annual fee, ever.</p>
+                </div>
+                <div class="cp-highlight">
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Cashback</div>
+                        <div class="cp-highlight-value accent">2%</div>
+                    </div>
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Annual Fee</div>
+                        <div class="cp-highlight-value">$0</div>
+                    </div>
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Intro APR</div>
+                        <div class="cp-highlight-value">0%</div>
+                    </div>
+                </div>
+                <ul class="cp-features">
+                    <li><i class="fas fa-check-circle"></i> Unlimited 2% cashback on all purchases</li>
+                    <li><i class="fas fa-check-circle"></i> No annual fee, no foreign transaction fees</li>
+                    <li><i class="fas fa-check-circle"></i> 0% intro APR for 15 months on purchases</li>
+                    <li><i class="fas fa-check-circle"></i> Free credit score monitoring</li>
+                </ul>
+                <a href="{% url 'account:register' %}" class="cp-btn cp-btn-outline">Apply Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- Travel Card -->
+            <div class="card-product featured">
+                <div class="cp-visual travel">
+                    <div class="cp-visual-content">
+                        <div class="cp-visual-top">
+                            <div class="cp-visual-chip"></div>
+                            <div class="cp-visual-brand">VISA SIGNATURE</div>
+                        </div>
+                        <div class="cp-visual-number">•••• •••• •••• 3924</div>
+                        <div class="cp-visual-bottom">
+                            <span>TRAVEL ELITE</span>
+                            <span>WRB</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cp-header">
+                    <h3 class="cp-name">Travel Elite</h3>
+                    <p class="cp-tagline">Earn points on every trip with premium travel perks and lounge access worldwide.</p>
+                </div>
+                <div class="cp-highlight">
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Rewards</div>
+                        <div class="cp-highlight-value accent">5X</div>
+                    </div>
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Annual Fee</div>
+                        <div class="cp-highlight-value">$95</div>
+                    </div>
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Sign-up</div>
+                        <div class="cp-highlight-value">60K pts</div>
+                    </div>
+                </div>
+                <ul class="cp-features">
+                    <li><i class="fas fa-check-circle"></i> 5X points on travel, 3X on dining, 1X on everything else</li>
+                    <li><i class="fas fa-check-circle"></i> Priority Pass lounge access worldwide</li>
+                    <li><i class="fas fa-check-circle"></i> $200 annual travel credit</li>
+                    <li><i class="fas fa-check-circle"></i> Global Entry/TSA PreCheck credit</li>
+                </ul>
+                <a href="{% url 'account:register' %}" class="cp-btn cp-btn-primary">Apply Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- Platinum Card -->
+            <div class="card-product">
+                <div class="cp-visual platinum">
+                    <div class="cp-visual-content">
+                        <div class="cp-visual-top">
+                            <div class="cp-visual-chip"></div>
+                            <div class="cp-visual-brand">MASTERCARD PLATINUM</div>
+                        </div>
+                        <div class="cp-visual-number">•••• •••• •••• 7156</div>
+                        <div class="cp-visual-bottom">
+                            <span>PLATINUM RESERVE</span>
+                            <span>WRB</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cp-header">
+                    <h3 class="cp-name">Platinum Reserve</h3>
+                    <p class="cp-tagline">The ultimate card for discerning clients. Exclusive benefits, unmatched service.</p>
+                </div>
+                <div class="cp-highlight">
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Rewards</div>
+                        <div class="cp-highlight-value accent">4X</div>
+                    </div>
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Annual Fee</div>
+                        <div class="cp-highlight-value">$495</div>
+                    </div>
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Sign-up</div>
+                        <div class="cp-highlight-value">100K pts</div>
+                    </div>
+                </div>
+                <ul class="cp-features">
+                    <li><i class="fas fa-check-circle"></i> 4X points on dining & travel, 1X on everything else</li>
+                    <li><i class="fas fa-check-circle"></i> 24/7 dedicated concierge service</li>
+                    <li><i class="fas fa-check-circle"></i> $500 annual airline fee credit</li>
+                    <li><i class="fas fa-check-circle"></i> Complimentary hotel elite status</li>
+                </ul>
+                <a href="{% url 'account:register' %}" class="cp-btn cp-btn-outline">Apply Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- Business Card -->
+            <div class="card-product">
+                <div class="cp-visual business">
+                    <div class="cp-visual-content">
+                        <div class="cp-visual-top">
+                            <div class="cp-visual-chip"></div>
+                            <div class="cp-visual-brand">VISA BUSINESS</div>
+                        </div>
+                        <div class="cp-visual-number">•••• •••• •••• 4829</div>
+                        <div class="cp-visual-bottom">
+                            <span>BUSINESS INFINITE</span>
+                            <span>WRB</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cp-header">
+                    <h3 class="cp-name">Business Infinite</h3>
+                    <p class="cp-tagline">Built for growing businesses. Track expenses, earn rewards, and empower your team.</p>
+                </div>
+                <div class="cp-highlight">
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Cashback</div>
+                        <div class="cp-highlight-value accent">3%</div>
+                    </div>
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Annual Fee</div>
+                        <div class="cp-highlight-value">$0*</div>
+                    </div>
+                    <div class="cp-highlight-item">
+                        <div class="cp-highlight-label">Employees</div>
+                        <div class="cp-highlight-value">Unlimited</div>
+                    </div>
+                </div>
+                <ul class="cp-features">
+                    <li><i class="fas fa-check-circle"></i> 3% on advertising, 2% on gas, 1% on everything else</li>
+                    <li><i class="fas fa-check-circle"></i> Unlimited employee cards at no extra cost</li>
+                    <li><i class="fas fa-check-circle"></i> Detailed expense reporting & integrations</li>
+                    <li><i class="fas fa-check-circle"></i> First year fee waived</li>
+                </ul>
+                <a href="{% url 'account:register' %}" class="cp-btn cp-btn-outline">Apply Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="benefits-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Benefits That Go Beyond Rewards</h2>
+            <p>Every Weatherbys credit card comes packed with premium perks designed to enhance your everyday life.</p>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+                <h4>Zero Liability Protection</h4>
+                <p>You're never responsible for unauthorized charges. We've got you covered 100%.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-globe"></i></div>
+                <h4>No Foreign Fees</h4>
+                <p>Travel the world without worrying about extra charges. Zero foreign transaction fees on all cards.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h4>Instant Digital Cards</h4>
+                <p>Get your card number instantly upon approval. Start shopping before your physical card arrives.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-percentage"></i></div>
+                <h4>0% Intro APR</h4>
+                <p>Enjoy 15 months of 0% intro APR on purchases and balance transfers on select cards.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-plane"></i></div>
+                <h4>Travel Insurance</h4>
+                <p>Comprehensive coverage for trip cancellation, lost luggage, rental cars, and emergency medical.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-gift"></i></div>
+                <h4>Exclusive Access</h4>
+                <p>Get early access to concerts, sporting events, and exclusive dining experiences worldwide.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Rewards Calculator -->
+<section class="rewards-section" id="rewards">
+    <div class="container rewards-grid">
+        <div class="rewards-content">
+            <h2>See how much you could earn</h2>
+            <p>Use our rewards calculator to estimate your annual earnings based on your typical spending. Choose a card and adjust your monthly expenses to see the potential rewards.</p>
+
+            <div class="rewards-features">
+                <div class="rf-item">
+                    <div class="rf-icon"><i class="fas fa-coins"></i></div>
+                    <div>
+                        <h4>Flexible Redemption</h4>
+                        <p>Redeem points for travel, cashback, gift cards, or statement credits. Your choice.</p>
+                    </div>
+                </div>
+                <div class="rf-item">
+                    <div class="rf-icon" style="background: rgba(91,91,247,0.15); color: #5B5BF7;"><i class="fas fa-sync-alt"></i></div>
+                    <div>
+                        <h4>Points Never Expire</h4>
+                        <p>As long as your account is open, your rewards are safe and never expire.</p>
+                    </div>
+                </div>
+                <div class="rf-item">
+                    <div class="rf-icon" style="background: rgba(0,212,168,0.15); color: var(--accent);"><i class="fas fa-users"></i></div>
+                    <div>
+                        <h4>Transfer to Partners</h4>
+                        <p>Transfer points to over 20 airline and hotel partners at a 1:1 ratio.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-card">
+            <h3>Rewards Calculator</h3>
+
+            <!-- Card Selector -->
+            <div class="card-selector">
+                <button type="button" class="card-selector-btn active" data-card="essential">Essential (2%)</button>
+                <button type="button" class="card-selector-btn" data-card="travel">Travel Elite (5X)</button>
+                <button type="button" class="card-selector-btn" data-card="platinum">Platinum (4X)</button>
+                <button type="button" class="card-selector-btn" data-card="business">Business (3%)</button>
+            </div>
+
+            <!-- Spending Categories -->
+            <div class="spend-category">
+                <label>
+                    <span>Monthly Groceries</span>
+                    <span class="value-display" id="groceriesDisplay">$500</span>
+                </label>
+                <input type="range" class="spend-range" id="groceries" min="0" max="2000" step="50" value="500">
+            </div>
+            <div class="spend-category">
+                <label>
+                    <span>Monthly Dining</span>
+                    <span class="value-display" id="diningDisplay">$300</span>
+                </label>
+                <input type="range" class="spend-range" id="dining" min="0" max="2000" step="50" value="300">
+            </div>
+            <div class="spend-category">
+                <label>
+                    <span>Monthly Travel</span>
+                    <span class="value-display" id="travelDisplay">$400</span>
+                </label>
+                <input type="range" class="spend-range" id="travel" min="0" max="5000" step="100" value="400">
+            </div>
+            <div class="spend-category">
+                <label>
+                    <span>Other Monthly Spending</span>
+                    <span class="value-display" id="otherDisplay">$800</span>
+                </label>
+                <input type="range" class="spend-range" id="other" min="0" max="5000" step="100" value="800">
+            </div>
+
+            <!-- Results -->
+            <div class="rewards-results">
+                <div class="rr-row">
+                    <span class="rr-label">Annual Rewards</span>
+                    <span class="rr-value highlight" id="annualRewards">$240</span>
+                </div>
+                <div class="rr-row">
+                    <span class="rr-label">Total Annual Spend</span>
+                    <span class="rr-value" id="annualSpend">$24,000</span>
+                </div>
+                <div class="rr-row">
+                    <span class="rr-label">Effective Rate</span>
+                    <span class="rr-value" id="effectiveRate">1.0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Comparison Table -->
+<section class="comparison-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Compare All Cards</h2>
+            <p>See all the features side-by-side to find the perfect fit for your spending habits.</p>
+        </div>
+        <div class="comparison-table-wrap">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Card</th>
+                        <th>Rewards</th>
+                        <th>Annual Fee</th>
+                        <th>Foreign Fee</th>
+                        <th>Intro APR</th>
+                        <th>Sign-up Bonus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="card-name-cell">
+                                <div class="card-mini-visual" style="background: linear-gradient(135deg, #00D4A8, #059669);"></div>
+                                Essential Cashback
+                            </div>
+                        </td>
+                        <td><strong>2%</strong> on everything</td>
+                        <td><strong>$0</strong></td>
+                        <td><span class="check-yes">$0</span></td>
+                        <td>0% for 15 months</td>
+                        <td>$200 cashback</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="card-name-cell">
+                                <div class="card-mini-visual" style="background: linear-gradient(135deg, #5B5BF7, #7C3AED);"></div>
+                                Travel Elite
+                            </div>
+                        </td>
+                        <td><strong>5X</strong> travel, 3X dining</td>
+                        <td>$95</td>
+                        <td><span class="check-yes">$0</span></td>
+                        <td>0% for 12 months</td>
+                        <td>60,000 points</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="card-name-cell">
+                                <div class="card-mini-visual" style="background: linear-gradient(135deg, #0A0E1A, #1A1F2E);"></div>
+                                Platinum Reserve
+                            </div>
+                        </td>
+                        <td><strong>4X</strong> dining & travel</td>
+                        <td>$495</td>
+                        <td><span class="check-yes">$0</span></td>
+                        <td><span class="check-no">N/A</span></td>
+                        <td>100,000 points</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="card-name-cell">
+                                <div class="card-mini-visual" style="background: linear-gradient(135deg, #F43F5E, #F59E0B);"></div>
+                                Business Infinite
+                            </div>
+                        </td>
+                        <td><strong>3%</strong> ads, 2% gas</td>
+                        <td>$0* (1st yr)</td>
+                        <td><span class="check-yes">$0</span></td>
+                        <td>0% for 12 months</td>
+                        <td>$750 cashback</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about our credit cards.</p>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I apply for a Weatherbys credit card?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Applying is quick and easy. Click "Apply Now" on any card, fill out our secure online application (takes about 5 minutes), and get an instant decision. If approved, your card will arrive in 7-10 business days, or you can use your digital card immediately.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What credit score do I need to qualify?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Our Essential card is available to applicants with good credit (670+). Premium cards like Travel Elite and Platinum Reserve typically require excellent credit (740+). However, we consider multiple factors including income, existing debt, and credit history.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I redeem my rewards?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        You can redeem rewards through our mobile app, online banking, or by calling customer service. Options include statement credits, direct deposit to your bank account, travel bookings, gift cards, or transferring points to airline and hotel partners. There's no minimum redemption amount for most options.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Are there any foreign transaction fees?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        No! All Weatherbys credit cards come with zero foreign transaction fees. Whether you're shopping online from international retailers or traveling abroad, you'll never pay extra fees for currency conversion. You'll get the same great exchange rate as local transactions.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What insurance protections come with the card?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        All cards include zero liability protection, purchase protection (90 days), extended warranty (+1 year), and rental car collision damage waiver. Premium cards add travel insurance including trip cancellation, lost luggage, emergency medical evacuation, and global emergency assistance.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I have multiple Weatherbys cards?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! Many of our customers hold multiple cards to maximize rewards across different spending categories. For example, you might use the Travel Elite for flights and hotels, and the Essential Cashback for everyday purchases. You can have up to 4 personal cards and 2 business cards.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="cards-cta">
+    <div class="container">
+        <div class="cards-cta-content">
+            <h2>Ready to earn more?</h2>
+            <p>Join millions of customers who trust Weatherbys Racing Bank to reward their spending. Apply in minutes and get a decision instantly.</p>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="#cards" class="btn btn-white">Choose Your Card <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'frontend:contact' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.5);">Compare Cards</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // ===== REWARDS CALCULATOR =====
+    const groceriesInput = document.getElementById('groceries');
+    const diningInput = document.getElementById('dining');
+    const travelInput = document.getElementById('travel');
+    const otherInput = document.getElementById('other');
+
+    const groceriesDisplay = document.getElementById('groceriesDisplay');
+    const diningDisplay = document.getElementById('diningDisplay');
+    const travelDisplay = document.getElementById('travelDisplay');
+    const otherDisplay = document.getElementById('otherDisplay');
+
+    const annualRewardsEl = document.getElementById('annualRewards');
+    const annualSpendEl = document.getElementById('annualSpend');
+    const effectiveRateEl = document.getElementById('effectiveRate');
+
+    const cardSelectorBtns = document.querySelectorAll('.card-selector-btn');
+    let selectedCard = 'essential';
+
+    // Reward rates per card (groceries, dining, travel, other)
+    const cardRates = {
+        essential: { groceries: 0.02, dining: 0.02, travel: 0.02, other: 0.02 },
+        travel: { groceries: 0.01, dining: 0.03, travel: 0.05, other: 0.01 },
+        platinum: { groceries: 0.01, dining: 0.04, travel: 0.04, other: 0.01 },
+        business: { groceries: 0.01, dining: 0.01, travel: 0.01, other: 0.01 } // simplified
+    };
+
+    function formatCurrency(num) {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0
+        }).format(num);
+    }
+
+    function calculateRewards() {
+        const groceries = parseFloat(groceriesInput.value) || 0;
+        const dining = parseFloat(diningInput.value) || 0;
+        const travel = parseFloat(travelInput.value) || 0;
+        const other = parseFloat(otherInput.value) || 0;
+
+        // Update displays
+        groceriesDisplay.textContent = formatCurrency(groceries);
+        diningDisplay.textContent = formatCurrency(dining);
+        travelDisplay.textContent = formatCurrency(travel);
+        otherDisplay.textContent = formatCurrency(other);
+
+        const rates = cardRates[selectedCard];
+        const monthlyRewards = 
+            (groceries * rates.groceries) +
+            (dining * rates.dining) +
+            (travel * rates.travel) +
+            (other * rates.other);
+
+        const annualRewards = monthlyRewards * 12;
+        const monthlySpend = groceries + dining + travel + other;
+        const annualSpend = monthlySpend * 12;
+        const effectiveRate = annualSpend > 0 ? (annualRewards / annualSpend) * 100 : 0;
+
+        annualRewardsEl.textContent = formatCurrency(annualRewards);
+        annualSpendEl.textContent = formatCurrency(annualSpend);
+        effectiveRateEl.textContent = effectiveRate.toFixed(1) + '%';
+    }
+
+    // Attach listeners
+    [groceriesInput, diningInput, travelInput, otherInput].forEach(input => {
+        input.addEventListener('input', calculateRewards);
+    });
+
+    // Card selector
+    cardSelectorBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            cardSelectorBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedCard = btn.dataset.card;
+            calculateRewards();
+        });
+    });
+
+    // Initial calculation
+    calculateRewards();
+
+    // ===== FAQ ACCORDION =====
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!wasOpen) item.classList.add('open');
+        });
+    });
+
+    // ===== 3D CARD HOVER EFFECT =====
+    const heroVisual = document.querySelector('.cards-hero-visual');
+    if (heroVisual) {
+        heroVisual.addEventListener('mousemove', (e) => {
+            const rect = heroVisual.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+            const cards = heroVisual.querySelectorAll('.credit-card-3d');
+            cards.forEach((card, idx) => {
+                const intensity = (idx + 1) * 5;
+                card.style.transform = `rotateY(${x * intensity}deg) rotateX(${-y * intensity}deg)`;
+            });
+        });
+
+        heroVisual.addEventListener('mouseleave', () => {
+            const cards = heroVisual.querySelectorAll('.credit-card-3d');
+            cards[0].style.transform = 'rotate(-8deg)';
+            cards[1].style.transform = 'rotate(4deg)';
+            cards[2].style.transform = 'rotate(-3deg)';
+        });
+    }
+});
+</script>
+{% endblock %}

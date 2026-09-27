@@ -1,0 +1,1107 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %}Business Loans | Weatherbys Racing Bank{% endblock %}
+
+{% block meta_description %}Fuel your business growth with Weatherbys Racing Bank's flexible business loans. Get up to $5M in funding with rates starting at 5.9% APR and 24-hour approvals.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'frontends/components/home.css' %}">
+<style>
+/* ===== BUSINESS LOANS PAGE ===== */
+
+/* Hero Section */
+.loans-hero {
+    position: relative;
+    padding: 160px 0 100px;
+    background: linear-gradient(135deg, #0A0E1A 0%, #1A1F2E 50%, #2D1B4E 100%);
+    overflow: hidden;
+}
+.loans-hero::before {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(245,158,11,0.18), transparent 70%);
+    border-radius: 50%;
+}
+.loans-hero::after {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(91,91,247,0.22), transparent 70%);
+    border-radius: 50%;
+}
+.loans-hero-content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+.loans-hero-text h1 {
+    font-size: 52px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+    line-height: 1.15;
+}
+.loans-hero-text h1 span {
+    background: linear-gradient(135deg, #F59E0B, #F43F5E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.loans-hero-text p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 32px;
+    line-height: 1.7;
+    max-width: 520px;
+}
+.loans-hero-image {
+    position: relative;
+}
+.loans-hero-image img {
+    border-radius: 24px;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.hero-stat-card {
+    position: absolute;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 16px 20px;
+    border-radius: 16px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: float 6s ease-in-out infinite;
+}
+.hero-stat-card.card-1 {
+    top: 10%;
+    left: -30px;
+}
+.hero-stat-card.card-2 {
+    bottom: 15%;
+    right: -30px;
+    animation-delay: 2s;
+}
+.hsc-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(245,158,11,0.2);
+    color: #F59E0B;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+}
+.hsc-text h4 { font-size: 14px; margin-bottom: 2px; }
+.hsc-text p { font-size: 12px; color: rgba(255,255,255,0.7); margin: 0; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+/* Trust Stats Bar */
+.trust-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 32px 0;
+}
+.trust-bar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+}
+.trust-item h3 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+.trust-item p {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+/* Loan Products */
+.products-section {
+    padding: 100px 0;
+    background: var(--bg);
+}
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+.product-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary);
+}
+.product-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary), var(--primary-2));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.product-card:hover::before { opacity: 1; }
+.pc-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: rgba(91,91,247,0.08);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.product-card:nth-child(2) .pc-icon { background: rgba(0,212,168,0.1); color: var(--accent); }
+.product-card:nth-child(3) .pc-icon { background: rgba(245,158,11,0.1); color: #D97706; }
+.product-card:nth-child(4) .pc-icon { background: rgba(244,63,94,0.1); color: var(--danger); }
+
+.product-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.product-card .pc-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+.pc-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--surface-2);
+    border-radius: 12px;
+}
+.pc-detail {
+    display: flex;
+    flex-direction: column;
+}
+.pc-detail-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+.pc-detail-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+}
+.pc-features {
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 0;
+}
+.pc-features li {
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.pc-features li i {
+    color: var(--accent);
+    font-size: 12px;
+}
+
+/* Loan Calculator */
+.calculator-section {
+    padding: 100px 0;
+    background: linear-gradient(135deg, #0A0E1A 0%, #1A1F2E 100%);
+    color: #fff;
+}
+.calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+.calc-content h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+.calc-content > p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 32px;
+    line-height: 1.7;
+}
+.calc-features {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.calc-feature {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+.cf-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(245,158,11,0.15);
+    color: #F59E0B;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+.calc-feature h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.calc-feature p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin: 0;
+}
+
+/* Calculator Card */
+.calc-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    color: var(--ink);
+}
+.calc-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+.calc-row {
+    margin-bottom: 20px;
+}
+.calc-row label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+    margin-bottom: 8px;
+}
+.calc-row label .value-display {
+    color: var(--primary);
+    font-weight: 700;
+}
+.calc-range {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: var(--line);
+    border-radius: 100px;
+    outline: none;
+    cursor: pointer;
+}
+.calc-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(91,91,247,0.4);
+    transition: transform 0.2s;
+}
+.calc-range::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+}
+.calc-range::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(91,91,247,0.4);
+}
+
+/* Loan Type Selector */
+.loan-type-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+}
+.loan-type-btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+.loan-type-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.loan-type-btn.active {
+    background: rgba(91,91,247,0.08);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* Results */
+.calc-results {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    border-radius: 16px;
+    padding: 24px;
+    color: #fff;
+    margin-top: 24px;
+}
+.calc-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.calc-result-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.calc-result-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+.calc-result-value {
+    font-size: 22px;
+    font-weight: 800;
+}
+.calc-result-value.highlight {
+    font-size: 32px;
+    color: #fff;
+    background: rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: 8px;
+}
+
+/* Application Process */
+.process-section {
+    padding: 100px 0;
+    background: var(--surface);
+}
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    position: relative;
+}
+.process-grid::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 12%;
+    right: 12%;
+    height: 2px;
+    background: var(--line);
+    z-index: 0;
+}
+.process-card {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+.process-num {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 auto 20px;
+    box-shadow: 0 10px 25px -5px rgba(91,91,247,0.4);
+}
+.process-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.process-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* FAQ */
+.faq-section {
+    padding: 100px 0;
+    background: var(--bg);
+}
+.faq-grid {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.faq-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+.faq-item:hover {
+    border-color: var(--primary);
+}
+.faq-question {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    transition: all 0.2s;
+}
+.faq-question:hover {
+    color: var(--primary);
+}
+.faq-question .faq-toggle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    color: var(--muted);
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+.faq-item.open .faq-question .faq-toggle {
+    background: var(--primary);
+    color: #fff;
+    transform: rotate(180deg);
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+.faq-item.open .faq-answer {
+    max-height: 300px;
+}
+.faq-answer-content {
+    padding: 0 24px 20px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+/* Final CTA */
+.loans-cta {
+    padding: 100px 0;
+    text-align: center;
+    background: linear-gradient(135deg, #F59E0B 0%, #F43F5E 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.loans-cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+}
+.loans-cta-content {
+    position: relative;
+    z-index: 2;
+    max-width: 650px;
+    margin: 0 auto;
+}
+.loans-cta-content h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+.loans-cta-content p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 32px;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .loans-hero-content, .calc-grid { grid-template-columns: 1fr; text-align: center; }
+    .loans-hero-text p { margin: 0 auto 32px; }
+    .loans-hero-image { display: none; }
+    .trust-bar-grid { grid-template-columns: repeat(2, 1fr); }
+    .products-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: repeat(2, 1fr); }
+    .process-grid::before { display: none; }
+}
+@media (max-width: 768px) {
+    .loans-hero-text h1 { font-size: 36px; }
+    .calc-content h2 { font-size: 32px; }
+    .trust-bar-grid { grid-template-columns: 1fr; gap: 32px; }
+    .process-grid { grid-template-columns: 1fr; }
+    .loan-type-selector { grid-template-columns: 1fr; }
+    .loans-cta-content h2 { font-size: 32px; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="loans-hero">
+    <div class="container loans-hero-content">
+        <div class="loans-hero-text">
+            <h1>Fuel your business <span>growth</span></h1>
+            <p>Access flexible funding solutions from $10,000 to $5 million. Whether you're expanding operations, purchasing equipment, or managing cash flow, we have the capital to power your next move.</p>
+            <div class="hero-btns" style="display: flex; gap: 16px; justify-content: flex-start;">
+                <a href="#calculator" class="btn btn-primary">Calculate Your Loan <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'frontend:contact' %}" class="btn btn-outline">Speak to an Advisor</a>
+            </div>
+        </div>
+        <div class="loans-hero-image">
+            <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80&w=800" alt="Business team meeting">
+            <div class="hero-stat-card card-1">
+                <div class="hsc-icon"><i class="fas fa-bolt"></i></div>
+                <div class="hsc-text">
+                    <h4>Fast Approvals</h4>
+                    <p>Decisions in 24 hours</p>
+                </div>
+            </div>
+            <div class="hero-stat-card card-2">
+                <div class="hsc-icon" style="background: rgba(91,91,247,0.2); color: #5B5BF7;"><i class="fas fa-percentage"></i></div>
+                <div class="hsc-text">
+                    <h4>Competitive Rates</h4>
+                    <p>Starting at 5.9% APR</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Stats Bar -->
+<section class="trust-bar">
+    <div class="container">
+        <div class="trust-bar-grid">
+            <div class="trust-item">
+                <h3>$5M</h3>
+                <p>Maximum Loan Amount</p>
+            </div>
+            <div class="trust-item">
+                <h3>5.9%</h3>
+                <p>Starting APR</p>
+            </div>
+            <div class="trust-item">
+                <h3>24hrs</h3>
+                <p>Approval Decision</p>
+            </div>
+            <div class="trust-item">
+                <h3>98%</h3>
+                <p>Approval Rate</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Loan Products -->
+<section class="products-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Financing Solutions for Every Stage</h2>
+            <p>From startups to established enterprises, our diverse loan products are designed to meet your specific business needs.</p>
+        </div>
+        <div class="products-grid">
+            <!-- Term Loans -->
+            <div class="product-card">
+                <div class="pc-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                <h3>Business Term Loans</h3>
+                <p class="pc-desc">Lump-sum funding with fixed monthly payments, perfect for major investments, expansions, or acquisitions.</p>
+                <div class="pc-details">
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Loan Amount</span>
+                        <span class="pc-detail-value">$50K - $5M</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">APR</span>
+                        <span class="pc-detail-value">5.9% - 12%</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Term</span>
+                        <span class="pc-detail-value">1 - 10 years</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Funding</span>
+                        <span class="pc-detail-value">1 - 5 days</span>
+                    </div>
+                </div>
+                <ul class="pc-features">
+                    <li><i class="fas fa-check-circle"></i> Fixed or variable rate options</li>
+                    <li><i class="fas fa-check-circle"></i> No prepayment penalties</li>
+                    <li><i class="fas fa-check-circle"></i> Flexible repayment terms</li>
+                </ul>
+                <a href="#calculator" class="btn-text">Calculate Payment <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- Line of Credit -->
+            <div class="product-card">
+                <div class="pc-icon"><i class="fas fa-credit-card"></i></div>
+                <h3>Business Line of Credit</h3>
+                <p class="pc-desc">Revolving credit access to manage cash flow, cover unexpected expenses, or seize opportunities as they arise.</p>
+                <div class="pc-details">
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Credit Limit</span>
+                        <span class="pc-detail-value">$10K - $500K</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">APR</span>
+                        <span class="pc-detail-value">7.5% - 15%</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Draw Period</span>
+                        <span class="pc-detail-value">12 - 24 months</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Access</span>
+                        <span class="pc-detail-value">Same day</span>
+                    </div>
+                </div>
+                <ul class="pc-features">
+                    <li><i class="fas fa-check-circle"></i> Pay interest only on what you use</li>
+                    <li><i class="fas fa-check-circle"></i> Renew automatically</li>
+                    <li><i class="fas fa-check-circle"></i> No annual fees</li>
+                </ul>
+                <a href="#calculator" class="btn-text">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- Equipment Financing -->
+            <div class="product-card">
+                <div class="pc-icon"><i class="fas fa-cogs"></i></div>
+                <h3>Equipment Financing</h3>
+                <p class="pc-desc">Acquire the machinery, vehicles, or technology your business needs without draining your cash reserves.</p>
+                <div class="pc-details">
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Loan Amount</span>
+                        <span class="pc-detail-value">$25K - $2M</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">APR</span>
+                        <span class="pc-detail-value">6.5% - 14%</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Term</span>
+                        <span class="pc-detail-value">2 - 7 years</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Down Payment</span>
+                        <span class="pc-detail-value">As low as 10%</span>
+                    </div>
+                </div>
+                <ul class="pc-features">
+                    <li><i class="fas fa-check-circle"></i> Equipment serves as collateral</li>
+                    <li><i class="fas fa-check-circle"></i> Tax-deductible interest</li>
+                    <li><i class="fas fa-check-circle"></i> New & used equipment eligible</li>
+                </ul>
+                <a href="#calculator" class="btn-text">Calculate Payment <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- SBA Loans -->
+            <div class="product-card">
+                <div class="pc-icon"><i class="fas fa-landmark"></i></div>
+                <h3>SBA Loans</h3>
+                <p class="pc-desc">Government-backed loans with favorable terms, lower down payments, and longer repayment periods for qualified businesses.</p>
+                <div class="pc-details">
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Loan Amount</span>
+                        <span class="pc-detail-value">Up to $5M</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">APR</span>
+                        <span class="pc-detail-value">5.9% - 9%</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Term</span>
+                        <span class="pc-detail-value">Up to 25 years</span>
+                    </div>
+                    <div class="pc-detail">
+                        <span class="pc-detail-label">Down Payment</span>
+                        <span class="pc-detail-value">As low as 10%</span>
+                    </div>
+                </div>
+                <ul class="pc-features">
+                    <li><i class="fas fa-check-circle"></i> Lower down payment requirements</li>
+                    <li><i class="fas fa-check-circle"></i> Longer repayment terms</li>
+                    <li><i class="fas fa-check-circle"></i> Competitive rates</li>
+                </ul>
+                <a href="{% url 'frontend:contact' %}" class="btn-text">Check Eligibility <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Interactive Loan Calculator -->
+<section class="calculator-section" id="calculator">
+    <div class="container calc-grid">
+        <div class="calc-content">
+            <h2>Calculate your monthly payment</h2>
+            <p>Get a clear picture of what your loan payments will look like. Adjust the sliders to match your needs and see real-time estimates.</p>
+
+            <div class="calc-features">
+                <div class="calc-feature">
+                    <div class="cf-icon"><i class="fas fa-calculator"></i></div>
+                    <div>
+                        <h4>Instant Estimates</h4>
+                        <p>See your monthly payment, total interest, and total cost update in real-time as you adjust.</p>
+                    </div>
+                </div>
+                <div class="calc-feature">
+                    <div class="cf-icon" style="background: rgba(91,91,247,0.15); color: #5B5BF7;"><i class="fas fa-sliders-h"></i></div>
+                    <div>
+                        <h4>Flexible Scenarios</h4>
+                        <p>Try different loan amounts, terms, and rates to find the perfect fit for your business.</p>
+                    </div>
+                </div>
+                <div class="calc-feature">
+                    <div class="cf-icon" style="background: rgba(0,212,168,0.15); color: var(--accent);"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <div>
+                        <h4>No Hidden Costs</h4>
+                        <p>What you see is what you get. Our rates are transparent with no surprise fees.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-card">
+            <h3>Loan Calculator</h3>
+
+            <!-- Loan Type Selector -->
+            <div class="loan-type-selector">
+                <button type="button" class="loan-type-btn active" data-min-rate="5.9" data-max-rate="12">Term Loan</button>
+                <button type="button" class="loan-type-btn" data-min-rate="7.5" data-max-rate="15">Line of Credit</button>
+                <button type="button" class="loan-type-btn" data-min-rate="6.5" data-max-rate="14">Equipment</button>
+                <button type="button" class="loan-type-btn" data-min-rate="5.9" data-max-rate="9">SBA Loan</button>
+            </div>
+
+            <!-- Loan Amount -->
+            <div class="calc-row">
+                <label>
+                    <span>Loan Amount</span>
+                    <span class="value-display" id="loanAmountDisplay">$100,000</span>
+                </label>
+                <input type="range" class="calc-range" id="loanAmount" min="10000" max="5000000" step="5000" value="100000">
+            </div>
+
+            <!-- Loan Term -->
+            <div class="calc-row">
+                <label>
+                    <span>Loan Term</span>
+                    <span class="value-display" id="loanTermDisplay">5 years</span>
+                </label>
+                <input type="range" class="calc-range" id="loanTerm" min="1" max="25" step="1" value="5">
+            </div>
+
+            <!-- Interest Rate -->
+            <div class="calc-row">
+                <label>
+                    <span>Interest Rate (APR)</span>
+                    <span class="value-display" id="interestRateDisplay">7.5%</span>
+                </label>
+                <input type="range" class="calc-range" id="interestRate" min="5.9" max="15" step="0.1" value="7.5">
+            </div>
+
+            <!-- Results -->
+            <div class="calc-results">
+                <div class="calc-result-row">
+                    <span class="calc-result-label">Monthly Payment</span>
+                    <span class="calc-result-value highlight" id="monthlyPayment">$2,004</span>
+                </div>
+                <div class="calc-result-row">
+                    <span class="calc-result-label">Total Interest</span>
+                    <span class="calc-result-value" id="totalInterest">$20,225</span>
+                </div>
+                <div class="calc-result-row">
+                    <span class="calc-result-label">Total Cost of Loan</span>
+                    <span class="calc-result-value" id="totalCost">$120,225</span>
+                </div>
+            </div>
+
+            <a href="{% url 'frontend:contact' %}" class="btn btn-primary" style="width: 100%; margin-top: 20px; justify-content: center;">
+                Apply for This Loan <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Application Process -->
+<section class="process-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Get Funded in 4 Simple Steps</h2>
+            <p>Our streamlined application process gets you from application to funded in as little as 24 hours.</p>
+        </div>
+        <div class="process-grid">
+            <div class="process-card">
+                <div class="process-num">1</div>
+                <h3>Apply Online</h3>
+                <p>Complete our simple 10-minute application. No lengthy paperwork or branch visits required.</p>
+            </div>
+            <div class="process-card">
+                <div class="process-num">2</div>
+                <h3>Get Reviewed</h3>
+                <p>Our expert underwriting team reviews your application and makes a decision within 24 hours.</p>
+            </div>
+            <div class="process-card">
+                <div class="process-num">3</div>
+                <h3>Accept Terms</h3>
+                <p>Review your loan offer, choose your terms, and e-sign your documents securely online.</p>
+            </div>
+            <div class="process-card">
+                <div class="process-num">4</div>
+                <h3>Get Funded</h3>
+                <p>Receive funds directly in your business account, often the same day you accept.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about our business loan products.</p>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What documents do I need to apply for a business loan?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Most applications require your business tax returns (last 2 years), personal tax returns, bank statements (last 6 months), business financial statements, and a valid government-issued ID. For SBA loans, you may also need a business plan and additional documentation. Our team will guide you through exactly what's needed for your specific loan type.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How long does the approval process take?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Most business loan applications receive an initial decision within 24 hours. Once approved and documents are signed, funding typically occurs within 1-5 business days, depending on the loan type. SBA loans may take longer (2-4 weeks) due to additional government processing requirements.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What credit score do I need to qualify?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We consider multiple factors beyond just credit score, including business revenue, time in business, and industry. Generally, a personal credit score of 640+ and business credit score of 160+ (D&B PAYDEX) are preferred. However, we work with businesses across the credit spectrum and can often find solutions for those with lower scores.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Are there any prepayment penalties?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Most of our business loans have no prepayment penalties, allowing you to pay off your loan early without additional fees. Some SBA loans may have a small prepayment penalty during the first few years, which will be clearly disclosed in your loan agreement.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I use the loan for any business purpose?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes, our term loans and lines of credit can be used for virtually any legitimate business purpose, including expansion, working capital, inventory, marketing, hiring, or refinancing existing debt. Equipment financing is specifically for purchasing equipment, and SBA loans have specific eligible uses outlined by the SBA.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do I need to provide collateral?</span>
+                    <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        It depends on the loan type and amount. Equipment financing uses the equipment itself as collateral. SBA loans typically require collateral for larger amounts. For term loans under $250K, we often offer unsecured options for qualified borrowers. Our team will discuss the best structure for your specific situation.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="loans-cta">
+    <div class="container">
+        <div class="loans-cta-content">
+            <h2>Ready to grow your business?</h2>
+            <p>Join thousands of business owners who have trusted Weatherbys Racing Bank to fund their success. Apply today and get a decision in 24 hours.</p>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="{% url 'frontend:contact' %}" class="btn btn-white">Apply Now <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'frontend:contact' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.5);">Talk to an Advisor</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // ===== LOAN CALCULATOR =====
+    const loanAmountInput = document.getElementById('loanAmount');
+    const loanTermInput = document.getElementById('loanTerm');
+    const interestRateInput = document.getElementById('interestRate');
+
+    const loanAmountDisplay = document.getElementById('loanAmountDisplay');
+    const loanTermDisplay = document.getElementById('loanTermDisplay');
+    const interestRateDisplay = document.getElementById('interestRateDisplay');
+
+    const monthlyPaymentEl = document.getElementById('monthlyPayment');
+    const totalInterestEl = document.getElementById('totalInterest');
+    const totalCostEl = document.getElementById('totalCost');
+
+    const loanTypeBtns = document.querySelectorAll('.loan-type-btn');
+
+    function formatCurrency(num) {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0
+        }).format(num);
+    }
+
+    function calculateLoan() {
+        const P = parseFloat(loanAmountInput.value);
+        const years = parseFloat(loanTermInput.value);
+        const annualRate = parseFloat(interestRateInput.value) / 100;
+        const n = years * 12; // total months
+        const r = annualRate / 12; // monthly rate
+
+        // Update displays
+        loanAmountDisplay.textContent = formatCurrency(P);
+        loanTermDisplay.textContent = `${years} ${years === 1 ? 'year' : 'years'}`;
+        interestRateDisplay.textContent = `${annualRate.toFixed(1)}%`;
+
+        // PMT formula: P * (r(1+r)^n) / ((1+r)^n - 1)
+        let monthlyPayment;
+        if (r === 0) {
+            monthlyPayment = P / n;
+        } else {
+            monthlyPayment = P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+        }
+
+        const totalCost = monthlyPayment * n;
+        const totalInterest = totalCost - P;
+
+        monthlyPaymentEl.textContent = formatCurrency(monthlyPayment);
+        totalInterestEl.textContent = formatCurrency(totalInterest);
+        totalCostEl.textContent = formatCurrency(totalCost);
+    }
+
+    // Attach listeners
+    [loanAmountInput, loanTermInput, interestRateInput].forEach(input => {
+        input.addEventListener('input', calculateLoan);
+    });
+
+    // Loan type selector changes rate range
+    loanTypeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            loanTypeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const minRate = parseFloat(btn.dataset.minRate);
+            const maxRate = parseFloat(btn.dataset.maxRate);
+
+            interestRateInput.min = minRate;
+            interestRateInput.max = maxRate;
+
+            // Set to midpoint of new range
+            const midRate = ((minRate + maxRate) / 2).toFixed(1);
+            interestRateInput.value = midRate;
+
+            calculateLoan();
+        });
+    });
+
+    // Initial calculation
+    calculateLoan();
+
+    // ===== FAQ ACCORDION =====
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!wasOpen) item.classList.add('open');
+        });
+    });
+});
+</script>
+{% endblock %}

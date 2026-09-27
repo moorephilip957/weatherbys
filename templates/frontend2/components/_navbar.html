@@ -30,9 +30,7 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'frontend:savings' %}">Savings</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'frontend:loans' %}">Business Loans</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'frontend:cards' %}">Credit Cards</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'frontend:about' %}">About Us</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'frontend:contact' %}">Contact Us</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'frontend:corperate' %}">Privacy Policy</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'frontend:privacy' %}">Privacy Policy</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'frontend:terms' %}">Terms Of Use</a></li>
                     </ul>
                 </li>
@@ -81,23 +79,21 @@
     <div class="mobile-offcanvas-body">
         <ul class="mobile-nav-list">
             <li><a href="{% url 'frontend:home' %}" class="mobile-nav-link"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{% url 'frontend:about' %}" class="mobile-nav-link"><i class="fas fa-umbrella"></i> About Us</a></li>
             <li><a href="{% url 'frontend:personal' %}" class="mobile-nav-link"><i class="fas fa-user"></i> Personal</a></li>
-            <li><a href="{% url 'frontend:corperate' %}" class="mobile-nav-link"><i class="fas fa-briefcase"></i> Corporate</a></li>
-            <li><a href="{% url 'frontend:insurance' %}" class="mobile-nav-link"><i class="fas fa-umbrella"></i> Insurance</a></li>
-            <li><a href="{% url 'frontend:mortgages' %}" class="mobile-nav-link"><i class="fas fa-home"></i> Mortgages</a></li>
+            <li><a href="{% url 'frontend:about' %}" class="mobile-nav-link"><i class="fas fa-briefcase"></i> Corporate</a></li>
+            <li><a href="{% url 'frontend:contact' %}" class="mobile-nav-link"><i class="fas fa-home"></i> Contact Us</a></li>
 
             <li class="mobile-submenu">
                 <a href="#" class="mobile-nav-link dropdown-toggle" id="mobileDropdownToggle">
-                    <span><i class="fas fa-piggy-bank"></i> Sefton Savings</span>
+                    <span><i class="fas fa-piggy-bank"></i> More</span>
                     <i class="fas fa-chevron-down dropdown-icon"></i>
                 </a>
                 <ul class="mobile-submenu-list">
                     <li><a href="{% url 'frontend:savings' %}" class="mobile-nav-link">Savings</a></li>
                     <li><a href="{% url 'frontend:loans' %}" class="mobile-nav-link">Business Loans</a></li>
                     <li><a href="{% url 'frontend:cards' %}" class="mobile-nav-link">Credit Cards</a></li>
-                    <li><a href="{% url 'frontend:about' %}" class="mobile-nav-link">About Us</a></li>
-                    <li><a href="{% url 'frontend:contact' %}" class="mobile-nav-link">Contact Us</a></li>
-                    <li><a href="{% url 'frontend:terms' %}" class="mobile-nav-link">Privacy Policy</a></li>
+                    <li><a href="{% url 'frontend:privacy' %}" class="mobile-nav-link">Privacy Policy</a></li>
                     <li><a href="{% url 'frontend:terms' %}" class="mobile-nav-link">Terms Of Use</a></li>
                 </ul>
             </li>

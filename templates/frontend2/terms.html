@@ -1,0 +1,1006 @@
+{% extends './base.html' %}
+
+{% block title %}Terms and Conditions | Weatherbys Racing Bank{% endblock %}
+
+{% block meta_description %}Read the complete Terms and Conditions for Weatherbys Racing Bank. Learn about account eligibility, fees, security, privacy, and your rights as a customer.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== TERMS & CONDITIONS PAGE ===== */
+
+/* Hero Section */
+.terms-hero {
+    position: relative;
+    padding: 140px 0 80px;
+    background: linear-gradient(135deg, #0A0E1A 0%, #1A1F2E 50%, #2D1B4E 100%);
+    overflow: hidden;
+}
+.terms-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(91,91,247,0.2), transparent 70%);
+    border-radius: 50%;
+}
+.terms-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.terms-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.terms-hero-badge i {
+    color: var(--accent);
+}
+.terms-hero h1 {
+    font-size: 48px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+.terms-hero p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+.terms-meta {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+.terms-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    font-weight: 500;
+}
+.terms-meta-item i {
+    color: var(--accent);
+    font-size: 14px;
+}
+
+/* Main Layout */
+.terms-layout {
+    padding: 60px 0 100px;
+    background: var(--bg);
+}
+.terms-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 48px;
+    align-items: start;
+}
+
+/* Sticky Sidebar / TOC */
+.terms-sidebar {
+    position: sticky;
+    top: 100px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+.terms-sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+.terms-sidebar::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 100px;
+}
+.toc-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.toc-title i {
+    color: var(--primary);
+}
+.toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.toc-list li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
+    transition: all 0.2s;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+}
+.toc-list li a:hover {
+    background: var(--surface-2);
+    color: var(--primary);
+}
+.toc-list li a.active {
+    background: rgba(91,91,247,0.08);
+    color: var(--primary);
+    font-weight: 600;
+    border-left-color: var(--primary);
+}
+.toc-list li a .toc-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    min-width: 20px;
+}
+.toc-list li a.active .toc-num {
+    color: var(--primary);
+}
+
+/* Sidebar Actions */
+.toc-actions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.toc-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-2);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.toc-action-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(91,91,247,0.04);
+}
+.toc-action-btn i {
+    font-size: 13px;
+}
+
+/* Main Content */
+.terms-content {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 48px;
+}
+
+.terms-section {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--line-2);
+    scroll-margin-top: 100px;
+}
+.terms-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.terms-section-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.ts-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(91,91,247,0.1), rgba(124,58,237,0.1));
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+.terms-section h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+.terms-section h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 24px 0 12px;
+}
+.terms-section p {
+    font-size: 15px;
+    color: var(--ink-2);
+    line-height: 1.8;
+    margin-bottom: 14px;
+}
+.terms-section ul, .terms-section ol {
+    margin: 12px 0 16px 20px;
+    padding: 0;
+}
+.terms-section li {
+    font-size: 15px;
+    color: var(--ink-2);
+    line-height: 1.8;
+    margin-bottom: 8px;
+}
+.terms-section ul li {
+    list-style: none;
+    position: relative;
+    padding-left: 20px;
+}
+.terms-section ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+}
+.terms-section strong {
+    color: var(--ink);
+    font-weight: 700;
+}
+
+/* Important Notice Callouts */
+.terms-notice {
+    display: flex;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.terms-notice.info {
+    background: rgba(91,91,247,0.06);
+    border: 1px solid rgba(91,91,247,0.15);
+    color: var(--ink-2);
+}
+.terms-notice.warning {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-left: 3px solid #D97706;
+    color: var(--ink-2);
+}
+.terms-notice.danger {
+    background: rgba(244,63,94,0.06);
+    border: 1px solid rgba(244,63,94,0.2);
+    border-left: 3px solid var(--danger);
+    color: var(--ink-2);
+}
+.terms-notice.success {
+    background: rgba(0,212,168,0.06);
+    border: 1px solid rgba(0,212,168,0.2);
+    border-left: 3px solid var(--accent);
+    color: var(--ink-2);
+}
+.terms-notice-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+.terms-notice.info .terms-notice-icon { background: rgba(91,91,247,0.12); color: var(--primary); }
+.terms-notice.warning .terms-notice-icon { background: rgba(245,158,11,0.12); color: #D97706; }
+.terms-notice.danger .terms-notice-icon { background: rgba(244,63,94,0.12); color: var(--danger); }
+.terms-notice.success .terms-notice-icon { background: rgba(0,212,168,0.12); color: var(--accent); }
+
+.terms-notice-content {
+    flex: 1;
+}
+.terms-notice-content strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ink);
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    box-shadow: 0 8px 20px -6px rgba(91,91,247,0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.back-to-top:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -6px rgba(91,91,247,0.6);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .terms-container {
+        grid-template-columns: 1fr;
+    }
+    .terms-sidebar {
+        position: static;
+        max-height: none;
+    }
+    .terms-content {
+        padding: 32px 24px;
+    }
+    .terms-hero h1 {
+        font-size: 36px;
+    }
+}
+@media (max-width: 768px) {
+    .terms-hero {
+        padding: 120px 0 60px;
+    }
+    .terms-hero h1 {
+        font-size: 28px;
+    }
+    .terms-hero p {
+        font-size: 15px;
+    }
+    .terms-content {
+        padding: 24px 20px;
+    }
+    .terms-section h2 {
+        font-size: 20px;
+    }
+    .terms-section p,
+    .terms-section li {
+        font-size: 14px;
+    }
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 42px;
+        height: 42px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .desktop-navbar, .mobile-navbar, .footer,
+    .terms-sidebar, .back-to-top, .toc-actions {
+        display: none !important;
+    }
+    .terms-hero {
+        background: #fff !important;
+        color: #000 !important;
+        padding: 20px 0 !important;
+    }
+    .terms-hero h1, .terms-hero p, .terms-meta-item {
+        color: #000 !important;
+    }
+    .terms-content {
+        border: none !important;
+        padding: 0 !important;
+    }
+    .terms-section {
+        page-break-inside: avoid;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="terms-hero">
+    <div class="container terms-hero-content">
+        <div class="terms-hero-badge">
+            <i class="fas fa-file-contract"></i>
+            <span>Legal Document</span>
+        </div>
+        <h1>Terms and Conditions</h1>
+        <p>Please read these terms carefully before using Weatherbys Racing Bank's services. By accessing or using our services, you agree to be bound by these terms.</p>
+        <div class="terms-meta">
+            <div class="terms-meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Last updated: September 27, 2026</span>
+            </div>
+            <div class="terms-meta-item">
+                <i class="fas fa-clock"></i>
+                <span>~15 min read</span>
+            </div>
+            <div class="terms-meta-item">
+                <i class="fas fa-language"></i>
+                <span>English</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="terms-layout">
+    <div class="container">
+        <div class="terms-container">
+
+            <!-- Sidebar / Table of Contents -->
+            <aside class="terms-sidebar">
+                <div class="toc-title">
+                    <i class="fas fa-list"></i>
+                    <span>Table of Contents</span>
+                </div>
+                <ul class="toc-list" id="tocList">
+                    <li><a href="#section-1" class="active"><span class="toc-num">1</span>Introduction</a></li>
+                    <li><a href="#section-2"><span class="toc-num">2</span>Account Eligibility</a></li>
+                    <li><a href="#section-3"><span class="toc-num">3</span>Account Opening & KYC</a></li>
+                    <li><a href="#section-4"><span class="toc-num">4</span>Fees & Charges</a></li>
+                    <li><a href="#section-5"><span class="toc-num">5</span>Interest Rates</a></li>
+                    <li><a href="#section-6"><span class="toc-num">6</span>Deposits & Withdrawals</a></li>
+                    <li><a href="#section-7"><span class="toc-num">7</span>Transfers & Payments</a></li>
+                    <li><a href="#section-8"><span class="toc-num">8</span>Cards & Credit</a></li>
+                    <li><a href="#section-9"><span class="toc-num">9</span>Loans & Borrowing</a></li>
+                    <li><a href="#section-10"><span class="toc-num">10</span>Security & Fraud</a></li>
+                    <li><a href="#section-11"><span class="toc-num">11</span>Privacy & Data</a></li>
+                    <li><a href="#section-12"><span class="toc-num">12</span>Limitation of Liability</a></li>
+                    <li><a href="#section-13"><span class="toc-num">13</span>Dispute Resolution</a></li>
+                    <li><a href="#section-14"><span class="toc-num">14</span>Account Termination</a></li>
+                    <li><a href="#section-15"><span class="toc-num">15</span>Changes to Terms</a></li>
+                    <li><a href="#section-16"><span class="toc-num">16</span>Governing Law</a></li>
+                    <li><a href="#section-17"><span class="toc-num">17</span>Contact Information</a></li>
+                </ul>
+                <div class="toc-actions">
+                    <button type="button" class="toc-action-btn" onclick="window.print()">
+                        <i class="fas fa-print"></i>
+                        <span>Print Terms</span>
+                    </button>
+                    <a href="#" class="toc-action-btn">
+                        <i class="fas fa-download"></i>
+                        <span>Download PDF</span>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="terms-content">
+
+                <!-- Section 1: Introduction -->
+                <section class="terms-section" id="section-1">
+                    <div class="terms-section-head">
+                        <div class="ts-num">1</div>
+                        <h2>Introduction & Acceptance of Terms</h2>
+                    </div>
+                    <p>Welcome to Weatherbys Racing Bank ("the Bank," "we," "us," or "our"). These Terms and Conditions ("Terms") govern your access to and use of our banking services, website, mobile applications, and related products and services (collectively, the "Services").</p>
+                    
+                    <div class="terms-notice info">
+                        <div class="terms-notice-icon"><i class="fas fa-info-circle"></i></div>
+                        <div class="terms-notice-content">
+                            <strong>Important:</strong>
+                            By opening an account, accessing our website, downloading our mobile app, or otherwise using our Services, you acknowledge that you have read, understood, and agree to be bound by these Terms. If you do not agree to these Terms, you must not use our Services.
+                        </div>
+                    </div>
+
+                    <h3>1.1 Definitions</h3>
+                    <p>In these Terms, the following terms have the meanings ascribed to them:</p>
+                    <ul>
+                        <li><strong>"Account"</strong> refers to any bank account, savings account, loan account, or credit facility opened with us.</li>
+                        <li><strong>"Customer"</strong> or <strong>"You"</strong> refers to any individual or entity that holds an Account with us.</li>
+                        <li><strong>"Services"</strong> includes all banking, financial, and related services provided by the Bank.</li>
+                        <li><strong>"Platform"</strong> refers to our website, mobile applications, and any digital interfaces through which you access our Services.</li>
+                    </ul>
+
+                    <h3>1.2 Binding Agreement</h3>
+                    <p>These Terms, together with our Privacy Policy, Fee Schedule, and any other policies or agreements referenced herein, constitute a legally binding agreement between you and Weatherbys Racing Bank.</p>
+                </section>
+
+                <!-- Section 2: Account Eligibility -->
+                <section class="terms-section" id="section-2">
+                    <div class="terms-section-head">
+                        <div class="ts-num">2</div>
+                        <h2>Account Eligibility</h2>
+                    </div>
+                    <p>To open and maintain an Account with Weatherbys Racing Bank, you must meet the following eligibility requirements:</p>
+                    <ul>
+                        <li>Be at least <strong>18 years of age</strong> (or the age of majority in your jurisdiction).</li>
+                        <li>Be a legal resident or citizen of a country where our Services are available.</li>
+                        <li>Have the legal capacity to enter into binding contracts.</li>
+                        <li>Not be listed on any government sanctions, watchlists, or politically exposed persons (PEP) databases.</li>
+                        <li>Provide accurate, complete, and current information during the account opening process.</li>
+                    </ul>
+
+                    <div class="terms-notice warning">
+                        <div class="terms-notice-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="terms-notice-content">
+                            <strong>Minor Accounts:</strong>
+                            Accounts for individuals under 18 may only be opened by a parent or legal guardian as a joint custodial account, subject to additional terms and restrictions.
+                        </div>
+                    </div>
+
+                    <h3>2.1 Business Accounts</h3>
+                    <p>Business accounts require additional documentation, including but not limited to business registration certificates, articles of incorporation, beneficial ownership information, and authorization resolutions from the company's board of directors.</p>
+                </section>
+
+                <!-- Section 3: Account Opening & KYC -->
+                <section class="terms-section" id="section-3">
+                    <div class="terms-section-head">
+                        <div class="ts-num">3</div>
+                        <h2>Account Opening & KYC Verification</h2>
+                    </div>
+                    <p>In compliance with international Anti-Money Laundering (AML) and Counter-Terrorist Financing (CTF) regulations, all customers must complete a Know Your Customer (KYC) verification process before gaining full access to our Services.</p>
+
+                    <h3>3.1 Required Documentation</h3>
+                    <p>You may be required to provide the following documents:</p>
+                    <ul>
+                        <li>A valid government-issued photo identification (passport, driver's license, or national ID).</li>
+                        <li>Proof of address (utility bill, bank statement, or official correspondence dated within the last 3 months).</li>
+                        <li>Tax identification number (TIN) or Social Security Number (SSN).</li>
+                        <li>Source of funds documentation for large deposits or business accounts.</li>
+                    </ul>
+
+                    <h3>3.2 Verification Process</h3>
+                    <p>Our verification team will review your submitted documents within <strong>1-3 business days</strong>. During this period, your account may have limited functionality. Once verified, you will receive full access to all Services.</p>
+
+                    <div class="terms-notice success">
+                        <div class="terms-notice-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="terms-notice-content">
+                            <strong>Fast-Track Verification:</strong>
+                            Most individual accounts are verified within 24 hours when clear, high-quality documents are provided. Business accounts may take 3-5 business days.
+                        </div>
+                    </div>
+
+                    <h3>3.3 Ongoing Monitoring</h3>
+                    <p>We reserve the right to request updated documentation at any time and to conduct periodic reviews of your account activity to ensure continued compliance with regulatory requirements.</p>
+                </section>
+
+                <!-- Section 4: Fees & Charges -->
+                <section class="terms-section" id="section-4">
+                    <div class="terms-section-head">
+                        <div class="ts-num">4</div>
+                        <h2>Fees & Charges</h2>
+                    </div>
+                    <p>Weatherbys Racing Bank is committed to transparent pricing. All applicable fees are detailed in our published Fee Schedule, which is available on our website and upon request.</p>
+
+                    <h3>4.1 Account Maintenance Fees</h3>
+                    <p>Most of our personal accounts have <strong>zero monthly maintenance fees</strong>. Premium accounts and certain business accounts may be subject to monthly or annual fees as disclosed at account opening.</p>
+
+                    <h3>4.2 Transaction Fees</h3>
+                    <ul>
+                        <li><strong>Domestic transfers:</strong> Free for most account types.</li>
+                        <li><strong>International wire transfers:</strong> Starting at $15 per outgoing transfer.</li>
+                        <li><strong>ATM withdrawals:</strong> Free at our network ATMs; fees may apply at third-party ATMs.</li>
+                        <li><strong>Foreign currency transactions:</strong> Zero foreign transaction fees on all our credit cards.</li>
+                    </ul>
+
+                    <h3>4.3 Overdraft & Insufficient Funds</h3>
+                    <p>If a transaction exceeds your available balance, we may decline the transaction or, at our discretion, cover it as an overdraft. Overdraft fees are capped at <strong>$35 per occurrence</strong>, with a maximum of <strong>3 overdraft fees per business day</strong>.</p>
+
+                    <div class="terms-notice danger">
+                        <div class="terms-notice-icon"><i class="fas fa-exclamation-circle"></i></div>
+                        <div class="terms-notice-content">
+                            <strong>Fee Changes:</strong>
+                            We will provide at least 30 days' written notice before implementing any new fees or increasing existing fees. You have the right to close your account without penalty before any fee change takes effect.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 5: Interest Rates -->
+                <section class="terms-section" id="section-5">
+                    <div class="terms-section-head">
+                        <div class="ts-num">5</div>
+                        <h2>Interest Rates</h2>
+                    </div>
+                    <p>Interest rates on deposits and loans are determined by market conditions, your account type, balance, and other factors. Current rates are published on our website and are subject to change.</p>
+
+                    <h3>5.1 Savings & Deposit Accounts</h3>
+                    <p>Interest on savings accounts is calculated daily and credited monthly. Rates may be variable or fixed depending on the account type. Our high-yield savings accounts currently offer up to <strong>4.50% APY</strong>.</p>
+
+                    <h3>5.2 Loans & Credit</h3>
+                    <p>Interest rates on loans and credit facilities are determined at the time of approval based on your creditworthiness, loan term, and prevailing market rates. All rates will be clearly disclosed in your loan agreement before you accept the funds.</p>
+
+                    <h3>5.3 Rate Changes</h3>
+                    <p>For variable-rate products, we reserve the right to adjust rates in accordance with our Index Rate, which is tied to the Prime Rate published by major financial institutions. Rate changes will be communicated in accordance with regulatory requirements.</p>
+                </section>
+
+                <!-- Section 6: Deposits & Withdrawals -->
+                <section class="terms-section" id="section-6">
+                    <div class="terms-section-head">
+                        <div class="ts-num">6</div>
+                        <h2>Deposits & Withdrawals</h2>
+                    </div>
+                    <p>You may deposit funds into your Account through various channels including direct deposit, mobile check deposit, wire transfers, and in-person at our branches.</p>
+
+                    <h3>6.1 Deposit Holds</h3>
+                    <p>We reserve the right to place temporary holds on deposits, particularly for large amounts, new accounts, or deposits that require additional verification. Holds typically last 1-5 business days.</p>
+
+                    <h3>6.2 Withdrawal Limits</h3>
+                    <p>Daily withdrawal and transfer limits apply to protect your account from unauthorized activity. You can view and adjust your limits in your online banking settings or by contacting customer service.</p>
+
+                    <h3>6.3 Returned Deposits</h3>
+                    <p>If a deposited check or payment is returned unpaid by the paying institution, we reserve the right to reverse the credit to your account and charge a returned deposit fee as outlined in our Fee Schedule.</p>
+                </section>
+
+                <!-- Section 7: Transfers & Payments -->
+                <section class="terms-section" id="section-7">
+                    <div class="terms-section-head">
+                        <div class="ts-num">7</div>
+                        <h2>Transfers & Payments</h2>
+                    </div>
+                    <p>Weatherbys Racing Bank offers multiple ways to transfer funds and make payments, including domestic wires, ACH transfers, international SWIFT transfers, and bill pay services.</p>
+
+                    <h3>7.1 Authorized Transactions</h3>
+                    <p>You are responsible for all transactions made using your Account credentials, cards, or other access devices. Transactions you authorize are binding and cannot be reversed except as provided by law or our error resolution procedures.</p>
+
+                    <h3>7.2 Transaction Errors</h3>
+                    <p>If you believe an error has occurred in your account, you must notify us within <strong>60 days</strong> of the statement date on which the error appeared. We will investigate and resolve the error in accordance with Regulation E requirements.</p>
+
+                    <h3>7.3 International Transfers</h3>
+                    <p>International transfers are subject to exchange rate fluctuations, correspondent bank fees, and regulatory requirements in both the sending and receiving countries. Transfer times vary by destination and typically range from 1-5 business days.</p>
+                </section>
+
+                <!-- Section 8: Cards & Credit -->
+                <section class="terms-section" id="section-8">
+                    <div class="terms-section-head">
+                        <div class="ts-num">8</div>
+                        <h2>Cards & Credit Facilities</h2>
+                    </div>
+                    <p>Debit cards, credit cards, and other payment cards issued by Weatherbys Racing Bank are subject to these Terms and any additional cardholder agreements provided at the time of issuance.</p>
+
+                    <h3>8.1 Card Security</h3>
+                    <p>You are responsible for safeguarding your cards and PINs. Never share your PIN with anyone, including Bank employees. If your card is lost, stolen, or compromised, notify us immediately at <strong>+1 (800) 123-4567</strong>.</p>
+
+                    <h3>8.2 Credit Card Terms</h3>
+                    <p>Credit card accounts are subject to separate Cardholder Agreements that detail your credit limit, APR, minimum payment requirements, rewards program terms, and other card-specific provisions.</p>
+
+                    <h3>8.3 Zero Liability Protection</h3>
+                    <div class="terms-notice success">
+                        <div class="terms-notice-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="terms-notice-content">
+                            <strong>Our Guarantee:</strong>
+                            You will never be held liable for unauthorized transactions on your Weatherbys debit or credit cards, provided you report the loss or theft promptly and have not acted fraudulently or with gross negligence.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 9: Loans & Borrowing -->
+                <section class="terms-section" id="section-9">
+                    <div class="terms-section-head">
+                        <div class="ts-num">9</div>
+                        <h2>Loans & Borrowing</h2>
+                    </div>
+                    <p>Loan products offered by Weatherbys Racing Bank, including personal loans, mortgages, business loans, and lines of credit, are subject to separate loan agreements that detail the specific terms and conditions of your borrowing arrangement.</p>
+
+                    <h3>9.1 Credit Approval</h3>
+                    <p>All loans are subject to credit approval. Approval is based on your credit history, income, debt-to-income ratio, and other factors. We reserve the right to decline any loan application.</p>
+
+                    <h3>9.2 Repayment Obligations</h3>
+                    <p>You are obligated to make all payments on time and in full according to the terms of your loan agreement. Late payments may result in late fees, increased interest rates, and negative credit reporting.</p>
+
+                    <h3>9.3 Default & Remedies</h3>
+                    <p>If you fail to meet your repayment obligations, your loan may be considered in default. In such cases, we reserve the right to accelerate the loan balance, report the default to credit bureaus, and pursue all legal remedies available under applicable law.</p>
+                </section>
+
+                <!-- Section 10: Security & Fraud -->
+                <section class="terms-section" id="section-10">
+                    <div class="terms-section-head">
+                        <div class="ts-num">10</div>
+                        <h2>Security & Fraud Protection</h2>
+                    </div>
+                    <p>Weatherbys Racing Bank employs industry-leading security measures to protect your accounts and personal information. However, you also have responsibilities to help keep your account secure.</p>
+
+                    <h3>10.1 Your Security Responsibilities</h3>
+                    <ul>
+                        <li>Keep your passwords, PINs, and security questions confidential.</li>
+                        <li>Use strong, unique passwords for your online banking.</li>
+                        <li>Enable multi-factor authentication where available.</li>
+                        <li>Regularly monitor your account activity and report any suspicious transactions immediately.</li>
+                        <li>Never share your account credentials via email, phone, or text message.</li>
+                    </ul>
+
+                    <h3>10.2 Bank Security Measures</h3>
+                    <p>We employ 256-bit SSL encryption, real-time fraud monitoring, AI-powered anomaly detection, and multi-factor authentication to protect your accounts. Our security team monitors transactions 24/7 for suspicious activity.</p>
+
+                    <div class="terms-notice danger">
+                        <div class="terms-notice-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="terms-notice-content">
+                            <strong>Beware of Scams:</strong>
+                            Weatherbys Racing Bank will NEVER ask for your password, PIN, or full account number via email, phone, or text message. If you receive suspicious communications claiming to be from us, contact our fraud team immediately.
+                        </div>
+                    </div>
+
+                    <h3>10.3 Reporting Fraud</h3>
+                    <p>If you suspect fraudulent activity on your account, contact us immediately at <strong>+1 (800) 123-4567</strong> or through the secure messaging feature in our mobile app. Prompt reporting is essential to limit your liability and protect your funds.</p>
+                </section>
+
+                <!-- Section 11: Privacy & Data -->
+                <section class="terms-section" id="section-11">
+                    <div class="terms-section-head">
+                        <div class="ts-num">11</div>
+                        <h2>Privacy & Data Protection</h2>
+                    </div>
+                    <p>Your privacy is of paramount importance to us. Our collection, use, and protection of your personal information is governed by our comprehensive <a href="{% url 'frontend:privacy' %}" style="color: var(--primary); font-weight: 600;">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+
+                    <h3>11.1 Data Collection</h3>
+                    <p>We collect information necessary to provide our Services, comply with legal obligations, and improve your experience. This includes personal identification information, financial transaction data, device information, and usage data.</p>
+
+                    <h3>11.2 Data Sharing</h3>
+                    <p>We do not sell your personal information to third parties. We may share your information with:</p>
+                    <ul>
+                        <li>Service providers who assist in operating our business (subject to strict confidentiality agreements).</li>
+                        <li>Regulatory authorities as required by law.</li>
+                        <li>Law enforcement in response to valid legal requests.</li>
+                        <li>Other parties with your explicit consent.</li>
+                    </ul>
+
+                    <h3>11.3 Data Security</h3>
+                    <p>We implement administrative, technical, and physical safeguards to protect your personal information from unauthorized access, disclosure, alteration, or destruction.</p>
+                </section>
+
+                <!-- Section 12: Limitation of Liability -->
+                <section class="terms-section" id="section-12">
+                    <div class="terms-section-head">
+                        <div class="ts-num">12</div>
+                        <h2>Limitation of Liability</h2>
+                    </div>
+                    <p>To the maximum extent permitted by applicable law, Weatherbys Racing Bank shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or business opportunities, arising from your use of our Services.</p>
+
+                    <h3>12.1 Service Interruptions</h3>
+                    <p>While we strive for 99.99% uptime, we cannot guarantee uninterrupted access to our Services. We shall not be liable for any damages resulting from temporary service interruptions due to maintenance, system failures, or circumstances beyond our reasonable control.</p>
+
+                    <h3>12.2 Third-Party Services</h3>
+                    <p>Our Platform may include links to third-party websites or services. We are not responsible for the content, privacy practices, or availability of third-party services. Your use of third-party services is at your own risk.</p>
+
+                    <h3>12.3 Total Liability Cap</h3>
+                    <p>Our total aggregate liability to you for any claims arising from these Terms or your use of our Services shall not exceed the amount of fees you paid to us in the twelve (12) months preceding the claim, or $100, whichever is greater.</p>
+                </section>
+
+                <!-- Section 13: Dispute Resolution -->
+                <section class="terms-section" id="section-13">
+                    <div class="terms-section-head">
+                        <div class="ts-num">13</div>
+                        <h2>Dispute Resolution</h2>
+                    </div>
+                    <p>We encourage you to contact our customer service team first to resolve any disputes informally. Most issues can be resolved quickly through direct communication.</p>
+
+                    <h3>13.1 Informal Resolution</h3>
+                    <p>Before initiating any formal dispute proceedings, you agree to contact us at <strong>disputes@weatherbys.com</strong> and attempt to resolve the dispute informally for a period of at least 60 days.</p>
+
+                    <h3>13.2 Arbitration</h3>
+                    <p>Except as required by law, any dispute that cannot be resolved informally shall be settled by binding arbitration administered by the American Arbitration Association (AAA) under its Consumer Arbitration Rules.</p>
+
+                    <h3>13.3 Class Action Waiver</h3>
+                    <div class="terms-notice warning">
+                        <div class="terms-notice-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="terms-notice-content">
+                            <strong>Important:</strong>
+                            You agree that any disputes will be resolved on an individual basis and that you waive any right to participate in a class action lawsuit or class-wide arbitration.
+                        </div>
+                    </div>
+
+                    <h3>13.4 Opt-Out</h3>
+                    <p>You may opt out of this arbitration agreement by sending written notice to us within 30 days of opening your account. The notice must include your name, address, account number, and a clear statement that you wish to opt out of the arbitration agreement.</p>
+                </section>
+
+                <!-- Section 14: Account Termination -->
+                <section class="terms-section" id="section-14">
+                    <div class="terms-section-head">
+                        <div class="ts-num">14</div>
+                        <h2>Account Termination</h2>
+                    </div>
+                    <h3>14.1 Termination by You</h3>
+                    <p>You may close your Account at any time by contacting customer service or through your online banking settings. You are responsible for any outstanding balances, fees, or charges at the time of closure.</p>
+
+                    <h3>14.2 Termination by Us</h3>
+                    <p>We reserve the right to close or restrict your Account at any time, with or without cause, including but not limited to:</p>
+                    <ul>
+                        <li>Suspected fraud or illegal activity.</li>
+                        <li>Violation of these Terms or any other agreement with us.</li>
+                        <li>Extended account inactivity (typically 24 months).</li>
+                        <li>Failure to provide requested documentation or information.</li>
+                        <li>Regulatory or legal requirements.</li>
+                    </ul>
+
+                    <h3>14.3 Effect of Termination</h3>
+                    <p>Upon termination, you remain responsible for any outstanding obligations. We will return any remaining funds in your account (minus any outstanding balances or fees) via check or transfer to another account you designate.</p>
+                </section>
+
+                <!-- Section 15: Changes to Terms -->
+                <section class="terms-section" id="section-15">
+                    <div class="terms-section-head">
+                        <div class="ts-num">15</div>
+                        <h2>Changes to Terms</h2>
+                    </div>
+                    <p>We reserve the right to modify these Terms at any time. Changes may be made to comply with new laws, regulations, or to improve our Services.</p>
+
+                    <h3>15.1 Notice of Changes</h3>
+                    <p>For changes that materially affect your rights or obligations, we will provide at least <strong>30 days' advance notice</strong> via email, in-app notification, or postal mail. The updated Terms will also be posted on our website with a revised "Last Updated" date.</p>
+
+                    <h3>15.2 Continued Use</h3>
+                    <p>Your continued use of our Services after the effective date of any changes constitutes your acceptance of the revised Terms. If you do not agree to the changes, you must close your Account and cease using our Services.</p>
+                </section>
+
+                <!-- Section 16: Governing Law -->
+                <section class="terms-section" id="section-16">
+                    <div class="terms-section-head">
+                        <div class="ts-num">16</div>
+                        <h2>Governing Law</h2>
+                    </div>
+                    <p>These Terms shall be governed by and construed in accordance with the laws of the State of New York, United States, without regard to its conflict of law principles.</p>
+                    <p>Any legal action or proceeding arising under these Terms shall be brought exclusively in the federal or state courts located in New York County, New York, and you hereby consent to the personal jurisdiction and venue of such courts.</p>
+                </section>
+
+                <!-- Section 17: Contact Information -->
+                <section class="terms-section" id="section-17">
+                    <div class="terms-section-head">
+                        <div class="ts-num">17</div>
+                        <h2>Contact Information</h2>
+                    </div>
+                    <p>If you have any questions, concerns, or comments about these Terms or our Services, please contact us using the information below:</p>
+
+                    <div style="background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 24px; margin: 20px 0;">
+                        <p style="margin-bottom: 12px;"><strong>Weatherbys Racing Bank</strong></p>
+                        <p style="margin-bottom: 8px;"><i class="fas fa-map-marker-alt" style="color: var(--primary); width: 20px;"></i> Sanders Road, Wellingborrow NN8 4BX, United Kingdom</p>
+                        <p style="margin-bottom: 8px;"><i class="fas fa-phone" style="color: var(--primary); width: 20px;"></i> +1 (800) 123-4567 (24/7 Support)</p>
+                        <p style="margin-bottom: 8px;"><i class="fas fa-envelope" style="color: var(--primary); width: 20px;"></i> support@weatherbysonline.com</p>
+                        <p style="margin-bottom: 0;"><i class="fas fa-globe" style="color: var(--primary); width: 20px;"></i> www.weatherbysonline.com</p>
+                    </div>
+
+                    <h3>17.1 Regulatory Information</h3>
+                    <p>Weatherbys Racing Bank is a member of the Financial Services Compensation Scheme (FSCS). Your deposits are insured up to $2,500,000 per depositor, per insured bank, for each account ownership category.</p>
+
+                    <div class="terms-notice info">
+                        <div class="terms-notice-icon"><i class="fas fa-university"></i></div>
+                        <div class="terms-notice-content">
+                            <strong>FSCS Insurance:</strong>
+                            Deposits at Weatherbys Racing Bank are insured by the FSCS up to applicable limits whether your funds are held at a branch or through our digital platforms.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- End Notice -->
+                <div style="text-align: center; padding: 32px 0 0; border-top: 1px solid var(--line-2); margin-top: 32px;">
+                    <p style="font-size: 14px; color: var(--muted); margin-bottom: 16px;">
+                        <i class="fas fa-check-circle" style="color: var(--accent); margin-right: 6px;"></i>
+                        You have reached the end of the Terms and Conditions.
+                    </p>
+                    <p style="font-size: 13px; color: var(--muted); margin-bottom: 0;">
+                        © 2026 Weatherbys Racing Bank. All rights reserved.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back to Top Button -->
+<button type="button" class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tocLinks = document.querySelectorAll('.toc-list a');
+    const sections = document.querySelectorAll('.terms-section');
+    const backToTopBtn = document.getElementById('backToTop');
+
+    // ===== SMOOTH SCROLL =====
+    tocLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // ===== ACTIVE SECTION HIGHLIGHTING =====
+    function updateActiveLink() {
+        let currentSection = '';
+        const scrollPosition = window.scrollY + 150;
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                currentSection = section.getAttribute('id');
+            }
+        });
+
+        tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${currentSection}`) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // ===== BACK TO TOP BUTTON =====
+    function toggleBackToTop() {
+        if (window.scrollY > 500) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    }
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ===== SCROLL EVENT LISTENER =====
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            updateActiveLink();
+            toggleBackToTop();
+        }, 10);
+    });
+
+    // Initial calls
+    updateActiveLink();
+    toggleBackToTop();
+});
+</script>
+{% endblock %}

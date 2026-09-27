@@ -1,0 +1,292 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %}Savings Accounts | Weatherbys Racing Bank{% endblock %}
+
+{% block meta_description %}Grow your wealth with Weatherbys Racing Bank's high-yield savings accounts. Enjoy competitive APY, zero hidden fees, and FDIC insurance up to $250,000.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'frontends/components/home.css' %}">
+<link rel="stylesheet" href="{% static 'frontends/components/savings.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="savings-hero">
+    <div class="container savings-hero-content">
+        <div class="savings-hero-text">
+            <h1>Make your money <span>work harder</span></h1>
+            <p>Earn up to 4.50% APY with our high-yield savings accounts. No hidden fees, no minimum balance requirements, and FSCS insured up to $2,500,000.</p>
+            <div class="hero-btns" style="display: flex; gap: 16px; justify-content: flex-start;">
+                <a href="{% url 'account:register' %}" class="btn btn-primary">Open Savings Account <i class="fas fa-arrow-right"></i></a>
+                <a href="#calculator" class="btn btn-outline">Calculate Earnings</a>
+            </div>
+        </div>
+        <div class="savings-hero-image">
+            <img src="{% static 'frontends/images/savings-1.jpg' %}" alt="Growing savings">
+        </div>
+    </div>
+</section>
+
+<!-- Trust Stats Bar -->
+<section class="trust-bar">
+    <div class="container">
+        <div class="trust-bar-grid">
+            <div class="trust-item">
+                <h3>4.50%</h3>
+                <p>High-Yield APY</p>
+            </div>
+            <div class="trust-item">
+                <h3>$0</h3>
+                <p>Monthly Maintenance Fees</p>
+            </div>
+            <div class="trust-item">
+                <h3>$0</h3>
+                <p>Minimum Balance</p>
+            </div>
+            <div class="trust-item">
+                <h3>FSCS</h3>
+                <p>Insured up to $2.5m</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Account Types -->
+<section class="accounts-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Choose Your Savings Strategy</h2>
+            <p>Whether you're building an emergency fund or saving for a major milestone, we have an account tailored to your goals.</p>
+        </div>
+        <div class="accounts-grid">
+            <!-- High-Yield Savings -->
+            <div class="account-card featured">
+                <div class="ac-header">
+                    <div class="ac-apy">4.50% <span>APY</span></div>
+                    <h3 class="ac-name">High-Yield Savings</h3>
+                    <p class="ac-desc">Our flagship account designed to maximize your returns with zero compromises.</p>
+                </div>
+                <ul class="ac-features">
+                    <li><i class="fas fa-check-circle"></i> No monthly maintenance fees</li>
+                    <li><i class="fas fa-check-circle"></i> No minimum balance requirement</li>
+                    <li><i class="fas fa-check-circle"></i> Unlimited free transfers</li>
+                    <li><i class="fas fa-check-circle"></i> Automated savings rules</li>
+                    <li><i class="fas fa-check-circle"></i> Mobile check deposit</li>
+                </ul>
+                <a href="{% url 'account:register' %}" class="ac-btn ac-btn-primary">Open Account <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- Fixed Deposit / CD -->
+            <div class="account-card">
+                <div class="ac-header">
+                    <div class="ac-apy">5.00% <span>APY</span></div>
+                    <h3 class="ac-name">Fixed Deposit (CD)</h3>
+                    <p class="ac-desc">Lock in a guaranteed rate for a fixed term and watch your money grow predictably.</p>
+                </div>
+                <ul class="ac-features">
+                    <li><i class="fas fa-check-circle"></i> Guaranteed return on investment</li>
+                    <li><i class="fas fa-check-circle"></i> Terms from 6 to 60 months</li>
+                    <li><i class="fas fa-check-circle"></i> $500 minimum opening deposit</li>
+                    <li><i class="fas fa-check-circle"></i> FDIC insured</li>
+                    <li><i class="fas fa-check-circle"></i> Auto-renewal options</li>
+                </ul>
+                <a href="#" class="ac-btn ac-btn-outline">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- Goal-Based Savings -->
+            <div class="account-card">
+                <div class="ac-header">
+                    <div class="ac-apy">4.25% <span>APY</span></div>
+                    <h3 class="ac-name">Goal-Based Savings</h3>
+                    <p class="ac-desc">Create custom savings buckets for vacations, emergencies, or big purchases.</p>
+                </div>
+                <ul class="ac-features">
+                    <li><i class="fas fa-check-circle"></i> Up to 10 custom savings buckets</li>
+                    <li><i class="fas fa-check-circle"></i> Visual progress tracking</li>
+                    <li><i class="fas fa-check-circle"></i> Round-up spare change automatically</li>
+                    <li><i class="fas fa-check-circle"></i> No fees or minimums</li>
+                    <li><i class="fas fa-check-circle"></i> Instant transfers to primary account</li>
+                </ul>
+                <a href="#" class="ac-btn ac-btn-outline">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Interactive Savings Calculator -->
+<section class="calculator-section" id="calculator">
+    <div class="container calculator-grid">
+        <div class="calc-content">
+            <h2>See how much you can earn</h2>
+            <p>Use our interactive savings calculator to estimate your potential earnings. Adjust the values to see how consistent saving and compound interest can accelerate your financial goals.</p>
+            
+            <div class="feature-list" style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="feature-item" style="display: flex; gap: 16px; align-items: flex-start;">
+                    <div class="fi-icon" style="width: 48px; height: 48px; border-radius: 12px; background: rgba(0,212,168,0.1); color: var(--accent); display: grid; place-items: center; font-size: 18px; flex-shrink: 0;"><i class="fas fa-chart-line"></i></div>
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Compound Interest</h4>
+                        <p style="font-size: 14px; color: var(--muted); margin: 0;">Earn interest on your interest, accelerating your growth over time.</p>
+                    </div>
+                </div>
+                <div class="feature-item" style="display: flex; gap: 16px; align-items: flex-start;">
+                    <div class="fi-icon" style="width: 48px; height: 48px; border-radius: 12px; background: rgba(91,91,247,0.1); color: var(--primary); display: grid; place-items: center; font-size: 18px; flex-shrink: 0;"><i class="fas fa-robot"></i></div>
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Automated Contributions</h4>
+                        <p style="font-size: 14px; color: var(--muted); margin: 0;">Set up recurring transfers and watch your savings grow on autopilot.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-card">
+            <div class="calc-row">
+                <label>Initial Deposit</label>
+                <div class="calc-input-wrap">
+                    <span class="currency-symbol">$</span>
+                    <input type="number" class="calc-input" id="initialDeposit" value="5000" min="0">
+                </div>
+            </div>
+            <div class="calc-row">
+                <label>Monthly Contribution</label>
+                <div class="calc-input-wrap">
+                    <span class="currency-symbol">$</span>
+                    <input type="number" class="calc-input" id="monthlyContribution" value="200" min="0">
+                </div>
+            </div6>
+            <div class="calc-row">
+                <label>Interest Rate (APY)</label>
+                <div class="calc-input-wrap">
+                    <input type="number" class="calc-input" id="interestRate" value="4.5" step="0.1" min="0" style="padding-left: 14px;">
+                    <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-weight: 600;">%</span>
+                </div>
+            </div>
+            <div class="calc-row">
+                <label>Time Period</label>
+                <div class="calc-input-wrap">
+                    <input type="number" class="calc-input" id="timePeriod" value="5" min="1" max="50" style="padding-left: 14px;">
+                    <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-weight: 600;">Years</span>
+                </div>
+            </div>
+
+            <div class="calc-results">
+                <div class="calc-result-row">
+                    <span class="calc-result-label">Total Contributions</span>
+                    <span class="calc-result-value" id="totalContributions">$17,000</span>
+                </div>
+                <div class="calc-result-row">
+                    <span class="calc-result-label">Interest Earned</span>
+                    <span class="calc-result-value" id="interestEarned">$2,185</span>
+                </div>
+                <div class="calc-result-row">
+                    <span class="calc-result-label">Estimated Total Balance</span>
+                    <span class="calc-result-value highlight" id="totalBalance">$19,185</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Grid -->
+<section class="features-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Why Save With Weatherbys?</h2>
+            <p>We've stripped away the complexity and fees of traditional banking to give you a better place to park your cash.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="fc-icon"><i class="fas fa-shield-alt"></i></div>
+                <h4>Fully Insured</h4>
+                <p>Your deposits are protected by the FDIC up to $250,000 per depositor, per insured bank.</p>
+            </div>
+            <div class="feature-card">
+                <div class="fc-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fas fa-mobile-alt"></i></div>
+                <h4>Mobile First</h4>
+                <p>Manage your savings, set goals, and transfer funds instantly from our award-winning app.</p>
+            </div>
+            <div class="feature-card">
+                <div class="fc-icon" style="background: rgba(245,158,11,0.1); color: #D97706;"><i class="fas fa-hand-holding-usd"></i></div>
+                <h4>No Hidden Fees</h4>
+                <p>No monthly maintenance fees, no minimum balance fees, and no surprise charges. Ever.</p>
+            </div>
+            <div class="feature-card">
+                <div class="fc-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);"><i class="fas fa-headset"></i></div>
+                <h4>24/7 Support</h4>
+                <p>Our dedicated US-based support team is always available to help you with your savings goals.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="savings-cta">
+    <div class="container">
+        <div class="savings-cta-content">
+            <h2>Start growing your wealth today</h2>
+            <p>Join over 2 million customers who trust Weatherbys Racing Bank to keep their money safe and growing. Open your account in less than 3 minutes.</p>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="{% url 'account:register' %}" class="btn btn-white">Open Savings Account <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'frontend:contact' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.5);">Talk to an Advisor</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== SAVINGS CALCULATOR LOGIC =====
+const initialDepositInput = document.getElementById('initialDeposit');
+const monthlyContributionInput = document.getElementById('monthlyContribution');
+const interestRateInput = document.getElementById('interestRate');
+const timePeriodInput = document.getElementById('timePeriod');
+
+const totalContributionsEl = document.getElementById('totalContributions');
+const interestEarnedEl = document.getElementById('interestEarned');
+const totalBalanceEl = document.getElementById('totalBalance');
+
+function formatCurrency(num) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0
+    }).format(num);
+}
+
+function calculateSavings() {
+    const P = parseFloat(initialDepositInput.value) || 0;
+    const PMT = parseFloat(monthlyContributionInput.value) || 0;
+    const r = (parseFloat(interestRateInput.value) || 0) / 100;
+    const t = parseFloat(timePeriodInput.value) || 0;
+    const n = 12; // Compounded monthly
+
+    // Future Value of Initial Deposit: P * (1 + r/n)^(n*t)
+    const fvInitial = P * Math.pow((1 + r / n), (n * t));
+    
+    // Future Value of Series (Monthly Contributions): PMT * (((1 + r/n)^(n*t) - 1) / (r/n))
+    let fvContributions = 0;
+    if (r > 0) {
+        fvContributions = PMT * ((Math.pow((1 + r / n), (n * t)) - 1) / (r / n));
+    } else {
+        fvContributions = PMT * n * t;
+    }
+
+    const totalBalance = fvInitial + fvContributions;
+    const totalContributed = P + (PMT * n * t);
+    const interestEarned = totalBalance - totalContributed;
+
+    // Update DOM
+    totalContributionsEl.textContent = formatCurrency(totalContributed);
+    interestEarnedEl.textContent = formatCurrency(interestEarned);
+    totalBalanceEl.textContent = formatCurrency(totalBalance);
+}
+
+// Attach event listeners to all inputs
+[initialDepositInput, monthlyContributionInput, interestRateInput, timePeriodInput].forEach(input => {
+    input.addEventListener('input', calculateSavings);
+});
+
+// Initial calculation on load
+calculateSavings();
+</script>
+{% endblock %}
