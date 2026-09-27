@@ -267,6 +267,6 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 # Default sender
-DEFAULT_FROM_EMAIL = f"First Havin <{os.getenv('EMAIL_HOST_USER')}>"
+DEFAULT_FROM_EMAIL = f"Weatherbys <{os.getenv('EMAIL_HOST_USER')}>"
 # SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
