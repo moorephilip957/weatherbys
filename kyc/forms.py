@@ -127,7 +127,20 @@ class KYCVerificationForm(forms.ModelForm):
             }),
 
 
-            'document_type': forms.HiddenInput(),
+            # 'document_type': forms.HiddenInput(),
+
+            # ✅ CHANGED: Make document_type a visible Select with choices
+            'document_type': forms.Select(attrs={
+                'class': 'form-select',
+                'id': 'document_type'
+            }, choices=[
+                ('passport', 'Passport'),
+                ('drivers_license', "Driver's License"),
+                ('national_id', 'National ID Card'),
+                ('state_id', 'State ID'),
+                ('military_id', 'Military ID'),
+                ('other', 'Other Government ID'),
+            ]),
 
             'upload_front_side': forms.ClearableFileInput(attrs={
                 'class': 'form-control d-none',
