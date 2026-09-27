@@ -237,63 +237,6 @@ def card(request):
 
 
 @login_required
-@block_blocked_users
-def local_transfer(request):
-
-    return render(
-        request,
-        'customer/local_transfer.html',
-    )
-
-
-@login_required
-def international_transfer(request):
-
-    return render(
-        request,
-        'customer/international_transfer.html',
-    )
-
-
-@login_required
-def deposit(request):
-
-    return render(
-        request,
-        'customer/deposit.html',
-    )
-
-
-@login_required
-@kyc_required
-@block_blocked_users
-def save_invest(request):
-
-    return render(
-        request,
-        'customer/save_invest.html',
-    )
-
-
-@login_required
-def loan(request):
-
-    return render(
-        request,
-        'customer/loan.html',
-    )
-
-
-@login_required
-def loan_history(request):
-
-    return render(
-        request,
-        'customer/loan_history.html',
-    )
-
-
-@login_required
 @kyc_required
 @block_blocked_users
 def download_app(request):
@@ -302,10 +245,7 @@ def download_app(request):
         request,
         'customers/download_app.html',
     )
-    # return render(
-    #     request,
-    #     'customer/download_app2.html',
-    # )
+
 
 @login_required
 @kyc_required
@@ -321,27 +261,6 @@ def settings(request):
             'user': user,
             'bank_account': getattr(user, 'bank_account', None),
         }
-    )
-
-
-@login_required
-def support(request):
-
-    return render(
-        request,
-        'customer/support.html',
-    )
-
-
-
-@login_required
-@kyc_required
-@block_blocked_users
-def change_password(request):
-
-    return render(
-        request,
-        'customer/change_password.html',
     )
 
 
@@ -393,14 +312,6 @@ def apply_card(request):
             'form': form,
             'account': account,
         }
-    )
-
-@login_required
-def payment(request):
-
-    return render(
-        request,
-        'customer/crypto_payment.html',
     )
 
 
