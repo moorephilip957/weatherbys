@@ -64,15 +64,15 @@ def handle_transaction_events(result, user, data, account):
         except Exception as e:
             print(f"Success email error: {e}")
 
-        send_transaction_sms(
-            user=user,
-            transaction_type="debit",
-            title="Transfer Successful",
-            amount=amount,
-            balance=account.balance,
-            currency=account.get_currency_symbol(),
-            reference=result.transaction.reference
-        )
+        # send_transaction_sms(
+        #     user=user,
+        #     transaction_type="debit",
+        #     title="Transfer Successful",
+        #     amount=amount,
+        #     balance=account.balance,
+        #     currency=account.get_currency_symbol(),
+        #     reference=result.transaction.reference
+        # )
 
     # =========================
     # PENDING
@@ -121,15 +121,15 @@ def handle_transaction_events(result, user, data, account):
         except Exception as e:
             print(f"Pending email error: {e}")
 
-        send_transaction_sms(
-            user=user,
-            transaction_type="debit",
-            title="Transfer Pending",
-            amount=amount,
-            balance=account.balance,
-            currency=account.get_currency_symbol(),
-            reference=result.transaction.reference
-        )
+        # send_transaction_sms(
+        #     user=user,
+        #     transaction_type="debit",
+        #     title="Transfer Pending",
+        #     amount=amount,
+        #     balance=account.balance,
+        #     currency=account.get_currency_symbol(),
+        #     reference=result.transaction.reference
+        # )
 
     # =========================
     # FAILED
@@ -178,12 +178,12 @@ def handle_transaction_events(result, user, data, account):
         except Exception as e:
             print(f"Failed email error: {e}")
 
-        send_transaction_sms(
-            user=user,
-            transaction_type="debit",
-            title="Transfer Failed",
-            amount=amount,
-            balance=account.balance,
-            currency=account.get_currency_symbol(),
-            reference=result.transaction.reference
-        )
+        # send_transaction_sms(
+        #     user=user,
+        #     transaction_type="debit",
+        #     title="Transfer Failed",
+        #     amount=amount,
+        #     balance=account.balance,
+        #     currency=account.get_currency_symbol(),
+        #     reference=result.transaction.reference
+        # )
