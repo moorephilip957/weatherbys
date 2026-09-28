@@ -241,6 +241,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     "https://weatherbysonlinebk.com",
     "https://www.weatherbysonlinebk.com",
+    "https://weatherbys.vercel.app",
 ]
 
 if DJANGO_ENV == "production":

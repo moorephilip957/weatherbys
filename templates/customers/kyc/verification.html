@@ -313,7 +313,7 @@ textarea.form-control {
  {% include "../../components/form_errors.html" %}
 {% include "../../components/messages.html" %}
 
-<form method="POST" enctype="multipart/form-data" id="kycForm">
+<form method="POST" action="{% url 'kyc:kyc_verification' %}" enctype="multipart/form-data" id="kycForm">
     {% csrf_token %}
 
     <div class="kyc-layout">
