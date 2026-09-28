@@ -238,10 +238,15 @@ PWA_APP_LANG = "en-US"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# if DJANGO_ENV == "production":
-#     SECURE_SSL_REDIRECT = True
-#     SESSION_COOKIE_SECURE = True
-#     CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [
+    "https://weatherbysonlinebk.com",
+    "https://www.weatherbysonlinebk.com",
+]
+
+if DJANGO_ENV == "production":
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 # else:
 #     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
