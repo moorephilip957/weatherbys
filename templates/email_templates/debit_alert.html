@@ -1,6 +1,6 @@
 {% extends './base.html' %}
 
-{% block title %}Account Debited | W.R.B{% endblock %}
+{% block title %}Account Debited | PinnaclePB{% endblock %}
 
 {% block preheader %}A debit of {{ currency }}{{ amount }} was made from your account. Reference: {{ reference }}. If you did not authorize this, contact us immediately.{% endblock %}
 
@@ -35,7 +35,7 @@
 <!-- Greeting -->
 <p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
     Hello {{ user.get_full_name|default:user.username }},<br>
-    This is a notification that a debit transaction has been successfully processed on your W.R.B account.
+    This is a notification that a debit transaction has been successfully processed on your PinnaclePB account.
 </p>
 
 <!-- Debited Amount Highlight -->
@@ -134,7 +134,7 @@
                 🚨 Did not authorize this transaction?
             </p>
             <p style="margin: 0; font-size: 14px; color: #9F1239; line-height: 1.5;">
-                If you do not recognize this debit, your account may be compromised. Please <a href="https://www.wronlinebk.com/support" style="color: #9F1239; text-decoration: underline; font-weight: 700;">contact our fraud support team immediately</a> or freeze your account via the mobile app.
+                If you do not recognize this debit, your account may be compromised. Please <a href="https://www.pinnaclepbonline.com/support" style="color: #9F1239; text-decoration: underline; font-weight: 700;">contact our fraud support team immediately</a> or freeze your account via the mobile app.
             </p>
         </td>
     </tr>
@@ -143,6 +143,6 @@
 <!-- Sign Off -->
 <p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
     Stay secure,<br>
-    <strong style="color: #5B5BF7;">The W.R.B Team</strong>
+    <strong style="color: #5B5BF7;">The PinnaclePB Team</strong>
 </p>
 {% endblock %}

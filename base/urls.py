@@ -13,7 +13,7 @@ urlpatterns = [
     path('loan/', include('loan.urls', namespace="loan")),
     path('support/', include('support.urls', namespace="support")),
     path('notification/', include('notification.urls', namespace="notification")),
-    path('kyc/', include('kyc.urls', namespace="kyc")),
+    path('verify/', include('kyc.urls', namespace="kyc")),
     path('staff/', include('staff.urls', namespace="staff")),
     path("", include("pwa.urls")),
 ]

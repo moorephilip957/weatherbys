@@ -9,6 +9,8 @@ media/
 raw
 raw/
 staticfiles/
+deposit_proofs/
+deposit_proofs
 
 # nixpacks.toml
 # Backup files # 

@@ -1,8 +1,8 @@
 {% extends './base.html' %}
 {% load static %}
-{% block title %}Personal Banking | W.R.B{% endblock %}
+{% block title %}Personal Banking | PinnaclePB{% endblock %}
 
-{% block meta_description %}Discover personal banking solutions tailored to your lifestyle. From high-yield savings to everyday current accounts, we make managing your money seamless and secure.{% endblock %}
+{% block meta_description %}Discover personal solutions tailored to your lifestyle. From high-yield savings to everyday current accounts, we make managing your money seamless and secure.{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'frontends/components/home.css' %}">
@@ -15,8 +15,8 @@
 <section class="personal-hero">
     <div class="container personal-hero-content">
         <div class="personal-hero-text">
-            <h1>Personal Banking <span>Tailored to You</span></h1>
-            <p>From everyday spending to long-term wealth building, our personal banking solutions are designed to give you control, security, and peace of mind.</p>
+            <h1>Personal Services <span>Tailored to You</span></h1>
+            <p>From everyday spending to long-term wealth building, our personal finance solutions are designed to give you control, security, and peace of mind.</p>
             <div class="hero-btns" style="display: flex; gap: 16px; justify-content: flex-start;">
                 <a href="{% url 'account:register' %}" class="btn btn-primary">Open an Account <i class="fas fa-arrow-right"></i></a>
                 <a href="{% url 'frontend:contact' %}" class="btn btn-outline">Speak to an Advisor</a>
@@ -129,7 +129,7 @@
     <div class="container spotlight-grid">
         <div class="spotlight-content">
             <h2>Banking at Your Fingertips</h2>
-            <p>Take control of your finances with the W.R.B mobile app. It's secure, intuitive, and packed with features to make your life easier.</p>
+            <p>Take control of your finances with the PinnaclePB mobile app. It's secure, intuitive, and packed with features to make your life easier.</p>
             <div class="spotlight-features">
                 <div class="spotlight-feature">
                     <div class="sf-icon"><i class="fas fa-bolt"></i></div>
@@ -182,7 +182,7 @@
         <div class="personal-cta-box">
             <div class="personal-cta-content">
                 <h2>Ready to Upgrade Your Banking?</h2>
-                <p>Join over 2 million customers who trust W.R.B. Opening an account takes less than 5 minutes.</p>
+                <p>Join over 2 million customers who trust PinnaclePB. Opening an account takes less than 5 minutes.</p>
                 <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
                     <a href="{% url 'account:register' %}" class="btn btn-white">Open an Account <i class="fas fa-arrow-right"></i></a>
                     <a href="{% url 'frontend:contact' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.5);">Contact Us</a>

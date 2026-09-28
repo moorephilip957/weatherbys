@@ -1,6 +1,6 @@
 {% extends './base.html' %}
 
-{% block title %}Deposit Approved & Credited | W.R.B{% endblock %}
+{% block title %}Deposit Approved & Credited | PinnaclePB{% endblock %}
 
 {% block preheader %}Great news! Your deposit of {{ currency }}{{ amount }} has been approved and credited to your account. Reference: {{ reference }}.{% endblock %}
 
@@ -35,7 +35,7 @@
 <!-- Greeting -->
 <p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
     Hello {{ user.get_full_name|default:user.username }},<br>
-    Great news! Your recent deposit has been successfully verified by our system and the funds have been fully credited to your W.R.B account. Your updated balance is ready for you to use.
+    Great news! Your recent deposit has been successfully verified by our system and the funds have been fully credited to your PinnaclePB account. Your updated balance is ready for you to use.
 </p>
 
 <!-- Credited Amount Highlight -->
@@ -131,7 +131,7 @@
     <tr>
         <td style="padding: 16px; background-color: #F0F9FF; border-radius: 8px; border-left: 4px solid #3B82F6;">
             <p style="margin: 0; font-size: 14px; color: #1E40AF; line-height: 1.5;">
-                <strong>ℹ️ Account Updated:</strong> Your available balance has been updated to reflect this deposit. If you did not initiate this transaction or have any questions, please <a href="https://www.wronlinebk.com/support" style="color: #1E40AF; text-decoration: underline; font-weight: 600;">contact our support team</a> immediately.
+                <strong>ℹ️ Account Updated:</strong> Your available balance has been updated to reflect this deposit. If you did not initiate this transaction or have any questions, please <a href="https://www.pinnaclepbonline.com/support" style="color: #1E40AF; text-decoration: underline; font-weight: 600;">contact our support team</a> immediately.
             </p>
         </td>
     </tr>
@@ -140,6 +140,6 @@
 <!-- Sign Off -->
 <p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
     Thank you for banking with us,<br>
-    <strong style="color: #5B5BF7;">The W.R.B Team</strong>
+    <strong style="color: #5B5BF7;">The PinnaclePB Team</strong>
 </p>
 {% endblock %}

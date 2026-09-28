@@ -1,6 +1,6 @@
 {% extends './base.html' %}
 
-{% block title %}Loan Disbursed Successfully | W.R.B{% endblock %}
+{% block title %}Loan Disbursed Successfully | PinnaclePB{% endblock %}
 
 {% block preheader %}Great news! Your loan of {{ currency }}{{ amount }} has been successfully disbursed to your account.{% endblock %}
 
@@ -35,7 +35,7 @@
 <!-- Greeting -->
 <p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
     Hello {{ user.get_full_name|default:user.username }},<br>
-    Great news! We are pleased to inform you that your loan application has been approved, and the funds have been successfully disbursed to your W.R.B account. You can now use these funds for your intended purpose.
+    Great news! We are pleased to inform you that your loan application has been approved, and the funds have been successfully disbursed to your PinnaclePB account. You can now use these funds for your intended purpose.
 </p>
 
 <!-- Loan Summary Card -->
@@ -129,6 +129,6 @@
 <!-- Sign Off -->
 <p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
     Wishing you continued success,<br>
-    <strong style="color: #5B5BF7;">The W.R.B Lending Team</strong>
+    <strong style="color: #5B5BF7;">The PinnaclePB Lending Team</strong>
 </p>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends './base.html' %}
 {% load static %}
 
-{% block title %}W.R.B | Premium Service for the Modern Era{% endblock %}
+{% block title %}PinnaclePB | Premium Service for the Modern Era{% endblock %}
 
 {% block meta_description %}Experience premium financial services tailored for modern lifestyles. Open your account in minutes.{% endblock %}
 
@@ -14,18 +14,18 @@
 <section class="hero">
     <div class="container hero-content">
         <div class="hero-text">
-            <h1>Banking Built for <span>Ambition</span></h1>
-            <p>Experience a higher standard of financial services, thoughtfully designed for modern lifestyles. From seamless everyday banking to sophisticated wealth management, W.R.B delivers trusted solutions tailored to your goals—helping you build, protect, and grow your financial future.</p>
+            <h1>System Built for <span>Ambition</span></h1>
+            <p>Experience a higher standard of financial services, thoughtfully designed for modern lifestyles. From seamless everyday services to sophisticated wealth management, PinnaclePB delivers trusted solutions tailored to your goals—helping you build, protect, and grow your financial future.</p>
             <div class="hero-btns">
                 <a href="{% url 'account:register' %}" class="btn btn-primary">Open an Account <i class="fas fa-arrow-right"></i></a>
                 <a href="{% url 'frontend:about' %}" class="btn btn-outline">Learn More</a>
             </div>
         </div>
         <div class="hero-image">
-            <img src="{% static 'frontends/images/hero-1.jpg' %}" alt="Modern Banking App">
+            <img src="{% static 'frontends/images/hero-1.jpg' %}" alt="Modern App">
             <div class="hero-float-card card-1">
                 <div class="hfc-icon"><i class="fas fa-shield-alt"></i></div>
-                <div class="hfc-text"><h4>Bank-Grade Security</h4><p>256-bit encryption</p></div>
+                <div class="hfc-text"><h4>Top-Grade Security</h4><p>256-bit encryption</p></div>
             </div>
             <div class="hero-float-card card-2">
                 <div class="hfc-icon" style="background: rgba(91,91,247,0.2); color: #5B5BF7;"><i class="fas fa-chart-line"></i></div>
@@ -41,7 +41,7 @@
         <div class="partners-wrapper">
             <div class="partner-logo"><i class="fab fa-cc-visa"></i> VISA</div>
             <div class="partner-logo"><i class="fab fa-cc-mastercard"></i> Mastercard</div>
-            <div class="partner-logo"><i class="fas fa-university"></i> FDIC Insured</div>
+            <div class="partner-logo"><i class="fas fa-university"></i>Top Security</div>
             <div class="partner-logo"><i class="fas fa-lock"></i> 256-bit SSL</div>
             <div class="partner-logo"><i class="fab fa-apple"></i> Apple Pay</div>
         </div>
@@ -59,8 +59,8 @@
                 </div>
             </div>
             <div class="about-content">
-                <h2>Why Choose W.R.B?</h2>
-                <p>We combine cutting-edge technology with personalized service to deliver a banking experience that truly puts you first. Our commitment to transparency and security is unmatched.</p>
+                <h2>Why Choose PinnaclePB?</h2>
+                <p>We combine cutting-edge technology with personalized service to deliver a financial experience that truly puts you first. Our commitment to transparency and security is unmatched.</p>
                 
                 <div class="feature-list">
                     <div class="feature-item">
@@ -95,8 +95,8 @@
 <section class="section">
     <div class="container">
         <div class="section-header">
-            <h2>Start Banking in 3 Simple Steps</h2>
-            <p>Opening an account with W.R.B is fast, secure, and completely digital. Get started in minutes.</p>
+            <h2>Start in 3 Simple Steps</h2>
+            <p>Opening an account with PinnaclePB is fast, secure, and completely digital. Get started in minutes.</p>
         </div>
         <div class="steps-grid">
             <div class="step-card">
@@ -111,12 +111,14 @@
             </div>
             <div class="step-card">
                 <div class="step-number">3</div>
-                <h3>Start Banking</h3>
-                <p>Once approved, fund your account and get instant access to your debit card and mobile app.</p>
+                <h3>Get Started</h3>
+                <p>Once approved, fund your account and get instant access to your card and mobile app.</p>
             </div>
         </div>
     </div>
 </section>
+
+
 
 <!-- Premium Solutions -->
 <section class="section" style="background: var(--surface-2);">
@@ -138,10 +140,10 @@
             </div>
             <div class="image-card">
                 <div class="image-card-img">
-                    <img src="{% static 'frontends/images/about-us.jpg' %}" alt="Corporate Banking">
+                    <img src="{% static 'frontends/images/about-us.jpg' %}" alt="Corporate">
                 </div>
                 <div class="image-card-body">
-                    <h3>Corporate Banking</h3>
+                    <h3>Corporate</h3>
                     <p>Scalable treasury management, commercial lending, and dedicated relationship managers for your business.</p>
                     <a href="{% url 'frontend:corperate' %}" class="btn-text">Explore Corporate <i class="fas fa-arrow-right"></i></a>
                 </div>
@@ -164,8 +166,8 @@
 <section class="section app-section">
     <div class="container app-grid">
         <div class="app-content">
-            <h2>Banking at Your Fingertips</h2>
-            <p>Download the W.R.B mobile app and manage your finances anytime, anywhere.</p>
+            <h2>Services at Your Fingertips</h2>
+            <p>Download the PinnaclePB mobile app and manage your finances anytime, anywhere.</p>
             <div class="app-features">
                 <div class="app-feature">
                     <div class="af-icon"><i class="fas fa-bolt"></i></div>
@@ -229,13 +231,13 @@
             <div class="services-grid">
                 <div class="service-card">
                     <div class="sc-icon"><i class="fas fa-user"></i></div>
-                    <h3>Personal Banking</h3>
+                    <h3>Personal Services</h3>
                     <p>Everyday accounts, debit cards, and personal loans designed for your lifestyle.</p>
                     <a href="{% url 'frontend:personal' %}" class="service-link">Explore Personal <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="service-card">
                     <div class="sc-icon" style="background: rgba(0,212,168,0.1); color: var(--accent);"><i class="fas fa-briefcase"></i></div>
-                    <h3>Corporate Banking</h3>
+                    <h3>Corporate Services</h3>
                     <p>Scalable business accounts, treasury management, and commercial lending.</p>
                     <a href="{% url 'frontend:corperate' %}" class="service-link">Explore Corporate <i class="fas fa-arrow-right"></i></a>
                 </div>
@@ -260,7 +262,7 @@
     <div class="container">
         <div class="section-header">
             <h2>Financial Insights & News</h2>
-            <p>Stay ahead of the curve with expert advice, market updates, and tips from the W.R.B team.</p>
+            <p>Stay ahead of the curve with expert advice, market updates, and tips from the PinnaclePB team.</p>
         </div>
         <div class="insights-grid">
             <div class="insight-card">
@@ -296,12 +298,12 @@
     <div class="container">
         <div class="section-header">
             <h2>Trusted by Thousands</h2>
-            <p>See what our customers have to say about their experience with W.R.B.</p>
+            <p>See what our customers have to say about their experience with PinnaclePB.</p>
         </div>
         <div class="testimonials-grid">
             <div class="testimonial-card">
                 <div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                <p class="tc-text">"Switching to Weatherbys was the best financial decision I've made. The app is incredibly intuitive, and the customer support is genuinely helpful."</p>
+                <p class="tc-text">"Switching to PinnaclePB was the best financial decision I've made. The app is incredibly intuitive, and the customer support is genuinely helpful."</p>
                 <div class="tc-author"><div class="tc-avatar">JD</div><div class="tc-info"><h4>James Davidson</h4><p>Small Business Owner</p></div></div>
             </div>
             <div class="testimonial-card">
@@ -329,8 +331,420 @@
             <div class="security-item"><i class="fas fa-shield-alt"></i><h4>256-bit Encryption</h4><p>Military-grade encryption protects all data in transit and at rest.</p></div>
             <div class="security-item"><i class="fas fa-user-shield"></i><h4>Fraud Monitoring</h4><p>24/7 AI-powered systems detect and block suspicious activity instantly.</p></div>
             <div class="security-item"><i class="fas fa-fingerprint"></i><h4>Biometric Auth</h4><p>Secure your account with Face ID, Touch ID, or fingerprint scanning.</p></div>
-            <div class="security-item"><i class="fas fa-university"></i><h4>Fully Regulated</h4><p>We are fully licensed and comply with all international banking regulations.</p></div>
+            <div class="security-item"><i class="fas fa-university"></i><h4>fully active</h4><p>We are fully licensed and comply with all international regulations.</p></div>
         </div>
+    </div>
+</section>
+
+<!-- App Download Section -->
+<section class="app-download-section">
+    <div class="container">
+        
+        <!-- Hero Device Detection -->
+        <div class="download-hero">
+            <div class="download-hero-content">
+                <div class="download-hero-text">
+                    <div class="detected-badge">
+                        <span class="dot-live"></span>
+                        <span id="detectedText">Detecting your device...</span>
+                    </div>
+                    <h1>Install <span class="gradient-text">PinnaclePB</span> on your device</h1>
+                    <p>Get the full experience with our Progressive Web App. No app store needed — install directly from your browser in seconds.</p>
+
+                    <button class="download-btn-primary" id="main-install-button">
+                        <div class="dbp-icon" id="downloadBtnIcon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="dbp-text">
+                            <span class="small" id="downloadBtnSmall">One-click install for</span>
+                            <span class="big" id="downloadBtnBig">Your Device</span>
+                        </div>
+                    </button>
+
+                    <div class="download-alt-options">
+                        <button class="download-alt-btn" data-platform="ios">
+                            <i class="fab fa-apple"></i>
+                            <span>iPhone / iPad</span>
+                        </button>
+                        <button class="download-alt-btn" data-platform="android">
+                            <i class="fab fa-android"></i>
+                            <span>Android</span>
+                        </button>
+                        <button class="download-alt-btn" data-platform="windows">
+                            <i class="fab fa-windows"></i>
+                            <span>Windows</span>
+                        </button>
+                        <button class="download-alt-btn" data-platform="macos">
+                            <i class="fab fa-apple"></i>
+                            <span>Mac</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="device-mockup">
+                    <div class="device-phone">
+                        <div class="device-screen">
+                            <div class="app-logo">W</div>
+                            <!-- <div class="app-name">PinnaclePB</div> -->
+                            <div class="app-tag">Finance · Reimagined</div>
+                            <div class="mini-balance">
+                                Available balance
+                                <strong>$24,562.00</strong>
+                            </div>
+                            <div class="mini-balance">
+                                Quick send
+                                <strong style="font-size: 12px;">→ Sarah · $120</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code Section -->
+        <div class="qr-section">
+            <div class="qr-wrap">
+                <!-- Replace with your actual app URL -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://pinnaclepbonline.com" alt="Install QR Code">
+                <div class="qr-logo">W</div>
+            </div>
+            <div class="qr-section-text">
+                <h3>Scan with your phone camera</h3>
+                <p>Open your phone's camera app and point it at the QR code. You'll be taken directly to the install page. Works on both iOS and Android.</p>
+                <div class="qr-url-box">
+                    <i class="fas fa-link" style="color: var(--muted);"></i>
+                    <span>https://pinnaclepbonline.com</span>
+                    <button class="copy-url-btn" id="copyUrlBtn">
+                        <i class="far fa-copy"></i>
+                        <span>Copy</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual Instructions -->
+        <div class="manual-section" id="manual-instructions">
+            <div class="manual-section-head">
+                <h2>Manual installation guide</h2>
+                <p>Choose your device below for step-by-step instructions</p>
+            </div>
+
+            <!-- Platform Tabs -->
+            <div class="platform-tabs">
+                <button class="platform-tab active" data-platform="ios">
+                    <span class="pt-icon ios"><i class="fab fa-apple"></i></span>
+                    <span>iPhone / iPad</span>
+                </button>
+                <button class="platform-tab" data-platform="android">
+                    <span class="pt-icon android"><i class="fab fa-android"></i></span>
+                    <span>Android</span>
+                </button>
+                <button class="platform-tab" data-platform="windows">
+                    <span class="pt-icon windows"><i class="fab fa-windows"></i></span>
+                    <span>Windows</span>
+                </button>
+                <button class="platform-tab" data-platform="macos">
+                    <span class="pt-icon macos"><i class="fab fa-apple"></i></span>
+                    <span>macOS</span>
+                </button>
+            </div>
+
+            <!-- iOS Instructions -->
+            <div class="platform-content active" id="platform-ios">
+                <div class="platform-intro">
+                    <div class="pi-icon" style="background: #000;"><i class="fab fa-apple"></i></div>
+                    <div class="pi-text">
+                        <h4>Install on iPhone or iPad</h4>
+                        <p>Use Safari browser — other browsers don't support installation on iOS</p>
+                    </div>
+                </div>
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p class="step-title">Open Safari browser</p>
+                            <p class="step-desc">Launch the <strong>Safari</strong> app on your iPhone or iPad. Note: Chrome, Firefox, and other browsers do not support PWA installation on iOS.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <p class="step-title">Navigate to our website</p>
+                            <p class="step-desc">Go to <code>wrbonlinebk.com</code> in the Safari address bar and wait for the page to fully load.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <p class="step-title">Tap the Share button</p>
+                            <p class="step-desc">Tap the <strong>Share icon</strong> at the bottom of Safari (the square with an upward arrow). On iPad, it's at the top of the screen.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <p class="step-title">Select "Add to Home Screen"</p>
+                            <p class="step-desc">Scroll down the share menu and tap <strong>"Add to Home Screen"</strong>. You can rename the app if you'd like.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <p class="step-title">Tap "Add" to confirm</p>
+                            <p class="step-desc">Tap <strong>"Add"</strong> in the top-right corner. The PinnaclePB icon will now appear on your home screen — tap it to launch the app!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Android Instructions -->
+            <div class="platform-content" id="platform-android">
+                <div class="platform-intro">
+                    <div class="pi-icon" style="background: #3DDC84; color: #0A0E1A;"><i class="fab fa-android"></i></div>
+                    <div class="pi-text">
+                        <h4>Install on Android</h4>
+                        <p>Works with Chrome, Edge, Samsung Internet, and most modern browsers</p>
+                    </div>
+                </div>
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p class="step-title">Open your browser</p>
+                            <p class="step-desc">Launch <strong>Chrome</strong> (recommended) or any modern browser on your Android device.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <p class="step-title">Visit our website</p>
+                            <p class="step-desc">Navigate to <code>wrbonlinebk.com</code> and wait for the page to fully load.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <p class="step-title">Tap the browser menu</p>
+                            <p class="step-desc">Tap the <strong>three-dot menu</strong> (⋮) in the top-right corner of your browser.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <p class="step-title">Look for install prompt</p>
+                            <p class="step-desc">You may see an <strong>"Install app"</strong> banner at the top of the page. If so, tap it and skip to step 6. Otherwise, continue to step 5.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <p class="step-title">Select install option</p>
+                            <p class="step-desc">In the menu, tap <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>. The wording may vary slightly by browser.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <p class="step-title">Confirm installation</p>
+                            <p class="step-desc">Tap <strong>"Install"</strong> in the confirmation dialog. The app will be added to your home screen and app drawer automatically.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Windows Instructions -->
+            <div class="platform-content" id="platform-windows">
+                <div class="platform-intro">
+                    <div class="pi-icon" style="background: #0078D4;"><i class="fab fa-windows"></i></div>
+                    <div class="pi-text">
+                        <h4>Install on Windows</h4>
+                        <p>Works with Microsoft Edge, Chrome, and Brave browsers</p>
+                    </div>
+                </div>
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p class="step-title">Open your browser</p>
+                            <p class="step-desc">Launch <strong>Microsoft Edge</strong> (recommended) or Chrome on your Windows PC.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <p class="step-title">Visit our website</p>
+                            <p class="step-desc">Go to <code>wrbonlinebk.com</code> and wait for the page to fully load.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <p class="step-title">Look for install icon</p>
+                            <p class="step-desc">Look for the <strong>app install icon</strong> (a monitor with a down arrow ↓) in the right side of the address bar. Click it.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <p class="step-title">Alternative: Use browser menu</p>
+                            <p class="step-desc">If you don't see the icon, click the <strong>three dots</strong> in the top-right → <strong>Apps</strong> → <strong>"Install this site as an app"</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <p class="step-title">Click "Install"</p>
+                            <p class="step-desc">In the popup dialog, click <strong>"Install"</strong>. The app will open in its own window.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <p class="step-title">Pin to taskbar (optional)</p>
+                            <p class="step-desc">Right-click the app icon in your taskbar and select <strong>"Pin to taskbar"</strong> for quick access anytime.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- macOS Instructions -->
+            <div class="platform-content" id="platform-macos">
+                <div class="platform-intro">
+                    <div class="pi-icon" style="background: linear-gradient(135deg, #5B5BF7, #7C3AED);"><i class="fab fa-apple"></i></div>
+                    <div class="pi-text">
+                        <h4>Install on macOS</h4>
+                        <p>Use Safari 16.4+ on macOS Ventura or later for best experience</p>
+                    </div>
+                </div>
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p class="step-title">Open Safari</p>
+                            <p class="step-desc">Launch <strong>Safari</strong> on your Mac. Make sure you're running Safari 16.4 or later (macOS Ventura or newer).</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <p class="step-title">Visit our website</p>
+                            <p class="step-desc">Navigate to <code>wrbonlinebk.com</code> and wait for the page to fully load.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <p class="step-title">Open the File menu</p>
+                            <p class="step-desc">In the top menu bar, click <strong>File</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <p class="step-title">Select "Add to Dock"</p>
+                            <p class="step-desc">Click <strong>"Add to Dock..."</strong> from the dropdown menu.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <p class="step-title">Confirm the addition</p>
+                            <p class="step-desc">Click <strong>"Add"</strong> in the confirmation dialog. The PinnaclePB app will now appear in your Dock.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <p class="step-title">Launch the app</p>
+                            <p class="step-desc">Click the PinnaclePB icon in your Dock to launch the app. It runs in its own window, just like a native app!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-section">
+            <h2>Why install the app?</h2>
+            <p class="sub">Experience Finance the way it should be</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="fc-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h4>Lightning fast</h4>
+                    <p>Instant load times with smart caching — no more waiting for pages</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon" style="background: rgba(0,212,168,0.12); color: #059669;">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h4>Works offline</h4>
+                    <p>View your balance and recent transactions even without internet</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon" style="background: rgba(244,63,94,0.1); color: var(--danger);">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h4>Push notifications</h4>
+                    <p>Get instant alerts for transactions, deposits, and security events</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon" style="background: rgba(245,158,11,0.12); color: #D97706;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Top-grade security</h4>
+                    <p>Biometric login, encryption, and fraud monitoring built-in</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2>Frequently asked questions</h2>
+            <p class="sub">Everything you need to know about the app</p>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is a Progressive Web App (PWA)?</span>
+                    <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <p>A Progressive Web App is a website that can be installed on your device like a native app. It works offline, sends push notifications, and provides a full-screen experience — all without downloading from an app store.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Does the app take up storage space?</span>
+                    <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <p>Very little! The PinnaclePB app uses less than 5MB of storage — compared to 100-300MB for traditional apps. It intelligently caches only what you need.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is the app secure?</span>
+                    <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely. The app uses the same top-grade 256-bit encryption as our website, supports biometric login (Face ID, Touch ID, fingerprint), and includes real-time fraud monitoring.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I update the app?</span>
+                    <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                </div>
+                <div class="faq-answer">
+                    <p>Updates happen automatically! Whenever you open the app, it checks for updates in the background. You'll always have the latest features and security patches without lifting a finger.</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -361,12 +775,176 @@
 <!-- CTA -->
 <section class="cta-section">
     <div class="container cta-content">
-        <h2>Ready to Elevate Your Banking?</h2>
-        <p>Join over 2 million customers who trust W.R.B for their financial journey. Open your account in minutes.</p>
+        <h2>Ready to Elevate Your Experience?</h2>
+        <p>Join over 2 million customers who trust PinnaclePB for their financial journey. Open your account in minutes.</p>
         <div class="cta-btns">
             <a href="{% url 'account:register' %}" class="btn btn-white">Open An Account <i class="fas fa-arrow-right"></i></a>
             <a href="{% url 'frontend:contact' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.5);">Contact Sales</a>
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ===== APP DOWNLOAD LOGIC =====
+document.addEventListener('DOMContentLoaded', () => {
+    const installBtn = document.getElementById('main-install-button');
+    const manualInstructions = document.getElementById('manual-instructions');
+    const platformTabs = document.querySelectorAll('.platform-tab');
+    const platformContents = document.querySelectorAll('.platform-content');
+    
+    const detectedText = document.getElementById('detectedText');
+    const downloadBtnIcon = document.getElementById('downloadBtnIcon');
+    const downloadBtnSmall = document.getElementById('downloadBtnSmall');
+    const downloadBtnBig = document.getElementById('downloadBtnBig');
+    
+    let deferredPrompt = null;
+
+    // 1. Detect device reliably
+    const ua = navigator.userAgent.toLowerCase();
+    const isIOS = /iphone|ipad|ipod/.test(ua);
+    const isAndroid = /android/.test(ua);
+    const isWindows = /win/.test(ua);
+    const isMac = /mac/.test(ua) && !isIOS;
+
+    // 2. Set default text based on detected device
+    let deviceName = "Your Device";
+    let smallText = "One-click install for";
+    let iconClass = "fas fa-download";
+
+    if (isIOS) {
+        deviceName = "iPhone / iPad";
+        smallText = "Safari installation for";
+        iconClass = "fab fa-apple";
+    } else if (isAndroid) {
+        deviceName = "Android";
+        smallText = "One-click install for";
+        iconClass = "fab fa-android";
+    } else if (isWindows) {
+        deviceName = "Windows";
+        smallText = "One-click install for";
+        iconClass = "fab fa-windows";
+    } else if (isMac) {
+        deviceName = "macOS";
+        smallText = "Safari installation for";
+        iconClass = "fab fa-apple";
+    }
+
+    // Apply the detected text to the DOM immediately
+    if (detectedText) detectedText.textContent = `Detected: ${deviceName}`;
+    if (downloadBtnIcon) downloadBtnIcon.innerHTML = `<i class="${iconClass}"></i>`;
+    if (downloadBtnSmall) downloadBtnSmall.textContent = smallText;
+    if (downloadBtnBig) downloadBtnBig.textContent = deviceName;
+
+    // 3. Capture PWA install event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Update button text gracefully, KEEPING the device name
+        if (downloadBtnSmall) downloadBtnSmall.textContent = "Tap to";
+        if (downloadBtnBig) downloadBtnBig.textContent = `Install ${deviceName} App`;
+        
+        // Add a subtle visual cue that it's ready
+        if (installBtn) {
+            installBtn.style.boxShadow = "0 0 20px rgba(0, 212, 168, 0.4)";
+        }
+    });
+
+    // 4. Helper to switch tabs and scroll
+    function switchTab(platform) {
+        platformTabs.forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.dataset.platform === platform) {
+                tab.classList.add('active');
+            }
+        });
+        platformContents.forEach(content => {
+            content.classList.remove('active');
+            if (content.id === `platform-${platform}`) {
+                content.classList.add('active');
+            }
+        });
+        if (manualInstructions) {
+            manualInstructions.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // 5. Main install button logic
+    installBtn?.addEventListener('click', async () => {
+        // Supported browsers with native PWA prompt
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            try {
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                }
+                deferredPrompt = null;
+            } catch (err) {
+                console.log(err);
+            }
+            return;
+        }
+
+        // If iOS, switch to iOS tab and scroll (iOS doesn't support beforeinstallprompt)
+        if (isIOS) {
+            switchTab('ios');
+            return;
+        }
+        
+        // If Android but no prompt (e.g., already installed or unsupported browser), show Android tab
+        if (isAndroid) {
+            switchTab('android');
+            return;
+        }
+
+        // Fallback: scroll to manual instructions
+        if (manualInstructions) {
+            manualInstructions.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+
+    // 6. Alt option buttons
+    document.querySelectorAll('.download-alt-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            switchTab(btn.dataset.platform);
+        });
+    });
+
+    // 7. Platform tabs clicking logic
+    platformTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            switchTab(tab.dataset.platform);
+        });
+    });
+
+    // 8. Copy URL functionality
+    document.getElementById('copyUrlBtn')?.addEventListener('click', function() {
+        const url = 'https://wrbonlinebk.com'; // Replace with your actual URL
+        navigator.clipboard.writeText(url).then(() => {
+            const original = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-check"></i> <span>Copied!</span>';
+            this.style.background = '#059669';
+            this.style.color = '#fff';
+            setTimeout(() => {
+                this.innerHTML = original;
+                this.style.background = '';
+                this.style.color = '';
+            }, 2000);
+        });
+    });
+
+    // 9. FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', () => {
+            const item = q.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!wasOpen) item.classList.add('open');
+        });
+    });
+});
+</script>
 {% endblock %}

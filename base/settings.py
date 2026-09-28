@@ -109,7 +109,7 @@ DATABASES = {
 }
 
 
-DATABASES = {'default': dj_database_url.config(default=os.environ['DATABASE_URL'], engine='django_cockroachdb')}
+# DATABASES = {'default': dj_database_url.config(default=os.environ['DATABASE_URL'], engine='django_cockroachdb')}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -239,7 +239,8 @@ PWA_APP_LANG = "en-US"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://wronlinebk.vercel.app",
+    "https://pinnaclepbonline.com",
+    "https://www.pinnaclepbonline.com",
 ]
 
 if DJANGO_ENV == "production":
@@ -271,6 +272,6 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 # Default sender
-DEFAULT_FROM_EMAIL = f"W.R.B <{os.getenv('EMAIL_HOST_USER')}>"
+DEFAULT_FROM_EMAIL = f"PinnaclePB <{os.getenv('EMAIL_HOST_USER')}>"
 # SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
