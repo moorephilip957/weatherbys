@@ -1,6 +1,6 @@
 {% extends './base.html' %}
 
-{% block title %}Account Credited | Weatherbys Racing Bank{% endblock %}
+{% block title %}Account Credited | W.R.B{% endblock %}
 
 {% block preheader %}Great news! Your account has been credited with {{ currency }}{{ amount }}. Reference: {{ reference }}.{% endblock %}
 
@@ -35,7 +35,7 @@
 <!-- Greeting -->
 <p style="margin: 0 0 24px 0; font-size: 16px; color: #4B5563; line-height: 1.6;" class="dark-muted">
     Hello {{ user.get_full_name|default:user.username }},<br>
-    Great news! We are writing to confirm that your Weatherbys Racing Bank account has been successfully credited. The funds are now available for you to use.
+    Great news! We are writing to confirm that your W.R.B account has been successfully credited. The funds are now available for you to use.
 </p>
 
 <!-- Credited Amount Highlight -->
@@ -115,7 +115,7 @@
     <tr>
         <td style="padding: 16px; background-color: #F0F9FF; border-radius: 8px; border-left: 4px solid #3B82F6;">
             <p style="margin: 0; font-size: 14px; color: #1E40AF; line-height: 1.5;">
-                <strong>ℹ️ Security Notice:</strong> If you were not expecting this credit, or if you suspect any unauthorized activity on your account, please <a href="https://www.weatherbysonlinebk.com/support" style="color: #1E40AF; text-decoration: underline; font-weight: 600;">contact our support team</a> immediately.
+                <strong>ℹ️ Security Notice:</strong> If you were not expecting this credit, or if you suspect any unauthorized activity on your account, please <a href="https://www.wronlinebk.com/support" style="color: #1E40AF; text-decoration: underline; font-weight: 600;">contact our support team</a> immediately.
             </p>
         </td>
     </tr>
@@ -123,7 +123,7 @@
 
 <!-- Sign Off -->
 <p style="margin: 0; font-size: 15px; color: #0A0E1A; line-height: 1.6;" class="dark-text">
-    Thank you for choosing Weatherbys Racing Bank,<br>
-    <strong style="color: #5B5BF7;">The Weatherbys Racing Bank Team</strong>
+    Thank you for choosing W.R.B,<br>
+    <strong style="color: #5B5BF7;">The W.R.B Team</strong>
 </p>
 {% endblock %}
