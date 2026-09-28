@@ -18,8 +18,8 @@ def kyc_terms(request):
     )
 
 
-# @kyc_block_if_approved
-# @block_blocked_users
+@kyc_block_if_approved
+@block_blocked_users
 def kyc_verification(request):
 
     # try to get existing KYC (edit mode)
