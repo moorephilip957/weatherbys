@@ -47,16 +47,8 @@
             </div>
 
             <!-- Error Messages -->
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags == 'error' %}
-                        <div class="register-alert">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <span>{{ message }}</span>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+            {% include "../../components/form_errors.html" %}
+            {% include "../../components/messages.html" %}
 
             <!-- Multi-Step Form -->
             <form method="POST" id="registerForm" action="{% url 'account:register' %}" novalidate>
