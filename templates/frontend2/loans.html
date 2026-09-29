@@ -1032,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatCurrency(num) {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'GBP',
             maximumFractionDigits: 0
         }).format(num);
     }
@@ -1046,8 +1046,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update displays
         loanAmountDisplay.textContent = formatCurrency(P);
-        loanTermDisplay.textContent = `£{years} £{years === 1 ? 'year' : 'years'}`;
-        interestRateDisplay.textContent = `£{annualRate.toFixed(1)}%`;
+        loanTermDisplay.textContent = `${years} ${years === 1 ? 'year' : 'years'}`;
+        interestRateDisplay.textContent = `${annualRate.toFixed(1)}%`;
 
         // PMT formula: P * (r(1+r)^n) / ((1+r)^n - 1)
         let monthlyPayment;

@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Savings Accounts | PinnaclePB{% endblock %}
 
-{% block meta_description %}Grow your wealth with PinnaclePB's high-yield savings accounts. Enjoy competitive APY, zero hidden fees, and FDIC insurance up to $250,000.{% endblock %}
+{% block meta_description %}Grow your wealth with PinnaclePB's high-yield savings accounts. Enjoy competitive APY, zero hidden fees, and FSCS insurance up to £250,000.{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'frontends/components/home.css' %}">
@@ -15,7 +15,7 @@
     <div class="container savings-hero-content">
         <div class="savings-hero-text">
             <h1>Make your money <span>work harder</span></h1>
-            <p>Earn up to 4.50% APY with our high-yield savings accounts. No hidden fees, no minimum balance requirements, and FSCS insured up to $2,500,000.</p>
+            <p>Earn up to 4.50% APY with our high-yield savings accounts. No hidden fees, no minimum balance requirements, and FSCS insured up to £2,500,000.</p>
             <div class="hero-btns" style="display: flex; gap: 16px; justify-content: flex-start;">
                 <a href="{% url 'account:register' %}" class="btn btn-primary">Open Savings Account <i class="fas fa-arrow-right"></i></a>
                 <a href="#calculator" class="btn btn-outline">Calculate Earnings</a>
@@ -36,16 +36,16 @@
                 <p>High-Yield APY</p>
             </div>
             <div class="trust-item">
-                <h3>$0</h3>
+                <h3>£0</h3>
                 <p>Monthly Maintenance Fees</p>
             </div>
             <div class="trust-item">
-                <h3>$0</h3>
+                <h3>£0</h3>
                 <p>Minimum Balance</p>
             </div>
             <div class="trust-item">
                 <h3>FSCS</h3>
-                <p>Insured up to $2.5m</p>
+                <p>Insured up to £2.5m</p>
             </div>
         </div>
     </div>
@@ -86,8 +86,8 @@
                 <ul class="ac-features">
                     <li><i class="fas fa-check-circle"></i> Guaranteed return on investment</li>
                     <li><i class="fas fa-check-circle"></i> Terms from 6 to 60 months</li>
-                    <li><i class="fas fa-check-circle"></i> $500 minimum opening deposit</li>
-                    <li><i class="fas fa-check-circle"></i> FDIC insured</li>
+                    <li><i class="fas fa-check-circle"></i> £500 minimum opening deposit</li>
+                    <li><i class="fas fa-check-circle"></i> FSCS insured</li>
                     <li><i class="fas fa-check-circle"></i> Auto-renewal options</li>
                 </ul>
                 <a href="#" class="ac-btn ac-btn-outline">Learn More <i class="fas fa-arrow-right"></i></a>
@@ -142,14 +142,14 @@
             <div class="calc-row">
                 <label>Initial Deposit</label>
                 <div class="calc-input-wrap">
-                    <span class="currency-symbol">$</span>
+                    <span class="currency-symbol">£</span>
                     <input type="number" class="calc-input" id="initialDeposit" value="5000" min="0">
                 </div>
             </div>
             <div class="calc-row">
                 <label>Monthly Contribution</label>
                 <div class="calc-input-wrap">
-                    <span class="currency-symbol">$</span>
+                    <span class="currency-symbol">£</span>
                     <input type="number" class="calc-input" id="monthlyContribution" value="200" min="0">
                 </div>
             </div6>
@@ -171,15 +171,15 @@
             <div class="calc-results">
                 <div class="calc-result-row">
                     <span class="calc-result-label">Total Contributions</span>
-                    <span class="calc-result-value" id="totalContributions">$17,000</span>
+                    <span class="calc-result-value" id="totalContributions">£17,000</span>
                 </div>
                 <div class="calc-result-row">
                     <span class="calc-result-label">Interest Earned</span>
-                    <span class="calc-result-value" id="interestEarned">$2,185</span>
+                    <span class="calc-result-value" id="interestEarned">£2,185</span>
                 </div>
                 <div class="calc-result-row">
                     <span class="calc-result-label">Estimated Total Balance</span>
-                    <span class="calc-result-value highlight" id="totalBalance">$19,185</span>
+                    <span class="calc-result-value highlight" id="totalBalance">£19,185</span>
                 </div>
             </div>
         </div>
@@ -197,7 +197,7 @@
             <div class="feature-card">
                 <div class="fc-icon"><i class="fas fa-shield-alt"></i></div>
                 <h4>Fully Insured</h4>
-                <p>Your deposits are protected by the FDIC up to $250,000 per depositor, per insured bank.</p>
+                <p>Your deposits are protected by the FSCS up to £250,000 per depositor, per insured bank.</p>
             </div>
             <div class="feature-card">
                 <div class="fc-icon" style="background: rgba(91,91,247,0.1); color: var(--primary);"><i class="fas fa-mobile-alt"></i></div>

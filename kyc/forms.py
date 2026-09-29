@@ -1,6 +1,45 @@
 from django import forms
 from .models import KYCVerification
+from PIL import Image
 
+MAX_KYC_FILE_SIZE = 2 * 1024 * 1024  # 2MB
+
+
+def validate_kyc_image(upload):
+    if not upload:
+        return upload
+
+    # 1. File size
+    if upload.size > MAX_KYC_FILE_SIZE:
+        raise forms.ValidationError(
+            "Image must be smaller than 2MB."
+        )
+
+    # 2. Content type
+    allowed_types = {
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+    }
+
+    if upload.content_type not in allowed_types:
+        raise forms.ValidationError(
+            "Only JPG, JPEG, and PNG images are allowed."
+        )
+
+    # 3. Verify that the file is actually an image
+    try:
+        image = Image.open(upload)
+        image.verify()
+    except Exception:
+        raise forms.ValidationError(
+            "The uploaded file is not a valid image."
+        )
+
+    # Reset file pointer after verify()
+    upload.seek(0)
+
+    return upload
 
 class KYCVerificationForm(forms.ModelForm):
 
@@ -142,24 +181,42 @@ class KYCVerificationForm(forms.ModelForm):
                 ('other', 'Other Government ID'),
             ]),
 
-            'upload_front_side': forms.ClearableFileInput(attrs={
-                'class': 'form-control d-none',
-                "id":"frontimg" ,
-                "accept":"image/*"
-            }),
+            "upload_front_side": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control d-none",
+                    "id": "frontimg",
+                    "accept": "image/jpeg,image/png",
+                }
+            ),
 
-            'upload_back_side': forms.ClearableFileInput(attrs={
-                'class': 'form-control d-none',
-                "id":"backimg" ,
-                "accept":"image/*"
-            }),
+            "upload_back_side": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control d-none",
+                    "id": "backimg",
+                    "accept": "image/jpeg,image/png,image/jpg",
+                }
+            ),
 
-            'passport_photograph': forms.ClearableFileInput(attrs={
-                'class': 'form-control d-none',
-                "id":"photo" ,
-                "accept":"image/*"
-            }),
+            "passport_photograph": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control d-none",
+                    "id": "photo",
+                    "accept": "image/jpeg,image/png",
+                }
+            ),
         }
+
+    def clean_upload_front_side(self):
+        upload = self.cleaned_data.get("upload_front_side")
+        return validate_kyc_image(upload)
+
+    def clean_upload_back_side(self):
+        upload = self.cleaned_data.get("upload_back_side")
+        return validate_kyc_image(upload)
+
+    def clean_passport_photograph(self):
+        upload = self.cleaned_data.get("passport_photograph")
+        return validate_kyc_image(upload)
 
 
 class PassportPhotoForm(forms.ModelForm):
