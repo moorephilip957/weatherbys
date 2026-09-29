@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Business Loans | PinnaclePB{% endblock %}
 
-{% block meta_description %}Fuel your business growth with PinnaclePB's flexible business loans. Get up to $5M in funding with rates starting at 5.9% APR and 24-hour approvals.{% endblock %}
+{% block meta_description %}Fuel your business growth with PinnaclePB's flexible business loans. Get up to £5M in funding with rates starting at 5.9% APR and 24-hour approvals.{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'frontends/components/home.css' %}">
@@ -603,7 +603,7 @@
     <div class="container loans-hero-content">
         <div class="loans-hero-text">
             <h1>Fuel your business <span>growth</span></h1>
-            <p>Access flexible funding solutions from $10,000 to $5 million. Whether you're expanding operations, purchasing equipment, or managing cash flow, we have the capital to power your next move.</p>
+            <p>Access flexible funding solutions from £10,000 to £5 million. Whether you're expanding operations, purchasing equipment, or managing cash flow, we have the capital to power your next move.</p>
             <div class="hero-btns" style="display: flex; gap: 16px; justify-content: flex-start;">
                 <a href="#calculator" class="btn btn-primary">Calculate Your Loan <i class="fas fa-arrow-right"></i></a>
                 <a href="{% url 'frontend:contact' %}" class="btn btn-outline">Speak to an Advisor</a>
@@ -634,7 +634,7 @@
     <div class="container">
         <div class="trust-bar-grid">
             <div class="trust-item">
-                <h3>$5M</h3>
+                <h3>£5M</h3>
                 <p>Maximum Loan Amount</p>
             </div>
             <div class="trust-item">
@@ -669,7 +669,7 @@
                 <div class="pc-details">
                     <div class="pc-detail">
                         <span class="pc-detail-label">Loan Amount</span>
-                        <span class="pc-detail-value">$50K - $5M</span>
+                        <span class="pc-detail-value">£50K - £5M</span>
                     </div>
                     <div class="pc-detail">
                         <span class="pc-detail-label">APR</span>
@@ -700,7 +700,7 @@
                 <div class="pc-details">
                     <div class="pc-detail">
                         <span class="pc-detail-label">Credit Limit</span>
-                        <span class="pc-detail-value">$10K - $500K</span>
+                        <span class="pc-detail-value">£10K - £500K</span>
                     </div>
                     <div class="pc-detail">
                         <span class="pc-detail-label">APR</span>
@@ -731,7 +731,7 @@
                 <div class="pc-details">
                     <div class="pc-detail">
                         <span class="pc-detail-label">Loan Amount</span>
-                        <span class="pc-detail-value">$25K - $2M</span>
+                        <span class="pc-detail-value">£25K - £2M</span>
                     </div>
                     <div class="pc-detail">
                         <span class="pc-detail-label">APR</span>
@@ -757,12 +757,12 @@
             <!-- SBA Loans -->
             <div class="product-card">
                 <div class="pc-icon"><i class="fas fa-landmark"></i></div>
-                <h3>SBA Loans</h3>
-                <p class="pc-desc">Government-backed loans with favorable terms, lower down payments, and longer repayment periods for qualified businesses.</p>
+                <h3> Growth Guarantee Scheme (GGS)</h3>
+                <p class="pc-desc">Government backed loans with favorable terms, lower down payments, and longer repayment periods for qualified businesses.</p>
                 <div class="pc-details">
                     <div class="pc-detail">
                         <span class="pc-detail-label">Loan Amount</span>
-                        <span class="pc-detail-value">Up to $5M</span>
+                        <span class="pc-detail-value">Up to £5M</span>
                     </div>
                     <div class="pc-detail">
                         <span class="pc-detail-label">APR</span>
@@ -835,7 +835,7 @@
             <div class="calc-row">
                 <label>
                     <span>Loan Amount</span>
-                    <span class="value-display" id="loanAmountDisplay">$100,000</span>
+                    <span class="value-display" id="loanAmountDisplay">£100,000</span>
                 </label>
                 <input type="range" class="calc-range" id="loanAmount" min="10000" max="5000000" step="5000" value="100000">
             </div>
@@ -862,15 +862,15 @@
             <div class="calc-results">
                 <div class="calc-result-row">
                     <span class="calc-result-label">Monthly Payment</span>
-                    <span class="calc-result-value highlight" id="monthlyPayment">$2,004</span>
+                    <span class="calc-result-value highlight" id="monthlyPayment">£2,004</span>
                 </div>
                 <div class="calc-result-row">
                     <span class="calc-result-label">Total Interest</span>
-                    <span class="calc-result-value" id="totalInterest">$20,225</span>
+                    <span class="calc-result-value" id="totalInterest">£20,225</span>
                 </div>
                 <div class="calc-result-row">
                     <span class="calc-result-label">Total Cost of Loan</span>
-                    <span class="calc-result-value" id="totalCost">$120,225</span>
+                    <span class="calc-result-value" id="totalCost">£120,225</span>
                 </div>
             </div>
 
@@ -988,7 +988,7 @@
                 </div>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        It depends on the loan type and amount. Equipment financing uses the equipment itself as collateral. SBA loans typically require collateral for larger amounts. For term loans under $250K, we often offer unsecured options for qualified borrowers. Our team will discuss the best structure for your specific situation.
+                        It depends on the loan type and amount. Equipment financing uses the equipment itself as collateral. SBA loans typically require collateral for larger amounts. For term loans under £250K, we often offer unsecured options for qualified borrowers. Our team will discuss the best structure for your specific situation.
                     </div>
                 </div>
             </div>
@@ -1046,8 +1046,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update displays
         loanAmountDisplay.textContent = formatCurrency(P);
-        loanTermDisplay.textContent = `${years} ${years === 1 ? 'year' : 'years'}`;
-        interestRateDisplay.textContent = `${annualRate.toFixed(1)}%`;
+        loanTermDisplay.textContent = `£{years} £{years === 1 ? 'year' : 'years'}`;
+        interestRateDisplay.textContent = `£{annualRate.toFixed(1)}%`;
 
         // PMT formula: P * (r(1+r)^n) / ((1+r)^n - 1)
         let monthlyPayment;

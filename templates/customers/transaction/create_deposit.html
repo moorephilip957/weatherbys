@@ -13,7 +13,7 @@
 <div class="page-header">
     <div>
         <h1>Deposit Funds</h1>
-        <p>Add money to your Hampdens Bank account</p>
+        <p>Add money to your Pinnacle PB account</p>
     </div>
 </div>
 
@@ -46,10 +46,10 @@
             <div class="method-icon">₮</div>
             <span>USDT (Tether)</span>
         </button>
-        <button type="button" class="deposit-method-tab" data-method="BTC">
+        <!-- <button type="button" class="deposit-method-tab" data-method="BTC">
             <div class="method-icon">₿</div>
             <span>Bitcoin</span>
-        </button>
+        </button> -->
         <button type="button" class="deposit-method-tab" data-method="WIRE">
             <div class="method-icon"><i class="fas fa-university"></i></div>
             <span>Wire Transfer</span>
@@ -393,7 +393,7 @@ methodTabs.forEach(tab => {
         } else if (method === 'BTC') {
             currencySymbol.textContent = '₿';
         } else if (method === 'WIRE') {
-            currencySymbol.textContent = '€';
+            currencySymbol.textContent = currencySymbol.textContent;
         }
 
         // Hide submit button for wire (user must contact support first)
