@@ -568,57 +568,229 @@ textarea.form-control {
 
 {% block extra_js %}
 <script>
-// ===== FILE UPLOAD UI LOGIC =====
+const MAX_OUTPUT_SIZE = 1024 * 1024; // Target: ~1MB
+const MAX_DIMENSION = 1600;
+const JPEG_QUALITY = 0.80;
+
+
+function compressImage(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            const img = new Image();
+
+            img.onload = function () {
+                let width = img.width;
+                let height = img.height;
+
+                // Resize while preserving aspect ratio
+                if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+                    if (width > height) {
+                        height = Math.round(
+                            height * MAX_DIMENSION / width
+                        );
+                        width = MAX_DIMENSION;
+                    } else {
+                        width = Math.round(
+                            width * MAX_DIMENSION / height
+                        );
+                        height = MAX_DIMENSION;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+
+                // White background helps with some image formats
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, width, height);
+
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Convert to JPEG
+                canvas.toBlob(
+                    function (blob) {
+                        if (!blob) {
+                            reject(new Error('Image compression failed.'));
+                            return;
+                        }
+
+                        const compressedFile = new File(
+                            [blob],
+                            file.name.replace(/\.[^/.]+$/, '') + '.jpg',
+                            {
+                                type: 'image/jpeg',
+                                lastModified: Date.now()
+                            }
+                        );
+
+                        resolve(compressedFile);
+                    },
+                    'image/jpeg',
+                    JPEG_QUALITY
+                );
+            };
+
+            img.onerror = function () {
+                reject(new Error('Unable to read image.'));
+            };
+
+            img.src = event.target.result;
+        };
+
+        reader.onerror = function () {
+            reject(new Error('Unable to read file.'));
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
+
 function setupFileUpload(inputId, boxId) {
     const input = document.getElementById(inputId);
     const box = document.getElementById(boxId);
-    if (!input || !box) return;
 
-    // Hide default Django input
+    if (!input || !box) {
+        console.warn(`Missing element: ${inputId} or ${boxId}`);
+        return;
+    }
+
+    // Hide Django's default file input
     input.style.display = 'none';
 
-    // Click box to trigger input
-    box.addEventListener('click', () => input.click());
+    box.addEventListener('click', () => {
+        input.click();
+    });
 
-    // Handle file selection
-    input.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            // Validate size (5MB)
-            if (file.size > 1 * 1024 * 1024) {
-                alert('File is too large. Maximum size is 5MB.');
-                input.value = '';
-                return;
-            }
+    input.addEventListener('change', async (e) => {
+        const originalFile = e.target.files[0];
 
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                box.innerHTML = `
-                    <div class="fub-preview" style="display: block;">
-                        <img src="${e.target.result}" alt="Preview">
-                        <div class="file-name">${file.name}</div>
-                        <div style="font-size: 11px; color: var(--primary); margin-top: 4px; font-weight: 600;">
-                            <i class="fas fa-check-circle"></i> Uploaded · Click to change
-                        </div>
+        if (!originalFile) {
+            return;
+        }
+
+        // Only accept images
+        if (!originalFile.type.startsWith('image/')) {
+            alert('Please select an image file.');
+            input.value = '';
+            return;
+        }
+
+        // Show processing state
+        box.innerHTML = `
+            <div class="fub-preview" style="display:block;">
+                <div style="font-size:14px; font-weight:600;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Processing image...
+                </div>
+            </div>
+        `;
+
+        try {
+            const compressedFile = await compressImage(originalFile);
+
+            console.log(
+                'Original:',
+                (originalFile.size / 1024 / 1024).toFixed(2),
+                'MB'
+            );
+
+            console.log(
+                'Compressed:',
+                (compressedFile.size / 1024 / 1024).toFixed(2),
+                'MB'
+            );
+
+            // Replace the original file with compressed file
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(compressedFile);
+            input.files = dataTransfer.files;
+
+            // Preview compressed image
+            const previewUrl = URL.createObjectURL(compressedFile);
+
+            box.innerHTML = `
+                <div class="fub-preview" style="display:block;">
+                    <img
+                        src="${previewUrl}"
+                        alt="Preview"
+                    >
+
+                    <div class="file-name">
+                        ${compressedFile.name}
                     </div>
-                `;
-            };
-            reader.readAsDataURL(file);
+
+                    <div style="
+                        font-size:11px;
+                        color:var(--primary);
+                        margin-top:4px;
+                        font-weight:600;
+                    ">
+                        <i class="fas fa-check-circle"></i>
+                        Ready · Click to change
+                    </div>
+
+                    <div style="
+                        font-size:10px;
+                        color:var(--muted);
+                        margin-top:4px;
+                    ">
+                        ${(originalFile.size / 1024 / 1024).toFixed(2)} MB
+                        →
+                        ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB
+                    </div>
+                </div>
+            `;
+
+        } catch (error) {
+            console.error(error);
+
+            alert(
+                'Unable to process this image. Please try another image.'
+            );
+
+            input.value = '';
+
+            box.innerHTML = `
+                <div class="fub-icon">
+                    <i class="fas fa-image"></i>
+                </div>
+
+                <p class="fub-title">
+                    Click to upload
+                </p>
+
+                <p class="fub-sub">
+                    JPG, PNG (Max 5MB)
+                </p>
+            `;
         }
     });
 }
 
-// Initialize all three upload boxes
+
+// Initialize uploads
 setupFileUpload('frontimg', 'frontBox');
 setupFileUpload('backimg', 'backBox');
 setupFileUpload('photo', 'photoBox');
 
-// ===== FORM SUBMIT =====
+
+// Form submission
 document.getElementById('kycForm')?.addEventListener('submit', (e) => {
     const btn = document.getElementById('submitBtn');
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Submitting...</span>';
+
+    btn.innerHTML = `
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Submitting...</span>
+    `;
+
     btn.disabled = true;
-    // Let Django handle the rest
 });
 </script>
+
 {% endblock %}
